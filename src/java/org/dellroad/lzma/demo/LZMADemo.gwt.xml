@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id$ -->
+<module rename-to="lzma_demo">
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="org.dellroad.lzma.LZMA"/>
+    <entry-point class="org.dellroad.lzma.demo.client.LZMADemo"/>
+</module>

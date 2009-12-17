@@ -1,0 +1,53 @@
+<!-- $Id$ -->
+<html>
+	<head>
+		<title>GWT-LZMA Demo</title>
+		<link rel="stylesheet" type="text/css" href="LZMADemo.css" />
+	</head>
+	<body bgcolor="white"> 
+        <script language="javascript" src="lzma_demo.nocache.js"></script>
+        <table cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr><td style="vertical-align: top;" align="left">
+                <div style="white-space: nowrap;" class="lzmademo-title">LZMA GWT module demo</div>
+            </td></tr>
+            <tr><td style="vertical-align: top;" align="left">
+                <div class="lzmademo-description">
+                    <p>
+                    This page is an example <a href="http://code.google.com/webtoolkit/">GWT</a> application that demonstrates
+                    the use of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
+                    The GWT-LZMA compression module implements the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a>
+                    compression algorithm in GWT-compiled Javascript.
+                    </p>
+
+                    <p>
+                    Enter any content into the left window and press "Compress" to compress it.
+                    When finished, the right window will display the hexadecimal representation
+                    of the compressed content of the left window (after encoding it in UTF-8).
+                    </p>
+
+                    <p>
+                    Enter whitespace-separated hexadecimal bytes in the right window corresponding
+                    to compressed output of the LZMA algorithm. On UNIX machines, you can generate
+                    this yourself using commands like this:
+                    <blockquote>
+                    <p style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</p>
+                    </blockquote>
+                    Press the "Decompress" button to decompress the data and show the original in
+                    the right window (decoded from UTF-8).
+                    </p>
+
+                    <p>
+                    <em>Warning:</em> The LZMA algorithm was not designed to run in a browser as Javascript.
+                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.
+                    </p>
+
+                    <p class="lzmademo-footnote">
+                    This GWT-based Javascript application runs entirely within your web browser.
+                    </p>
+                </div>
+            </td></tr>
+          </tbody>
+        </table>
+	</body>
+</html>
