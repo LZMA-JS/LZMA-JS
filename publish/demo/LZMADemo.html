@@ -21,20 +21,27 @@
                     </p>
 
                     <p>
+                    <strong>Compressing:</strong>
                     Enter any content into the left window and press "Compress" to compress it.
                     When finished, the right window will display the hexadecimal representation
                     of the compressed content of the left window (after encoding it in UTF-8).
+                    Use the pulldown to choose from fastest (Level 1) to best (Level 9) compression; lower levels
+                    are more appropriate for Javascript running in a browser.
                     </p>
 
                     <p>
+                    <strong>Decompressing:</strong>
                     Enter whitespace-separated hexadecimal bytes in the right window corresponding
-                    to compressed output of the LZMA algorithm. On UNIX machines, you can generate
-                    this yourself using commands like this:
+                    to compressed output of the LZMA algorithm.
+                    Press the "Decompress" button to decompress the data and the original will be shown back in
+                    the left window (decoded from UTF-8).
+                    </p>
+
+                    <p>
+                    On UNIX machines, you can generate input for the right window yourself using commands like this:
                     <blockquote>
-                    <p style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</p>
+                    <span style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</span>
                     </blockquote>
-                    Press the "Decompress" button to decompress the data and show the original in
-                    the right window (decoded from UTF-8).
                     </p>
 
                     <p>
