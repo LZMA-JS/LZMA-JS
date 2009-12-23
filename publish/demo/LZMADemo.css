@@ -1,5 +1,13 @@
 /* $Id$ */
 
+.gwt-TextArea {
+    margin: 0px 0px 10px 0px;
+}
+
+.demo-panel {
+    margin: 0px 10px 10px 10px;
+}
+
 body {
     background: #ffffff;
     color: black;
