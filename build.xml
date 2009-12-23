@@ -62,7 +62,7 @@
 
     <target name="jar" depends="javac">
         <mkdir dir="build"/>
-        <zip destfile="build/${ant.project.name}.zip">
+        <zip destfile="build/${ant.project.name}-${gwt-lzma.version}.zip">
             <fileset dir="src/java">
                 <include name="org/dellroad/lzma/client/**/*"/>
                 <include name="org/dellroad/lzma/LZMA.gwt.xml"/>
@@ -76,7 +76,7 @@
     <target name="demo" depends="jar, gwtc.classpath" description="GWT compile">
         <antcontrib:outofdate>
             <sourcefiles>
-                <fileset dir="build" includes="${ant.project.name}.zip"/>
+                <fileset dir="build" includes="${ant.project.name}-${gwt-lzma.version}.zip"/>
                 <fileset dir="src/java">
                     <include name="org/dellroad/lzma/demo/**/*"/>
                 </fileset>
@@ -91,7 +91,7 @@
                 <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
                     <classpath>
                         <path refid="gwtc.classpath"/>
-                        <pathelement location="build/${ant.project.name}.zip"/>
+                        <pathelement location="build/${ant.project.name}-${gwt-lzma.version}.zip"/>
                         <pathelement location="src/java"/>
                     </classpath>
                     <jvmarg value="-Xmx256M"/>
@@ -134,11 +134,10 @@
 
         <!-- Clean up -->
         <delete includeemptydirs="false">
-            <fileset dir="publish" includes="*"/>
+            <fileset dir="publish" includes="**/*"/>
         </delete>
 
         <!-- Copy over stuff -->
-        <copy tofile="publish/${ant.project.name}-${gwt-lzma.version}.zip" file="build/${ant.project.name}.zip"/>
         <copy todir="publish/javadoc">
             <fileset dir="build/reports/javadoc"/>
         </copy>
