@@ -47,7 +47,7 @@ public enum CompressionMode {
     /**
      * Configure the given {@link Encoder} based on this compression mode.
      */
-    public void configure(Encoder encoder) {
+    void configure(Encoder encoder) {
         if (!encoder.SetAlgorithm(this.algorithm))
             throw new RuntimeException("unexpected failure");
         if (!encoder.SetDictionarySize(1 << this.dictionarySize))
