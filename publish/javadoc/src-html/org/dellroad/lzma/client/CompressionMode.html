@@ -50,7 +50,7 @@
 <FONT color="green">047</FONT>        /**<a name="line.47"></a>
 <FONT color="green">048</FONT>         * Configure the given {@link Encoder} based on this compression mode.<a name="line.48"></a>
 <FONT color="green">049</FONT>         */<a name="line.49"></a>
-<FONT color="green">050</FONT>        public void configure(Encoder encoder) {<a name="line.50"></a>
+<FONT color="green">050</FONT>        void configure(Encoder encoder) {<a name="line.50"></a>
 <FONT color="green">051</FONT>            if (!encoder.SetAlgorithm(this.algorithm))<a name="line.51"></a>
 <FONT color="green">052</FONT>                throw new RuntimeException("unexpected failure");<a name="line.52"></a>
 <FONT color="green">053</FONT>            if (!encoder.SetDictionarySize(1 &lt;&lt; this.dictionarySize))<a name="line.53"></a>
