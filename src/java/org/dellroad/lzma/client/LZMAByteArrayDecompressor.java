@@ -22,14 +22,11 @@ public class LZMAByteArrayDecompressor extends LZMADecompressor {
      * Constructor.
      *
      * @param data compressed data
+     * @throws IOException if the compressed data is truncated or corrupted
      */
-    public LZMAByteArrayDecompressor(byte[] data) {
+    public LZMAByteArrayDecompressor(byte[] data) throws IOException {
         this.output = new ByteArrayOutputStream();
-        try {
-            init(new ByteArrayInputStream(data), this.output);
-        } catch (IOException e) {
-            throw new RuntimeException("impossible exception");
-        }
+        init(new ByteArrayInputStream(data), this.output);
     }
 
     /**
