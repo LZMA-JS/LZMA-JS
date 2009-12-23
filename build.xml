@@ -6,7 +6,7 @@
   xmlns:antcontrib="urn:net.sf.antcontrib">
 
     <!-- Configure build -->
-    <property name="gwt-lzma.version" value="1.0"/>
+    <property name="gwt-lzma.version" value="1.1"/>
     <property name="javac.compiler.flags" value="-Xlint:all,-serial,-fallthrough,-deprecation,-cast"/>
 
     <!-- Import build macros -->
