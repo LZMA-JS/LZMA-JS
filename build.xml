@@ -100,6 +100,7 @@
                     <arg value="-gen"/>         <arg value="build/gwtc/gen"/>
                     <arg value="-war"/>         <arg value="build/gwtc/war"/>
                     <arg value="-extra"/>       <arg value="build/gwtc/extra"/>
+                    <arg value="-style"/>       <arg value="PRETTY" />
                     <arg value="org.dellroad.lzma.demo.LZMADemo"/>
                 </java>
             </sequential>
