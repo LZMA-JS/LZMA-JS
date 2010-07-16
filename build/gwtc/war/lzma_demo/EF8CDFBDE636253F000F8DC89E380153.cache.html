@@ -4932,7 +4932,6 @@ function encode(s){
     else 
       elen += 3;
   }
-  //alert(_3B_classLit);
   data = initDim(_3B_classLit, 0, -1, elen, 1);
   elen = 0;
   for (i = 0; i < s.length; ++i) {
@@ -5068,7 +5067,10 @@ function init(){
   var data;
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
   addCommand($LZMADemo$1(new LZMADemo$1(), $LZMADemo(new LZMADemo())));
+  //var func1 = $LZMADemo$1(new LZMADemo$1(), $LZMADemo(new LZMADemo()));
+  //func1.execute();
   data = initValues(_3B_classLit, 0, -1, [93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  //$LZMADemo$2(new LZMADemo$2(), data);
   addCommand($LZMADemo$2(new LZMADemo$2(), data));
 }
 
