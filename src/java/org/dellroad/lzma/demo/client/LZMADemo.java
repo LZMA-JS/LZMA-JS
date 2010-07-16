@@ -168,7 +168,7 @@ public class LZMADemo implements EntryPoint {
         // Get binary data
 //        this.leftWindow.setText("");
 //        updateSizes(false);
-        final byte[] data = new byte[] {93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, 193, 251, 255, 255, 255, 224, 0, 0, 0};
+        final byte[] data = new byte[] {93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, (byte)193, (byte)251, (byte)255, (byte)255, (byte)255, (byte)224, 0, 0, 0};
         //if (data == null)
         //    return;
 
