@@ -127,6 +127,7 @@
             <arg value="-gen"/>         <arg value="build/hosted/gen"/>
             <arg value="-war"/>         <arg value="build/hosted/war"/>
             <arg value="-extra"/>       <arg value="build/hosted/extra"/>
+            <arg value="-style"/>       <arg value="PRETTY" />
             <arg value="org.dellroad.lzma.demo.LZMADemo"/>
         </java>
     </target>
