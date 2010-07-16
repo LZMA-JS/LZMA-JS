@@ -14,7 +14,7 @@ function equals_1(other){
   return this === (other == null?null:other);
 }
 
-function getClass_66(){
+function getClass_36(){
   return Ljava_lang_Object_2_classLit;
 }
 
@@ -22,55 +22,27 @@ function hashCode_3(){
   return this.$H || (this.$H = ++sNextHashId);
 }
 
-function toString_8(){
-  return (this.typeMarker$ == nullMethod || this.typeId$ == 2?this.getClass$():Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName + '@' + toPowerOfTwoString(this.typeMarker$ == nullMethod || this.typeId$ == 2?this.hashCode$():this.$H || (this.$H = ++sNextHashId), 4);
-}
-
 function Object_0(){
 }
 
 _ = Object_0.prototype = {};
 _.equals$ = equals_1;
-_.getClass$ = getClass_66;
+_.getClass$ = getClass_36;
 _.hashCode$ = hashCode_3;
-_.toString$ = toString_8;
-_.toString = function(){
-  return this.toString$();
-}
-;
 _.typeMarker$ = nullMethod;
 _.typeId$ = 1;
-var sUncaughtExceptionHandler = null;
-function getClass_71(){
+function getClass_40(){
   return Ljava_lang_Throwable_2_classLit;
-}
-
-function getMessage_0(){
-  return this.detailMessage;
-}
-
-function toString_12(){
-  var className, msg;
-  className = this.getClass$().typeName;
-  msg = this.getMessage();
-  if (msg != null) {
-    return className + ': ' + msg;
-  }
-   else {
-    return className;
-  }
 }
 
 function Throwable(){
 }
 
 _ = Throwable.prototype = new Object_0();
-_.getClass$ = getClass_71;
-_.getMessage = getMessage_0;
-_.toString$ = toString_12;
+_.getClass$ = getClass_40;
 _.typeId$ = 3;
 _.detailMessage = null;
-function getClass_61(){
+function getClass_31(){
   return Ljava_lang_Exception_2_classLit;
 }
 
@@ -78,14 +50,14 @@ function Exception(){
 }
 
 _ = Exception.prototype = new Throwable();
-_.getClass$ = getClass_61;
+_.getClass$ = getClass_31;
 _.typeId$ = 4;
 function $RuntimeException(this$static, message){
   this$static.detailMessage = message;
   return this$static;
 }
 
-function getClass_67(){
+function getClass_37(){
   return Ljava_lang_RuntimeException_2_classLit;
 }
 
@@ -93,10 +65,9 @@ function RuntimeException(){
 }
 
 _ = RuntimeException.prototype = new Exception();
-_.getClass$ = getClass_67;
+_.getClass$ = getClass_37;
 _.typeId$ = 5;
 function $JavaScriptException(this$static, e){
-  this$static.e = e;
   return this$static;
 }
 
@@ -104,80 +75,12 @@ function getClass_0(){
   return Lcom_google_gwt_core_client_JavaScriptException_2_classLit;
 }
 
-function getDescription(e){
-  if (e != null && (e.typeMarker$ != nullMethod && e.typeId$ != 2)) {
-    return getDescription0(dynamicCastJso(e));
-  }
-   else {
-    return e + '';
-  }
-}
-
-function getDescription0(e){
-  return e == null?null:e.message;
-}
-
-function getMessage(){
-  if (this.message_0 == null) {
-    this.name_0 = getName(this.e);
-    this.description = getDescription(this.e);
-    this.message_0 = '(' + this.name_0 + '): ' + this.description + getProperties(this.e);
-  }
-  return this.message_0;
-}
-
-function getName(e){
-  if (e == null) {
-    return 'null';
-  }
-   else if (e != null && (e.typeMarker$ != nullMethod && e.typeId$ != 2)) {
-    return getName0(dynamicCastJso(e));
-  }
-   else if (e != null && canCast(e.typeId$, 1)) {
-    return 'String';
-  }
-   else {
-    return (e.typeMarker$ == nullMethod || e.typeId$ == 2?e.getClass$():Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
-  }
-}
-
-function getName0(e){
-  return e == null?null:e.name;
-}
-
-function getProperties(e){
-  return e != null && (e.typeMarker$ != nullMethod && e.typeId$ != 2)?getProperties0(dynamicCastJso(e)):'';
-}
-
-function getProperties0(e){
-  var result = '';
-  try {
-    for (prop in e) {
-      if (prop != 'name' && (prop != 'message' && prop != 'toString')) {
-        try {
-          result += '\n ' + prop + ': ' + e[prop];
-        }
-         catch (ignored) {
-        }
-      }
-    }
-  }
-   catch (ignored) {
-  }
-  return result;
-}
-
 function JavaScriptException(){
 }
 
 _ = JavaScriptException.prototype = new RuntimeException();
 _.getClass$ = getClass_0;
-_.getMessage = getMessage;
 _.typeId$ = 6;
-_.description = null;
-_.e = null;
-_.message_0 = null;
-_.name_0 = null;
 function equals__devirtual$(this$static, other){
   return this$static.typeMarker$ == nullMethod || this$static.typeId$ == 2?this$static.equals$(other):(this$static == null?null:this$static) === (other == null?null:other);
 }
@@ -187,277 +90,56 @@ function hashCode__devirtual$(this$static){
 }
 
 var sNextHashId = 0;
-function $append(a, x){
-  a[a.explicitLength++] = x;
-}
-
-function $append_0(a, x){
-  a[a.explicitLength++] = x == null?'null':x;
-}
-
-function $appendNonNull(a, x){
-  a[a.explicitLength++] = x;
-}
-
-function $toString_0(a){
-  var s_0, s;
-  s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
-  a[a.explicitLength++] = s_0;
-  return s_0;
-}
-
-function $clinit_10(){
-  $clinit_10 = nullMethod;
-  $clinit_8();
-  new DOMImplIE6();
-}
-
-function $createScriptElement(doc, source){
-  var elem;
-  elem = doc.createElement('script');
-  elem.text = source;
-  return elem;
-}
-
-function getClass_4(){
-  return Lcom_google_gwt_dom_client_DOMImpl_2_classLit;
-}
-
-function DOMImpl(){
-}
-
-_ = DOMImpl.prototype = new Object_0();
-_.getClass$ = getClass_4;
-_.typeId$ = 0;
-function $clinit_9(){
-  $clinit_9 = nullMethod;
-  $clinit_10();
-}
-
-function $isOrHasChild(parent_0, child){
-  return parent_0 === child || parent_0.contains(child);
-}
-
-function $selectAdd(select, option, before){
-  if (before) {
-    select.add(option, before.index);
-  }
-   else {
-    select.add(option);
-  }
-}
-
 function getClass_3(){
-  return Lcom_google_gwt_dom_client_DOMImplTrident_2_classLit;
+  return Lcom_google_gwt_core_client_impl_StringBufferImpl_2_classLit;
 }
 
-function DOMImplTrident(){
+function StringBufferImpl(){
 }
 
-_ = DOMImplTrident.prototype = new DOMImpl();
+_ = StringBufferImpl.prototype = new Object_0();
 _.getClass$ = getClass_3;
 _.typeId$ = 0;
-var currentEventTarget = null;
-function $clinit_8(){
-  $clinit_8 = nullMethod;
-  $clinit_9();
-}
-
 function getClass_2(){
-  return Lcom_google_gwt_dom_client_DOMImplIE6_2_classLit;
+  return Lcom_google_gwt_core_client_impl_StringBufferImplAppend_2_classLit;
 }
 
-function DOMImplIE6(){
+function StringBufferImplAppend(){
 }
 
-_ = DOMImplIE6.prototype = new DOMImplTrident();
+_ = StringBufferImplAppend.prototype = new StringBufferImpl();
 _.getClass$ = getClass_2;
 _.typeId$ = 0;
-function $getPropertyString(this$static, name_0){
-  return this$static[name_0] == null?null:String(this$static[name_0]);
-}
-
-function getClass_13(){
+_.string = '';
+function getClass_7(){
   return Lcom_google_gwt_event_shared_GwtEvent_2_classLit;
-}
-
-function toString_2(){
-  return 'An event type';
 }
 
 function GwtEvent(){
 }
 
 _ = GwtEvent.prototype = new Object_0();
-_.getClass$ = getClass_13;
-_.toString$ = toString_2;
+_.getClass$ = getClass_7;
 _.typeId$ = 0;
 _.dead = false;
 _.source = null;
-function fireNativeEvent(nativeEvent, handlerSource, relativeElem){
-  var currentNative, currentRelativeElem, typeKey;
-  if (registered) {
-    typeKey = dynamicCast(registered.map[($clinit_10() , nativeEvent).type], 2);
-    if (typeKey) {
-      currentNative = typeKey.flyweight.nativeEvent;
-      currentRelativeElem = typeKey.flyweight.relativeElem;
-      typeKey.flyweight.nativeEvent = nativeEvent;
-      typeKey.flyweight.relativeElem = relativeElem;
-      $fireEvent_1(handlerSource, typeKey.flyweight);
-      typeKey.flyweight.nativeEvent = currentNative;
-      typeKey.flyweight.relativeElem = currentRelativeElem;
-    }
-  }
-}
-
-function getClass_8(){
-  return Lcom_google_gwt_event_dom_client_DomEvent_2_classLit;
-}
-
-function DomEvent(){
-}
-
-_ = DomEvent.prototype = new GwtEvent();
-_.getClass$ = getClass_8;
-_.typeId$ = 0;
-_.nativeEvent = null;
-_.relativeElem = null;
-var registered = null;
-function $clinit_20(){
-  $clinit_20 = nullMethod;
-  TYPE = $DomEvent$Type(new DomEvent$Type(), 'change', ($clinit_20() , new ChangeEvent()));
-}
-
 function dispatch(handler){
-  handler.this$0.mode = get_1(handler.val$modeBox.element.selectedIndex + 1);
+  $onClose();
+}
+
+function fire(source){
+  var event_0;
+  if (TYPE) {
+    event_0 = new CloseEvent();
+    $fireEvent_0(source, event_0);
+  }
 }
 
 function getAssociatedType(){
   return TYPE;
 }
 
-function getClass_5(){
-  return Lcom_google_gwt_event_dom_client_ChangeEvent_2_classLit;
-}
-
-function ChangeEvent(){
-}
-
-_ = ChangeEvent.prototype = new DomEvent();
-_.dispatch = dispatch;
-_.getAssociatedType = getAssociatedType;
-_.getClass$ = getClass_5;
-_.typeId$ = 0;
-var TYPE;
-function $clinit_22(){
-  $clinit_22 = nullMethod;
-  TYPE_0 = $DomEvent$Type(new DomEvent$Type(), 'click', ($clinit_22() , new ClickEvent()));
-}
-
-function dispatch_0(handler){
-  handler.onClick(this);
-}
-
-function getAssociatedType_0(){
-  return TYPE_0;
-}
-
-function getClass_6(){
-  return Lcom_google_gwt_event_dom_client_ClickEvent_2_classLit;
-}
-
-function ClickEvent(){
-}
-
-_ = ClickEvent.prototype = new DomEvent();
-_.dispatch = dispatch_0;
-_.getAssociatedType = getAssociatedType_0;
-_.getClass$ = getClass_6;
-_.typeId$ = 0;
-var TYPE_0;
-function $GwtEvent$Type(this$static){
-  this$static.index_0 = ++nextHashCode;
-  return this$static;
-}
-
-function getClass_12(){
-  return Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit;
-}
-
-function hashCode_1(){
-  return this.index_0;
-}
-
-function toString_1(){
-  return 'Event type';
-}
-
-function GwtEvent$Type(){
-}
-
-_ = GwtEvent$Type.prototype = new Object_0();
-_.getClass$ = getClass_12;
-_.hashCode$ = hashCode_1;
-_.toString$ = toString_1;
-_.typeId$ = 0;
-_.index_0 = 0;
-var nextHashCode = 0;
-function $DomEvent$Type(this$static, eventName, flyweight){
-  this$static.index_0 = ++nextHashCode;
-  this$static.flyweight = flyweight;
-  if (!registered) {
-    registered = $PrivateMap(new PrivateMap());
-  }
-  registered.map[eventName] = this$static;
-  this$static.name_0 = eventName;
-  return this$static;
-}
-
-function getClass_7(){
-  return Lcom_google_gwt_event_dom_client_DomEvent$Type_2_classLit;
-}
-
-function DomEvent$Type(){
-}
-
-_ = DomEvent$Type.prototype = new GwtEvent$Type();
-_.getClass$ = getClass_7;
-_.typeId$ = 7;
-_.flyweight = null;
-_.name_0 = null;
-function $PrivateMap(this$static){
-  this$static.map = {};
-  return this$static;
-}
-
-function getClass_9(){
-  return Lcom_google_gwt_event_dom_client_PrivateMap_2_classLit;
-}
-
-function PrivateMap(){
-}
-
-_ = PrivateMap.prototype = new Object_0();
-_.getClass$ = getClass_9;
-_.typeId$ = 0;
-_.map = null;
-function dispatch_1(handler){
-  handler.onClose(this);
-}
-
-function fire(source){
-  var event_0;
-  if (TYPE_1) {
-    event_0 = new CloseEvent();
-    $fireEvent_0(source, event_0);
-  }
-}
-
-function getAssociatedType_1(){
-  return TYPE_1;
-}
-
-function getClass_10(){
+function getClass_4(){
   return Lcom_google_gwt_event_logical_shared_CloseEvent_2_classLit;
 }
 
@@ -465,12 +147,12 @@ function CloseEvent(){
 }
 
 _ = CloseEvent.prototype = new GwtEvent();
-_.dispatch = dispatch_1;
-_.getAssociatedType = getAssociatedType_1;
-_.getClass$ = getClass_10;
+_.dispatch = dispatch;
+_.getAssociatedType = getAssociatedType;
+_.getClass$ = getClass_4;
 _.typeId$ = 0;
-var TYPE_1 = null;
-function getClass_11(){
+var TYPE = null;
+function getClass_5(){
   return Lcom_google_gwt_event_shared_DefaultHandlerRegistration_2_classLit;
 }
 
@@ -478,15 +160,30 @@ function DefaultHandlerRegistration(){
 }
 
 _ = DefaultHandlerRegistration.prototype = new Object_0();
-_.getClass$ = getClass_11;
+_.getClass$ = getClass_5;
 _.typeId$ = 0;
-function $HandlerManager(this$static, source){
-  this$static.registry = $HandlerManager$HandlerRegistry(new HandlerManager$HandlerRegistry());
-  this$static.source = source;
-  this$static.isReverseOrder = false;
+function $GwtEvent$Type(this$static){
+  this$static.index = ++nextHashCode;
   return this$static;
 }
 
+function getClass_6(){
+  return Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit;
+}
+
+function hashCode_1(){
+  return this.index;
+}
+
+function GwtEvent$Type(){
+}
+
+_ = GwtEvent$Type.prototype = new Object_0();
+_.getClass$ = getClass_6;
+_.hashCode$ = hashCode_1;
+_.typeId$ = 0;
+_.index = 0;
+var nextHashCode = 0;
 function $addHandler_0(this$static, type, handler){
   if (this$static.firingDepth > 0) {
     $defer(this$static, $HandlerManager$1(new HandlerManager$1(), this$static, type, handler));
@@ -501,7 +198,7 @@ function $defer(this$static, command){
   if (!this$static.deferredDeltas) {
     this$static.deferredDeltas = $ArrayList(new ArrayList());
   }
-  $add_5(this$static.deferredDeltas, command);
+  $add_0(this$static.deferredDeltas, command);
 }
 
 function $fireEvent_0(this$static, event_0){
@@ -536,7 +233,7 @@ function $handleQueuedAddsAndRemoves(this$static){
   if (this$static.deferredDeltas) {
     try {
       for (c$iterator = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), this$static.deferredDeltas); c$iterator.i < c$iterator.this$0.size;) {
-        c = dynamicCast($next_0(c$iterator), 3);
+        c = dynamicCast($next_0(c$iterator), 2);
         $addHandler(c.this$0.registry, c.val$type, c.val$handler);
       }
     }
@@ -546,7 +243,7 @@ function $handleQueuedAddsAndRemoves(this$static){
   }
 }
 
-function getClass_16(){
+function getClass_10(){
   return Lcom_google_gwt_event_shared_HandlerManager_2_classLit;
 }
 
@@ -554,7 +251,7 @@ function HandlerManager(){
 }
 
 _ = HandlerManager.prototype = new Object_0();
-_.getClass$ = getClass_16;
+_.getClass$ = getClass_10;
 _.typeId$ = 0;
 _.deferredDeltas = null;
 _.firingDepth = 0;
@@ -568,7 +265,7 @@ function $HandlerManager$1(this$static, this$0, val$type, val$handler){
   return this$static;
 }
 
-function getClass_14(){
+function getClass_8(){
   return Lcom_google_gwt_event_shared_HandlerManager$1_2_classLit;
 }
 
@@ -576,8 +273,8 @@ function HandlerManager$1(){
 }
 
 _ = HandlerManager$1.prototype = new Object_0();
-_.getClass$ = getClass_14;
-_.typeId$ = 8;
+_.getClass$ = getClass_8;
+_.typeId$ = 7;
 _.this$0 = null;
 _.val$handler = null;
 _.val$type = null;
@@ -588,7 +285,7 @@ function $HandlerManager$HandlerRegistry(this$static){
 
 function $addHandler(this$static, type, handler){
   var l;
-  l = dynamicCast($get(this$static.map, type), 4);
+  l = dynamicCast($get(this$static.map, type), 3);
   if (!l) {
     l = $ArrayList(new ArrayList());
     $put(this$static.map, type, l);
@@ -599,22 +296,22 @@ function $addHandler(this$static, type, handler){
 function $fireEvent(this$static, event_0, isReverseOrder){
   var count, handler, i, type, l, l_0, l_1;
   type = event_0.getAssociatedType();
-  count = (l = dynamicCast($get(this$static.map, type), 4) , !l?0:l.size);
+  count = (l = dynamicCast($get(this$static.map, type), 3) , !l?0:l.size);
   if (isReverseOrder) {
     for (i = count - 1; i >= 0; --i) {
-      handler = (l_0 = dynamicCast($get(this$static.map, type), 4) , dynamicCast((checkIndex(i, l_0.size) , l_0.array[i]), 15));
+      handler = (l_0 = dynamicCast($get(this$static.map, type), 3) , dynamicCast((checkIndex(i, l_0.size) , l_0.array[i]), 10));
       event_0.dispatch(handler);
     }
   }
    else {
     for (i = 0; i < count; ++i) {
-      handler = (l_1 = dynamicCast($get(this$static.map, type), 4) , dynamicCast((checkIndex(i, l_1.size) , l_1.array[i]), 15));
+      handler = (l_1 = dynamicCast($get(this$static.map, type), 3) , dynamicCast((checkIndex(i, l_1.size) , l_1.array[i]), 10));
       event_0.dispatch(handler);
     }
   }
 }
 
-function getClass_15(){
+function getClass_9(){
   return Lcom_google_gwt_event_shared_HandlerManager$HandlerRegistry_2_classLit;
 }
 
@@ -622,7 +319,7 @@ function HandlerManager$HandlerRegistry(){
 }
 
 _ = HandlerManager$HandlerRegistry.prototype = new Object_0();
-_.getClass$ = getClass_15;
+_.getClass$ = getClass_9;
 _.typeId$ = 0;
 function createFromSeed(seedType, length_0){
   var array = new Array(length_0);
@@ -635,14 +332,14 @@ function createFromSeed(seedType, length_0){
   return array;
 }
 
-function getClass_17(){
+function getClass_11(){
   return this.arrayClass$;
 }
 
 function initDim(arrayClass, typeId, queryId, length_0, seedType){
   var result;
   result = createFromSeed(seedType, length_0);
-  $clinit_61();
+  $clinit_20();
   wrapArray(result, expandoNames_0, expandoValues_0);
   result.arrayClass$ = arrayClass;
   result.typeId$ = typeId;
@@ -651,7 +348,7 @@ function initDim(arrayClass, typeId, queryId, length_0, seedType){
 }
 
 function initValues(arrayClass, typeId, queryId, array){
-  $clinit_61();
+  $clinit_20();
   wrapArray(array, expandoNames_0, expandoValues_0);
   array.arrayClass$ = arrayClass;
   array.typeId$ = typeId;
@@ -675,13 +372,13 @@ function Array_0(){
 }
 
 _ = Array_0.prototype = new Object_0();
-_.getClass$ = getClass_17;
+_.getClass$ = getClass_11;
 _.typeId$ = 0;
 _.arrayClass$ = null;
 _.length = 0;
 _.queryId$ = 0;
-function $clinit_61(){
-  $clinit_61 = nullMethod;
+function $clinit_20(){
+  $clinit_20 = nullMethod;
   expandoNames_0 = [];
   expandoValues_0 = [];
   initExpandos(new Array_0(), expandoNames_0, expandoValues_0);
@@ -699,7 +396,7 @@ function initExpandos(protoType, expandoNames, expandoValues){
 }
 
 function wrapArray(array, expandoNames, expandoValues){
-  $clinit_61();
+  $clinit_20();
   for (var i = 0, c = expandoNames.length; i < c; ++i) {
     array[expandoNames[i]] = expandoValues[i];
   }
@@ -721,13 +418,6 @@ function dynamicCast(src, dstId){
   return src;
 }
 
-function dynamicCastJso(src){
-  if (src != null && (src.typeMarker$ == nullMethod || src.typeId$ == 2)) {
-    throw new ClassCastException();
-  }
-  return src;
-}
-
 function instanceOf(src, dstId){
   return src != null && canCast(src.typeId$, dstId);
 }
@@ -736,9 +426,9 @@ function round_int(x){
   return ~~Math.max(Math.min(x, 2147483647), -2147483648);
 }
 
-var typeIdArray = [{}, {}, {1:1}, {16:1}, {16:1}, {16:1}, {16:1}, {2:1}, {3:1}, {18:1}, {18:1}, {18:1}, {16:1}, {15:1}, {5:1}, {7:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1, 19:1}, {15:1}, {5:1, 6:1, 7:1, 8:1, 19:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {5:1, 6:1, 7:1, 8:1}, {16:1, 24:1}, {16:1}, {16:1}, {16:1}, {16:1}, {16:1}, {16:1, 25:1}, {16:1}, {16:1}, {16:1}, {16:1}, {23:1}, {23:1}, {21:1}, {21:1}, {21:1}, {23:1}, {4:1}, {22:1}, {23:1}, {21:1}, {16:1}, {17:1}, {17:1}, {17:1}, {17:1}, {9:1}, {10:1}, {11:1}, {12:1}, {13:1}, {15:1}, {15:1}, {15:1}, {15:1}, {15:1}, {17:1}, {17:1}, {14:1}];
+var typeIdArray = [{}, {}, {1:1}, {11:1}, {11:1}, {11:1}, {11:1}, {2:1}, {13:1}, {13:1}, {13:1}, {11:1}, {10:1}, {11:1, 18:1}, {11:1}, {11:1}, {11:1}, {11:1}, {11:1}, {11:1, 19:1}, {11:1}, {11:1}, {11:1}, {11:1}, {17:1}, {15:1}, {15:1}, {15:1}, {3:1}, {16:1}, {15:1}, {11:1}, {12:1}, {12:1}, {12:1}, {12:1}, {4:1}, {5:1}, {6:1}, {7:1}, {8:1}, {12:1}, {12:1}, {9:1}];
 function caught(e){
-  if (e != null && canCast(e.typeId$, 16)) {
+  if (e != null && canCast(e.typeId$, 11)) {
     return e;
   }
   return $JavaScriptException(new JavaScriptException(), e);
@@ -812,36 +502,36 @@ function create(valueLow, valueHigh){
   return [valueLow, valueHigh];
 }
 
-function div_0(a, b){
+function div(a, b){
   var approx, deltaRem, deltaResult, halfa, rem, result;
   if (b[0] == 0 && b[1] == 0) {
     throw $ArithmeticException(new ArithmeticException(), '/ by zero');
   }
   if (a[0] == 0 && a[1] == 0) {
-    return $clinit_67() , ZERO;
+    return $clinit_26() , ZERO;
   }
-  if (eq(a, ($clinit_67() , MIN_VALUE))) {
+  if (eq(a, ($clinit_26() , MIN_VALUE))) {
     if (eq(b, ONE) || eq(b, NEG_ONE)) {
       return MIN_VALUE;
     }
     halfa = shr(a, 1);
-    approx = shl(div_0(halfa, b), 1);
+    approx = shl(div(halfa, b), 1);
     rem = sub(a, mul(b, approx));
-    return add(approx, div_0(rem, b));
+    return add(approx, div(rem, b));
   }
   if (eq(b, MIN_VALUE)) {
     return ZERO;
   }
   if (a[1] < 0) {
     if (b[1] < 0) {
-      return div_0(neg(a), neg(b));
+      return div(neg(a), neg(b));
     }
      else {
-      return neg(div_0(neg(a), b));
+      return neg(div(neg(a), b));
     }
   }
   if (b[1] < 0) {
-    return neg(div_0(a, neg(b)));
+    return neg(div(a, neg(b)));
   }
   result = ZERO;
   rem = a;
@@ -863,13 +553,13 @@ function eq(a, b){
 
 function fromDouble(value){
   if (isNaN(value)) {
-    return $clinit_67() , ZERO;
+    return $clinit_26() , ZERO;
   }
   if (value < -9223372036854775808) {
-    return $clinit_67() , MIN_VALUE;
+    return $clinit_26() , MIN_VALUE;
   }
   if (value >= 9223372036854775807) {
-    return $clinit_67() , MAX_VALUE;
+    return $clinit_26() , MAX_VALUE;
   }
   if (value > 0) {
     return create(Math.floor(value), 0);
@@ -883,7 +573,7 @@ function fromInt(value){
   var rebase, result;
   if (value > -129 && value < 128) {
     rebase = value + 128;
-    result = ($clinit_66() , boxedValues)[rebase];
+    result = ($clinit_25() , boxedValues)[rebase];
     if (result == null) {
       result = boxedValues[rebase] = internalFromInt(value);
     }
@@ -923,12 +613,12 @@ function makeFromBits(highBits, lowBits){
 function mul(a, b){
   var a1, a2, a3, a4, b1, b2, b3, b4, res;
   if (a[0] == 0 && a[1] == 0) {
-    return $clinit_67() , ZERO;
+    return $clinit_26() , ZERO;
   }
   if (b[0] == 0 && b[1] == 0) {
-    return $clinit_67() , ZERO;
+    return $clinit_26() , ZERO;
   }
-  if (eq(a, ($clinit_67() , MIN_VALUE))) {
+  if (eq(a, ($clinit_26() , MIN_VALUE))) {
     return multByMinValue(b);
   }
   if (eq(b, MIN_VALUE)) {
@@ -972,16 +662,16 @@ function mul(a, b){
 
 function multByMinValue(a){
   if ((lowBits_0(a) & 1) == 1) {
-    return $clinit_67() , MIN_VALUE;
+    return $clinit_26() , MIN_VALUE;
   }
    else {
-    return $clinit_67() , ZERO;
+    return $clinit_26() , ZERO;
   }
 }
 
 function neg(a){
   var newHigh, newLow;
-  if (eq(a, ($clinit_67() , MIN_VALUE))) {
+  if (eq(a, ($clinit_26() , MIN_VALUE))) {
     return MIN_VALUE;
   }
   newHigh = -a[1];
@@ -1013,7 +703,7 @@ function pwrAsDouble(n){
 function shl(a, n){
   var diff, newHigh, newLow, twoToN;
   n &= 63;
-  if (eq(a, ($clinit_67() , MIN_VALUE))) {
+  if (eq(a, ($clinit_26() , MIN_VALUE))) {
     if (n == 0) {
       return a;
     }
@@ -1050,7 +740,7 @@ function shru(a, n){
   n &= 63;
   sr = shr(a, n);
   if (a[1] < 0) {
-    sr = add(sr, shl(($clinit_67() , TWO), 63 - n));
+    sr = add(sr, shl(($clinit_26() , TWO), 63 - n));
   }
   return sr;
 }
@@ -1062,13 +752,9 @@ function sub(a, b){
   return create(newLow, newHigh);
 }
 
-function toDouble(a){
-  return a[1] + a[0];
-}
-
 function toDoubleRoundDown(a){
   var diff, magnitute, toSubtract;
-  magnitute = round_int(Math.log(a[1]) / ($clinit_67() , LN_2));
+  magnitute = round_int(Math.log(a[1]) / ($clinit_26() , LN_2));
   if (magnitute <= 48) {
     return a[1] + a[0];
   }
@@ -1081,7 +767,7 @@ function toDoubleRoundDown(a){
 
 function toDoubleRoundUp(a){
   var diff, magnitute, toAdd;
-  magnitute = round_int(Math.log(a[1]) / ($clinit_67() , LN_2));
+  magnitute = round_int(Math.log(a[1]) / ($clinit_26() , LN_2));
   if (magnitute <= 48) {
     return a[1] + a[0];
   }
@@ -1092,22 +778,22 @@ function toDoubleRoundUp(a){
   }
 }
 
-function toString_3(a){
+function toString_0(a){
   var digits, rem, remDivTenPower, res, tenPowerLong, zeroesNeeded;
   if (a[0] == 0 && a[1] == 0) {
     return '0';
   }
-  if (eq(a, ($clinit_67() , MIN_VALUE))) {
+  if (eq(a, ($clinit_26() , MIN_VALUE))) {
     return '-9223372036854775808';
   }
   if (a[1] < 0) {
-    return '-' + toString_3(neg(a));
+    return '-' + toString_0(neg(a));
   }
   rem = a;
   res = '';
   while (!(rem[0] == 0 && rem[1] == 0)) {
     tenPowerLong = fromInt(1000000000);
-    remDivTenPower = div_0(rem, tenPowerLong);
+    remDivTenPower = div(rem, tenPowerLong);
     digits = '' + lowBits_0(sub(rem, mul(remDivTenPower, tenPowerLong)));
     rem = remDivTenPower;
     if (!(rem[0] == 0 && rem[1] == 0)) {
@@ -1121,14 +807,14 @@ function toString_3(a){
   return res;
 }
 
-function $clinit_66(){
-  $clinit_66 = nullMethod;
-  boxedValues = initDim(_3_3D_classLit, 0, 14, 256, 0);
+function $clinit_25(){
+  $clinit_25 = nullMethod;
+  boxedValues = initDim(_3_3D_classLit, 0, 9, 256, 0);
 }
 
 var boxedValues;
-function $clinit_67(){
-  $clinit_67 = nullMethod;
+function $clinit_26(){
+  $clinit_26 = nullMethod;
   LN_2 = Math.log(2);
   MAX_VALUE = P7fffffffffffffff_longLit;
   MIN_VALUE = N8000000000000000_longLit;
@@ -1149,18 +835,11 @@ function $CommandExecutor(this$static){
 }
 
 function $doCommandCanceled(this$static){
-  var cmd, ex, ueh;
+  var cmd;
   cmd = $getLast(this$static.iterator);
   $remove(this$static.iterator);
-  ex = null;
-  if (cmd != null && canCast(cmd.typeId$, 17)) {
-    ex = $IncrementalCommandCanceledException(new IncrementalCommandCanceledException(), dynamicCast(cmd, 17));
-  }
-  if (ex) {
-    ueh = sUncaughtExceptionHandler;
-    if (ueh) {
-      $wnd.alert('Uncaught exception: ' + ex);
-    }
+  if (cmd != null && canCast(cmd.typeId$, 12)) {
+    $IncrementalCommandCanceledException(new IncrementalCommandCanceledException(), dynamicCast(cmd, 12));
   }
   this$static.executing = false;
   $maybeStartExecutionTimer(this$static);
@@ -1180,8 +859,8 @@ function $doExecuteCommands(this$static, startTimeMillis){
         if (element == null) {
           return;
         }
-        if (element != null && canCast(element.typeId$, 17)) {
-          incrementalCommand = dynamicCast(element, 17);
+        if (element != null && canCast(element.typeId$, 12)) {
+          incrementalCommand = dynamicCast(element, 12);
           removeCommand = !incrementalCommand.execute();
         }
       }
@@ -1216,11 +895,11 @@ function $maybeStartExecutionTimer(this$static){
 }
 
 function $submit(this$static, command){
-  $add_5(this$static.commands, command);
+  $add_0(this$static.commands, command);
   $maybeStartExecutionTimer(this$static);
 }
 
-function getClass_21(){
+function getClass_15(){
   return Lcom_google_gwt_user_client_CommandExecutor_2_classLit;
 }
 
@@ -1228,12 +907,12 @@ function CommandExecutor(){
 }
 
 _ = CommandExecutor.prototype = new Object_0();
-_.getClass$ = getClass_21;
+_.getClass$ = getClass_15;
 _.typeId$ = 0;
 _.executing = false;
 _.executionTimerPending = false;
-function $clinit_81(){
-  $clinit_81 = nullMethod;
+function $clinit_38(){
+  $clinit_38 = nullMethod;
   timers = $ArrayList(new ArrayList());
   addCloseHandler(new Timer$1());
 }
@@ -1245,28 +924,12 @@ function $cancel(this$static){
    else {
     $wnd.clearTimeout(this$static.timerId);
   }
-  $remove_6(timers, this$static);
-}
-
-function $fireAndCatch(this$static){
-  var $e0, e;
-  try {
-    $fireImpl(this$static);
-  }
-   catch ($e0) {
-    $e0 = caught($e0);
-    if (instanceOf($e0, 16)) {
-      e = $e0;
-      $wnd.alert('Uncaught exception: ' + e);
-    }
-     else 
-      throw $e0;
-  }
+  $remove_1(timers, this$static);
 }
 
 function $fireImpl(this$static){
   if (!this$static.isRepeating) {
-    $remove_6(timers, this$static);
+    $remove_1(timers, this$static);
   }
   this$static.run();
 }
@@ -1278,7 +941,7 @@ function $schedule(this$static, delayMillis){
   $cancel(this$static);
   this$static.isRepeating = false;
   this$static.timerId = createTimeout(this$static, delayMillis);
-  $add_5(timers, this$static);
+  $add_0(timers, this$static);
 }
 
 function createTimeout(timer, delay){
@@ -1289,17 +952,10 @@ function createTimeout(timer, delay){
 }
 
 function fire_0(){
-  var handler;
-  handler = sUncaughtExceptionHandler;
-  if (handler) {
-    $fireAndCatch(this);
-  }
-   else {
-    $fireImpl(this);
-  }
+  $fireImpl(this);
 }
 
-function getClass_24(){
+function getClass_18(){
   return Lcom_google_gwt_user_client_Timer_2_classLit;
 }
 
@@ -1308,23 +964,23 @@ function Timer(){
 
 _ = Timer.prototype = new Object_0();
 _.fire = fire_0;
-_.getClass$ = getClass_24;
-_.typeId$ = 9;
+_.getClass$ = getClass_18;
+_.typeId$ = 8;
 _.isRepeating = false;
 _.timerId = 0;
 var timers;
-function $clinit_71(){
-  $clinit_71 = nullMethod;
-  $clinit_81();
+function $clinit_30(){
+  $clinit_30 = nullMethod;
+  $clinit_38();
 }
 
 function $CommandExecutor$1(this$static, this$0){
-  $clinit_71();
+  $clinit_30();
   this$static.this$0 = this$0;
   return this$static;
 }
 
-function getClass_18(){
+function getClass_12(){
   return Lcom_google_gwt_user_client_CommandExecutor$1_2_classLit;
 }
 
@@ -1339,22 +995,22 @@ function CommandExecutor$1(){
 }
 
 _ = CommandExecutor$1.prototype = new Timer();
-_.getClass$ = getClass_18;
+_.getClass$ = getClass_12;
 _.run = run;
-_.typeId$ = 10;
+_.typeId$ = 9;
 _.this$0 = null;
-function $clinit_72(){
-  $clinit_72 = nullMethod;
-  $clinit_81();
+function $clinit_31(){
+  $clinit_31 = nullMethod;
+  $clinit_38();
 }
 
 function $CommandExecutor$2(this$static, this$0){
-  $clinit_72();
+  $clinit_31();
   this$static.this$0 = this$0;
   return this$static;
 }
 
-function getClass_19(){
+function getClass_13(){
   return Lcom_google_gwt_user_client_CommandExecutor$2_2_classLit;
 }
 
@@ -1367,9 +1023,9 @@ function CommandExecutor$2(){
 }
 
 _ = CommandExecutor$2.prototype = new Timer();
-_.getClass$ = getClass_19;
+_.getClass$ = getClass_13;
 _.run = run_0;
-_.typeId$ = 11;
+_.typeId$ = 10;
 _.this$0 = null;
 function $CommandExecutor$CircularIterator(this$static, this$0){
   this$static.this$0 = this$0;
@@ -1395,7 +1051,7 @@ function $next(this$static){
 }
 
 function $remove(this$static){
-  $remove_5(this$static.this$0.commands, this$static.last);
+  $remove_0(this$static.this$0.commands, this$static.last);
   --this$static.end;
   if (this$static.last <= this$static.next) {
     if (--this$static.next < 0) {
@@ -1405,7 +1061,7 @@ function $remove(this$static){
   this$static.last = -1;
 }
 
-function getClass_20(){
+function getClass_14(){
   return Lcom_google_gwt_user_client_CommandExecutor$CircularIterator_2_classLit;
 }
 
@@ -1421,7 +1077,7 @@ function CommandExecutor$CircularIterator(){
 }
 
 _ = CommandExecutor$CircularIterator.prototype = new Object_0();
-_.getClass$ = getClass_20;
+_.getClass$ = getClass_14;
 _.hasNext = hasNext;
 _.next_0 = next_0;
 _.typeId$ = 0;
@@ -1429,67 +1085,13 @@ _.end = 0;
 _.last = -1;
 _.next = 0;
 _.this$0 = null;
-function dispatchEvent_0(evt, elem, listener){
-  var handler;
-  handler = sUncaughtExceptionHandler;
-  if (handler) {
-    dispatchEventAndCatch(evt, elem, listener);
-  }
-   else {
-    dispatchEventImpl(evt, elem, listener);
-  }
-}
-
-function dispatchEventAndCatch(evt, elem, listener){
-  var $e0, e;
-  try {
-    dispatchEventImpl(evt, elem, listener);
-  }
-   catch ($e0) {
-    $e0 = caught($e0);
-    if (instanceOf($e0, 16)) {
-      e = $e0;
-      $wnd.alert('Uncaught exception: ' + e);
-    }
-     else 
-      throw $e0;
-  }
-}
-
-function dispatchEventImpl(evt, elem, listener){
-  var prevCurrentEvent;
-  if (elem == sCaptureElem) {
-    if ($eventGetTypeInt(($clinit_10() , evt).type) == 8192) {
-      sCaptureElem = null;
-    }
-  }
-  prevCurrentEvent = currentEvent;
-  currentEvent = evt;
-  try {
-    listener.onBrowserEvent(evt);
-  }
-   finally {
-    currentEvent = prevCurrentEvent;
-  }
-}
-
-function previewEvent(evt){
-  return true;
-}
-
-function sinkEvents(elem, eventBits){
-  $maybeInitializeEventSystem();
-  $sinkEventsImpl(elem, eventBits);
-}
-
-var currentEvent = null, sCaptureElem = null;
-function $clinit_76(){
-  $clinit_76 = nullMethod;
+function $clinit_34(){
+  $clinit_34 = nullMethod;
   commandExecutor = $CommandExecutor(new CommandExecutor());
 }
 
 function addCommand(cmd){
-  $clinit_76();
+  $clinit_34();
   if (!cmd) {
     throw $NullPointerException(new NullPointerException(), 'cmd cannot be null');
   }
@@ -1501,7 +1103,7 @@ function $IncrementalCommandCanceledException(this$static){
   return this$static;
 }
 
-function getClass_22(){
+function getClass_16(){
   return Lcom_google_gwt_user_client_IncrementalCommandCanceledException_2_classLit;
 }
 
@@ -1509,48 +1111,31 @@ function IncrementalCommandCanceledException(){
 }
 
 _ = IncrementalCommandCanceledException.prototype = new RuntimeException();
-_.getClass$ = getClass_22;
-_.typeId$ = 12;
-function getClass_23(){
-  return Lcom_google_gwt_user_client_Timer$1_2_classLit;
+_.getClass$ = getClass_16;
+_.typeId$ = 11;
+function $onClose(){
+  while (($clinit_38() , timers).size > 0) {
+    $cancel(dynamicCast($get_0(timers, 0), 13));
+  }
 }
 
-function onClose(event_0){
-  while (($clinit_81() , timers).size > 0) {
-    $cancel(dynamicCast($get_0(timers, 0), 18));
-  }
+function getClass_17(){
+  return Lcom_google_gwt_user_client_Timer$1_2_classLit;
 }
 
 function Timer$1(){
 }
 
 _ = Timer$1.prototype = new Object_0();
-_.getClass$ = getClass_23;
-_.onClose = onClose;
-_.typeId$ = 13;
+_.getClass$ = getClass_17;
+_.typeId$ = 12;
 function addCloseHandler(handler){
   maybeInitializeCloseHandlers();
-  return addHandler(TYPE_1?TYPE_1:(TYPE_1 = $GwtEvent$Type(new GwtEvent$Type())), handler);
+  return addHandler(TYPE?TYPE:(TYPE = $GwtEvent$Type(new GwtEvent$Type())), handler);
 }
 
 function addHandler(type, handler){
   return $addHandler_0(getHandlers(), type, handler);
-}
-
-function fireClosedAndCatch(){
-  var $e0, e;
-  try {
-    fireClosedImpl();
-  }
-   catch ($e0) {
-    $e0 = caught($e0);
-    if (instanceOf($e0, 16)) {
-      e = $e0;
-      $wnd.alert('Uncaught exception: ' + e);
-    }
-     else 
-      throw $e0;
-  }
 }
 
 function fireClosedImpl(){
@@ -1559,27 +1144,10 @@ function fireClosedImpl(){
   }
 }
 
-function fireClosingAndCatch(){
-  var $e0, e;
-  try {
-    return fireClosingImpl();
-  }
-   catch ($e0) {
-    $e0 = caught($e0);
-    if (instanceOf($e0, 16)) {
-      e = $e0;
-      $wnd.alert('Uncaught exception: ' + e);
-      return null;
-    }
-     else 
-      throw $e0;
-  }
-}
-
 function fireClosingImpl(){
   var event_0;
   if (closeHandlersInitialized) {
-    event_0 = ($clinit_82() , new Window$ClosingEvent());
+    event_0 = ($clinit_39() , new Window$ClosingEvent());
     fireEvent(event_0);
     return null;
   }
@@ -1601,48 +1169,26 @@ function getHandlers(){
 
 function maybeInitializeCloseHandlers(){
   if (!closeHandlersInitialized) {
-    $initHandler($getWindowCloseHandlerMethodString(), '__gwt_initWindowCloseHandler');
+    $initWindowCloseHandler();
     closeHandlersInitialized = true;
   }
 }
 
-function onClosed(){
-  var handler;
-  handler = sUncaughtExceptionHandler;
-  if (handler) {
-    fireClosedAndCatch();
-  }
-   else {
-    fireClosedImpl();
-  }
-}
-
-function onClosing(){
-  var handler;
-  handler = sUncaughtExceptionHandler;
-  if (handler) {
-    return fireClosingAndCatch();
-  }
-   else {
-    return fireClosingImpl();
-  }
-}
-
 var closeHandlersInitialized = false, handlers = null;
-function $clinit_82(){
-  $clinit_82 = nullMethod;
-  TYPE_2 = $GwtEvent$Type(new GwtEvent$Type());
+function $clinit_39(){
+  $clinit_39 = nullMethod;
+  TYPE_0 = $GwtEvent$Type(new GwtEvent$Type());
 }
 
-function dispatch_2(handler){
+function dispatch_0(handler){
   null.nullMethod();
 }
 
-function getAssociatedType_2(){
-  return TYPE_2;
+function getAssociatedType_0(){
+  return TYPE_0;
 }
 
-function getClass_25(){
+function getClass_19(){
   return Lcom_google_gwt_user_client_Window$ClosingEvent_2_classLit;
 }
 
@@ -1650,11 +1196,11 @@ function Window$ClosingEvent(){
 }
 
 _ = Window$ClosingEvent.prototype = new GwtEvent();
-_.dispatch = dispatch_2;
-_.getAssociatedType = getAssociatedType_2;
-_.getClass$ = getClass_25;
+_.dispatch = dispatch_0;
+_.getAssociatedType = getAssociatedType_0;
+_.getClass$ = getClass_19;
 _.typeId$ = 0;
-var TYPE_2;
+var TYPE_0;
 function $Window$WindowHandlers(this$static){
   this$static.registry = $HandlerManager$HandlerRegistry(new HandlerManager$HandlerRegistry());
   this$static.source = null;
@@ -1662,7 +1208,7 @@ function $Window$WindowHandlers(this$static){
   return this$static;
 }
 
-function getClass_26(){
+function getClass_20(){
   return Lcom_google_gwt_user_client_Window$WindowHandlers_2_classLit;
 }
 
@@ -1670,1099 +1216,43 @@ function Window$WindowHandlers(){
 }
 
 _ = Window$WindowHandlers.prototype = new HandlerManager();
-_.getClass$ = getClass_26;
-_.typeId$ = 14;
-function $eventGetTypeInt(eventType){
-  switch (eventType) {
-    case 'blur':
-      return 4096;
-    case 'change':
-      return 1024;
-    case 'click':
-      return 1;
-    case 'dblclick':
-      return 2;
-    case 'focus':
-      return 2048;
-    case 'keydown':
-      return 128;
-    case 'keypress':
-      return 256;
-    case 'keyup':
-      return 512;
-    case 'load':
-      return 32768;
-    case 'losecapture':
-      return 8192;
-    case 'mousedown':
-      return 4;
-    case 'mousemove':
-      return 64;
-    case 'mouseout':
-      return 32;
-    case 'mouseover':
-      return 16;
-    case 'mouseup':
-      return 8;
-    case 'scroll':
-      return 16384;
-    case 'error':
-      return 65536;
-    case 'mousewheel':
-      return 131072;
-    case 'DOMMouseScroll':
-      return 131072;
-    case 'contextmenu':
-      return 262144;
-  }
-}
-
-function $maybeInitializeEventSystem(){
-  if (!eventSystemIsInitialized) {
-    $initEventSystem();
-    eventSystemIsInitialized = true;
-  }
-}
-
-var eventSystemIsInitialized = false;
-function $initEventSystem(){
-  dispatchEvent_1 = function(){
-    var oldEventTarget = ($clinit_9() , currentEventTarget);
-    currentEventTarget = this;
-    if ($wnd.event.returnValue == null) {
-      $wnd.event.returnValue = true;
-      if (!previewEvent($wnd.event)) {
-        currentEventTarget = oldEventTarget;
-        return;
-      }
-    }
-    var listener, curElem = this;
-    while (curElem && !(listener = curElem.__listener)) {
-      curElem = curElem.parentElement;
-    }
-    if (listener) {
-      if (!(listener != null && (listener.typeMarker$ != nullMethod && listener.typeId$ != 2)) && (listener != null && canCast(listener.typeId$, 6))) {
-        dispatchEvent_0($wnd.event, curElem, listener);
-      }
-    }
-    currentEventTarget = oldEventTarget;
-  }
-  ;
-  dispatchDblClickEvent = function(){
-    var newEvent = $doc.createEventObject();
-    if ($wnd.event.returnValue == null) {
-      $wnd.event.srcElement.fireEvent('onclick', newEvent);
-    }
-    if (this.__eventBits & 2) {
-      dispatchEvent_1.call(this);
-    }
-     else if ($wnd.event.returnValue == null) {
-      $wnd.event.returnValue = true;
-      previewEvent($wnd.event);
-    }
-  }
-  ;
-  var bodyDispatcher = function(){
-    dispatchEvent_1.call($doc.body);
-  }
-  ;
-  var bodyDblClickDispatcher = function(){
-    dispatchDblClickEvent.call($doc.body);
-  }
-  ;
-  $doc.body.attachEvent('onclick', bodyDispatcher);
-  $doc.body.attachEvent('onmousedown', bodyDispatcher);
-  $doc.body.attachEvent('onmouseup', bodyDispatcher);
-  $doc.body.attachEvent('onmousemove', bodyDispatcher);
-  $doc.body.attachEvent('onmousewheel', bodyDispatcher);
-  $doc.body.attachEvent('onkeydown', bodyDispatcher);
-  $doc.body.attachEvent('onkeypress', bodyDispatcher);
-  $doc.body.attachEvent('onkeyup', bodyDispatcher);
-  $doc.body.attachEvent('onfocus', bodyDispatcher);
-  $doc.body.attachEvent('onblur', bodyDispatcher);
-  $doc.body.attachEvent('ondblclick', bodyDblClickDispatcher);
-  $doc.body.attachEvent('oncontextmenu', bodyDispatcher);
-}
-
-function $sinkEventsImpl(elem, bits){
-  var chMask = (elem.__eventBits || 0) ^ bits;
-  elem.__eventBits = bits;
-  if (!chMask)
-    return;
-  if (chMask & 1)
-    elem.onclick = bits & 1?dispatchEvent_1:null;
-  if (chMask & 3)
-    elem.ondblclick = bits & 3?dispatchDblClickEvent:null;
-  if (chMask & 4)
-    elem.onmousedown = bits & 4?dispatchEvent_1:null;
-  if (chMask & 8)
-    elem.onmouseup = bits & 8?dispatchEvent_1:null;
-  if (chMask & 16)
-    elem.onmouseover = bits & 16?dispatchEvent_1:null;
-  if (chMask & 32)
-    elem.onmouseout = bits & 32?dispatchEvent_1:null;
-  if (chMask & 64)
-    elem.onmousemove = bits & 64?dispatchEvent_1:null;
-  if (chMask & 128)
-    elem.onkeydown = bits & 128?dispatchEvent_1:null;
-  if (chMask & 256)
-    elem.onkeypress = bits & 256?dispatchEvent_1:null;
-  if (chMask & 512)
-    elem.onkeyup = bits & 512?dispatchEvent_1:null;
-  if (chMask & 1024)
-    elem.onchange = bits & 1024?dispatchEvent_1:null;
-  if (chMask & 2048)
-    elem.onfocus = bits & 2048?dispatchEvent_1:null;
-  if (chMask & 4096)
-    elem.onblur = bits & 4096?dispatchEvent_1:null;
-  if (chMask & 8192)
-    elem.onlosecapture = bits & 8192?dispatchEvent_1:null;
-  if (chMask & 16384)
-    elem.onscroll = bits & 16384?dispatchEvent_1:null;
-  if (chMask & 32768)
-    elem.onload = bits & 32768?dispatchEvent_1:null;
-  if (chMask & 65536)
-    elem.onerror = bits & 65536?dispatchEvent_1:null;
-  if (chMask & 131072)
-    elem.onmousewheel = bits & 131072?dispatchEvent_1:null;
-  if (chMask & 262144)
-    elem.oncontextmenu = bits & 262144?dispatchEvent_1:null;
-}
-
-var dispatchDblClickEvent = null, dispatchEvent_1 = null;
-function $getWindowCloseHandlerMethodString(){
-  return function(beforeunload, unload){
-    var wnd = window, oldOnBeforeUnload = wnd.onbeforeunload, oldOnUnload = wnd.onunload;
-    wnd.onbeforeunload = function(evt){
-      var ret, oldRet;
-      try {
-        ret = beforeunload();
-      }
-       finally {
-        oldRet = oldOnBeforeUnload && oldOnBeforeUnload(evt);
-      }
-      if (ret != null) {
-        return ret;
-      }
-      if (oldRet != null) {
-        return oldRet;
-      }
-    }
-    ;
-    wnd.onunload = function(evt){
-      try {
-        unload();
-      }
-       finally {
-        oldOnUnload && oldOnUnload(evt);
-        wnd.onresize = null;
-        wnd.onscroll = null;
-        wnd.onbeforeunload = null;
-        wnd.onunload = null;
-      }
-    }
-    ;
-    wnd.__gwt_initWindowCloseHandler = undefined;
-  }
-  .toString();
-}
-
-function $initHandler(initFunc, funcName){
-  var scriptElem;
-  initFunc = $replaceFirst(initFunc, 'function', 'function ' + funcName);
-  scriptElem = $createScriptElement(($clinit_10() , $doc), initFunc);
-  $doc.body.appendChild(scriptElem);
-  $initWindowCloseHandlerImpl();
-  $doc.body.removeChild(scriptElem);
-}
-
-function $initWindowCloseHandlerImpl(){
-  $wnd.__gwt_initWindowCloseHandler(function(){
-    return onClosing();
-  }
-  , function(){
-    onClosed();
-  }
-  );
-}
-
-function getClass_46(){
-  return Lcom_google_gwt_user_client_ui_UIObject_2_classLit;
-}
-
-function setStylePrimaryName(elem, style){
-  if (!elem) {
-    throw $RuntimeException(new RuntimeException(), 'Null widget handle. If you are creating a composite, ensure that initWidget() has been called.');
-  }
-  style = $trim(style);
-  if (style.length == 0) {
-    throw $IllegalArgumentException(new IllegalArgumentException(), 'Style names cannot be empty');
-  }
-  updatePrimaryAndDependentStyleNames(elem, style);
-}
-
-function toString_5(){
-  if (!this.element) {
-    return '(null handle)';
-  }
-  return ($clinit_10() , this.element).outerHTML;
-}
-
-function updatePrimaryAndDependentStyleNames(elem, newPrimaryStyle){
-  var classes = elem.className.split(/\s+/);
-  if (!classes) {
-    return;
-  }
-  var oldPrimaryStyle = classes[0];
-  var oldPrimaryStyleLen = oldPrimaryStyle.length;
-  classes[0] = newPrimaryStyle;
-  for (var i = 1, n = classes.length; i < n; i++) {
-    var name_0 = classes[i];
-    if (name_0.length > oldPrimaryStyleLen && (name_0.charAt(oldPrimaryStyleLen) == '-' && name_0.indexOf(oldPrimaryStyle) == 0)) {
-      classes[i] = newPrimaryStyle + name_0.substring(oldPrimaryStyleLen);
-    }
-  }
-  elem.className = classes.join(' ');
-}
-
-function UIObject(){
-}
-
-_ = UIObject.prototype = new Object_0();
-_.getClass$ = getClass_46;
-_.toString$ = toString_5;
-_.typeId$ = 15;
-_.element = null;
-function $addDomHandler(this$static, handler, type){
-  $sinkEvents(this$static, $eventGetTypeInt(type.name_0));
-  return $addHandler_0(!this$static.handlerManager?(this$static.handlerManager = $HandlerManager(new HandlerManager(), this$static)):this$static.handlerManager, type, handler);
-}
-
-function $fireEvent_1(this$static, event_0){
-  if (this$static.handlerManager) {
-    $fireEvent_0(this$static.handlerManager, event_0);
-  }
-}
-
-function $onAttach(this$static){
-  var bitsToAdd;
-  if (this$static.attached) {
-    throw $IllegalStateException(new IllegalStateException(), "Should only call onAttach when the widget is detached from the browser's document");
-  }
-  this$static.attached = true;
-  this$static.element.__listener = this$static;
-  bitsToAdd = this$static.eventsToSink;
-  this$static.eventsToSink = -1;
-  if (bitsToAdd > 0) {
-    $sinkEvents(this$static, bitsToAdd);
-  }
-  this$static.doAttachChildren();
-  this$static.onLoad();
-}
-
-function $onBrowserEvent(this$static, event_0){
-  var related;
-  switch ($eventGetTypeInt(($clinit_10() , event_0).type)) {
-    case 16:
-    case 32:
-      related = event_0.relatedTarget || (event_0.type == 'mouseout'?event_0.toElement:event_0.fromElement);
-      if (!!related && $isOrHasChild(this$static.element, related)) {
-        return;
-      }
-
-  }
-  fireNativeEvent(event_0, this$static, this$static.element);
-}
-
-function $onDetach(this$static){
-  if (!this$static.attached) {
-    throw $IllegalStateException(new IllegalStateException(), "Should only call onDetach when the widget is attached to the browser's document");
-  }
-  try {
-    this$static.onUnload();
-  }
-   finally {
-    this$static.doDetachChildren();
-    this$static.element.__listener = null;
-    this$static.attached = false;
-  }
-}
-
-function $removeFromParent(this$static){
-  if (!this$static.parent_0) {
-    $clinit_115();
-    if ($containsKey(widgetsToDetach.map, this$static)) {
-      $onDetach(this$static);
-      $remove_4(widgetsToDetach.map, this$static) != null;
-    }
-  }
-   else if (this$static.parent_0) {
-    this$static.parent_0.remove(this$static);
-  }
-   else if (this$static.parent_0) {
-    throw $IllegalStateException(new IllegalStateException(), "This widget's parent does not implement HasWidgets");
-  }
-}
-
-function $setParent(this$static, parent_0){
-  var oldParent;
-  oldParent = this$static.parent_0;
-  if (!parent_0) {
-    if (!!oldParent && oldParent.attached) {
-      $onDetach(this$static);
-    }
-    this$static.parent_0 = null;
-  }
-   else {
-    if (oldParent) {
-      throw $IllegalStateException(new IllegalStateException(), 'Cannot set a new parent without first clearing the old parent');
-    }
-    this$static.parent_0 = parent_0;
-    if (parent_0.attached) {
-      $onAttach(this$static);
-    }
-  }
-}
-
-function $sinkEvents(this$static, eventBitsToAdd){
-  if (this$static.eventsToSink == -1) {
-    sinkEvents(this$static.element, eventBitsToAdd | (this$static.element.__eventBits || 0));
-  }
-   else {
-    this$static.eventsToSink |= eventBitsToAdd;
-  }
-}
-
-function doAttachChildren_0(){
-}
-
-function doDetachChildren_0(){
-}
-
-function getClass_50(){
-  return Lcom_google_gwt_user_client_ui_Widget_2_classLit;
-}
-
-function onBrowserEvent_0(event_0){
-  $onBrowserEvent(this, event_0);
-}
-
-function onLoad_0(){
-}
-
-function onUnload_0(){
-}
-
-function Widget(){
-}
-
-_ = Widget.prototype = new UIObject();
-_.doAttachChildren = doAttachChildren_0;
-_.doDetachChildren = doDetachChildren_0;
-_.getClass$ = getClass_50;
-_.onBrowserEvent = onBrowserEvent_0;
-_.onLoad = onLoad_0;
-_.onUnload = onUnload_0;
-_.typeId$ = 16;
-_.attached = false;
-_.eventsToSink = 0;
-_.handlerManager = null;
-_.parent_0 = null;
-function doAttachChildren(){
-  var child, it;
-  for (it = this.iterator_0(); it.hasNext();) {
-    child = dynamicCast(it.next_0(), 8);
-    $onAttach(child);
-  }
-}
-
-function doDetachChildren(){
-  var child, it;
-  for (it = this.iterator_0(); it.hasNext();) {
-    child = dynamicCast(it.next_0(), 8);
-    $onDetach(child);
-  }
-}
-
-function getClass_38(){
-  return Lcom_google_gwt_user_client_ui_Panel_2_classLit;
-}
-
-function onLoad(){
-}
-
-function onUnload(){
-}
-
-function Panel(){
-}
-
-_ = Panel.prototype = new Widget();
-_.doAttachChildren = doAttachChildren;
-_.doDetachChildren = doDetachChildren;
-_.getClass$ = getClass_38;
-_.onLoad = onLoad;
-_.onUnload = onUnload;
-_.typeId$ = 17;
-function $add_0(this$static, child, container){
-  $removeFromParent(child);
-  $add_3(this$static.children, child);
-  container.appendChild(child.element);
-  $setParent(child, this$static);
-}
-
-function $remove_0(this$static, w){
-  var elem;
-  if (w.parent_0 != this$static) {
-    return false;
-  }
-  $setParent(w, null);
-  elem = w.element;
-  ($clinit_10() , elem).parentElement.removeChild(elem);
-  $remove_3(this$static.children, w);
-  return true;
-}
-
-function getClass_31(){
-  return Lcom_google_gwt_user_client_ui_ComplexPanel_2_classLit;
-}
-
-function iterator(){
-  return $WidgetCollection$WidgetIterator(new WidgetCollection$WidgetIterator(), this.children);
-}
-
-function remove_0(w){
-  return $remove_0(this, w);
-}
-
-function ComplexPanel(){
-}
-
-_ = ComplexPanel.prototype = new Panel();
-_.getClass$ = getClass_31;
-_.iterator_0 = iterator;
-_.remove = remove_0;
-_.typeId$ = 18;
-function $add(this$static, w){
-  $add_0(this$static, w, this$static.element);
-}
-
-function changeToStaticPositioning(elem){
-  elem.style['left'] = '';
-  elem.style['top'] = '';
-  elem.style['position'] = '';
-}
-
-function getClass_27(){
-  return Lcom_google_gwt_user_client_ui_AbsolutePanel_2_classLit;
-}
-
-function remove(w){
-  var removed;
-  removed = $remove_0(this, w);
-  if (removed) {
-    changeToStaticPositioning(w.element);
-  }
-  return removed;
-}
-
-function AbsolutePanel(){
-}
-
-_ = AbsolutePanel.prototype = new ComplexPanel();
-_.getClass$ = getClass_27;
-_.remove = remove;
-_.typeId$ = 19;
-function $FocusWidget(this$static, elem){
-  this$static.element = elem;
-  this$static.element.tabIndex = 0;
-  return this$static;
-}
-
-function getClass_32(){
-  return Lcom_google_gwt_user_client_ui_FocusWidget_2_classLit;
-}
-
-function FocusWidget(){
-}
-
-_ = FocusWidget.prototype = new Widget();
-_.getClass$ = getClass_32;
-_.typeId$ = 20;
-function $ButtonBase(this$static, elem){
-  this$static.element = elem;
-  this$static.element.tabIndex = 0;
-  return this$static;
-}
-
-function getClass_28(){
-  return Lcom_google_gwt_user_client_ui_ButtonBase_2_classLit;
-}
-
-function ButtonBase(){
-}
-
-_ = ButtonBase.prototype = new FocusWidget();
-_.getClass$ = getClass_28;
-_.typeId$ = 21;
-function $Button_0(this$static, html, handler){
-  $ButtonBase(this$static, ($clinit_10() , $doc).createElement('button'));
-  adjustType(this$static.element);
-  this$static.element['className'] = 'gwt-Button';
-  this$static.element.innerHTML = html || '';
-  $addDomHandler(this$static, handler, ($clinit_22() , TYPE_0));
-  return this$static;
-}
-
-function adjustType(button){
-  if (button.type == 'submit') {
+_.getClass$ = getClass_20;
+_.typeId$ = 0;
+function $initWindowCloseHandler(){
+  var oldOnBeforeUnload = $wnd.onbeforeunload;
+  var oldOnUnload = $wnd.onunload;
+  $wnd.onbeforeunload = function(evt){
+    var ret, oldRet;
     try {
-      button.setAttribute('type', 'button');
+      ret = fireClosingImpl();
     }
-     catch (e) {
+     finally {
+      oldRet = oldOnBeforeUnload && oldOnBeforeUnload(evt);
     }
-  }
-}
-
-function getClass_29(){
-  return Lcom_google_gwt_user_client_ui_Button_2_classLit;
-}
-
-function Button(){
-}
-
-_ = Button.prototype = new ButtonBase();
-_.getClass$ = getClass_29;
-_.typeId$ = 22;
-function $CellPanel(this$static){
-  this$static.children = $WidgetCollection(new WidgetCollection());
-  this$static.table = ($clinit_10() , $doc).createElement('table');
-  this$static.body_0 = $doc.createElement('tbody');
-  this$static.table.appendChild(this$static.body_0);
-  this$static.element = this$static.table;
-  return this$static;
-}
-
-function getClass_30(){
-  return Lcom_google_gwt_user_client_ui_CellPanel_2_classLit;
-}
-
-function CellPanel(){
-}
-
-_ = CellPanel.prototype = new ComplexPanel();
-_.getClass$ = getClass_30;
-_.typeId$ = 23;
-_.body_0 = null;
-_.table = null;
-function $clinit_100(){
-  $clinit_100 = nullMethod;
-  $HasHorizontalAlignment$HorizontalAlignmentConstant(new HasHorizontalAlignment$HorizontalAlignmentConstant(), 'center');
-  ALIGN_LEFT = $HasHorizontalAlignment$HorizontalAlignmentConstant(new HasHorizontalAlignment$HorizontalAlignmentConstant(), 'left');
-  $HasHorizontalAlignment$HorizontalAlignmentConstant(new HasHorizontalAlignment$HorizontalAlignmentConstant(), 'right');
-  ALIGN_DEFAULT = ALIGN_LEFT;
-}
-
-var ALIGN_DEFAULT, ALIGN_LEFT;
-function $HasHorizontalAlignment$HorizontalAlignmentConstant(this$static, textAlignString){
-  this$static.textAlignString = textAlignString;
-  return this$static;
-}
-
-function getClass_33(){
-  return Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$HorizontalAlignmentConstant_2_classLit;
-}
-
-function HasHorizontalAlignment$HorizontalAlignmentConstant(){
-}
-
-_ = HasHorizontalAlignment$HorizontalAlignmentConstant.prototype = new Object_0();
-_.getClass$ = getClass_33;
-_.typeId$ = 0;
-_.textAlignString = null;
-function $clinit_105(){
-  $clinit_105 = nullMethod;
-  $HasVerticalAlignment$VerticalAlignmentConstant(new HasVerticalAlignment$VerticalAlignmentConstant(), 'bottom');
-  $HasVerticalAlignment$VerticalAlignmentConstant(new HasVerticalAlignment$VerticalAlignmentConstant(), 'middle');
-  ALIGN_TOP = $HasVerticalAlignment$VerticalAlignmentConstant(new HasVerticalAlignment$VerticalAlignmentConstant(), 'top');
-}
-
-var ALIGN_TOP;
-function $HasVerticalAlignment$VerticalAlignmentConstant(this$static, verticalAlignString){
-  this$static.verticalAlignString = verticalAlignString;
-  return this$static;
-}
-
-function getClass_34(){
-  return Lcom_google_gwt_user_client_ui_HasVerticalAlignment$VerticalAlignmentConstant_2_classLit;
-}
-
-function HasVerticalAlignment$VerticalAlignmentConstant(){
-}
-
-_ = HasVerticalAlignment$VerticalAlignmentConstant.prototype = new Object_0();
-_.getClass$ = getClass_34;
-_.typeId$ = 0;
-_.verticalAlignString = null;
-function $HorizontalPanel(this$static){
-  $CellPanel(this$static);
-  this$static.horzAlign = ($clinit_100() , ALIGN_DEFAULT);
-  this$static.vertAlign = ($clinit_105() , ALIGN_TOP);
-  this$static.tableRow = ($clinit_10() , $doc).createElement('tr');
-  this$static.body_0.appendChild(this$static.tableRow);
-  this$static.table['cellSpacing'] = '0';
-  this$static.table['cellPadding'] = '0';
-  return this$static;
-}
-
-function $add_1(this$static, w){
-  var td_0, td;
-  td_0 = (td = ($clinit_10() , $doc).createElement('td') , (td['align'] = this$static.horzAlign.textAlignString , undefined) , (td.style['verticalAlign'] = this$static.vertAlign.verticalAlignString , undefined) , td);
-  this$static.tableRow.appendChild(td_0);
-  $removeFromParent(w);
-  $add_3(this$static.children, w);
-  td_0.appendChild(w.element);
-  $setParent(w, this$static);
-}
-
-function getClass_35(){
-  return Lcom_google_gwt_user_client_ui_HorizontalPanel_2_classLit;
-}
-
-function remove_1(w){
-  var removed, td;
-  td = ($clinit_10() , w.element).parentElement;
-  removed = $remove_0(this, w);
-  if (removed) {
-    this.tableRow.removeChild(td);
-  }
-  return removed;
-}
-
-function HorizontalPanel(){
-}
-
-_ = HorizontalPanel.prototype = new CellPanel();
-_.getClass$ = getClass_35;
-_.remove = remove_1;
-_.typeId$ = 24;
-_.tableRow = null;
-function $Label(this$static, text){
-  this$static.element = ($clinit_10() , $doc).createElement('div');
-  this$static.element['className'] = 'gwt-Label';
-  this$static.element.innerText = text || '';
-  return this$static;
-}
-
-function getClass_36(){
-  return Lcom_google_gwt_user_client_ui_Label_2_classLit;
-}
-
-function Label(){
-}
-
-_ = Label.prototype = new Widget();
-_.getClass$ = getClass_36;
-_.typeId$ = 25;
-function $ListBox(this$static){
-  var html;
-  $FocusWidget(this$static, (html = '<SELECT>' , ($clinit_10() , $doc).createElement(html)));
-  this$static.element['className'] = 'gwt-ListBox';
-  return this$static;
-}
-
-function $insertItem(this$static, item, value, index){
-  var before, option, select;
-  select = this$static.element;
-  option = ($clinit_10() , $doc).createElement('option');
-  option.text = item;
-  option.value = value;
-  if (index == -1 || index == select.options.length) {
-    $selectAdd(select, option, null);
-  }
-   else {
-    before = select.options[index];
-    $selectAdd(select, option, before);
-  }
-}
-
-function getClass_37(){
-  return Lcom_google_gwt_user_client_ui_ListBox_2_classLit;
-}
-
-function ListBox(){
-}
-
-_ = ListBox.prototype = new FocusWidget();
-_.getClass$ = getClass_37;
-_.typeId$ = 26;
-function $clinit_115(){
-  $clinit_115 = nullMethod;
-  rootPanels = $HashMap(new HashMap());
-  widgetsToDetach = $HashSet(new HashSet());
-}
-
-function $RootPanel(this$static, elem){
-  $clinit_115();
-  this$static.children = $WidgetCollection(new WidgetCollection());
-  this$static.element = elem;
-  $onAttach(this$static);
-  return this$static;
-}
-
-function detachWidgets(){
-  var outerIter, entry;
-  $clinit_115();
-  var widget, widget$iterator;
-  for (widget$iterator = (outerIter = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $keySet(widgetsToDetach.map).val$entrySet.this$0) , $AbstractMap$1$1(new AbstractMap$1$1(), outerIter)); $hasNext_0(widget$iterator.val$outerIter.iter);) {
-    widget = dynamicCast((entry = dynamicCast($next_0(widget$iterator.val$outerIter.iter), 21) , entry.getKey()), 8);
-    if (widget.attached) {
-      $onDetach(widget);
+    if (ret != null) {
+      return ret;
+    }
+    if (oldRet != null) {
+      return oldRet;
     }
   }
-  $clearImpl(widgetsToDetach.map);
-  $clearImpl(rootPanels);
-}
-
-function get_0(id){
-  $clinit_115();
-  var rp;
-  rp = dynamicCast($get(rootPanels, id), 19);
-  if (rp) {
-    return rp;
-  }
-  if (rootPanels.size == 0) {
-    addCloseHandler(new RootPanel$1());
-  }
-  rp = $RootPanel$DefaultRootPanel(new RootPanel$DefaultRootPanel());
-  $put(rootPanels, id, rp);
-  $add_6(widgetsToDetach, rp);
-  return rp;
-}
-
-function getClass_41(){
-  return Lcom_google_gwt_user_client_ui_RootPanel_2_classLit;
-}
-
-function RootPanel(){
-}
-
-_ = RootPanel.prototype = new AbsolutePanel();
-_.getClass$ = getClass_41;
-_.typeId$ = 27;
-var rootPanels, widgetsToDetach;
-function getClass_39(){
-  return Lcom_google_gwt_user_client_ui_RootPanel$1_2_classLit;
-}
-
-function onClose_0(closeEvent){
-  detachWidgets();
-}
-
-function RootPanel$1(){
-}
-
-_ = RootPanel$1.prototype = new Object_0();
-_.getClass$ = getClass_39;
-_.onClose = onClose_0;
-_.typeId$ = 28;
-function $clinit_114(){
-  $clinit_114 = nullMethod;
-  $clinit_115();
-}
-
-function $RootPanel$DefaultRootPanel(this$static){
-  $clinit_114();
-  $RootPanel(this$static, $doc.body);
-  return this$static;
-}
-
-function getClass_40(){
-  return Lcom_google_gwt_user_client_ui_RootPanel$DefaultRootPanel_2_classLit;
-}
-
-function RootPanel$DefaultRootPanel(){
-}
-
-_ = RootPanel$DefaultRootPanel.prototype = new RootPanel();
-_.getClass$ = getClass_40;
-_.typeId$ = 29;
-function $SimplePanel(this$static){
-  this$static.element = ($clinit_10() , $doc).createElement('div');
-  return this$static;
-}
-
-function $remove_1(this$static, w){
-  if (this$static.widget != w) {
-    return false;
-  }
-  $setParent(w, null);
-  this$static.element.removeChild(w.element);
-  this$static.widget = null;
-  return true;
-}
-
-function $setWidget(this$static, w){
-  if (w == this$static.widget) {
-    return;
-  }
-  if (w) {
-    $removeFromParent(w);
-  }
-  if (this$static.widget) {
-    $remove_1(this$static, this$static.widget);
-  }
-  this$static.widget = w;
-  if (w) {
-    this$static.element.appendChild(this$static.widget.element);
-    $setParent(w, this$static);
-  }
-}
-
-function getClass_43(){
-  return Lcom_google_gwt_user_client_ui_SimplePanel_2_classLit;
-}
-
-function iterator_0(){
-  return $SimplePanel$1(new SimplePanel$1(), this);
-}
-
-function remove_2(w){
-  return $remove_1(this, w);
-}
-
-function SimplePanel(){
-}
-
-_ = SimplePanel.prototype = new Panel();
-_.getClass$ = getClass_43;
-_.iterator_0 = iterator_0;
-_.remove = remove_2;
-_.typeId$ = 30;
-_.widget = null;
-function $SimplePanel$1(this$static, this$0){
-  this$static.this$0 = this$0;
-  this$static.hasElement = !!this$static.this$0.widget;
-  return this$static;
-}
-
-function getClass_42(){
-  return Lcom_google_gwt_user_client_ui_SimplePanel$1_2_classLit;
-}
-
-function hasNext_0(){
-  return this.hasElement;
-}
-
-function next_1(){
-  if (!this.hasElement || !this.this$0.widget) {
-    throw new NoSuchElementException();
-  }
-  this.hasElement = false;
-  return this.this$0.widget;
-}
-
-function SimplePanel$1(){
-}
-
-_ = SimplePanel$1.prototype = new Object_0();
-_.getClass$ = getClass_42;
-_.hasNext = hasNext_0;
-_.next_0 = next_1;
-_.typeId$ = 0;
-_.this$0 = null;
-function $TextBoxBase(this$static, elem){
-  this$static.element = elem;
-  this$static.element.tabIndex = 0;
-  return this$static;
-}
-
-function $setText_1(this$static, text){
-  this$static.element['value'] = text != null?text:'';
-}
-
-function getClass_45(){
-  return Lcom_google_gwt_user_client_ui_TextBoxBase_2_classLit;
-}
-
-function onBrowserEvent(event_0){
-  var type;
-  type = $eventGetTypeInt(($clinit_10() , event_0).type);
-  if ((type & 896) != 0) {
-    $onBrowserEvent(this, event_0);
-  }
-   else {
-    $onBrowserEvent(this, event_0);
-  }
-}
-
-function TextBoxBase(){
-}
-
-_ = TextBoxBase.prototype = new FocusWidget();
-_.getClass$ = getClass_45;
-_.onBrowserEvent = onBrowserEvent;
-_.typeId$ = 31;
-function $TextArea(this$static){
-  $TextBoxBase(this$static, ($clinit_10() , $doc).createElement('textarea'));
-  this$static.element['className'] = 'gwt-TextArea';
-  return this$static;
-}
-
-function getClass_44(){
-  return Lcom_google_gwt_user_client_ui_TextArea_2_classLit;
-}
-
-function TextArea(){
-}
-
-_ = TextArea.prototype = new TextBoxBase();
-_.getClass$ = getClass_44;
-_.typeId$ = 32;
-function $VerticalPanel(this$static){
-  $CellPanel(this$static);
-  this$static.horzAlign = ($clinit_100() , ALIGN_DEFAULT);
-  this$static.vertAlign = ($clinit_105() , ALIGN_TOP);
-  this$static.table['cellSpacing'] = '0';
-  this$static.table['cellPadding'] = '0';
-  return this$static;
-}
-
-function $add_2(this$static, w){
-  var td_0, tr, td;
-  tr = ($clinit_10() , $doc).createElement('tr');
-  td_0 = (td = $doc.createElement('td') , (td['align'] = this$static.horzAlign.textAlignString , undefined) , (td.style['verticalAlign'] = this$static.vertAlign.verticalAlignString , undefined) , td);
-  tr.appendChild(td_0);
-  this$static.body_0.appendChild(tr);
-  $removeFromParent(w);
-  $add_3(this$static.children, w);
-  td_0.appendChild(w.element);
-  $setParent(w, this$static);
-}
-
-function getClass_47(){
-  return Lcom_google_gwt_user_client_ui_VerticalPanel_2_classLit;
-}
-
-function remove_3(w){
-  var removed, td;
-  td = ($clinit_10() , w.element).parentElement;
-  removed = $remove_0(this, w);
-  if (removed) {
-    this.body_0.removeChild(td.parentElement);
-  }
-  return removed;
-}
-
-function VerticalPanel(){
-}
-
-_ = VerticalPanel.prototype = new CellPanel();
-_.getClass$ = getClass_47;
-_.remove = remove_3;
-_.typeId$ = 33;
-function $WidgetCollection(this$static){
-  this$static.array = initDim(_3Lcom_google_gwt_user_client_ui_Widget_2_classLit, 0, 8, 4, 0);
-  return this$static;
-}
-
-function $add_3(this$static, w){
-  $insert(this$static, w, this$static.size);
-}
-
-function $indexOf(this$static, w){
-  var i;
-  for (i = 0; i < this$static.size; ++i) {
-    if (this$static.array[i] == w) {
-      return i;
+  ;
+  $wnd.onunload = function(evt){
+    try {
+      fireClosedImpl();
+    }
+     finally {
+      oldOnUnload && oldOnUnload(evt);
+      $wnd.onresize = null;
+      $wnd.onscroll = null;
+      $wnd.onbeforeunload = null;
+      $wnd.onunload = null;
     }
   }
-  return -1;
+  ;
 }
 
-function $insert(this$static, w, beforeIndex){
-  var i, newArray;
-  if (beforeIndex < 0 || beforeIndex > this$static.size) {
-    throw new IndexOutOfBoundsException();
-  }
-  if (this$static.size == this$static.array.length) {
-    newArray = initDim(_3Lcom_google_gwt_user_client_ui_Widget_2_classLit, 0, 8, this$static.array.length * 2, 0);
-    for (i = 0; i < this$static.array.length; ++i) {
-      setCheck(newArray, i, this$static.array[i]);
-    }
-    this$static.array = newArray;
-  }
-  ++this$static.size;
-  for (i = this$static.size - 1; i > beforeIndex; --i) {
-    setCheck(this$static.array, i, this$static.array[i - 1]);
-  }
-  setCheck(this$static.array, beforeIndex, w);
-}
-
-function $remove_2(this$static, index){
-  var i;
-  if (index < 0 || index >= this$static.size) {
-    throw new IndexOutOfBoundsException();
-  }
-  --this$static.size;
-  for (i = index; i < this$static.size; ++i) {
-    setCheck(this$static.array, i, this$static.array[i + 1]);
-  }
-  setCheck(this$static.array, this$static.size, null);
-}
-
-function $remove_3(this$static, w){
-  var index;
-  index = $indexOf(this$static, w);
-  if (index == -1) {
-    throw new NoSuchElementException();
-  }
-  $remove_2(this$static, index);
-}
-
-function getClass_49(){
-  return Lcom_google_gwt_user_client_ui_WidgetCollection_2_classLit;
-}
-
-function WidgetCollection(){
-}
-
-_ = WidgetCollection.prototype = new Object_0();
-_.getClass$ = getClass_49;
-_.typeId$ = 0;
-_.array = null;
-_.size = 0;
-function $WidgetCollection$WidgetIterator(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function getClass_48(){
-  return Lcom_google_gwt_user_client_ui_WidgetCollection$WidgetIterator_2_classLit;
-}
-
-function hasNext_1(){
-  return this.index_0 < this.this$0.size - 1;
-}
-
-function next_2(){
-  if (this.index_0 >= this.this$0.size) {
-    throw new NoSuchElementException();
-  }
-  return this.this$0.array[++this.index_0];
-}
-
-function WidgetCollection$WidgetIterator(){
-}
-
-_ = WidgetCollection$WidgetIterator.prototype = new Object_0();
-_.getClass$ = getClass_48;
-_.hasNext = hasNext_1;
-_.next_0 = next_2;
-_.typeId$ = 0;
-_.index_0 = -1;
-_.this$0 = null;
-function getClass_54(){
+function getClass_24(){
   return Ljava_io_InputStream_2_classLit;
 }
 
@@ -2770,7 +1260,7 @@ function InputStream(){
 }
 
 _ = InputStream.prototype = new Object_0();
-_.getClass$ = getClass_54;
+_.getClass$ = getClass_24;
 _.typeId$ = 0;
 function $ByteArrayInputStream(this$static, buf){
   $ByteArrayInputStream_0(this$static, buf, 0, buf.length);
@@ -2801,7 +1291,7 @@ function $read_0(this$static, buf, off, len){
   return len;
 }
 
-function getClass_51(){
+function getClass_21(){
   return Ljava_io_ByteArrayInputStream_2_classLit;
 }
 
@@ -2809,12 +1299,12 @@ function ByteArrayInputStream(){
 }
 
 _ = ByteArrayInputStream.prototype = new InputStream();
-_.getClass$ = getClass_51;
+_.getClass$ = getClass_21;
 _.typeId$ = 0;
 _.buf = null;
 _.count = 0;
 _.pos = 0;
-function getClass_55(){
+function getClass_25(){
   return Ljava_io_OutputStream_2_classLit;
 }
 
@@ -2822,7 +1312,7 @@ function OutputStream(){
 }
 
 _ = OutputStream.prototype = new Object_0();
-_.getClass$ = getClass_55;
+_.getClass$ = getClass_25;
 _.typeId$ = 0;
 function $ByteArrayOutputStream(this$static){
   this$static.buf = initDim(_3B_classLit, 0, -1, 32, 1);
@@ -2857,7 +1347,7 @@ function $write_0(this$static, buf, off, len){
   this$static.count += len;
 }
 
-function getClass_52(){
+function getClass_22(){
   return Ljava_io_ByteArrayOutputStream_2_classLit;
 }
 
@@ -2865,7 +1355,7 @@ function ByteArrayOutputStream(){
 }
 
 _ = ByteArrayOutputStream.prototype = new OutputStream();
-_.getClass$ = getClass_52;
+_.getClass$ = getClass_22;
 _.typeId$ = 0;
 _.buf = null;
 _.count = 0;
@@ -2874,7 +1364,7 @@ function $IOException(this$static, message){
   return this$static;
 }
 
-function getClass_53(){
+function getClass_23(){
   return Ljava_io_IOException_2_classLit;
 }
 
@@ -2882,14 +1372,14 @@ function IOException(){
 }
 
 _ = IOException.prototype = new Exception();
-_.getClass$ = getClass_53;
-_.typeId$ = 34;
+_.getClass$ = getClass_23;
+_.typeId$ = 13;
 function $ArithmeticException(this$static, explanation){
   this$static.detailMessage = explanation;
   return this$static;
 }
 
-function getClass_56(){
+function getClass_26(){
   return Ljava_lang_ArithmeticException_2_classLit;
 }
 
@@ -2897,14 +1387,14 @@ function ArithmeticException(){
 }
 
 _ = ArithmeticException.prototype = new RuntimeException();
-_.getClass$ = getClass_56;
-_.typeId$ = 35;
+_.getClass$ = getClass_26;
+_.typeId$ = 14;
 function $ArrayStoreException(this$static, message){
   this$static.detailMessage = message;
   return this$static;
 }
 
-function getClass_57(){
+function getClass_27(){
   return Ljava_lang_ArrayStoreException_2_classLit;
 }
 
@@ -2912,44 +1402,12 @@ function ArrayStoreException(){
 }
 
 _ = ArrayStoreException.prototype = new RuntimeException();
-_.getClass$ = getClass_57;
-_.typeId$ = 36;
-function digit_0(c, radix){
-  if (radix < 2 || radix > 36) {
-    return -1;
-  }
-  if (c >= 48 && c < 48 + (radix < 10?radix:10)) {
-    return c - 48;
-  }
-  if (c >= 97 && c < radix + 97 - 10) {
-    return c - 97 + 10;
-  }
-  if (c >= 65 && c < radix + 65 - 10) {
-    return c - 65 + 10;
-  }
-  return -1;
-}
-
-function forDigit(digit, radix){
-  if (radix < 2 || radix > 36) {
-    return 0;
-  }
-  if (digit < 0 || digit >= radix) {
-    return 0;
-  }
-  if (digit < 10) {
-    return 48 + digit & 65535;
-  }
-   else {
-    return 97 + digit - 10 & 65535;
-  }
-}
-
+_.getClass$ = getClass_27;
+_.typeId$ = 15;
 function createForArray(packageName, className){
   var clazz;
   clazz = new Class();
   clazz.typeName = packageName + className;
-  clazz.modifiers = 4;
   return clazz;
 }
 
@@ -2964,28 +1422,21 @@ function createForEnum(packageName, className){
   var clazz;
   clazz = new Class();
   clazz.typeName = packageName + className;
-  clazz.modifiers = 8;
   return clazz;
 }
 
-function getClass_59(){
+function getClass_29(){
   return Ljava_lang_Class_2_classLit;
-}
-
-function toString_6(){
-  return ((this.modifiers & 2) != 0?'interface ':(this.modifiers & 1) != 0?'':'class ') + this.typeName;
 }
 
 function Class(){
 }
 
 _ = Class.prototype = new Object_0();
-_.getClass$ = getClass_59;
-_.toString$ = toString_6;
+_.getClass$ = getClass_29;
 _.typeId$ = 0;
-_.modifiers = 0;
 _.typeName = null;
-function getClass_58(){
+function getClass_28(){
   return Ljava_lang_ClassCastException_2_classLit;
 }
 
@@ -2993,13 +1444,13 @@ function ClassCastException(){
 }
 
 _ = ClassCastException.prototype = new RuntimeException();
-_.getClass$ = getClass_58;
-_.typeId$ = 39;
+_.getClass$ = getClass_28;
+_.typeId$ = 18;
 function equals_0(other){
   return this === (other == null?null:other);
 }
 
-function getClass_60(){
+function getClass_30(){
   return Ljava_lang_Enum_2_classLit;
 }
 
@@ -3007,26 +1458,20 @@ function hashCode_2(){
   return this.$H || (this.$H = ++sNextHashId);
 }
 
-function toString_7(){
-  return this.name_0;
-}
-
 function Enum(){
 }
 
 _ = Enum.prototype = new Object_0();
 _.equals$ = equals_0;
-_.getClass$ = getClass_60;
+_.getClass$ = getClass_30;
 _.hashCode$ = hashCode_2;
-_.toString$ = toString_7;
 _.typeId$ = 0;
-_.name_0 = null;
 function $IllegalArgumentException(this$static, message){
   this$static.detailMessage = message;
   return this$static;
 }
 
-function getClass_62(){
+function getClass_32(){
   return Ljava_lang_IllegalArgumentException_2_classLit;
 }
 
@@ -3034,14 +1479,9 @@ function IllegalArgumentException(){
 }
 
 _ = IllegalArgumentException.prototype = new RuntimeException();
-_.getClass$ = getClass_62;
-_.typeId$ = 40;
-function $IllegalStateException(this$static, s){
-  this$static.detailMessage = s;
-  return this$static;
-}
-
-function getClass_63(){
+_.getClass$ = getClass_32;
+_.typeId$ = 19;
+function getClass_33(){
   return Ljava_lang_IllegalStateException_2_classLit;
 }
 
@@ -3049,14 +1489,14 @@ function IllegalStateException(){
 }
 
 _ = IllegalStateException.prototype = new RuntimeException();
-_.getClass$ = getClass_63;
-_.typeId$ = 41;
+_.getClass$ = getClass_33;
+_.typeId$ = 20;
 function $IndexOutOfBoundsException(this$static, message){
   this$static.detailMessage = message;
   return this$static;
 }
 
-function getClass_64(){
+function getClass_34(){
   return Ljava_lang_IndexOutOfBoundsException_2_classLit;
 }
 
@@ -3064,31 +1504,8 @@ function IndexOutOfBoundsException(){
 }
 
 _ = IndexOutOfBoundsException.prototype = new RuntimeException();
-_.getClass$ = getClass_64;
-_.typeId$ = 42;
-function toPowerOfTwoString(value, shift){
-  var bitMask, buf, bufSize, digits, pos;
-  bufSize = ~~(32 / shift);
-  bitMask = (1 << shift) - 1;
-  buf = initDim(_3C_classLit, 0, -1, bufSize, 1);
-  digits = ($clinit_156() , digits_0);
-  pos = bufSize - 1;
-  if (value >= 0) {
-    while (value > bitMask) {
-      buf[pos--] = digits[value & bitMask];
-      value >>= shift;
-    }
-  }
-   else {
-    while (pos > 0) {
-      buf[pos--] = digits[value & bitMask];
-      value >>= shift;
-    }
-  }
-  buf[pos] = digits[value & bitMask];
-  return __valueOf(buf, pos, bufSize);
-}
-
+_.getClass$ = getClass_34;
+_.typeId$ = 21;
 function max(x, y){
   return x > y?x:y;
 }
@@ -3102,7 +1519,7 @@ function $NullPointerException(this$static, message){
   return this$static;
 }
 
-function getClass_65(){
+function getClass_35(){
   return Ljava_lang_NullPointerException_2_classLit;
 }
 
@@ -3110,14 +1527,8 @@ function NullPointerException(){
 }
 
 _ = NullPointerException.prototype = new RuntimeException();
-_.getClass$ = getClass_65;
-_.typeId$ = 43;
-function $clinit_156(){
-  $clinit_156 = nullMethod;
-  digits_0 = initValues(_3C_classLit, 0, -1, [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]);
-}
-
-var digits_0;
+_.getClass$ = getClass_35;
+_.typeId$ = 22;
 function $equals_0(this$static, other){
   if (!(other != null && canCast(other.typeId$, 1))) {
     return false;
@@ -3132,60 +1543,11 @@ function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin){
   }
 }
 
-function $replaceFirst(this$static, regex, replace){
-  replace = __translateReplaceString(replace);
-  return this$static.replace(RegExp(regex), replace);
-}
-
-function $substring(this$static, beginIndex){
-  return this$static.substr(beginIndex, this$static.length - beginIndex);
-}
-
-function $trim(this$static){
-  if (this$static.length == 0 || this$static[0] > ' ' && this$static[this$static.length - 1] > ' ') {
-    return this$static;
-  }
-  var r1 = this$static.replace(/^(\s*)/, '');
-  var r2 = r1.replace(/\s*$/, '');
-  return r2;
-}
-
-function __translateReplaceString(replaceStr){
-  var pos;
-  pos = 0;
-  while (0 <= (pos = replaceStr.indexOf('\\', pos))) {
-    if (replaceStr.charCodeAt(pos + 1) == 36) {
-      replaceStr = replaceStr.substr(0, pos - 0) + '$' + $substring(replaceStr, ++pos);
-    }
-     else {
-      replaceStr = replaceStr.substr(0, pos - 0) + $substring(replaceStr, ++pos);
-    }
-  }
-  return replaceStr;
-}
-
-function __valueOf(x, start, end){
-  x = x.slice(start, end);
-  return String.fromCharCode.apply(null, x);
-}
-
 function equals_2(other){
   return $equals_0(this, other);
 }
 
-function fromCodePoint(codePoint){
-  var hiSurrogate, loSurrogate;
-  if (codePoint >= 65536) {
-    hiSurrogate = 55296 + (codePoint - 65536 >> 10 & 1023) & 65535;
-    loSurrogate = 56320 + (codePoint - 65536 & 1023) & 65535;
-    return String.fromCharCode(hiSurrogate) + String.fromCharCode(loSurrogate);
-  }
-   else {
-    return String.fromCharCode(codePoint & 65535);
-  }
-}
-
-function getClass_70(){
+function getClass_39(){
   return Ljava_lang_String_2_classLit;
 }
 
@@ -3193,18 +1555,13 @@ function hashCode_4(){
   return getHashCode_0(this);
 }
 
-function toString_11(){
-  return this;
-}
-
 _ = String.prototype;
 _.equals$ = equals_2;
-_.getClass$ = getClass_70;
+_.getClass$ = getClass_39;
 _.hashCode$ = hashCode_4;
-_.toString$ = toString_11;
 _.typeId$ = 2;
-function $clinit_160(){
-  $clinit_160 = nullMethod;
+function $clinit_69(){
+  $clinit_69 = nullMethod;
   back = {};
   front = {};
 }
@@ -3223,7 +1580,7 @@ function compute(str){
 }
 
 function getHashCode_0(str){
-  $clinit_160();
+  $clinit_69();
   var key = ':' + str;
   var result = front[key];
   if (result != null) {
@@ -3247,63 +1604,20 @@ function increment(){
 }
 
 var back, count_0 = 0, front;
-function $StringBuffer(this$static){
-  var array;
-  this$static.data = (array = [] , array.explicitLength = 0 , array);
-  return this$static;
-}
-
-function $append_1(this$static, x){
-  $append_0(this$static.data, x);
-  return this$static;
-}
-
-function getClass_68(){
-  return Ljava_lang_StringBuffer_2_classLit;
-}
-
-function toString_9(){
-  return $toString_0(this.data);
-}
-
-function StringBuffer(){
-}
-
-_ = StringBuffer.prototype = new Object_0();
-_.getClass$ = getClass_68;
-_.toString$ = toString_9;
-_.typeId$ = 0;
 function $StringBuilder(this$static){
-  var array;
-  this$static.data = (array = [] , array.explicitLength = 0 , array);
+  this$static.impl = new StringBufferImplAppend();
   return this$static;
 }
 
-function $StringBuilder_0(this$static){
-  var array;
-  this$static.data = (array = [] , array.explicitLength = 0 , array);
-  return this$static;
-}
-
-function $append_2(this$static, x){
-  $appendNonNull(this$static.data, String.fromCharCode(x));
-  return this$static;
-}
-
-function getClass_69(){
+function getClass_38(){
   return Ljava_lang_StringBuilder_2_classLit;
-}
-
-function toString_10(){
-  return $toString_0(this.data);
 }
 
 function StringBuilder(){
 }
 
 _ = StringBuilder.prototype = new Object_0();
-_.getClass$ = getClass_69;
-_.toString$ = toString_10;
+_.getClass$ = getClass_38;
 _.typeId$ = 0;
 function arraycopy(src, srcOfs, dest, destOfs, len){
   var destArray, destEnd, destTypeName, destlen, srcArray, srcTypeName, srclen;
@@ -3324,8 +1638,8 @@ function arraycopy(src, srcOfs, dest, destOfs, len){
     throw new IndexOutOfBoundsException();
   }
   if ((srcTypeName.charCodeAt(1) == 76 || srcTypeName.charCodeAt(1) == 91) && !$equals_0(srcTypeName, destTypeName)) {
-    srcArray = dynamicCast(src, 20);
-    destArray = dynamicCast(dest, 20);
+    srcArray = dynamicCast(src, 14);
+    destArray = dynamicCast(dest, 14);
     if ((src == null?null:src) === (dest == null?null:dest) && srcOfs < destOfs) {
       srcOfs += len;
       for (destEnd = destOfs + len; destEnd-- > destOfs;) {
@@ -3348,7 +1662,7 @@ function $UnsupportedOperationException(this$static, message){
   return this$static;
 }
 
-function getClass_72(){
+function getClass_41(){
   return Ljava_lang_UnsupportedOperationException_2_classLit;
 }
 
@@ -3356,8 +1670,8 @@ function UnsupportedOperationException(){
 }
 
 _ = UnsupportedOperationException.prototype = new RuntimeException();
-_.getClass$ = getClass_72;
-_.typeId$ = 44;
+_.getClass$ = getClass_41;
+_.typeId$ = 23;
 function $advanceToFind(iter, o){
   var t;
   while (iter.hasNext()) {
@@ -3367,25 +1681,6 @@ function $advanceToFind(iter, o){
     }
   }
   return null;
-}
-
-function $toString_2(this$static){
-  var comma, iter, sb;
-  sb = $StringBuffer(new StringBuffer());
-  comma = null;
-  $append_0(sb.data, '[');
-  iter = this$static.iterator_0();
-  while (iter.hasNext()) {
-    if (comma != null) {
-      $append_0(sb.data, comma);
-    }
-     else {
-      comma = ', ';
-    }
-    $append_1(sb, '' + iter.next_0());
-  }
-  $append_0(sb.data, ']');
-  return $toString_0(sb.data);
 }
 
 function add_0(o){
@@ -3398,87 +1693,57 @@ function contains(o){
   return !!iter;
 }
 
-function getClass_73(){
+function getClass_42(){
   return Ljava_util_AbstractCollection_2_classLit;
-}
-
-function toString_13(){
-  return $toString_2(this);
 }
 
 function AbstractCollection(){
 }
 
 _ = AbstractCollection.prototype = new Object_0();
-_.add_0 = add_0;
-_.contains_0 = contains;
-_.getClass$ = getClass_73;
-_.toString$ = toString_13;
+_.add = add_0;
+_.contains = contains;
+_.getClass$ = getClass_42;
 _.typeId$ = 0;
-function $keySet(this$static){
-  var entrySet;
-  entrySet = $AbstractHashMap$EntrySet(new AbstractHashMap$EntrySet(), this$static);
-  return $AbstractMap$1(new AbstractMap$1(), this$static, entrySet);
-}
-
 function equals_5(obj){
   var entry, entry$iterator, otherKey, otherMap, otherValue;
   if ((obj == null?null:obj) === this) {
     return true;
   }
-  if (!(obj != null && canCast(obj.typeId$, 22))) {
+  if (!(obj != null && canCast(obj.typeId$, 16))) {
     return false;
   }
-  otherMap = dynamicCast(obj, 22);
-  if (dynamicCast(this, 22).size != otherMap.size) {
+  otherMap = dynamicCast(obj, 16);
+  if (dynamicCast(this, 16).size != otherMap.size) {
     return false;
   }
   for (entry$iterator = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $AbstractHashMap$EntrySet(new AbstractHashMap$EntrySet(), otherMap).this$0); $hasNext_0(entry$iterator.iter);) {
-    entry = dynamicCast($next_0(entry$iterator.iter), 21);
+    entry = dynamicCast($next_0(entry$iterator.iter), 15);
     otherKey = entry.getKey();
     otherValue = entry.getValue();
-    if (!(otherKey == null?dynamicCast(this, 22).nullSlotLive:otherKey != null && canCast(otherKey.typeId$, 1)?$hasStringValue(dynamicCast(this, 22), dynamicCast(otherKey, 1)):$hasHashValue(dynamicCast(this, 22), otherKey, ~~hashCode__devirtual$(otherKey)))) {
+    if (!(otherKey == null?dynamicCast(this, 16).nullSlotLive:otherKey != null && canCast(otherKey.typeId$, 1)?$hasStringValue(dynamicCast(this, 16), dynamicCast(otherKey, 1)):$hasHashValue(dynamicCast(this, 16), otherKey, ~~hashCode__devirtual$(otherKey)))) {
       return false;
     }
-    if (!equalsWithNullCheck(otherValue, otherKey == null?dynamicCast(this, 22).nullSlot:otherKey != null && canCast(otherKey.typeId$, 1)?dynamicCast(this, 22).stringMap[':' + dynamicCast(otherKey, 1)]:$getHashValue(dynamicCast(this, 22), otherKey, ~~hashCode__devirtual$(otherKey)))) {
+    if (!equalsWithNullCheck(otherValue, otherKey == null?dynamicCast(this, 16).nullSlot:otherKey != null && canCast(otherKey.typeId$, 1)?dynamicCast(this, 16).stringMap[':' + dynamicCast(otherKey, 1)]:$getHashValue(dynamicCast(this, 16), otherKey, ~~hashCode__devirtual$(otherKey)))) {
       return false;
     }
   }
   return true;
 }
 
-function getClass_84(){
+function getClass_51(){
   return Ljava_util_AbstractMap_2_classLit;
 }
 
 function hashCode_7(){
   var entry, entry$iterator, hashCode;
   hashCode = 0;
-  for (entry$iterator = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $AbstractHashMap$EntrySet(new AbstractHashMap$EntrySet(), dynamicCast(this, 22)).this$0); $hasNext_0(entry$iterator.iter);) {
-    entry = dynamicCast($next_0(entry$iterator.iter), 21);
+  for (entry$iterator = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $AbstractHashMap$EntrySet(new AbstractHashMap$EntrySet(), dynamicCast(this, 16)).this$0); $hasNext_0(entry$iterator.iter);) {
+    entry = dynamicCast($next_0(entry$iterator.iter), 15);
     hashCode += entry.hashCode$();
     hashCode = ~~hashCode;
   }
   return hashCode;
-}
-
-function toString_15(){
-  var comma, entry, iter, s;
-  s = '{';
-  comma = false;
-  for (iter = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $AbstractHashMap$EntrySet(new AbstractHashMap$EntrySet(), dynamicCast(this, 22)).this$0); $hasNext_0(iter.iter);) {
-    entry = dynamicCast($next_0(iter.iter), 21);
-    if (comma) {
-      s += ', ';
-    }
-     else {
-      comma = true;
-    }
-    s += '' + entry.getKey();
-    s += '=';
-    s += '' + entry.getValue();
-  }
-  return s + '}';
 }
 
 function AbstractMap(){
@@ -3486,9 +1751,8 @@ function AbstractMap(){
 
 _ = AbstractMap.prototype = new Object_0();
 _.equals$ = equals_5;
-_.getClass$ = getClass_84;
+_.getClass$ = getClass_51;
 _.hashCode$ = hashCode_7;
-_.toString$ = toString_15;
 _.typeId$ = 0;
 function $addAllHashEntries(this$static, dest){
   var hashCodeMap = this$static.hashCodeMap;
@@ -3496,7 +1760,7 @@ function $addAllHashEntries(this$static, dest){
     if (hashCode == parseInt(hashCode)) {
       var array = hashCodeMap[hashCode];
       for (var i = 0, c = array.length; i < c; ++i) {
-        dest.add_0(array[i]);
+        dest.add(array[i]);
       }
     }
   }
@@ -3507,17 +1771,9 @@ function $addAllStringEntries(this$static, dest){
   for (var key in stringMap) {
     if (key.charCodeAt(0) == 58) {
       var entry = new_$(this$static, key.substring(1));
-      dest.add_0(entry);
+      dest.add(entry);
     }
   }
-}
-
-function $clearImpl(this$static){
-  this$static.hashCodeMap = [];
-  this$static.stringMap = {};
-  this$static.nullSlotLive = false;
-  this$static.nullSlot = null;
-  this$static.size = 0;
 }
 
 function $containsKey(this$static, key){
@@ -3561,7 +1817,7 @@ function $hasStringValue(this$static, key){
 }
 
 function $put(this$static, key, value){
-  return key == null?$putNullSlot(this$static, value):key != null && canCast(key.typeId$, 1)?$putStringValue(this$static, dynamicCast(key, 1), value):$putHashValue(this$static, key, value, ~~hashCode__devirtual$(key));
+  return !key?$putNullSlot(this$static, value):$putHashValue(this$static, key, value, ~~key.index);
 }
 
 function $putHashValue(this$static, key, value, hashCode){
@@ -3610,47 +1866,11 @@ function $putStringValue(this$static, key, value){
   return result;
 }
 
-function $remove_4(this$static, key){
-  return !key?$removeNullSlot(this$static):$removeHashValue(this$static, key, ~~(key.$H || (key.$H = ++sNextHashId)));
-}
-
-function $removeHashValue(this$static, key, hashCode){
-  var array = this$static.hashCodeMap[hashCode];
-  if (array) {
-    for (var i = 0, c = array.length; i < c; ++i) {
-      var entry = array[i];
-      var entryKey = entry.getKey();
-      if (this$static.equalsBridge(key, entryKey)) {
-        if (array.length == 1) {
-          delete this$static.hashCodeMap[hashCode];
-        }
-         else {
-          array.splice(i, 1);
-        }
-        --this$static.size;
-        return entry.getValue();
-      }
-    }
-  }
-  return null;
-}
-
-function $removeNullSlot(this$static){
-  var result;
-  result = this$static.nullSlot;
-  this$static.nullSlot = null;
-  if (this$static.nullSlotLive) {
-    this$static.nullSlotLive = false;
-    --this$static.size;
-  }
-  return result;
-}
-
 function equalsBridge(value1, value2){
   return (value1 == null?null:value1) === (value2 == null?null:value2) || value1 != null && equals__devirtual$(value1, value2);
 }
 
-function getClass_78(){
+function getClass_47(){
   return Ljava_util_AbstractHashMap_2_classLit;
 }
 
@@ -3659,7 +1879,7 @@ function AbstractHashMap(){
 
 _ = AbstractHashMap.prototype = new AbstractMap();
 _.equalsBridge = equalsBridge;
-_.getClass$ = getClass_78;
+_.getClass$ = getClass_47;
 _.typeId$ = 0;
 _.hashCodeMap = null;
 _.nullSlot = null;
@@ -3671,23 +1891,23 @@ function equals_6(o){
   if ((o == null?null:o) === this) {
     return true;
   }
-  if (!(o != null && canCast(o.typeId$, 23))) {
+  if (!(o != null && canCast(o.typeId$, 17))) {
     return false;
   }
-  other = dynamicCast(o, 23);
-  if (other.size_0() != this.size_0()) {
+  other = dynamicCast(o, 17);
+  if (other.this$0.size != this.size_0()) {
     return false;
   }
-  for (iter = other.iterator_0(); iter.hasNext();) {
-    otherItem = iter.next_0();
-    if (!this.contains_0(otherItem)) {
+  for (iter = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), other.this$0); $hasNext_0(iter.iter);) {
+    otherItem = dynamicCast($next_0(iter.iter), 15);
+    if (!this.contains(otherItem)) {
       return false;
     }
   }
   return true;
 }
 
-function getClass_85(){
+function getClass_52(){
   return Ljava_util_AbstractSet_2_classLit;
 }
 
@@ -3709,36 +1929,32 @@ function AbstractSet(){
 
 _ = AbstractSet.prototype = new AbstractCollection();
 _.equals$ = equals_6;
-_.getClass$ = getClass_85;
+_.getClass$ = getClass_52;
 _.hashCode$ = hashCode_8;
-_.typeId$ = 45;
+_.typeId$ = 0;
 function $AbstractHashMap$EntrySet(this$static, this$0){
   this$static.this$0 = this$0;
   return this$static;
 }
 
-function $contains(this$static, o){
+function contains_0(o){
   var entry, key, value;
-  if (o != null && canCast(o.typeId$, 21)) {
-    entry = dynamicCast(o, 21);
+  if (o != null && canCast(o.typeId$, 15)) {
+    entry = dynamicCast(o, 15);
     key = entry.getKey();
-    if ($containsKey(this$static.this$0, key)) {
-      value = $get(this$static.this$0, key);
+    if ($containsKey(this.this$0, key)) {
+      value = $get(this.this$0, key);
       return $equals_1(entry.getValue(), value);
     }
   }
   return false;
 }
 
-function contains_0(o){
-  return $contains(this, o);
-}
-
-function getClass_75(){
+function getClass_44(){
   return Ljava_util_AbstractHashMap$EntrySet_2_classLit;
 }
 
-function iterator_1(){
+function iterator(){
   return $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), this.this$0);
 }
 
@@ -3750,18 +1966,18 @@ function AbstractHashMap$EntrySet(){
 }
 
 _ = AbstractHashMap$EntrySet.prototype = new AbstractSet();
-_.contains_0 = contains_0;
-_.getClass$ = getClass_75;
-_.iterator_0 = iterator_1;
+_.contains = contains_0;
+_.getClass$ = getClass_44;
+_.iterator_0 = iterator;
 _.size_0 = size_0;
-_.typeId$ = 46;
+_.typeId$ = 24;
 _.this$0 = null;
 function $AbstractHashMap$EntrySetIterator(this$static, this$0){
   var list;
   this$static.this$0 = this$0;
   list = $ArrayList(new ArrayList());
   if (this$static.this$0.nullSlotLive) {
-    $add_5(list, $AbstractHashMap$MapEntryNull(new AbstractHashMap$MapEntryNull(), this$static.this$0));
+    $add_0(list, $AbstractHashMap$MapEntryNull(new AbstractHashMap$MapEntryNull(), this$static.this$0));
   }
   $addAllStringEntries(this$static.this$0, list);
   $addAllHashEntries(this$static.this$0, list);
@@ -3769,32 +1985,32 @@ function $AbstractHashMap$EntrySetIterator(this$static, this$0){
   return this$static;
 }
 
-function getClass_74(){
+function getClass_43(){
   return Ljava_util_AbstractHashMap$EntrySetIterator_2_classLit;
 }
 
-function hasNext_2(){
+function hasNext_0(){
   return $hasNext_0(this.iter);
 }
 
-function next_3(){
-  return dynamicCast($next_0(this.iter), 21);
+function next_1(){
+  return dynamicCast($next_0(this.iter), 15);
 }
 
 function AbstractHashMap$EntrySetIterator(){
 }
 
 _ = AbstractHashMap$EntrySetIterator.prototype = new Object_0();
-_.getClass$ = getClass_74;
-_.hasNext = hasNext_2;
-_.next_0 = next_3;
+_.getClass$ = getClass_43;
+_.hasNext = hasNext_0;
+_.next_0 = next_1;
 _.typeId$ = 0;
 _.iter = null;
 _.this$0 = null;
 function equals_4(other){
   var entry;
-  if (other != null && canCast(other.typeId$, 21)) {
-    entry = dynamicCast(other, 21);
+  if (other != null && canCast(other.typeId$, 15)) {
+    entry = dynamicCast(other, 15);
     if (equalsWithNullCheck(this.getKey(), entry.getKey()) && equalsWithNullCheck(this.getValue(), entry.getValue())) {
       return true;
     }
@@ -3802,7 +2018,7 @@ function equals_4(other){
   return false;
 }
 
-function getClass_83(){
+function getClass_50(){
   return Ljava_util_AbstractMapEntry_2_classLit;
 }
 
@@ -3819,25 +2035,20 @@ function hashCode_6(){
   return keyHash ^ valueHash;
 }
 
-function toString_14(){
-  return this.getKey() + '=' + this.getValue();
-}
-
 function AbstractMapEntry(){
 }
 
 _ = AbstractMapEntry.prototype = new Object_0();
 _.equals$ = equals_4;
-_.getClass$ = getClass_83;
+_.getClass$ = getClass_50;
 _.hashCode$ = hashCode_6;
-_.toString$ = toString_14;
-_.typeId$ = 47;
+_.typeId$ = 25;
 function $AbstractHashMap$MapEntryNull(this$static, this$0){
   this$static.this$0 = this$0;
   return this$static;
 }
 
-function getClass_76(){
+function getClass_45(){
   return Ljava_util_AbstractHashMap$MapEntryNull_2_classLit;
 }
 
@@ -3857,11 +2068,11 @@ function AbstractHashMap$MapEntryNull(){
 }
 
 _ = AbstractHashMap$MapEntryNull.prototype = new AbstractMapEntry();
-_.getClass$ = getClass_76;
+_.getClass$ = getClass_45;
 _.getKey = getKey;
 _.getValue = getValue;
 _.setValue = setValue;
-_.typeId$ = 48;
+_.typeId$ = 26;
 _.this$0 = null;
 function $AbstractHashMap$MapEntryString(this$static, key, this$0){
   this$static.this$0 = this$0;
@@ -3869,7 +2080,7 @@ function $AbstractHashMap$MapEntryString(this$static, key, this$0){
   return this$static;
 }
 
-function getClass_77(){
+function getClass_46(){
   return Ljava_util_AbstractHashMap$MapEntryString_2_classLit;
 }
 
@@ -3893,15 +2104,15 @@ function AbstractHashMap$MapEntryString(){
 }
 
 _ = AbstractHashMap$MapEntryString.prototype = new AbstractMapEntry();
-_.getClass$ = getClass_77;
+_.getClass$ = getClass_46;
 _.getKey = getKey_0;
 _.getValue = getValue_0;
 _.setValue = setValue_0;
-_.typeId$ = 49;
+_.typeId$ = 27;
 _.key = null;
 _.this$0 = null;
 function add_1(obj){
-  $add_4(this, this.size_0(), obj);
+  $add(this, this.size_0(), obj);
   return true;
 }
 
@@ -3916,14 +2127,14 @@ function equals_3(o){
   if ((o == null?null:o) === this) {
     return true;
   }
-  if (!(o != null && canCast(o.typeId$, 4))) {
+  if (!(o != null && canCast(o.typeId$, 3))) {
     return false;
   }
-  other = dynamicCast(o, 4);
+  other = dynamicCast(o, 3);
   if (this.size_0() != other.size) {
     return false;
   }
-  iter = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 4));
+  iter = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 3));
   iterOther = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), other);
   while (iter.i < iter.this$0.size) {
     elem = $next_0(iter);
@@ -3935,14 +2146,14 @@ function equals_3(o){
   return true;
 }
 
-function getClass_80(){
+function getClass_49(){
   return Ljava_util_AbstractList_2_classLit;
 }
 
 function hashCode_5(){
   var iter, k, obj;
   k = 1;
-  iter = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 4));
+  iter = $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 3));
   while (iter.i < iter.this$0.size) {
     obj = $next_0(iter);
     k = 31 * k + (obj == null?0:hashCode__devirtual$(obj));
@@ -3955,19 +2166,19 @@ function indexOutOfBounds(index, size){
   throw $IndexOutOfBoundsException(new IndexOutOfBoundsException(), 'Index: ' + index + ', Size: ' + size);
 }
 
-function iterator_2(){
-  return $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 4));
+function iterator_0(){
+  return $AbstractList$IteratorImpl(new AbstractList$IteratorImpl(), dynamicCast(this, 3));
 }
 
 function AbstractList(){
 }
 
 _ = AbstractList.prototype = new AbstractCollection();
-_.add_0 = add_1;
+_.add = add_1;
 _.equals$ = equals_3;
-_.getClass$ = getClass_80;
+_.getClass$ = getClass_49;
 _.hashCode$ = hashCode_5;
-_.iterator_0 = iterator_2;
+_.iterator_0 = iterator_0;
 _.typeId$ = 0;
 function $AbstractList$IteratorImpl(this$static, this$0){
   this$static.this$0 = this$0;
@@ -3985,15 +2196,15 @@ function $next_0(this$static){
   return $get_0(this$static.this$0, this$static.i++);
 }
 
-function getClass_79(){
+function getClass_48(){
   return Ljava_util_AbstractList$IteratorImpl_2_classLit;
 }
 
-function hasNext_3(){
+function hasNext_1(){
   return this.i < this.this$0.size;
 }
 
-function next_4(){
+function next_2(){
   return $next_0(this);
 }
 
@@ -4001,85 +2212,24 @@ function AbstractList$IteratorImpl(){
 }
 
 _ = AbstractList$IteratorImpl.prototype = new Object_0();
-_.getClass$ = getClass_79;
-_.hasNext = hasNext_3;
-_.next_0 = next_4;
+_.getClass$ = getClass_48;
+_.hasNext = hasNext_1;
+_.next_0 = next_2;
 _.typeId$ = 0;
 _.i = 0;
 _.this$0 = null;
-function $AbstractMap$1(this$static, this$0, val$entrySet){
-  this$static.this$0 = this$0;
-  this$static.val$entrySet = val$entrySet;
-  return this$static;
-}
-
-function contains_1(key){
-  return $containsKey(this.this$0, key);
-}
-
-function getClass_82(){
-  return Ljava_util_AbstractMap$1_2_classLit;
-}
-
-function iterator_3(){
-  var outerIter;
-  return outerIter = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), this.val$entrySet.this$0) , $AbstractMap$1$1(new AbstractMap$1$1(), outerIter);
-}
-
-function size_1(){
-  return this.val$entrySet.this$0.size;
-}
-
-function AbstractMap$1(){
-}
-
-_ = AbstractMap$1.prototype = new AbstractSet();
-_.contains_0 = contains_1;
-_.getClass$ = getClass_82;
-_.iterator_0 = iterator_3;
-_.size_0 = size_1;
-_.typeId$ = 50;
-_.this$0 = null;
-_.val$entrySet = null;
-function $AbstractMap$1$1(this$static, val$outerIter){
-  this$static.val$outerIter = val$outerIter;
-  return this$static;
-}
-
-function getClass_81(){
-  return Ljava_util_AbstractMap$1$1_2_classLit;
-}
-
-function hasNext_4(){
-  return $hasNext_0(this.val$outerIter.iter);
-}
-
-function next_5(){
-  var entry;
-  return entry = dynamicCast($next_0(this.val$outerIter.iter), 21) , entry.getKey();
-}
-
-function AbstractMap$1$1(){
-}
-
-_ = AbstractMap$1$1.prototype = new Object_0();
-_.getClass$ = getClass_81;
-_.hasNext = hasNext_4;
-_.next_0 = next_5;
-_.typeId$ = 0;
-_.val$outerIter = null;
 function $ArrayList(this$static){
   this$static.array = initDim(_3Ljava_lang_Object_2_classLit, 0, 0, 0, 0);
   this$static.size = 0;
   return this$static;
 }
 
-function $add_5(this$static, o){
+function $add_0(this$static, o){
   setCheck(this$static.array, this$static.size++, o);
   return true;
 }
 
-function $add_4(this$static, index, o){
+function $add(this$static, index, o){
   if (index < 0 || index > this$static.size) {
     indexOutOfBounds(index, this$static.size);
   }
@@ -4092,7 +2242,7 @@ function $get_0(this$static, index){
   return this$static.array[index];
 }
 
-function $indexOf_2(this$static, o, index){
+function $indexOf(this$static, o, index){
   for (; index < this$static.size; ++index) {
     if (equalsWithNullCheck(o, this$static.array[index])) {
       return index;
@@ -4101,7 +2251,7 @@ function $indexOf_2(this$static, o, index){
   return -1;
 }
 
-function $remove_5(this$static, index){
+function $remove_0(this$static, index){
   var previous;
   previous = (checkIndex(index, this$static.size) , this$static.array[index]);
   this$static.array.splice(index, 1);
@@ -4109,13 +2259,13 @@ function $remove_5(this$static, index){
   return previous;
 }
 
-function $remove_6(this$static, o){
+function $remove_1(this$static, o){
   var i;
-  i = $indexOf_2(this$static, o, 0);
+  i = $indexOf(this$static, o, 0);
   if (i == -1) {
     return false;
   }
-  $remove_5(this$static, i);
+  $remove_0(this$static, i);
   return true;
 }
 
@@ -4123,15 +2273,15 @@ function add_2(o){
   return setCheck(this.array, this.size++, o) , true;
 }
 
-function contains_2(o){
-  return $indexOf_2(this, o, 0) != -1;
+function contains_1(o){
+  return $indexOf(this, o, 0) != -1;
 }
 
-function getClass_86(){
+function getClass_53(){
   return Ljava_util_ArrayList_2_classLit;
 }
 
-function size_2(){
+function size_1(){
   return this.size;
 }
 
@@ -4139,15 +2289,19 @@ function ArrayList(){
 }
 
 _ = ArrayList.prototype = new AbstractList();
-_.add_0 = add_2;
-_.contains_0 = contains_2;
-_.getClass$ = getClass_86;
-_.size_0 = size_2;
-_.typeId$ = 51;
+_.add = add_2;
+_.contains = contains_1;
+_.getClass$ = getClass_53;
+_.size_0 = size_1;
+_.typeId$ = 28;
 _.array = null;
 _.size = 0;
 function $HashMap(this$static){
-  $clearImpl(this$static);
+  this$static.hashCodeMap = [];
+  this$static.stringMap = {};
+  this$static.nullSlotLive = false;
+  this$static.nullSlot = null;
+  this$static.size = 0;
   return this$static;
 }
 
@@ -4155,7 +2309,7 @@ function $equals_1(value1, value2){
   return (value1 == null?null:value1) === (value2 == null?null:value2) || value1 != null && equals__devirtual$(value1, value2);
 }
 
-function getClass_87(){
+function getClass_54(){
   return Ljava_util_HashMap_2_classLit;
 }
 
@@ -4163,64 +2317,15 @@ function HashMap(){
 }
 
 _ = HashMap.prototype = new AbstractHashMap();
-_.getClass$ = getClass_87;
-_.typeId$ = 52;
-function $HashSet(this$static){
-  this$static.map = $HashMap(new HashMap());
-  return this$static;
-}
-
-function $add_6(this$static, o){
-  var old;
-  old = $put(this$static.map, o, this$static);
-  return old == null;
-}
-
-function add_3(o){
-  var old;
-  return old = $put(this.map, o, this) , old == null;
-}
-
-function contains_3(o){
-  return $containsKey(this.map, o);
-}
-
-function getClass_88(){
-  return Ljava_util_HashSet_2_classLit;
-}
-
-function iterator_4(){
-  var outerIter;
-  return outerIter = $AbstractHashMap$EntrySetIterator(new AbstractHashMap$EntrySetIterator(), $keySet(this.map).val$entrySet.this$0) , $AbstractMap$1$1(new AbstractMap$1$1(), outerIter);
-}
-
-function size_3(){
-  return this.map.size;
-}
-
-function toString_16(){
-  return $toString_2($keySet(this.map));
-}
-
-function HashSet(){
-}
-
-_ = HashSet.prototype = new AbstractSet();
-_.add_0 = add_3;
-_.contains_0 = contains_3;
-_.getClass$ = getClass_88;
-_.iterator_0 = iterator_4;
-_.size_0 = size_3;
-_.toString$ = toString_16;
-_.typeId$ = 53;
-_.map = null;
+_.getClass$ = getClass_54;
+_.typeId$ = 29;
 function $MapEntryImpl(this$static, key, value){
   this$static.key = key;
-  this$static.value_0 = value;
+  this$static.value = value;
   return this$static;
 }
 
-function getClass_89(){
+function getClass_55(){
   return Ljava_util_MapEntryImpl_2_classLit;
 }
 
@@ -4229,13 +2334,13 @@ function getKey_1(){
 }
 
 function getValue_1(){
-  return this.value_0;
+  return this.value;
 }
 
 function setValue_1(value){
   var old;
-  old = this.value_0;
-  this.value_0 = value;
+  old = this.value;
+  this.value = value;
   return old;
 }
 
@@ -4243,14 +2348,14 @@ function MapEntryImpl(){
 }
 
 _ = MapEntryImpl.prototype = new AbstractMapEntry();
-_.getClass$ = getClass_89;
+_.getClass$ = getClass_55;
 _.getKey = getKey_1;
 _.getValue = getValue_1;
 _.setValue = setValue_1;
-_.typeId$ = 54;
+_.typeId$ = 30;
 _.key = null;
-_.value_0 = null;
-function getClass_90(){
+_.value = null;
+function getClass_56(){
   return Ljava_util_NoSuchElementException_2_classLit;
 }
 
@@ -4258,29 +2363,27 @@ function NoSuchElementException(){
 }
 
 _ = NoSuchElementException.prototype = new RuntimeException();
-_.getClass$ = getClass_90;
-_.typeId$ = 55;
+_.getClass$ = getClass_56;
+_.typeId$ = 31;
 function equalsWithNullCheck(a, b){
   return (a == null?null:a) === (b == null?null:b) || a != null && equals__devirtual$(a, b);
 }
 
-function $clinit_193(){
-  $clinit_193 = nullMethod;
-  MODE_1 = $CompressionMode(new CompressionMode(), 'MODE_1', 1, 16, 64, 0, 3, 0, 2);
-  MODE_2 = $CompressionMode(new CompressionMode(), 'MODE_2', 2, 20, 64, 0, 3, 0, 2);
-  MODE_3 = $CompressionMode(new CompressionMode(), 'MODE_3', 3, 19, 64, 1, 3, 0, 2);
-  MODE_4 = $CompressionMode(new CompressionMode(), 'MODE_4', 4, 20, 64, 1, 3, 0, 2);
-  MODE_5 = $CompressionMode(new CompressionMode(), 'MODE_5', 5, 21, 128, 1, 3, 0, 2);
-  MODE_6 = $CompressionMode(new CompressionMode(), 'MODE_6', 6, 22, 128, 1, 3, 0, 2);
-  MODE_7 = $CompressionMode(new CompressionMode(), 'MODE_7', 7, 23, 128, 1, 3, 0, 2);
-  MODE_8 = $CompressionMode(new CompressionMode(), 'MODE_8', 8, 24, 255, 1, 3, 0, 2);
-  MODE_9 = $CompressionMode(new CompressionMode(), 'MODE_9', 9, 25, 255, 1, 3, 0, 2);
+function $clinit_98(){
+  $clinit_98 = nullMethod;
+  MODE_1 = $CompressionMode(new CompressionMode(), 'MODE_1', 16, 64, 0, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_2', 20, 64, 0, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_3', 19, 64, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_4', 20, 64, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_5', 21, 128, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_6', 22, 128, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_7', 23, 128, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_8', 24, 255, 1, 3, 0, 2);
+  $CompressionMode(new CompressionMode(), 'MODE_9', 25, 255, 1, 3, 0, 2);
 }
 
-function $CompressionMode(this$static, enum$name, level, dictionarySize, fb, matchFinder, lc, lp, pb){
-  $clinit_193();
-  this$static.name_0 = enum$name;
-  this$static.level = level;
+function $CompressionMode(this$static, enum$name, dictionarySize, fb, matchFinder, lc, lp, pb){
+  $clinit_98();
   this$static.dictionarySize = dictionarySize;
   this$static.fb = fb;
   this$static.matchFinder = matchFinder;
@@ -4301,32 +2404,7 @@ function $configure(this$static, encoder){
     throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 }
 
-function get_1(level){
-  $clinit_193();
-  switch (level) {
-    case 1:
-      return MODE_1;
-    case 2:
-      return MODE_2;
-    case 3:
-      return MODE_3;
-    case 4:
-      return MODE_4;
-    case 5:
-      return MODE_5;
-    case 6:
-      return MODE_6;
-    case 7:
-      return MODE_7;
-    case 8:
-      return MODE_8;
-    case 9:
-      return MODE_9;
-    default:throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid level ' + level);
-  }
-}
-
-function getClass_91(){
+function getClass_57(){
   return Lorg_dellroad_lzma_client_CompressionMode_2_classLit;
 }
 
@@ -4334,19 +2412,18 @@ function CompressionMode(){
 }
 
 _ = CompressionMode.prototype = new Enum();
-_.getClass$ = getClass_91;
+_.getClass$ = getClass_57;
 _.typeId$ = 0;
 _.dictionarySize = 0;
 _.fb = 0;
 _.lc = 0;
-_.level = 0;
 _.lp = 0;
 _.matchFinder = 0;
 _.pb = 0;
-var MODE_1, MODE_2, MODE_3, MODE_4, MODE_5, MODE_6, MODE_7, MODE_8, MODE_9;
-function $clinit_196(){
-  $clinit_196 = nullMethod;
-  $clinit_193();
+var MODE_1;
+function $clinit_101(){
+  $clinit_101 = nullMethod;
+  $clinit_98();
 }
 
 function $execute(this$static){
@@ -4356,7 +2433,7 @@ function $execute(this$static){
   }
    catch ($e0) {
     $e0 = caught($e0);
-    if (instanceOf($e0, 24)) {
+    if (instanceOf($e0, 18)) {
       return false;
     }
      else 
@@ -4364,19 +2441,12 @@ function $execute(this$static){
   }
 }
 
-function $getProgress(this$static){
-  if (eq(this$static.length_0, N1_longLit))
-    return 0;
-  return toDouble(this$static.chunker.inBytesProcessed) / toDouble(this$static.length_0);
-}
-
-function $init_0(this$static, input, output, length_0, mode){
+function $init(this$static, input, output, length_0, mode){
   var encoder, i;
   if (!mode)
     throw $IllegalArgumentException(new IllegalArgumentException(), 'null mode');
   if (compare_0(length_0, N1_longLit) < 0)
-    throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_3(length_0));
-  this$static.length_0 = length_0;
+    throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_0(length_0));
   encoder = $Encoder(new Encoder());
   $configure(mode, encoder);
   encoder._writeEndMark = true;
@@ -4390,7 +2460,7 @@ function execute(){
   return $execute(this);
 }
 
-function getClass_94(){
+function getClass_60(){
   return Lorg_dellroad_lzma_client_LZMACompressor_2_classLit;
 }
 
@@ -4399,25 +2469,24 @@ function LZMACompressor(){
 
 _ = LZMACompressor.prototype = new Object_0();
 _.execute = execute;
-_.getClass$ = getClass_94;
-_.typeId$ = 56;
+_.getClass$ = getClass_60;
+_.typeId$ = 32;
 _.chunker = null;
-_.length_0 = P0_longLit;
-function $clinit_194(){
-  $clinit_194 = nullMethod;
-  $clinit_196();
+function $clinit_99(){
+  $clinit_99 = nullMethod;
+  $clinit_101();
 }
 
 function $LZMAByteArrayCompressor(this$static, data, mode){
   var $e0;
-  $clinit_194();
+  $clinit_99();
   this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
   try {
-    $init_0(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
+    $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
   }
    catch ($e0) {
     $e0 = caught($e0);
-    if (instanceOf($e0, 24)) {
+    if (instanceOf($e0, 18)) {
       throw $RuntimeException(new RuntimeException(), 'impossible exception');
     }
      else 
@@ -4426,7 +2495,7 @@ function $LZMAByteArrayCompressor(this$static, data, mode){
   return this$static;
 }
 
-function getClass_92(){
+function getClass_58(){
   return Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit;
 }
 
@@ -4434,8 +2503,8 @@ function LZMAByteArrayCompressor(){
 }
 
 _ = LZMAByteArrayCompressor.prototype = new LZMACompressor();
-_.getClass$ = getClass_92;
-_.typeId$ = 57;
+_.getClass$ = getClass_58;
+_.typeId$ = 33;
 _.output = null;
 function $execute_0(this$static){
   var $e0, e;
@@ -4444,7 +2513,7 @@ function $execute_0(this$static){
   }
    catch ($e0) {
     $e0 = caught($e0);
-    if (instanceOf($e0, 24)) {
+    if (instanceOf($e0, 18)) {
       e = $e0;
       this$static.exception = e;
       return false;
@@ -4454,13 +2523,7 @@ function $execute_0(this$static){
   }
 }
 
-function $getProgress_0(this$static){
-  if (eq(this$static.length_0, N1_longLit))
-    return 0;
-  return toDouble(this$static.chunker.outBytesProcessed) / toDouble(this$static.length_0);
-}
-
-function $init_1(this$static, input, output){
+function $init_0(this$static, input, output){
   var decoder, expectedLength, i, properties, r;
   properties = initDim(_3B_classLit, 0, -1, 5, 1);
   for (i = 0; i < properties.length; ++i) {
@@ -4487,7 +2550,7 @@ function execute_0(){
   return $execute_0(this);
 }
 
-function getClass_95(){
+function getClass_61(){
   return Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit;
 }
 
@@ -4496,18 +2559,18 @@ function LZMADecompressor(){
 
 _ = LZMADecompressor.prototype = new Object_0();
 _.execute = execute_0;
-_.getClass$ = getClass_95;
-_.typeId$ = 58;
+_.getClass$ = getClass_61;
+_.typeId$ = 34;
 _.chunker = null;
 _.exception = null;
 _.length_0 = P0_longLit;
 function $LZMAByteArrayDecompressor(this$static, data){
   this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
-  $init_1(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output);
+  $init_0(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output);
   return this$static;
 }
 
-function getClass_93(){
+function getClass_59(){
   return Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit;
 }
 
@@ -4515,8 +2578,8 @@ function LZMAByteArrayDecompressor(){
 }
 
 _ = LZMAByteArrayDecompressor.prototype = new LZMADecompressor();
-_.getClass$ = getClass_93;
-_.typeId$ = 59;
+_.getClass$ = getClass_59;
+_.typeId$ = 35;
 _.output = null;
 function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv){
   var blockSize;
@@ -4603,7 +2666,7 @@ function $ReduceOffsets(this$static, subValue){
   this$static._streamPos -= subValue;
 }
 
-function getClass_108(){
+function getClass_74(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit;
 }
 
@@ -4611,7 +2674,7 @@ function InWindow(){
 }
 
 _ = InWindow.prototype = new Object_0();
-_.getClass$ = getClass_108;
+_.getClass$ = getClass_74;
 _.typeId$ = 0;
 _._blockSize = 0;
 _._bufferBase = null;
@@ -4624,8 +2687,8 @@ _._posLimit = 0;
 _._stream = null;
 _._streamEndWasReached = false;
 _._streamPos = 0;
-function $clinit_210(){
-  $clinit_210 = nullMethod;
+function $clinit_115(){
+  $clinit_115 = nullMethod;
   var i, j, r;
   CrcTable = initDim(_3I_classLit, 0, -1, 256, 1);
   for (i = 0; i < 256; ++i) {
@@ -4893,7 +2956,7 @@ function $Skip(this$static, num){
    while (--num != 0);
 }
 
-function getClass_107(){
+function getClass_73(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit;
 }
 
@@ -4901,7 +2964,7 @@ function BinTree(){
 }
 
 _ = BinTree.prototype = new InWindow();
-_.getClass$ = getClass_107;
+_.getClass$ = getClass_73;
 _.typeId$ = 0;
 _.HASH_ARRAY = true;
 _._cutValue = 255;
@@ -4981,7 +3044,7 @@ function $SetStream_0(this$static, stream){
   this$static._stream = stream;
 }
 
-function getClass_109(){
+function getClass_75(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit;
 }
 
@@ -4989,7 +3052,7 @@ function OutWindow(){
 }
 
 _ = OutWindow.prototype = new Object_0();
-_.getClass$ = getClass_109;
+_.getClass$ = getClass_75;
 _.typeId$ = 0;
 _._buffer = null;
 _._pos = 0;
@@ -5049,8 +3112,6 @@ function $processDecoderChunk(this$static){
   result = $CodeOneChunk(this$static.decoder);
   if (result == -1)
     throw $IOException(new IOException(), 'corrupted input');
-  this$static.inBytesProcessed = N1_longLit;
-  this$static.outBytesProcessed = this$static.decoder.nowPos64;
   if (result == 1 || compare_0(this$static.decoder.outSize, P0_longLit) >= 0 && compare_0(this$static.decoder.nowPos64, this$static.decoder.outSize) >= 0) {
     $CodeFinish(this$static.decoder);
     this$static.alive = false;
@@ -5059,15 +3120,13 @@ function $processDecoderChunk(this$static){
 
 function $processEncoderChunk(this$static){
   $CodeOneBlock(this$static.encoder, this$static.encoder.processedInSize, this$static.encoder.processedOutSize, this$static.encoder.finished);
-  this$static.inBytesProcessed = this$static.encoder.processedInSize[0];
-  this$static.outBytesProcessed = this$static.encoder.processedOutSize[0];
   if (this$static.encoder.finished[0]) {
     $ReleaseStreams(this$static.encoder);
     this$static.alive = false;
   }
 }
 
-function getClass_96(){
+function getClass_62(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit;
 }
 
@@ -5075,13 +3134,11 @@ function Chunker(){
 }
 
 _ = Chunker.prototype = new Object_0();
-_.getClass$ = getClass_96;
+_.getClass$ = getClass_62;
 _.typeId$ = 0;
 _.alive = false;
 _.decoder = null;
 _.encoder = null;
-_.inBytesProcessed = P0_longLit;
-_.outBytesProcessed = P0_longLit;
 function $CodeFinish(this$static){
   $Flush_0(this$static.m_OutWindow);
   $ReleaseStream(this$static.m_OutWindow);
@@ -5192,7 +3249,7 @@ function $Decoder(this$static){
   this$static.m_IsRepG1Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static.m_IsRepG2Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static.m_IsRep0LongDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
-  this$static.m_PosSlotDecoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 12, 4, 0);
+  this$static.m_PosSlotDecoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 4, 0);
   this$static.m_PosDecoders = initDim(_3S_classLit, 0, -1, 114, 1);
   this$static.m_PosAlignDecoder = $BitTreeDecoder(new BitTreeDecoder(), 4);
   this$static.m_LenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
@@ -5262,7 +3319,7 @@ function $SetLcLpPb(this$static, lc, lp, pb){
   return true;
 }
 
-function getClass_100(){
+function getClass_66(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit;
 }
 
@@ -5270,7 +3327,7 @@ function Decoder(){
 }
 
 _ = Decoder.prototype = new Object_0();
-_.getClass$ = getClass_100;
+_.getClass$ = getClass_66;
 _.typeId$ = 0;
 _.m_DictionarySize = -1;
 _.m_DictionarySizeCheck = -1;
@@ -5304,8 +3361,8 @@ function $Decode(this$static, rangeDecoder, posState){
 
 function $Decoder$LenDecoder(this$static){
   this$static.m_Choice = initDim(_3S_classLit, 0, -1, 2, 1);
-  this$static.m_LowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 12, 16, 0);
-  this$static.m_MidCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 12, 16, 0);
+  this$static.m_LowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
+  this$static.m_MidCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
   this$static.m_HighCoder = $BitTreeDecoder(new BitTreeDecoder(), 8);
   return this$static;
 }
@@ -5320,7 +3377,7 @@ function $Init(this$static){
   InitBitModels(this$static.m_HighCoder.Models);
 }
 
-function getClass_97(){
+function getClass_63(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit;
 }
 
@@ -5328,7 +3385,7 @@ function Decoder$LenDecoder(){
 }
 
 _ = Decoder$LenDecoder.prototype = new Object_0();
-_.getClass$ = getClass_97;
+_.getClass$ = getClass_63;
 _.typeId$ = 0;
 _.m_NumPosStates = 0;
 function $Create_0(this$static, numPosBits, numPrevBits){
@@ -5339,7 +3396,7 @@ function $Create_0(this$static, numPosBits, numPrevBits){
   this$static.m_PosMask = (1 << numPosBits) - 1;
   this$static.m_NumPrevBits = numPrevBits;
   numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-  this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit, 0, 9, numStates, 0);
+  this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit, 0, 4, numStates, 0);
   for (i = 0; i < numStates; ++i)
     this$static.m_Coders[i] = $Decoder$LiteralDecoder$Decoder2(new Decoder$LiteralDecoder$Decoder2());
 }
@@ -5355,7 +3412,7 @@ function $Init_0(this$static){
     InitBitModels(this$static.m_Coders[i].m_Decoders);
 }
 
-function getClass_99(){
+function getClass_65(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit;
 }
 
@@ -5363,7 +3420,7 @@ function Decoder$LiteralDecoder(){
 }
 
 _ = Decoder$LiteralDecoder.prototype = new Object_0();
-_.getClass$ = getClass_99;
+_.getClass$ = getClass_65;
 _.typeId$ = 0;
 _.m_Coders = null;
 _.m_NumPosBits = 0;
@@ -5401,7 +3458,7 @@ function $Decoder$LiteralDecoder$Decoder2(this$static){
   return this$static;
 }
 
-function getClass_98(){
+function getClass_64(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit;
 }
 
@@ -5409,10 +3466,10 @@ function Decoder$LiteralDecoder$Decoder2(){
 }
 
 _ = Decoder$LiteralDecoder$Decoder2.prototype = new Object_0();
-_.getClass$ = getClass_98;
-_.typeId$ = 60;
-function $clinit_209(){
-  $clinit_209 = nullMethod;
+_.getClass$ = getClass_64;
+_.typeId$ = 36;
+function $clinit_114(){
+  $clinit_114 = nullMethod;
   var c, j, k, slotFast;
   g_FastPos = initDim(_3B_classLit, 0, -1, 2048, 1);
   c = 2;
@@ -5601,7 +3658,7 @@ function $CodeOneBlock(this$static, inSize, outSize, finished){
 function $Create_2(this$static){
   var bt, numHashBytes;
   if (!this$static._matchFinder) {
-    bt = ($clinit_210() , new BinTree());
+    bt = ($clinit_115() , new BinTree());
     numHashBytes = 4;
     if (this$static._matchFinderType == 0)
       numHashBytes = 2;
@@ -5618,17 +3675,17 @@ function $Create_2(this$static){
 
 function $Encoder(this$static){
   var i;
-  $clinit_209();
+  $clinit_114();
   this$static._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
-  this$static._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 11, 4096, 0);
-  this$static._rangeEncoder = ($clinit_216() , new Encoder_0());
+  this$static._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
+  this$static._rangeEncoder = ($clinit_121() , new Encoder_0());
   this$static._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
   this$static._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static._isRepG0 = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
   this$static._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
-  this$static._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 13, 4, 0);
+  this$static._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
   this$static._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
   this$static._posAlignEncoder = $BitTreeEncoder(new BitTreeEncoder(), 4);
   this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
@@ -5739,7 +3796,7 @@ function $GetOptimum(this$static, position){
   }
   this$static._optimum[0].State = this$static._state;
   posState = position & this$static._posStateMask;
-  this$static._optimum[1].Price = ($clinit_216() , ProbPrices[this$static._isMatch[(this$static._state << 4) + posState] >>> 2]) + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position, this$static._previousByte), this$static._state >= 7, matchByte, currentByte);
+  this$static._optimum[1].Price = ($clinit_121() , ProbPrices[this$static._isMatch[(this$static._state << 4) + posState] >>> 2]) + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position, this$static._previousByte), this$static._state >= 7, matchByte, currentByte);
   $MakeAsChar(this$static._optimum[1]);
   matchPrice = ProbPrices[2048 - this$static._isMatch[(this$static._state << 4) + posState] >>> 2];
   repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[this$static._state] >>> 2];
@@ -6069,11 +4126,11 @@ function $GetPosLenPrice(this$static, pos, len, posState){
 function $GetPureRepPrice(this$static, repIndex, state, posState){
   var price;
   if (repIndex == 0) {
-    price = ($clinit_216() , ProbPrices[this$static._isRepG0[state] >>> 2]);
+    price = ($clinit_121() , ProbPrices[this$static._isRepG0[state] >>> 2]);
     price += ProbPrices[2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
   }
    else {
-    price = ($clinit_216() , ProbPrices[2048 - this$static._isRepG0[state] >>> 2]);
+    price = ($clinit_121() , ProbPrices[2048 - this$static._isRepG0[state] >>> 2]);
     if (repIndex == 1)
       price += ProbPrices[this$static._isRepG1[state] >>> 2];
     else {
@@ -6085,7 +4142,7 @@ function $GetPureRepPrice(this$static, repIndex, state, posState){
 }
 
 function $GetRepLen1Price(this$static, state, posState){
-  return ($clinit_216() , ProbPrices[this$static._isRepG0[state] >>> 2]) + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2];
+  return ($clinit_121() , ProbPrices[this$static._isRepG0[state] >>> 2]) + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2];
 }
 
 function $Init_4(this$static){
@@ -6222,7 +4279,7 @@ function GetPosSlot2(pos){
   return g_FastPos[pos >> 26] + 52;
 }
 
-function getClass_106(){
+function getClass_72(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
 }
 
@@ -6230,7 +4287,7 @@ function Encoder(){
 }
 
 _ = Encoder.prototype = new Object_0();
-_.getClass$ = getClass_106;
+_.getClass$ = getClass_72;
 _.typeId$ = 0;
 _._additionalOffset = 0;
 _._alignPriceCount = 0;
@@ -6282,8 +4339,8 @@ function $Encode(this$static, rangeEncoder, symbol, posState){
 function $Encoder$LenEncoder(this$static){
   var posState;
   this$static._choice = initDim(_3S_classLit, 0, -1, 2, 1);
-  this$static._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 13, 16, 0);
-  this$static._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 13, 16, 0);
+  this$static._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+  this$static._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
   this$static._highCoder = $BitTreeEncoder(new BitTreeEncoder(), 8);
   for (posState = 0; posState < 16; ++posState) {
     this$static._lowCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
@@ -6304,7 +4361,7 @@ function $Init_2(this$static, numPosStates){
 
 function $SetPrices(this$static, posState, numSymbols, prices, st){
   var a0, a1, b0, b1, i;
-  a0 = ($clinit_216() , ProbPrices[this$static._choice[0] >>> 2]);
+  a0 = ($clinit_121() , ProbPrices[this$static._choice[0] >>> 2]);
   a1 = ProbPrices[2048 - this$static._choice[0] >>> 2];
   b0 = a1 + ProbPrices[this$static._choice[1] >>> 2];
   b1 = a1 + ProbPrices[2048 - this$static._choice[1] >>> 2];
@@ -6323,7 +4380,7 @@ function $SetPrices(this$static, posState, numSymbols, prices, st){
     prices[st + i] = b1 + $GetPrice_1(this$static._highCoder, i - 8 - 8);
 }
 
-function getClass_101(){
+function getClass_67(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit;
 }
 
@@ -6331,7 +4388,7 @@ function Encoder$LenEncoder(){
 }
 
 _ = Encoder$LenEncoder.prototype = new Object_0();
-_.getClass$ = getClass_101;
+_.getClass$ = getClass_67;
 _.typeId$ = 0;
 function $Encode_0(this$static, rangeEncoder, symbol, posState){
   $Encode(this$static, rangeEncoder, symbol, posState);
@@ -6360,7 +4417,7 @@ function $UpdateTables(this$static, numPosStates){
   }
 }
 
-function getClass_102(){
+function getClass_68(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
 }
 
@@ -6368,7 +4425,7 @@ function Encoder$LenPriceTableEncoder(){
 }
 
 _ = Encoder$LenPriceTableEncoder.prototype = new Encoder$LenEncoder();
-_.getClass$ = getClass_102;
+_.getClass$ = getClass_68;
 _.typeId$ = 0;
 _._tableSize = 0;
 function $Create_1(this$static, numPosBits, numPrevBits){
@@ -6379,7 +4436,7 @@ function $Create_1(this$static, numPosBits, numPrevBits){
   this$static.m_PosMask = (1 << numPosBits) - 1;
   this$static.m_NumPrevBits = numPrevBits;
   numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-  this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit, 0, 10, numStates, 0);
+  this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit, 0, 5, numStates, 0);
   for (i = 0; i < numStates; ++i)
     this$static.m_Coders[i] = $Encoder$LiteralEncoder$Encoder2(new Encoder$LiteralEncoder$Encoder2());
 }
@@ -6395,7 +4452,7 @@ function $Init_3(this$static){
     InitBitModels_0(this$static.m_Coders[i].m_Encoders);
 }
 
-function getClass_104(){
+function getClass_70(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
 }
 
@@ -6403,7 +4460,7 @@ function Encoder$LiteralEncoder(){
 }
 
 _ = Encoder$LiteralEncoder.prototype = new Object_0();
-_.getClass$ = getClass_104;
+_.getClass$ = getClass_70;
 _.typeId$ = 0;
 _.m_Coders = null;
 _.m_NumPosBits = 0;
@@ -6466,7 +4523,7 @@ function $GetPrice_0(this$static, matchMode, matchByte, symbol){
   return price;
 }
 
-function getClass_103(){
+function getClass_69(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit;
 }
 
@@ -6474,8 +4531,8 @@ function Encoder$LiteralEncoder$Encoder2(){
 }
 
 _ = Encoder$LiteralEncoder$Encoder2.prototype = new Object_0();
-_.getClass$ = getClass_103;
-_.typeId$ = 61;
+_.getClass$ = getClass_69;
+_.typeId$ = 37;
 function $MakeAsChar(this$static){
   this$static.BackPrev = -1;
   this$static.Prev1IsChar = false;
@@ -6486,7 +4543,7 @@ function $MakeAsShortRep(this$static){
   this$static.Prev1IsChar = false;
 }
 
-function getClass_105(){
+function getClass_71(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
 }
 
@@ -6494,8 +4551,8 @@ function Encoder$Optimal(){
 }
 
 _ = Encoder$Optimal.prototype = new Object_0();
-_.getClass$ = getClass_105;
-_.typeId$ = 62;
+_.getClass$ = getClass_71;
+_.typeId$ = 38;
 _.BackPrev = 0;
 _.BackPrev2 = 0;
 _.Backs0 = 0;
@@ -6548,7 +4605,7 @@ function ReverseDecode(Models, startIndex, rangeDecoder, NumBitLevels){
   return symbol;
 }
 
-function getClass_110(){
+function getClass_76(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit;
 }
 
@@ -6556,8 +4613,8 @@ function BitTreeDecoder(){
 }
 
 _ = BitTreeDecoder.prototype = new Object_0();
-_.getClass$ = getClass_110;
-_.typeId$ = 63;
+_.getClass$ = getClass_76;
+_.typeId$ = 39;
 _.Models = null;
 _.NumBitLevels = 0;
 function $BitTreeEncoder(this$static, numBitLevels){
@@ -6632,13 +4689,13 @@ function ReverseGetPrice(Models, startIndex, NumBitLevels, symbol){
   for (i = NumBitLevels; i != 0; --i) {
     bit = symbol & 1;
     symbol >>>= 1;
-    price += ($clinit_216() , ProbPrices[((Models[startIndex + m] - bit ^ -bit) & 2047) >>> 2]);
+    price += ($clinit_121() , ProbPrices[((Models[startIndex + m] - bit ^ -bit) & 2047) >>> 2]);
     m = m << 1 | bit;
   }
   return price;
 }
 
-function getClass_111(){
+function getClass_77(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit;
 }
 
@@ -6646,8 +4703,8 @@ function BitTreeEncoder(){
 }
 
 _ = BitTreeEncoder.prototype = new Object_0();
-_.getClass$ = getClass_111;
-_.typeId$ = 64;
+_.getClass$ = getClass_77;
+_.typeId$ = 40;
 _.Models = null;
 _.NumBitLevels = 0;
 function $DecodeBit(this$static, probs, index){
@@ -6705,7 +4762,7 @@ function InitBitModels(probs){
     probs[i] = 1024;
 }
 
-function getClass_112(){
+function getClass_78(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit;
 }
 
@@ -6713,13 +4770,13 @@ function Decoder_0(){
 }
 
 _ = Decoder_0.prototype = new Object_0();
-_.getClass$ = getClass_112;
+_.getClass$ = getClass_78;
 _.typeId$ = 0;
 _.Code = 0;
 _.Range = 0;
 _.Stream = null;
-function $clinit_216(){
-  $clinit_216 = nullMethod;
+function $clinit_121(){
+  $clinit_121 = nullMethod;
   var end, i, j, start;
   ProbPrices = initDim(_3I_classLit, 0, -1, 512, 1);
   for (i = 8; i >= 0; --i) {
@@ -6798,18 +4855,18 @@ function $ShiftLow(this$static){
 }
 
 function GetPrice(Prob, symbol){
-  $clinit_216();
+  $clinit_121();
   return ProbPrices[((Prob - symbol ^ -symbol) & 2047) >>> 2];
 }
 
 function InitBitModels_0(probs){
-  $clinit_216();
+  $clinit_121();
   var i;
   for (i = 0; i < probs.length; ++i)
     probs[i] = 1024;
 }
 
-function getClass_113(){
+function getClass_79(){
   return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit;
 }
 
@@ -6817,7 +4874,7 @@ function Encoder_0(){
 }
 
 _ = Encoder_0.prototype = new Object_0();
-_.getClass$ = getClass_113;
+_.getClass$ = getClass_79;
 _.typeId$ = 0;
 _.Low = P0_longLit;
 _.Range = 0;
@@ -6828,13 +4885,13 @@ _._position = P0_longLit;
 var ProbPrices;
 function decode(utf){
   var buf, i, x, y, z;
-  buf = $StringBuilder_0(new StringBuilder());
+  buf = $StringBuilder(new StringBuilder());
   for (i = 0; i < utf.length; ++i) {
     x = utf[i] & 255;
     if ((x & 128) == 0) {
       if (x == 0)
         throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
-      $appendNonNull(buf.data, String.fromCharCode(x & 65535));
+      buf.impl.string += String.fromCharCode(x & 65535);
     }
      else if ((x & 224) == 192) {
       if (i + 1 >= utf.length)
@@ -6842,7 +4899,7 @@ function decode(utf){
       y = utf[++i] & 255;
       if ((y & 192) != 128)
         throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
-      $append(buf.data, (x & 31) << 6 & 65535 | y & 63);
+      buf.impl.string += (x & 31) << 6 & 65535 | y & 63;
     }
      else if ((x & 240) == 224) {
       if (i + 2 >= utf.length)
@@ -6853,12 +4910,12 @@ function decode(utf){
       z = utf[++i] & 255;
       if ((z & 192) != 128)
         throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
-      $appendNonNull(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
+      buf.impl.string += String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
     }
      else 
       throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
   }
-  return $toString_0(buf.data);
+  return buf.impl.string;
 }
 
 function encode(s){
@@ -6893,135 +4950,18 @@ function encode(s){
   return data;
 }
 
-function $clinit_226(){
-  $clinit_226 = nullMethod;
-  DEFAULT_COMPRESSION_MODE = ($clinit_193() , MODE_1);
+function $clinit_125(){
+  $clinit_125 = nullMethod;
+  DEFAULT_COMPRESSION_MODE = ($clinit_98() , MODE_1);
 }
 
 function $LZMADemo(this$static){
-  $clinit_226();
-  this$static.leftWindow = $TextArea(new TextArea());
-  this$static.rightWindow = $TextArea(new TextArea());
-  this$static.leftSizePanel = $SimplePanel(new SimplePanel());
-  this$static.rightSizePanel = $SimplePanel(new SimplePanel());
+  $clinit_125();
   this$static.mode = DEFAULT_COMPRESSION_MODE;
-  this$static.leftWindow.element.cols = 70;
-  this$static.leftWindow.element.rows = 25;
-  this$static.rightWindow.element.cols = 70;
-  this$static.rightWindow.element.rows = 25;
   return this$static;
 }
 
-function $compress(this$static){
-  this$static.rightWindow.element['value'] = '' != null?'':'';
-  $updateSizes(this$static, false);
-  $setWidget(this$static.rightSizePanel, $Label(new Label(), 'Compressing... 0%'));
-  addCommand($LZMADemo$7(new LZMADemo$7(), this$static));
-}
-
-function $decompress(this$static){
-  var data;
-  this$static.leftWindow.element['value'] = '' != null?'':'';
-  $updateSizes(this$static, false);
-  data = $getRightData(this$static, true);
-  if (data == null)
-    return;
-  $setWidget(this$static.leftSizePanel, $Label(new Label(), 'Decompressing... 0%'));
-  addCommand($LZMADemo$8(new LZMADemo$8(), this$static, data));
-}
-
-function $getRightData(this$static, alert_0){
-  var b, ch, digit, gothi, hinib, i, s;
-  b = $ByteArrayOutputStream(new ByteArrayOutputStream());
-  s = $getPropertyString(this$static.rightWindow.element, 'value');
-  gothi = false;
-  hinib = 0;
-  for (i = 0; i < s.length; ++i) {
-    ch = s.charCodeAt(i);
-    if (' \t\f\n\r'.indexOf(fromCodePoint(ch)) != -1)
-      continue;
-    digit = digit_0(ch, 16);
-    if (digit == -1) {
-      if (alert_0) {
-        $wnd.alert('invalid compressed input: invalid hex character `' + String.fromCharCode(ch) + "'");
-      }
-      return null;
-    }
-    if (gothi) {
-      $ensureCapacity(b, b.count + 1);
-      b.buf[b.count++] = (hinib << 4) + digit << 24 >> 24;
-    }
-     else 
-      hinib = digit;
-    gothi = !gothi;
-  }
-  if (gothi) {
-    if (alert_0) {
-      $wnd.alert('invalid compressed input: odd number of digits');
-    }
-    return null;
-  }
-  return $toByteArray(b);
-}
-
-function $onModuleLoad(this$static){
-  var compressButton, compressClearButton, decompressButton, decompressClearButton, hPanel, i, leftBottom, leftPanel, modeBox, rightBottom, rightPanel;
-  sUncaughtExceptionHandler = new LZMADemo$1();
-  compressButton = $Button_0(new Button(), 'Compress', $LZMADemo$2(new LZMADemo$2(), this$static));
-  compressClearButton = $Button_0(new Button(), 'Clear', $LZMADemo$3(new LZMADemo$3(), this$static));
-  modeBox = $ListBox(new ListBox());
-  for (i = 1; i <= 9; ++i)
-    $insertItem(modeBox, 'Level ' + i, '' + i, -1);
-  modeBox.element.selectedIndex = DEFAULT_COMPRESSION_MODE.level - 1;
-  $addDomHandler(modeBox, $LZMADemo$4(new LZMADemo$4(), this$static, modeBox), ($clinit_20() , TYPE));
-  leftBottom = $HorizontalPanel(new HorizontalPanel());
-  $add_1(leftBottom, modeBox);
-  $add_1(leftBottom, compressButton);
-  $add_1(leftBottom, compressClearButton);
-  $add_1(leftBottom, this$static.leftSizePanel);
-  decompressButton = $Button_0(new Button(), 'Decompress', $LZMADemo$5(new LZMADemo$5(), this$static));
-  decompressClearButton = $Button_0(new Button(), 'Clear', $LZMADemo$6(new LZMADemo$6(), this$static));
-  rightBottom = $HorizontalPanel(new HorizontalPanel());
-  $add_1(rightBottom, decompressButton);
-  $add_1(rightBottom, decompressClearButton);
-  $add_1(rightBottom, this$static.rightSizePanel);
-  leftPanel = $VerticalPanel(new VerticalPanel());
-  setStylePrimaryName(leftPanel.element, 'demo-panel');
-  $add_2(leftPanel, this$static.leftWindow);
-  $add_2(leftPanel, leftBottom);
-  rightPanel = $VerticalPanel(new VerticalPanel());
-  setStylePrimaryName(rightPanel.element, 'demo-panel');
-  $add_2(rightPanel, this$static.rightWindow);
-  $add_2(rightPanel, rightBottom);
-  hPanel = $HorizontalPanel(new HorizontalPanel());
-  hPanel.table['cellSpacing'] = 5;
-  $add_1(hPanel, leftPanel);
-  $add_1(hPanel, rightPanel);
-  $add(($clinit_115() , get_0(null)), hPanel);
-}
-
-function $prettyPrint(data){
-  var b, buf, i;
-  buf = $StringBuilder(new StringBuilder());
-  for (i = 0; i < data.length; ++i) {
-    b = data[i] & 255;
-    $append_2(buf, forDigit(b >> 4, 16));
-    $append_2(buf, forDigit(b & 15, 16));
-    $appendNonNull(buf.data, String.fromCharCode(i % 16 == 15?10:32));
-  }
-  return $toString_0(buf.data);
-}
-
-function $updateSizes(this$static, pcent){
-  var rd, s, uc;
-  uc = $getPropertyString(this$static.leftWindow.element, 'value').length;
-  $setWidget(this$static.leftSizePanel, $Label(new Label(), uc + ' bytes'));
-  rd = $getRightData(this$static, false);
-  s = rd != null?rd.length + ' bytes' + (pcent && uc > 0?' (' + ~~((rd.length * 100 + 99) / uc) + '%)':''):'invalid hex input';
-  $setWidget(this$static.rightSizePanel, $Label(new Label(), s));
-}
-
-function getClass_122(){
+function getClass_82(){
   return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
 }
 
@@ -7029,10 +4969,27 @@ function LZMADemo(){
 }
 
 _ = LZMADemo.prototype = new Object_0();
-_.getClass$ = getClass_122;
+_.getClass$ = getClass_82;
 _.typeId$ = 0;
 var DEFAULT_COMPRESSION_MODE;
-function getClass_114(){
+function $LZMADemo$1(this$static, this$0){
+  this$static.this$0 = this$0;
+  return this$static;
+}
+
+function execute_1(){
+  if (!this.c) {
+    this.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode('sample_enc'), this.this$0.mode);
+    return true;
+  }
+  if ($execute(this.c)) {
+    return true;
+  }
+  $wnd.alert($toByteArray(this.c.output));
+  return false;
+}
+
+function getClass_80(){
   return Lorg_dellroad_lzma_demo_client_LZMADemo$1_2_classLit;
 }
 
@@ -7040,163 +4997,27 @@ function LZMADemo$1(){
 }
 
 _ = LZMADemo$1.prototype = new Object_0();
-_.getClass$ = getClass_114;
-_.typeId$ = 0;
-function $LZMADemo$2(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function getClass_115(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$2_2_classLit;
-}
-
-function onClick(e){
-  $compress(this.this$0);
-}
-
-function LZMADemo$2(){
-}
-
-_ = LZMADemo$2.prototype = new Object_0();
-_.getClass$ = getClass_115;
-_.onClick = onClick;
-_.typeId$ = 65;
-_.this$0 = null;
-function $LZMADemo$3(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function getClass_116(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$3_2_classLit;
-}
-
-function onClick_0(e){
-  this.this$0.leftWindow.element['value'] = '' != null?'':'';
-  $updateSizes(this.this$0, false);
-}
-
-function LZMADemo$3(){
-}
-
-_ = LZMADemo$3.prototype = new Object_0();
-_.getClass$ = getClass_116;
-_.onClick = onClick_0;
-_.typeId$ = 66;
-_.this$0 = null;
-function $LZMADemo$4(this$static, this$0, val$modeBox){
-  this$static.this$0 = this$0;
-  this$static.val$modeBox = val$modeBox;
-  return this$static;
-}
-
-function getClass_117(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$4_2_classLit;
-}
-
-function LZMADemo$4(){
-}
-
-_ = LZMADemo$4.prototype = new Object_0();
-_.getClass$ = getClass_117;
-_.typeId$ = 67;
-_.this$0 = null;
-_.val$modeBox = null;
-function $LZMADemo$5(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function getClass_118(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$5_2_classLit;
-}
-
-function onClick_1(e){
-  $decompress(this.this$0);
-}
-
-function LZMADemo$5(){
-}
-
-_ = LZMADemo$5.prototype = new Object_0();
-_.getClass$ = getClass_118;
-_.onClick = onClick_1;
-_.typeId$ = 68;
-_.this$0 = null;
-function $LZMADemo$6(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function getClass_119(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$6_2_classLit;
-}
-
-function onClick_2(e){
-  this.this$0.rightWindow.element['value'] = '' != null?'':'';
-  $updateSizes(this.this$0, false);
-}
-
-function LZMADemo$6(){
-}
-
-_ = LZMADemo$6.prototype = new Object_0();
-_.getClass$ = getClass_119;
-_.onClick = onClick_2;
-_.typeId$ = 69;
-_.this$0 = null;
-function $LZMADemo$7(this$static, this$0){
-  this$static.this$0 = this$0;
-  return this$static;
-}
-
-function execute_1(){
-  var pcent;
-  if (!this.c) {
-    this.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode($getPropertyString(this.this$0.leftWindow.element, 'value')), this.this$0.mode);
-    return true;
-  }
-  if ($execute(this.c)) {
-    pcent = ~~Math.max(Math.min($getProgress(this.c) * 100, 2147483647), -2147483648);
-    $setWidget(this.this$0.rightSizePanel, $Label(new Label(), 'Compressing... ' + pcent + '%'));
-    return true;
-  }
-  $setText_1(this.this$0.rightWindow, $prettyPrint($toByteArray(this.c.output)));
-  $updateSizes(this.this$0, true);
-  return false;
-}
-
-function getClass_120(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$7_2_classLit;
-}
-
-function LZMADemo$7(){
-}
-
-_ = LZMADemo$7.prototype = new Object_0();
 _.execute = execute_1;
-_.getClass$ = getClass_120;
-_.typeId$ = 70;
+_.getClass$ = getClass_80;
+_.typeId$ = 41;
 _.c = null;
 _.this$0 = null;
-function $LZMADemo$8(this$static, this$0, val$data){
-  this$static.this$0 = this$0;
+function $LZMADemo$2(this$static, val$data){
   this$static.val$data = val$data;
   return this$static;
 }
 
 function execute_2(){
-  var $e0, e, ioe, pcent, text;
+  var $e0, e, ioe, text;
   if (!this.d) {
     try {
       this.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), this.val$data);
     }
      catch ($e0) {
       $e0 = caught($e0);
-      if (instanceOf($e0, 24)) {
+      if (instanceOf($e0, 18)) {
         e = $e0;
-        $setWidget(this.this$0.leftSizePanel, $Label(new Label(), 'Decompression failed: ' + e.detailMessage));
+        $wnd.alert('Decompression failed: ' + e.detailMessage);
         return false;
       }
        else 
@@ -7205,13 +5026,11 @@ function execute_2(){
     return true;
   }
   if ($execute_0(this.d)) {
-    pcent = ~~Math.max(Math.min($getProgress_0(this.d) * 100, 2147483647), -2147483648);
-    $setWidget(this.this$0.leftSizePanel, $Label(new Label(), 'Decompressing... ' + pcent + '%'));
     return true;
   }
   ioe = this.d.exception;
   if (ioe) {
-    $setWidget(this.this$0.leftSizePanel, $Label(new Label(), 'Decompression failed: ' + ioe.detailMessage));
+    $wnd.alert('Decompression failed: ' + ioe.detailMessage);
     return false;
   }
   try {
@@ -7219,36 +5038,36 @@ function execute_2(){
   }
    catch ($e0) {
     $e0 = caught($e0);
-    if (instanceOf($e0, 25)) {
-      e = $e0;
-      $setWidget(this.this$0.leftSizePanel, $Label(new Label(), 'Decompression failed: ' + e.detailMessage));
+    if (instanceOf($e0, 19)) {
+      $wnd.alert('Decompression failed: ' + ioe.detailMessage);
       return false;
     }
      else 
       throw $e0;
   }
-  $setText_1(this.this$0.leftWindow, text);
-  $updateSizes(this.this$0, true);
+  $wnd.alert(text);
   return false;
 }
 
-function getClass_121(){
-  return Lorg_dellroad_lzma_demo_client_LZMADemo$8_2_classLit;
+function getClass_81(){
+  return Lorg_dellroad_lzma_demo_client_LZMADemo$2_2_classLit;
 }
 
-function LZMADemo$8(){
+function LZMADemo$2(){
 }
 
-_ = LZMADemo$8.prototype = new Object_0();
+_ = LZMADemo$2.prototype = new Object_0();
 _.execute = execute_2;
-_.getClass$ = getClass_121;
-_.typeId$ = 71;
+_.getClass$ = getClass_81;
+_.typeId$ = 42;
 _.d = null;
-_.this$0 = null;
 _.val$data = null;
 function init(){
+  var data;
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
-  $onModuleLoad($LZMADemo(new LZMADemo()));
+  addCommand($LZMADemo$1(new LZMADemo$1(), $LZMADemo(new LZMADemo())));
+  data = initValues(_3B_classLit, 0, -1, [93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  addCommand($LZMADemo$2(new LZMADemo$2(), data));
 }
 
 function gwtOnLoad(errFn, modName, modBase){
@@ -7269,7 +5088,7 @@ function gwtOnLoad(errFn, modName, modBase){
 function nullMethod(){
 }
 
-var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'), Lcom_google_gwt_user_client_Timer_2_classLit = createForClass('com.google.gwt.user.client.', 'Timer'), Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'), Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'), Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'), Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptException'), Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptObject$'), Lcom_google_gwt_dom_client_DOMImpl_2_classLit = createForClass('com.google.gwt.dom.client.', 'DOMImpl'), Lcom_google_gwt_dom_client_DOMImplTrident_2_classLit = createForClass('com.google.gwt.dom.client.', 'DOMImplTrident'), Lcom_google_gwt_dom_client_DOMImplIE6_2_classLit = createForClass('com.google.gwt.dom.client.', 'DOMImplIE6'), Lcom_google_gwt_event_shared_GwtEvent_2_classLit = createForClass('com.google.gwt.event.shared.', 'GwtEvent'), Lcom_google_gwt_event_dom_client_DomEvent_2_classLit = createForClass('com.google.gwt.event.dom.client.', 'DomEvent'), Lcom_google_gwt_event_dom_client_ChangeEvent_2_classLit = createForClass('com.google.gwt.event.dom.client.', 'ChangeEvent'), Lcom_google_gwt_event_dom_client_ClickEvent_2_classLit = createForClass('com.google.gwt.event.dom.client.', 'ClickEvent'), Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit = createForClass('com.google.gwt.event.shared.', 'GwtEvent$Type'), Lcom_google_gwt_event_dom_client_DomEvent$Type_2_classLit = createForClass('com.google.gwt.event.dom.client.', 'DomEvent$Type'), Lcom_google_gwt_event_dom_client_PrivateMap_2_classLit = createForClass('com.google.gwt.event.dom.client.', 'PrivateMap'), Lcom_google_gwt_event_logical_shared_CloseEvent_2_classLit = createForClass('com.google.gwt.event.logical.shared.', 'CloseEvent'), Lcom_google_gwt_event_shared_DefaultHandlerRegistration_2_classLit = createForClass('com.google.gwt.event.shared.', 'DefaultHandlerRegistration'), Lcom_google_gwt_event_shared_HandlerManager_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager'), Lcom_google_gwt_event_shared_HandlerManager$HandlerRegistry_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager$HandlerRegistry'), Lcom_google_gwt_event_shared_HandlerManager$1_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager$1'), Ljava_lang_Enum_2_classLit = createForClass('java.lang.', 'Enum'), _3_3D_classLit = createForArray('', '[[D'), Lcom_google_gwt_user_client_ui_UIObject_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'UIObject'), Lcom_google_gwt_user_client_ui_Widget_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'Widget'), Lcom_google_gwt_user_client_ui_Panel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'Panel'), Lcom_google_gwt_user_client_ui_ComplexPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'ComplexPanel'), Lcom_google_gwt_user_client_ui_AbsolutePanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'AbsolutePanel'), Lcom_google_gwt_user_client_ui_FocusWidget_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'FocusWidget'), Lcom_google_gwt_user_client_ui_ButtonBase_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'ButtonBase'), Lcom_google_gwt_user_client_ui_Button_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'Button'), Lcom_google_gwt_user_client_ui_CellPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'CellPanel'), Lcom_google_gwt_user_client_ui_SimplePanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'SimplePanel'), _3Lcom_google_gwt_user_client_ui_Widget_2_classLit = createForArray('[Lcom.google.gwt.user.client.ui.', 'Widget;'), Lcom_google_gwt_user_client_ui_Label_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'Label'), Lcom_google_gwt_user_client_ui_HasHorizontalAlignment$HorizontalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'HasHorizontalAlignment$HorizontalAlignmentConstant'), Lcom_google_gwt_user_client_ui_HasVerticalAlignment$VerticalAlignmentConstant_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'HasVerticalAlignment$VerticalAlignmentConstant'), Lcom_google_gwt_user_client_ui_HorizontalPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'HorizontalPanel'), Ljava_util_AbstractCollection_2_classLit = createForClass('java.util.', 'AbstractCollection'), Ljava_util_AbstractList_2_classLit = createForClass('java.util.', 'AbstractList'), Ljava_util_ArrayList_2_classLit = createForClass('java.util.', 'ArrayList'), Lcom_google_gwt_user_client_ui_ListBox_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'ListBox'), _3C_classLit = createForArray('', '[C'), Lcom_google_gwt_user_client_ui_RootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'RootPanel'), Lcom_google_gwt_user_client_ui_RootPanel$DefaultRootPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'RootPanel$DefaultRootPanel'), Lcom_google_gwt_user_client_ui_RootPanel$1_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'RootPanel$1'), Lcom_google_gwt_user_client_ui_SimplePanel$1_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'SimplePanel$1'), Lcom_google_gwt_user_client_ui_TextBoxBase_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'TextBoxBase'), Lcom_google_gwt_user_client_ui_TextArea_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'TextArea'), Lcom_google_gwt_user_client_ui_VerticalPanel_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'VerticalPanel'), Lcom_google_gwt_user_client_ui_WidgetCollection_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'WidgetCollection'), Lcom_google_gwt_user_client_ui_WidgetCollection$WidgetIterator_2_classLit = createForClass('com.google.gwt.user.client.ui.', 'WidgetCollection$WidgetIterator'), Lcom_google_gwt_user_client_CommandExecutor_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor'), Lcom_google_gwt_user_client_CommandExecutor$CircularIterator_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$CircularIterator'), Lcom_google_gwt_user_client_CommandExecutor$1_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$1'), Lcom_google_gwt_user_client_CommandExecutor$2_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$2'), Lcom_google_gwt_user_client_IncrementalCommandCanceledException_2_classLit = createForClass('com.google.gwt.user.client.', 'IncrementalCommandCanceledException'), Lcom_google_gwt_user_client_Timer$1_2_classLit = createForClass('com.google.gwt.user.client.', 'Timer$1'), Lcom_google_gwt_user_client_Window$ClosingEvent_2_classLit = createForClass('com.google.gwt.user.client.', 'Window$ClosingEvent'), Lcom_google_gwt_user_client_Window$WindowHandlers_2_classLit = createForClass('com.google.gwt.user.client.', 'Window$WindowHandlers'), Ljava_io_InputStream_2_classLit = createForClass('java.io.', 'InputStream'), Ljava_io_ByteArrayInputStream_2_classLit = createForClass('java.io.', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'), Ljava_io_OutputStream_2_classLit = createForClass('java.io.', 'OutputStream'), Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('java.io.', 'ByteArrayOutputStream'), Ljava_io_IOException_2_classLit = createForClass('java.io.', 'IOException'), Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang.', 'ArithmeticException'), Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang.', 'IndexOutOfBoundsException'), Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang.', 'ArrayStoreException'), Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class'), Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang.', 'ClassCastException'), Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang.', 'IllegalArgumentException'), Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang.', 'IllegalStateException'), _3I_classLit = createForArray('', '[I'), Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang.', 'NullPointerException'), Ljava_lang_String_2_classLit = createForClass('java.lang.', 'String'), Ljava_lang_StringBuffer_2_classLit = createForClass('java.lang.', 'StringBuffer'), Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang.', 'StringBuilder'), Ljava_lang_UnsupportedOperationException_2_classLit = createForClass('java.lang.', 'UnsupportedOperationException'), _3Ljava_lang_Object_2_classLit = createForArray('[Ljava.lang.', 'Object;'), Ljava_util_AbstractMap_2_classLit = createForClass('java.util.', 'AbstractMap'), Ljava_util_AbstractHashMap_2_classLit = createForClass('java.util.', 'AbstractHashMap'), Ljava_util_AbstractSet_2_classLit = createForClass('java.util.', 'AbstractSet'), Ljava_util_AbstractHashMap$EntrySet_2_classLit = createForClass('java.util.', 'AbstractHashMap$EntrySet'), Ljava_util_AbstractHashMap$EntrySetIterator_2_classLit = createForClass('java.util.', 'AbstractHashMap$EntrySetIterator'), Ljava_util_AbstractMapEntry_2_classLit = createForClass('java.util.', 'AbstractMapEntry'), Ljava_util_AbstractHashMap$MapEntryNull_2_classLit = createForClass('java.util.', 'AbstractHashMap$MapEntryNull'), Ljava_util_AbstractHashMap$MapEntryString_2_classLit = createForClass('java.util.', 'AbstractHashMap$MapEntryString'), Ljava_util_AbstractList$IteratorImpl_2_classLit = createForClass('java.util.', 'AbstractList$IteratorImpl'), Ljava_util_AbstractMap$1_2_classLit = createForClass('java.util.', 'AbstractMap$1'), Ljava_util_AbstractMap$1$1_2_classLit = createForClass('java.util.', 'AbstractMap$1$1'), Ljava_util_HashMap_2_classLit = createForClass('java.util.', 'HashMap'), Ljava_util_HashSet_2_classLit = createForClass('java.util.', 'HashSet'), Ljava_util_MapEntryImpl_2_classLit = createForClass('java.util.', 'MapEntryImpl'), Ljava_util_NoSuchElementException_2_classLit = createForClass('java.util.', 'NoSuchElementException'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'InWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'BinTree'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'OutWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenPriceTableEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Encoder'), Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('org.dellroad.lzma.client.', 'CompressionMode'), Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMACompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayCompressor'), Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMADecompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayDecompressor'), Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo'), Lorg_dellroad_lzma_demo_client_LZMADemo$1_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$1'), Lorg_dellroad_lzma_demo_client_LZMADemo$2_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$2'), Lorg_dellroad_lzma_demo_client_LZMADemo$3_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$3'), Lorg_dellroad_lzma_demo_client_LZMADemo$4_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$4'), Lorg_dellroad_lzma_demo_client_LZMADemo$5_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$5'), Lorg_dellroad_lzma_demo_client_LZMADemo$6_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$6'), Lorg_dellroad_lzma_demo_client_LZMADemo$7_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$7'), Lorg_dellroad_lzma_demo_client_LZMADemo$8_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$8');
+var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'), Lcom_google_gwt_core_client_impl_StringBufferImpl_2_classLit = createForClass('com.google.gwt.core.client.impl.', 'StringBufferImpl'), Lcom_google_gwt_core_client_impl_StringBufferImplAppend_2_classLit = createForClass('com.google.gwt.core.client.impl.', 'StringBufferImplAppend'), Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'), Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'), Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'), Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptException'), Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptObject$'), Lcom_google_gwt_event_shared_GwtEvent_2_classLit = createForClass('com.google.gwt.event.shared.', 'GwtEvent'), Lcom_google_gwt_event_shared_GwtEvent$Type_2_classLit = createForClass('com.google.gwt.event.shared.', 'GwtEvent$Type'), Lcom_google_gwt_event_logical_shared_CloseEvent_2_classLit = createForClass('com.google.gwt.event.logical.shared.', 'CloseEvent'), Lcom_google_gwt_event_shared_DefaultHandlerRegistration_2_classLit = createForClass('com.google.gwt.event.shared.', 'DefaultHandlerRegistration'), Lcom_google_gwt_event_shared_HandlerManager_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager'), Lcom_google_gwt_event_shared_HandlerManager$HandlerRegistry_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager$HandlerRegistry'), Lcom_google_gwt_event_shared_HandlerManager$1_2_classLit = createForClass('com.google.gwt.event.shared.', 'HandlerManager$1'), Ljava_lang_Enum_2_classLit = createForClass('java.lang.', 'Enum'), _3_3D_classLit = createForArray('', '[[D'), Lcom_google_gwt_user_client_CommandExecutor_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor'), Lcom_google_gwt_user_client_CommandExecutor$CircularIterator_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$CircularIterator'), Lcom_google_gwt_user_client_Timer_2_classLit = createForClass('com.google.gwt.user.client.', 'Timer'), Lcom_google_gwt_user_client_CommandExecutor$1_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$1'), Lcom_google_gwt_user_client_CommandExecutor$2_2_classLit = createForClass('com.google.gwt.user.client.', 'CommandExecutor$2'), Lcom_google_gwt_user_client_IncrementalCommandCanceledException_2_classLit = createForClass('com.google.gwt.user.client.', 'IncrementalCommandCanceledException'), Lcom_google_gwt_user_client_Timer$1_2_classLit = createForClass('com.google.gwt.user.client.', 'Timer$1'), Lcom_google_gwt_user_client_Window$ClosingEvent_2_classLit = createForClass('com.google.gwt.user.client.', 'Window$ClosingEvent'), Lcom_google_gwt_user_client_Window$WindowHandlers_2_classLit = createForClass('com.google.gwt.user.client.', 'Window$WindowHandlers'), Ljava_io_InputStream_2_classLit = createForClass('java.io.', 'InputStream'), Ljava_io_ByteArrayInputStream_2_classLit = createForClass('java.io.', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'), Ljava_io_OutputStream_2_classLit = createForClass('java.io.', 'OutputStream'), Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('java.io.', 'ByteArrayOutputStream'), Ljava_io_IOException_2_classLit = createForClass('java.io.', 'IOException'), Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang.', 'ArithmeticException'), Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang.', 'IndexOutOfBoundsException'), Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang.', 'ArrayStoreException'), _3C_classLit = createForArray('', '[C'), Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class'), Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang.', 'ClassCastException'), Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang.', 'IllegalArgumentException'), Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang.', 'IllegalStateException'), _3I_classLit = createForArray('', '[I'), Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang.', 'NullPointerException'), Ljava_lang_String_2_classLit = createForClass('java.lang.', 'String'), Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang.', 'StringBuilder'), Ljava_lang_UnsupportedOperationException_2_classLit = createForClass('java.lang.', 'UnsupportedOperationException'), _3Ljava_lang_Object_2_classLit = createForArray('[Ljava.lang.', 'Object;'), Ljava_util_AbstractCollection_2_classLit = createForClass('java.util.', 'AbstractCollection'), Ljava_util_AbstractMap_2_classLit = createForClass('java.util.', 'AbstractMap'), Ljava_util_AbstractHashMap_2_classLit = createForClass('java.util.', 'AbstractHashMap'), Ljava_util_AbstractSet_2_classLit = createForClass('java.util.', 'AbstractSet'), Ljava_util_AbstractHashMap$EntrySet_2_classLit = createForClass('java.util.', 'AbstractHashMap$EntrySet'), Ljava_util_AbstractHashMap$EntrySetIterator_2_classLit = createForClass('java.util.', 'AbstractHashMap$EntrySetIterator'), Ljava_util_AbstractMapEntry_2_classLit = createForClass('java.util.', 'AbstractMapEntry'), Ljava_util_AbstractHashMap$MapEntryNull_2_classLit = createForClass('java.util.', 'AbstractHashMap$MapEntryNull'), Ljava_util_AbstractHashMap$MapEntryString_2_classLit = createForClass('java.util.', 'AbstractHashMap$MapEntryString'), Ljava_util_AbstractList_2_classLit = createForClass('java.util.', 'AbstractList'), Ljava_util_AbstractList$IteratorImpl_2_classLit = createForClass('java.util.', 'AbstractList$IteratorImpl'), Ljava_util_ArrayList_2_classLit = createForClass('java.util.', 'ArrayList'), Ljava_util_HashMap_2_classLit = createForClass('java.util.', 'HashMap'), Ljava_util_MapEntryImpl_2_classLit = createForClass('java.util.', 'MapEntryImpl'), Ljava_util_NoSuchElementException_2_classLit = createForClass('java.util.', 'NoSuchElementException'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'InWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'BinTree'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'OutWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenPriceTableEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Encoder'), Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('org.dellroad.lzma.client.', 'CompressionMode'), Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMACompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayCompressor'), Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMADecompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayDecompressor'), Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo'), Lorg_dellroad_lzma_demo_client_LZMADemo$1_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$1'), Lorg_dellroad_lzma_demo_client_LZMADemo$2_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo$2');
 $stats && $stats({moduleName:'lzma_demo',subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalEnd'});
 if ($wnd.lzma_demo) $wnd.lzma_demo.onScriptLoad();
 --></script></body></html>
