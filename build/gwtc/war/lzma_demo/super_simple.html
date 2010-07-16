@@ -1,0 +1,188 @@
+<script>
+
+/* LZMA */
+
+function fromInt(value){
+  var rebase, result;
+  if (value > -129 && value < 128) {
+    rebase = value + 128;
+    result = ($clinit_25() , boxedValues)[rebase];
+    if (result == null) {
+      result = boxedValues[rebase] = internalFromInt(value);
+    }
+    return result;
+  }
+  return internalFromInt(value);
+}
+
+function internalFromInt(value){
+  if (value >= 0) {
+    return [value, 0];
+  }
+   else {
+    return [value + 4294967296, -4294967296];
+  }
+}
+
+function $init(this$static, input, output, length_0, mode){
+  var encoder, i;
+  if (!mode)
+    throw $IllegalArgumentException(new IllegalArgumentException(), 'null mode');
+  if (compare_0(length_0, N1_longLit) < 0)
+    throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_0(length_0));
+  encoder = $Encoder(new Encoder());
+  $configure(mode, encoder);
+  encoder._writeEndMark = true;
+  $WriteCoderProperties(encoder, output);
+  for (i = 0; i < 64; i += 8)
+    $write(output, lowBits_0(shr(length_0, i)) & 255);
+  this$static.chunker = (encoder._needReleaseMFStream = false , (encoder._inStream = input , encoder._finished = false , $Create_2(encoder) , encoder._rangeEncoder.Stream = output , $Init_4(encoder) , $FillDistancesPrices(encoder) , $FillAlignPrices(encoder) , encoder._lenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._lenEncoder, 1 << encoder._posStateBits) , encoder._repMatchLenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._repMatchLenEncoder, 1 << encoder._posStateBits) , encoder.nowPos64 = P0_longLit , undefined) , $Chunker_0(new Chunker(), encoder));
+}
+
+
+function $ByteArrayOutputStream(this$static){
+  this$static.buf = initDim({}, 0, -1, 32, 1);
+  return this$static;
+}
+
+function $LZMAByteArrayCompressor(data, mode)
+{
+    var this$static = {};
+    //$clinit_99();
+    /*
+    MODE_1 = $CompressionMode(new CompressionMode(), 'MODE_1', 16, 64, 0, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_2', 20, 64, 0, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_3', 19, 64, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_4', 20, 64, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_5', 21, 128, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_6', 22, 128, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_7', 23, 128, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_8', 24, 255, 1, 3, 0, 2);
+    $CompressionMode(new CompressionMode(), 'MODE_9', 25, 255, 1, 3, 0, 2);
+    */
+    
+    this$static.output = $ByteArrayOutputStream({});
+    //try {
+        $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
+    //}
+    /*catch ($e0) {
+        $e0 = caught($e0);
+        if (instanceOf($e0, 18)) {
+        throw $RuntimeException(new RuntimeException(), 'impossible exception');
+        }
+        else 
+        throw $e0;
+    }*/
+    return this$static;
+}
+
+
+
+
+
+/* Encode string to bytes */
+
+
+function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin){
+  var srcIdx;
+  for (srcIdx = srcBegin; srcIdx < srcEnd; ++srcIdx) {
+    dst[dstBegin++] = this$static.charCodeAt(srcIdx);
+  }
+}
+
+
+function createForArray(packageName, className){
+  var clazz;
+  clazz = new Class();
+  clazz.typeName = packageName + className;
+  return clazz;
+}
+
+
+//var _3B_classLit = createForArray('', '[B');
+
+function wrapArray(array, expandoNames, expandoValues){
+  //$clinit_20();
+  for (var i = 0, c = expandoNames.length; i < c; ++i) {
+    array[expandoNames[i]] = expandoValues[i];
+  }
+}
+
+
+function createFromSeed(seedType, length_0){
+  var array = new Array(length_0);
+  if (seedType > 0) {
+    var value = [null, 0, false, [0, 0]][seedType];
+    for (var i = 0; i < length_0; ++i) {
+      array[i] = value;
+    }
+  }
+  return array;
+}
+
+
+function initDim(arrayClass, typeId, queryId, length_0, seedType){
+  var result;
+  result = createFromSeed(seedType, length_0);
+  //$clinit_20();
+  wrapArray(result, [], []);
+  result.arrayClass$ = arrayClass;
+  result.typeId$ = typeId;
+  result.queryId$ = queryId;
+  return result;
+}
+
+
+function encode(s){
+  var ch, chars, data, elen, i, charArr, n;
+  //chars = (n = s.length , charArr = initDim(_3C_classLit, 0, -1, n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
+  chars = (n = s.length , charArr = initDim({}, 0, -1, n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
+  elen = 0;
+  for (i = 0; i < s.length; ++i) {
+    ch = chars[i];
+    if (ch >= 1 && ch <= 127)
+      ++elen;
+    else if (ch == 0 || ch >= 128 && ch <= 2047)
+      elen += 2;
+    else 
+      elen += 3;
+  }
+  //data = initDim(_3B_classLit, 0, -1, elen, 1);
+  data = initDim({}, 0, -1, elen, 1);
+  
+  elen = 0;
+  for (i = 0; i < s.length; ++i) {
+    ch = chars[i];
+    if (ch >= 1 && ch <= 127)
+      data[elen++] = ch << 24 >> 24;
+    else if (ch == 0 || ch >= 128 && ch <= 2047) {
+      data[elen++] = (192 | ch >> 6 & 31) << 24 >> 24;
+      data[elen++] = (128 | ch & 63) << 24 >> 24;
+    }
+     else {
+      data[elen++] = (224 | ch >> 12 & 15) << 24 >> 24;
+      data[elen++] = (128 | ch >> 6 & 63) << 24 >> 24;
+      data[elen++] = (128 | ch & 63) << 24 >> 24;
+    }
+  }
+  return data;
+}
+
+
+
+
+
+/* Public functions */
+
+function execute_1(str, mode){
+  var enc = encode('sample_enc');
+  //alert('enc: ' + enc);
+  enc = $LZMAByteArrayCompressor(enc, mode)
+  //return ($toByteArray(enc));
+  return (enc);
+}
+
+
+alert('Yeah!: ' + execute_1('sample_enc', 1));
+
+</script>
