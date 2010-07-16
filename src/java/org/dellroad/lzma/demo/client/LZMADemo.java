@@ -13,9 +13,9 @@ import com.google.gwt.core.client.GWT;
 //import com.google.gwt.event.dom.client.ChangeHandler;
 //import com.google.gwt.event.dom.client.ClickEvent;
 //import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.CommandCanceledException;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.IncrementalCommand;
+//import com.google.gwt.user.client.CommandCanceledException;
+//import com.google.gwt.user.client.DeferredCommand;
+//import com.google.gwt.user.client.IncrementalCommand;
 //import com.google.gwt.user.client.ui.Button;
 //import com.google.gwt.user.client.ui.HorizontalPanel;
 //import com.google.gwt.user.client.ui.Label;
@@ -54,15 +54,15 @@ public class LZMADemo implements EntryPoint {
 //        this.rightWindow.setVisibleLines(25);
     }
 
-
-    public void compress() {
+    LZMAByteArrayCompressor c;
+    public boolean compress() {
 //        this.rightWindow.setText("");
 //        updateSizes(false);
 //        this.rightSizePanel.setWidget(new Label("Compressing... 0%"));
 //        this.compressing = true;
-        DeferredCommand.addCommand(new IncrementalCommand() {
-            LZMAByteArrayCompressor c;
-            public boolean execute() {
+//        DeferredCommand.addCommand(new IncrementalCommand() {
+            //LZMAByteArrayCompressor c;
+//            public boolean execute() {
                 if (c == null) {
                     //c = new LZMAByteArrayCompressor(UTF8.encode(LZMADemo.this.leftWindow.getText()), LZMADemo.this.mode);
                     c = new LZMAByteArrayCompressor(UTF8.encode("sample_enc"), LZMADemo.this.mode);
@@ -77,11 +77,11 @@ public class LZMADemo implements EntryPoint {
 //                updateSizes(true);
                 alert(c.getCompressedData());
                 return false;
-            }
-        });
+//            }
+//        });
     }
-
-    public void decompress() {
+    LZMAByteArrayDecompressor d;
+    public boolean decompress() {
 
         // Get binary data
 //        this.leftWindow.setText("");
@@ -89,13 +89,14 @@ public class LZMADemo implements EntryPoint {
         final byte[] data = new byte[] {93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, (byte)193, (byte)251, (byte)255, (byte)255, (byte)255, (byte)224, 0, 0, 0};
         //if (data == null)
         //    return;
-
+        //LZMAByteArrayDecompressor d;
         // Decompress it
         //this.leftSizePanel.setWidget(new Label("Decompressing... 0%"));
         //this.compressing = false;
-        DeferredCommand.addCommand(new IncrementalCommand() {
-            LZMAByteArrayDecompressor d;
-            public boolean execute() {
+//        DeferredCommand.addCommand(new IncrementalCommand() {
+
+//            public boolean execute() {
+
                 if (d == null) {
                     try {
                         d = new LZMAByteArrayDecompressor(data);
@@ -129,8 +130,8 @@ public class LZMADemo implements EntryPoint {
                 alert(text);
                 //updateSizes(true);
                 return false;
-            }
-        });
+//            }
+//        });
     }
 /*
     public void setRightData(byte[] data) {
