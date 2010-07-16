@@ -9,21 +9,21 @@ package org.dellroad.lzma.demo.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+//import com.google.gwt.event.dom.client.ChangeEvent;
+//import com.google.gwt.event.dom.client.ChangeHandler;
+//import com.google.gwt.event.dom.client.ClickEvent;
+//import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.CommandCanceledException;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.IncrementalCommand;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
+//import com.google.gwt.user.client.ui.Button;
+//import com.google.gwt.user.client.ui.HorizontalPanel;
+//import com.google.gwt.user.client.ui.Label;
+//import com.google.gwt.user.client.ui.ListBox;
+//import com.google.gwt.user.client.ui.RootPanel;
+//import com.google.gwt.user.client.ui.SimplePanel;
+//import com.google.gwt.user.client.ui.TextArea;
+//import com.google.gwt.user.client.ui.VerticalPanel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,25 +37,25 @@ public class LZMADemo implements EntryPoint {
 
     private static final CompressionMode DEFAULT_COMPRESSION_MODE = CompressionMode.MODE_1;
 
-    private final TextArea leftWindow = new TextArea();
-    private final TextArea rightWindow = new TextArea();
+//    private final TextArea leftWindow = new TextArea();
+//    private final TextArea rightWindow = new TextArea();
 
-    private final SimplePanel leftSizePanel = new SimplePanel();
-    private final SimplePanel rightSizePanel = new SimplePanel();
+//    private final SimplePanel leftSizePanel = new SimplePanel();
+//    private final SimplePanel rightSizePanel = new SimplePanel();
 
     private CompressionMode mode = DEFAULT_COMPRESSION_MODE;
 
     private boolean compressing;
 
     public LZMADemo() {
-        this.leftWindow.setCharacterWidth(70);
-        this.leftWindow.setVisibleLines(25);
-        this.rightWindow.setCharacterWidth(70);
-        this.rightWindow.setVisibleLines(25);
+//        this.leftWindow.setCharacterWidth(70);
+//        this.leftWindow.setVisibleLines(25);
+//        this.rightWindow.setCharacterWidth(70);
+//        this.rightWindow.setVisibleLines(25);
     }
 
     public void onModuleLoad() {
-
+/*
         // Set up uncaught exception handler
         if (GWT.isScript()) {
             GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
@@ -71,8 +71,9 @@ public class LZMADemo implements EntryPoint {
                 }
             });
         }
-
-        Button compressButton = new Button("Compress", new ClickHandler() {
+*/
+        
+/*        Button compressButton = new Button("Compress", new ClickHandler() {
             public void onClick(ClickEvent e) {
                 compress();
             }
@@ -83,7 +84,8 @@ public class LZMADemo implements EntryPoint {
                 updateSizes(false);
             }
         });
-        final ListBox modeBox = new ListBox();
+        */
+/*        final ListBox modeBox = new ListBox();
         for (int i = 1; i <= 9; i++)
             modeBox.addItem("Level " + i, "" + i);
         modeBox.setSelectedIndex(DEFAULT_COMPRESSION_MODE.getLevel() - 1);
@@ -97,8 +99,8 @@ public class LZMADemo implements EntryPoint {
         leftBottom.add(compressButton);
         leftBottom.add(compressClearButton);
         leftBottom.add(this.leftSizePanel);
-
-        Button decompressButton = new Button("Decompress", new ClickHandler() {
+*/
+/*        Button decompressButton = new Button("Decompress", new ClickHandler() {
             public void onClick(ClickEvent e) {
                 decompress();
             }
@@ -109,6 +111,8 @@ public class LZMADemo implements EntryPoint {
                 updateSizes(false);
             }
         });
+        */
+        /*
         HorizontalPanel rightBottom = new HorizontalPanel();
         rightBottom.add(decompressButton);
         rightBottom.add(decompressClearButton);
@@ -130,27 +134,30 @@ public class LZMADemo implements EntryPoint {
         hPanel.add(rightPanel);
 
         RootPanel.get().add(hPanel);
+        */
     }
 
     public void compress() {
-        this.rightWindow.setText("");
-        updateSizes(false);
-        this.rightSizePanel.setWidget(new Label("Compressing... 0%"));
-        this.compressing = true;
+//        this.rightWindow.setText("");
+//        updateSizes(false);
+//        this.rightSizePanel.setWidget(new Label("Compressing... 0%"));
+//        this.compressing = true;
         DeferredCommand.addCommand(new IncrementalCommand() {
             LZMAByteArrayCompressor c;
             public boolean execute() {
                 if (c == null) {
-                    c = new LZMAByteArrayCompressor(UTF8.encode(LZMADemo.this.leftWindow.getText()), LZMADemo.this.mode);
+                    //c = new LZMAByteArrayCompressor(UTF8.encode(LZMADemo.this.leftWindow.getText()), LZMADemo.this.mode);
+                    c = new LZMAByteArrayCompressor(UTF8.encode("sample_enc"), LZMADemo.this.mode);
                     return true;
                 }
                 if (c.execute()) {
-                    int pcent = (int)(c.getProgress() * 100.0);
-                    LZMADemo.this.rightSizePanel.setWidget(new Label("Compressing... " + pcent + "%"));
+//                    int pcent = (int)(c.getProgress() * 100.0);
+//                    LZMADemo.this.rightSizePanel.setWidget(new Label("Compressing... " + pcent + "%"));
                     return true;
                 }
-                setRightData(c.getCompressedData());
-                updateSizes(true);
+//                setRightData(c.getCompressedData());
+//                updateSizes(true);
+                    alert(c.getCompressedData());
                 return false;
             }
         });
@@ -159,15 +166,15 @@ public class LZMADemo implements EntryPoint {
     public void decompress() {
 
         // Get binary data
-        this.leftWindow.setText("");
-        updateSizes(false);
-        final byte[] data = getRightData(true);
-        if (data == null)
-            return;
+//        this.leftWindow.setText("");
+//        updateSizes(false);
+        final byte[] data = {93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, 193, 251, 255, 255, 255, 224, 0, 0, 0};
+        //if (data == null)
+        //    return;
 
         // Decompress it
-        this.leftSizePanel.setWidget(new Label("Decompressing... 0%"));
-        this.compressing = false;
+        //this.leftSizePanel.setWidget(new Label("Decompressing... 0%"));
+        //this.compressing = false;
         DeferredCommand.addCommand(new IncrementalCommand() {
             LZMAByteArrayDecompressor d;
             public boolean execute() {
@@ -175,40 +182,44 @@ public class LZMADemo implements EntryPoint {
                     try {
                         d = new LZMAByteArrayDecompressor(data);
                     } catch (IOException e) {
-                        LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + e.getMessage()));
+                        //LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + e.getMessage()));
+                        alert("Decompression failed: " + e.getMessage());
                         return false;
                     }
                     return true;
                 }
                 if (d.execute()) {
-                    int pcent = (int)(d.getProgress() * 100.0);
-                    LZMADemo.this.leftSizePanel.setWidget(new Label("Decompressing... " + pcent + "%"));
+                    //int pcent = (int)(d.getProgress() * 100.0);
+                    //LZMADemo.this.leftSizePanel.setWidget(new Label("Decompressing... " + pcent + "%"));
                     return true;
                 }
                 IOException ioe = d.getException();
                 if (ioe != null) {
-                    LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + ioe.getMessage()));
+                    //LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + ioe.getMessage()));
+                    alert("Decompression failed: " + ioe.getMessage());
                     return false;
                 }
                 String text;
                 try {
                     text = UTF8.decode(d.getUncompressedData());
                 } catch (IllegalArgumentException e) {
-                    LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + e.getMessage()));
+                    //LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + e.getMessage()));
+                    alert("Decompression failed: " + ioe.getMessage());
                     return false;
                 }
-                LZMADemo.this.leftWindow.setText(text);
-                updateSizes(true);
+                //LZMADemo.this.leftWindow.setText(text);
+                alert(text);
+                //updateSizes(true);
                 return false;
             }
         });
     }
-
+/*
     public void setRightData(byte[] data) {
         this.rightWindow.setText(prettyPrint(data));
     }
-
-    public String prettyPrint(byte[] data) {
+*/
+/*    public String prettyPrint(byte[] data) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
             int b = data[i] & 0xff;
@@ -218,7 +229,8 @@ public class LZMADemo implements EntryPoint {
         }
         return buf.toString();
     }
-
+*/
+/*
     public byte[] getRightData(boolean alert) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         String s = this.rightWindow.getText();
@@ -247,7 +259,8 @@ public class LZMADemo implements EntryPoint {
         }
         return b.toByteArray();
     }
-
+    */
+/*
     public void updateSizes(boolean pcent) {
         int uc = this.leftWindow.getText().length();
         this.leftSizePanel.setWidget(new Label(uc + " bytes"));
@@ -257,7 +270,7 @@ public class LZMADemo implements EntryPoint {
           "invalid hex input";
         this.rightSizePanel.setWidget(new Label(s));
     }
-
+*/
     public native void alert(String msg) /*-{
         $wnd.alert(msg);
     }-*/;
