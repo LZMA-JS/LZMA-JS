@@ -54,88 +54,6 @@ public class LZMADemo implements EntryPoint {
 //        this.rightWindow.setVisibleLines(25);
     }
 
-    public void onModuleLoad() {
-/*
-        // Set up uncaught exception handler
-        if (GWT.isScript()) {
-            GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
-                public void onUncaughtException(Throwable e) {
-                    if (e instanceof CommandCanceledException) {
-                        if (compressing)
-                            LZMADemo.this.rightSizePanel.setWidget(new Label("Compression canceled."));
-                        else
-                            LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression canceled."));
-                        return;
-                    }
-                    alert("Uncaught exception: " + e);
-                }
-            });
-        }
-*/
-        
-/*        Button compressButton = new Button("Compress", new ClickHandler() {
-            public void onClick(ClickEvent e) {
-                compress();
-            }
-        });
-        Button compressClearButton = new Button("Clear", new ClickHandler() {
-            public void onClick(ClickEvent e) {
-                LZMADemo.this.leftWindow.setText("");
-                updateSizes(false);
-            }
-        });
-        */
-/*        final ListBox modeBox = new ListBox();
-        for (int i = 1; i <= 9; i++)
-            modeBox.addItem("Level " + i, "" + i);
-        modeBox.setSelectedIndex(DEFAULT_COMPRESSION_MODE.getLevel() - 1);
-        modeBox.addChangeHandler(new ChangeHandler() {
-            public void onChange(ChangeEvent ev) {
-                LZMADemo.this.mode = CompressionMode.get(modeBox.getSelectedIndex() + 1);
-            }
-        });
-        HorizontalPanel leftBottom = new HorizontalPanel();
-        leftBottom.add(modeBox);
-        leftBottom.add(compressButton);
-        leftBottom.add(compressClearButton);
-        leftBottom.add(this.leftSizePanel);
-*/
-/*        Button decompressButton = new Button("Decompress", new ClickHandler() {
-            public void onClick(ClickEvent e) {
-                decompress();
-            }
-        });
-        Button decompressClearButton = new Button("Clear", new ClickHandler() {
-            public void onClick(ClickEvent e) {
-                LZMADemo.this.rightWindow.setText("");
-                updateSizes(false);
-            }
-        });
-        */
-        /*
-        HorizontalPanel rightBottom = new HorizontalPanel();
-        rightBottom.add(decompressButton);
-        rightBottom.add(decompressClearButton);
-        rightBottom.add(this.rightSizePanel);
-
-        VerticalPanel leftPanel = new VerticalPanel();
-        leftPanel.setStylePrimaryName("demo-panel");
-        leftPanel.add(this.leftWindow);
-        leftPanel.add(leftBottom);
-
-        VerticalPanel rightPanel = new VerticalPanel();
-        rightPanel.setStylePrimaryName("demo-panel");
-        rightPanel.add(rightWindow);
-        rightPanel.add(rightBottom);
-
-        HorizontalPanel hPanel = new HorizontalPanel();
-        hPanel.setSpacing(5);
-        hPanel.add(leftPanel);
-        hPanel.add(rightPanel);
-
-        RootPanel.get().add(hPanel);
-        */
-    }
 
     public void compress() {
 //        this.rightWindow.setText("");
@@ -277,5 +195,90 @@ public class LZMADemo implements EntryPoint {
     public native void alert(byte[] msg) /*-{
         $wnd.alert(msg);
     }-*/;
+    
+    public void onModuleLoad() {
+    compress();
+    decompress();
+/*
+        // Set up uncaught exception handler
+        if (GWT.isScript()) {
+            GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
+                public void onUncaughtException(Throwable e) {
+                    if (e instanceof CommandCanceledException) {
+                        if (compressing)
+                            LZMADemo.this.rightSizePanel.setWidget(new Label("Compression canceled."));
+                        else
+                            LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression canceled."));
+                        return;
+                    }
+                    alert("Uncaught exception: " + e);
+                }
+            });
+        }
+*/
+        
+/*        Button compressButton = new Button("Compress", new ClickHandler() {
+            public void onClick(ClickEvent e) {
+                compress();
+            }
+        });
+        Button compressClearButton = new Button("Clear", new ClickHandler() {
+            public void onClick(ClickEvent e) {
+                LZMADemo.this.leftWindow.setText("");
+                updateSizes(false);
+            }
+        });
+        */
+/*        final ListBox modeBox = new ListBox();
+        for (int i = 1; i <= 9; i++)
+            modeBox.addItem("Level " + i, "" + i);
+        modeBox.setSelectedIndex(DEFAULT_COMPRESSION_MODE.getLevel() - 1);
+        modeBox.addChangeHandler(new ChangeHandler() {
+            public void onChange(ChangeEvent ev) {
+                LZMADemo.this.mode = CompressionMode.get(modeBox.getSelectedIndex() + 1);
+            }
+        });
+        HorizontalPanel leftBottom = new HorizontalPanel();
+        leftBottom.add(modeBox);
+        leftBottom.add(compressButton);
+        leftBottom.add(compressClearButton);
+        leftBottom.add(this.leftSizePanel);
+*/
+/*        Button decompressButton = new Button("Decompress", new ClickHandler() {
+            public void onClick(ClickEvent e) {
+                decompress();
+            }
+        });
+        Button decompressClearButton = new Button("Clear", new ClickHandler() {
+            public void onClick(ClickEvent e) {
+                LZMADemo.this.rightWindow.setText("");
+                updateSizes(false);
+            }
+        });
+        */
+        /*
+        HorizontalPanel rightBottom = new HorizontalPanel();
+        rightBottom.add(decompressButton);
+        rightBottom.add(decompressClearButton);
+        rightBottom.add(this.rightSizePanel);
+
+        VerticalPanel leftPanel = new VerticalPanel();
+        leftPanel.setStylePrimaryName("demo-panel");
+        leftPanel.add(this.leftWindow);
+        leftPanel.add(leftBottom);
+
+        VerticalPanel rightPanel = new VerticalPanel();
+        rightPanel.setStylePrimaryName("demo-panel");
+        rightPanel.add(rightWindow);
+        rightPanel.add(rightBottom);
+
+        HorizontalPanel hPanel = new HorizontalPanel();
+        hPanel.setSpacing(5);
+        hPanel.add(leftPanel);
+        hPanel.add(rightPanel);
+
+        RootPanel.get().add(hPanel);
+        */
+    }
 }
 
