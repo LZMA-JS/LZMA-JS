@@ -3505,17 +3505,20 @@ function $LZMADemo(this$static){
   return this$static;
 }
 
-function $compress(this$static){
+function compress(str)
+{
+    var this$static = $LZMADemo(new LZMADemo());
   if (!this$static.c) {
-    this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode('sample_enc'), this$static.mode);
+    this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
     //alert(this$static.c);
     //return true;
   }
   if ($execute(this$static.c)) {
  //   return true;
   }
-  $wnd.alert($toByteArray(this$static.c.output));
-  return false;
+  //$wnd.alert($toByteArray(this$static.c.output));
+  return $toByteArray(this$static.c.output);
+  //return false;
 }
 
 function $decompress(this$static)
@@ -3569,7 +3572,7 @@ function $decompress(this$static)
 }
 
 function $onModuleLoad(this$static){
-  $compress(this$static);
+  compress(this$static);
   $decompress(this$static);
 }
 
@@ -3588,8 +3591,11 @@ _.d = null;
 var DEFAULT_COMPRESSION_MODE;
 function init(){
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
-  $onModuleLoad($LZMADemo(new LZMADemo()));
   //$onModuleLoad($LZMADemo(new LZMADemo()));
+  //$onModuleLoad($LZMADemo(new LZMADemo()));
+  var comp = compress("This is some sample text!");
+  alert("Compressed: " + comp);
+  
 }
 
 function gwtOnLoad(errFn, modName, modBase){
