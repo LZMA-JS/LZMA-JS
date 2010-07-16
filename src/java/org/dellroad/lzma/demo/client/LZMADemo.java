@@ -157,7 +157,7 @@ public class LZMADemo implements EntryPoint {
                 }
 //                setRightData(c.getCompressedData());
 //                updateSizes(true);
-                    alert(c.getCompressedData());
+                alert(c.getCompressedData());
                 return false;
             }
         });
@@ -272,6 +272,9 @@ public class LZMADemo implements EntryPoint {
     }
 */
     public native void alert(String msg) /*-{
+        $wnd.alert(msg);
+    }-*/;
+    public native void alert(byte[] msg) /*-{
         $wnd.alert(msg);
     }-*/;
 }
