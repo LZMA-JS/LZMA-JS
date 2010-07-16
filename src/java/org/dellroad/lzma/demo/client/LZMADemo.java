@@ -122,7 +122,7 @@ public class LZMADemo implements EntryPoint {
                     text = UTF8.decode(d.getUncompressedData());
                 } catch (IllegalArgumentException e) {
                     //LZMADemo.this.leftSizePanel.setWidget(new Label("Decompression failed: " + e.getMessage()));
-                    alert("Decompression failed: " + ioe.getMessage());
+                    alert("Decompression failed: " + e.getMessage());
                     return false;
                 }
                 //LZMADemo.this.leftWindow.setText(text);
