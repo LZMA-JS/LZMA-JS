@@ -3508,72 +3508,74 @@ function $LZMADemo(this$static){
 function compress(str)
 {
     var this$static = $LZMADemo(new LZMADemo());
-  if (!this$static.c) {
-    this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
-    //alert(this$static.c);
-    //return true;
-  }
-  if ($execute(this$static.c)) {
- //   return true;
-  }
-  //$wnd.alert($toByteArray(this$static.c.output));
-  return $toByteArray(this$static.c.output);
-  //return false;
+    if (!this$static.c) {
+        this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
+        //alert(this$static.c);
+        //return true;
+    }
+    if ($execute(this$static.c)) {
+    //   return true;
+    }
+    //$wnd.alert($toByteArray(this$static.c.output));
+    return $toByteArray(this$static.c.output);
+    //return false;
 }
 
-function $decompress(this$static)
+function decompress(byte_arr)
 {
-  var $e0, data, e, ioe, text;
-  data = initValues(_3B_classLit, 0, -1, [93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
-  if (!this$static.d) {
-//    try {
-      this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
-//    }
-//     catch ($e0) {
-//      $e0 = caught($e0);
-//      if (instanceOf($e0, 10)) {
-//        e = $e0;
-//        $wnd.alert('Decompression failed: ' + e.detailMessage);
-//        return false;
-//      }
-//       else 
-//        throw $e0;
-//    }
-//    return true;
-  }
-  if ($execute_0(this$static.d)) {
-    //alert("sdfsdf");
-    //return true;
-  }
-  if ($execute_0(this$static.d)) {
-    //alert("sdfsdf");
-    //return true;
-  }
-  ioe = this$static.d.exception;
-  if (ioe) {
-    $wnd.alert('Decompression failed: ' + ioe.detailMessage);
-    return false;
-  }
-  try {
-    text = decode($toByteArray(this$static.d.output));
-  }
-   catch ($e0) {
-    $e0 = caught($e0);
-    if (instanceOf($e0, 11)) {
-      e = $e0;
-      $wnd.alert('Decompression failed: ' + e.detailMessage);
-      return false;
+    var this$static = $LZMADemo(new LZMADemo());
+    var $e0, data, e, ioe, text;
+    data = initValues(_3B_classLit, 0, -1, byte_arr);
+    if (!this$static.d) {
+    //    try {
+        this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
+    //    }
+    //     catch ($e0) {
+    //      $e0 = caught($e0);
+    //      if (instanceOf($e0, 10)) {
+    //        e = $e0;
+    //        $wnd.alert('Decompression failed: ' + e.detailMessage);
+    //        return false;
+    //      }
+    //       else 
+    //        throw $e0;
+    //    }
+    //    return true;
     }
-     else 
-      throw $e0;
-  }
-  $wnd.alert(text);
-  return false;
+    if ($execute_0(this$static.d)) {
+        //alert("sdfsdf");
+        //return true;
+    }
+    if ($execute_0(this$static.d)) {
+        //alert("sdfsdf");
+        //return true;
+    }
+    ioe = this$static.d.exception;
+    if (ioe) {
+        $wnd.alert('Decompression failed: ' + ioe.detailMessage);
+        return false;
+    }
+    try {
+        text = decode($toByteArray(this$static.d.output));
+    }
+    catch ($e0) {
+        $e0 = caught($e0);
+        if (instanceOf($e0, 11)) {
+            e = $e0;
+            $wnd.alert('Decompression failed: ' + e.detailMessage);
+            return false;
+        }
+        else 
+        throw $e0;
+    }
+    //$wnd.alert(text);
+    return text;
+    //return false;
 }
 
 function $onModuleLoad(this$static){
   compress(this$static);
-  $decompress(this$static);
+  decompress(this$static);
 }
 
 function getClass_46(){
@@ -3593,9 +3595,11 @@ function init(){
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
   //$onModuleLoad($LZMADemo(new LZMADemo()));
   //$onModuleLoad($LZMADemo(new LZMADemo()));
-  var comp = compress("This is some sample text!");
+  var orig = "This is some sample text!";
+  var comp = compress(orig);
   alert("Compressed: " + comp);
-  
+  var uncomp = decompress(comp);
+  alert("Original: " + uncomp);
 }
 
 function gwtOnLoad(errFn, modName, modBase){
