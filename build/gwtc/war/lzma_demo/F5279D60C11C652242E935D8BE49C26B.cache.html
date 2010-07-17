@@ -3585,8 +3585,9 @@ function $decompress(byte_arr)
         else 
         throw $e0;
     }
-    $wnd.alert(text);
-    return false;
+    //$wnd.alert(text);
+    return text;
+    //return false;
 }
 
 function $onModuleLoad(this$static){
@@ -3617,7 +3618,8 @@ function init(){
   //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
   //alert(comp);
   //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
-  $decompress(comp);
+  var uncomp = $decompress(comp);
+  alert("Orig: " + uncomp);
 }
 
 function gwtOnLoad(errFn, modName, modBase){
