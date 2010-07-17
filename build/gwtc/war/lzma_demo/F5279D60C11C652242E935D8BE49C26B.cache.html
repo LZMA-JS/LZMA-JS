@@ -10,7 +10,7 @@ var $stats = $wnd.__gwtStatsEvent ? function(a) {return $wnd.__gwtStatsEvent(a);
 $stats && $stats({moduleName:'lzma_demo',subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalStart'});
 </script></head>
 <body>
-<script><!--
+<script>
 var _, N8000000000000000_longLit = [0, -9223372036854775808], N1_longLit = [4294967295, -4294967296], P0_longLit = [0, 0], P1_longLit = [1, 0], P4_longLit = [4, 0], P1000_longLit = [4096, 0], Pffffff_longLit = [16777215, 0], P1000000_longLit = [16777216, 0], Pff000000_longLit = [4278190080, 0], Pffffffff_longLit = [4294967295, 0], P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
 function getClass_18(){
   return Ljava_lang_Object_2_classLit;
@@ -3617,14 +3617,6 @@ function init(){
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
   //$onModuleLoad($LZMADemo(new LZMADemo()));
   //$onModuleLoad($LZMADemo(new LZMADemo()));
-  var orig= "sample_text 字の";
-  var comp = compress(orig, 1);
-  alert("Compressed: " + comp);
-  //decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
-  //alert(comp);
-  //decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
-  var uncomp = decompress(comp);
-  alert("Orig: " + uncomp);
 }
 
 function gwtOnLoad(errFn, modName, modBase){
@@ -3649,4 +3641,13 @@ var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'), Ljava
 $stats && $stats({moduleName:'lzma_demo',subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalEnd'});
 if ($wnd.lzma_demo) $wnd.lzma_demo.onScriptLoad();
 gwtOnLoad(function(){},'lzma_demo','');
---></script></body></html>
+
+
+var orig= "sample_text 字の";
+var comp = compress(orig, 1);
+alert("Compressed: " + comp);
+var uncomp = decompress(comp);
+alert("Orig: " + uncomp);
+  
+  
+</script></body></html>
