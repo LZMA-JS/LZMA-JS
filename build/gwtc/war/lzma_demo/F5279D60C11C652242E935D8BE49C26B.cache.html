@@ -3513,17 +3513,30 @@ function compress(str)
         //alert(this$static.c);
         //return true;
     }
-    if ($execute(this$static.c)) {
-    //   return true;
+    while ($execute(this$static.c)) {
+        /// Get percent done somehow.
     }
+    //if ($execute(this$static.c)) {
+    //   return true;
+    //}
     //$wnd.alert($toByteArray(this$static.c.output));
+    /*
+    var byte_arr = $toByteArray(this$static.c.output),
+        i,
+        len = byte_arr.length;
+    for (i = 0; i < len; ++i) {
+        if (byte_arr[i] < 0) byte_arr[i] += 256;
+    }
+    return byte_arr;
+    */
     return $toByteArray(this$static.c.output);
     //return false;
 }
 
-function decompress(byte_arr)
+function $decompress(byte_arr)
 {
     var this$static = $LZMADemo(new LZMADemo());
+    //var this$static = {};
     var $e0, data, e, ioe, text;
     data = initValues(_3B_classLit, 0, -1, byte_arr);
     if (!this$static.d) {
@@ -3542,6 +3555,10 @@ function decompress(byte_arr)
     //    }
     //    return true;
     }
+    while ($execute_0(this$static.d)) {
+        /// Get percent done somehow.
+    }
+    /*
     if ($execute_0(this$static.d)) {
         //alert("sdfsdf");
         //return true;
@@ -3549,7 +3566,7 @@ function decompress(byte_arr)
     if ($execute_0(this$static.d)) {
         //alert("sdfsdf");
         //return true;
-    }
+    }*/
     ioe = this$static.d.exception;
     if (ioe) {
         $wnd.alert('Decompression failed: ' + ioe.detailMessage);
@@ -3568,14 +3585,13 @@ function decompress(byte_arr)
         else 
         throw $e0;
     }
-    //$wnd.alert(text);
-    return text;
-    //return false;
+    $wnd.alert(text);
+    return false;
 }
 
 function $onModuleLoad(this$static){
   compress(this$static);
-  decompress(this$static);
+  $decompress(this$static);
 }
 
 function getClass_46(){
@@ -3595,11 +3611,13 @@ function init(){
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
   //$onModuleLoad($LZMADemo(new LZMADemo()));
   //$onModuleLoad($LZMADemo(new LZMADemo()));
-  var orig = "This is some sample text!";
+  var orig= "sample_text 字の";
   var comp = compress(orig);
   alert("Compressed: " + comp);
-  var uncomp = decompress(comp);
-  alert("Original: " + uncomp);
+  //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  //alert(comp);
+  //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  $decompress(comp);
 }
 
 function gwtOnLoad(errFn, modName, modBase){
