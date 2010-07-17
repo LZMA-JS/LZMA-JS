@@ -3505,14 +3505,17 @@ function $LZMADemo(this$static){
   return this$static;
 }
 
-function compress(str)
+function compress(str, mode)
 {
     var this$static = $LZMADemo(new LZMADemo());
-    if (!this$static.c) {
+    if (mode) {
+        /// Utilize $clinit_43() to figure out the mode objects.
+    }
+//    if (!this$static.c) {
         this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
         //alert(this$static.c);
         //return true;
-    }
+//    }
     while ($execute(this$static.c)) {
         /// Get percent done somehow.
     }
@@ -3533,13 +3536,13 @@ function compress(str)
     //return false;
 }
 
-function $decompress(byte_arr)
+function decompress(byte_arr)
 {
     var this$static = $LZMADemo(new LZMADemo());
     //var this$static = {};
     var $e0, data, e, ioe, text;
     data = initValues(_3B_classLit, 0, -1, byte_arr);
-    if (!this$static.d) {
+//    if (!this$static.d) {
     //    try {
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
     //    }
@@ -3554,7 +3557,7 @@ function $decompress(byte_arr)
     //        throw $e0;
     //    }
     //    return true;
-    }
+//    }
     while ($execute_0(this$static.d)) {
         /// Get percent done somehow.
     }
@@ -3573,7 +3576,7 @@ function $decompress(byte_arr)
         return false;
     }
     try {
-        text = decode($toByteArray(this$static.d.output));
+        return decode($toByteArray(this$static.d.output));
     }
     catch ($e0) {
         $e0 = caught($e0);
@@ -3586,13 +3589,13 @@ function $decompress(byte_arr)
         throw $e0;
     }
     //$wnd.alert(text);
-    return text;
+    //return text;
     //return false;
 }
 
 function $onModuleLoad(this$static){
   compress(this$static);
-  $decompress(this$static);
+  decompress(this$static);
 }
 
 function getClass_46(){
@@ -3613,12 +3616,12 @@ function init(){
   //$onModuleLoad($LZMADemo(new LZMADemo()));
   //$onModuleLoad($LZMADemo(new LZMADemo()));
   var orig= "sample_text 字の";
-  var comp = compress(orig);
+  var comp = compress(orig, 1);
   alert("Compressed: " + comp);
-  //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  //decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
   //alert(comp);
-  //$decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
-  var uncomp = $decompress(comp);
+  //decompress([93, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 48, -63, -5, -1, -1, -1, -32, 0, 0, 0]);
+  var uncomp = decompress(comp);
   alert("Orig: " + uncomp);
 }
 
