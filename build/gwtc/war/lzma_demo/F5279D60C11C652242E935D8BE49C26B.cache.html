@@ -945,6 +945,7 @@ function $CompressionMode(this$static, enum$name, dictionarySize, fb, matchFinde
   return this$static;
 }
 
+
 function $configure(this$static, encoder){
   if (!$SetDictionarySize_0(encoder, 1 << this$static.dictionarySize))
     throw $RuntimeException(new RuntimeException(), 'unexpected failure');
@@ -999,6 +1000,7 @@ function $init(this$static, input, output, length_0, mode){
     throw $IllegalArgumentException(new IllegalArgumentException(), 'null mode');
   if (compare(length_0, N1_longLit) < 0)
     throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_0(length_0));
+  this$static.length_0 = length_0;
   encoder = $Encoder(new Encoder());
   $configure(mode, encoder);
   encoder._writeEndMark = true;
@@ -1070,31 +1072,44 @@ function $execute_0(this$static){
   }
 }
 
-function $init_0(this$static, input, output){
-  var decoder, expectedLength, i, properties, r;
-  properties = initDim(_3B_classLit, 0, -1, 5, 1);
-  for (i = 0; i < properties.length; ++i) {
-    r = $read(input);
-    if (r == -1)
-      throw $IOException(new IOException(), 'truncated input');
-    properties[i] = r << 24 >> 24;
-  }
-  decoder = $Decoder(new Decoder());
-  if (!$SetDecoderProperties(decoder, properties))
-    throw $IOException(new IOException(), 'corrupted input');
-  
-  var length_set = false;
-  for (i = 0; i < 64; i += 8) {
-    r = $read(input);
-    if (r == -1)
-      throw $IOException(new IOException(), 'truncated input');
-    if (!length_set) {
-        this$static.length_0 = shl(fromInt(r), i);
-        length_set = true;
+function $init_0(this$static, input, output)
+{
+    var decoder, i, properties, r;
+    properties = initDim(_3B_classLit, 0, -1, 5, 1);
+    for (i = 0; i < properties.length; ++i) {
+        r = $read(input);
+        if (r == -1)
+            throw $IOException(new IOException(), 'truncated input');
+        properties[i] = r << 24 >> 24;
     }
-  }
-  //this$static.length_0 = expectedLength;
-  this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
+    decoder = $Decoder(new Decoder());
+    if (!$SetDecoderProperties(decoder, properties))
+        throw $IOException(new IOException(), 'corrupted input');
+    
+    var hex_length = "";
+    //  expectedLength = N1_longLit;
+    for (i = 0; i < 64; i += 8) {
+        r = $read(input);
+        if (r == -1)
+            throw $IOException(new IOException(), 'truncated input');
+        r = r.toString(16);
+        if (r.length == 1) r = "0" + r;
+        hex_length = r + "" + hex_length;
+    //    alert("or(" + expectedLength + ", shl(fromInt(" + r + "), " + i + "))) " + shl(fromInt(r), i) + " or " + or(expectedLength, shl(fromInt(r), i)));
+    //    expectedLength = or(expectedLength, shl(fromInt(r), i));
+    }
+    //alert(hex_length);
+    
+    /// Was the length set in the header (if it was compressed from a stream, the length is all f's).
+    if (hex_length.toLowerCase() == "ffffffffffffffffff" || hex_length == 0) {
+        /// The length is unknown, so set to -1.
+        this$static.length_0 = N1_longLit;
+    } else {
+        ///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
+        this$static.length_0 = fromDouble(parseInt(hex_length, 16));
+    }
+    //alert(this$static.length_0);
+    this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
 }
 
 function getClass_27(){
@@ -1658,6 +1673,8 @@ function $processDecoderChunk(this$static){
   result = $CodeOneChunk(this$static.decoder);
   if (result == -1)
     throw $IOException(new IOException(), 'corrupted input');
+  this$static.inBytesProcessed = N1_longLit;
+  this$static.outBytesProcessed = this$static.decoder.nowPos64;
   if (result == 1 || compare(this$static.decoder.outSize, P0_longLit) >= 0 && compare(this$static.decoder.nowPos64, this$static.decoder.outSize) >= 0) {
     $CodeFinish(this$static.decoder);
     this$static.alive = false;
@@ -3511,13 +3528,13 @@ function toDouble(a){
   return a[1] + a[0];
 }
 
-function compress(str, mode)
+function compress(str)
 {
     var this$static = $LZMADemo(new LZMADemo()),
         percent;
-    if (mode) {
-        /// Utilize $clinit_43() to figure out the mode objects.
-    }
+    
+    this$static.mode = current_mode;
+    
 //    if (!this$static.c) {
         this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
         //alert(this$static.c);
@@ -3531,6 +3548,7 @@ function compress(str, mode)
         percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
 //        alert(percent);
     }
+    //alert(percent);
     //if ($execute(this$static.c)) {
     //   return true;
     //}
@@ -3553,11 +3571,10 @@ function decompress(byte_arr)
     var this$static = $LZMADemo(new LZMADemo()),
         percent,
         $e0,
-        data,
+        data = initValues(_3B_classLit, 0, -1, byte_arr),
         e,
         ioe,
         text;
-    data = initValues(_3B_classLit, 0, -1, byte_arr);
 //    if (!this$static.d) {
     //    try {
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
@@ -3575,18 +3592,20 @@ function decompress(byte_arr)
     //    return true;
 //    }
 //alert(byte_arr.length);
-//    var count = 0;
+    //var count = 0;
 //alert(this$static.d.chunker.outBytesProcessed + " " + this$static.d.length_0);
     while ($execute_0(this$static.d)) {
         /// Get percent done somehow.
         //pcent = ~~Math.max(Math.min($getProgress_0(this.d) * 100, 2147483647), -2147483648);
         //alert(  ~~Math.max(Math.min( (toDouble(this$static.d.chunker.outBytesProcessed) / toDouble(this$static.d.length_0))  * 100, 2147483647), -2147483648)        );
-//        ++count;
+        //++count;
         //alert(toDouble(this$static.d.chunker.decoder.nowPos64) / (byte_arr.length / 2.333333));
         //alert(toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0));
         percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+        //alert(percent);
     }
-//    alert(count + " " + (byte_arr.length - count));
+    //alert(percent);
+    //alert(count);
     /*
     if ($execute_0(this$static.d)) {
         //alert("sdfsdf");
