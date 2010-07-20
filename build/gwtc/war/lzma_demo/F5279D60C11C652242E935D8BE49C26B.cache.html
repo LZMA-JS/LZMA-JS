@@ -3494,35 +3494,15 @@ function compress(str)
     
     this$static.mode = current_mode;
     
-//    if (!this$static.c) {
-        this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
-        //alert(this$static.c);
-        //return true;
-//    }
+    this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
+    update_progress(0);
     while ($execute(this$static.c)) {
-        /// Get percent done somehow.
-        //return toDouble(this$static.chunker.inBytesProcessed) / toDouble(this$static.length_0);
-        //alert(this$static.c.chunker.inBytesProcessed + " / " + this$static.c.length_0 + " = " + (toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0)));
-        //alert(this$static.c.chunker.inBytesProcessed + " / " + this$static.c.length_0);
         percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-//        alert(percent);
+        on_progress_update(percent);
     }
-    //alert(percent);
-    //if ($execute(this$static.c)) {
-    //   return true;
-    //}
-    //$wnd.alert($toByteArray(this$static.c.output));
-    /*
-    var byte_arr = $toByteArray(this$static.c.output),
-        i,
-        len = byte_arr.length;
-    for (i = 0; i < len; ++i) {
-        if (byte_arr[i] < 0) byte_arr[i] += 256;
-    }
-    return byte_arr;
-    */
+    update_progress(1);
+    
     return $toByteArray(this$static.c.output);
-    //return false;
 }
 
 function decompress(byte_arr)
@@ -3534,46 +3514,16 @@ function decompress(byte_arr)
         e,
         ioe,
         text;
-//    if (!this$static.d) {
-    //    try {
-        this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
-    //    }
-    //     catch ($e0) {
-    //      $e0 = caught($e0);
-    //      if (instanceOf($e0, 10)) {
-    //        e = $e0;
-    //        $wnd.alert('Decompression failed: ' + e.detailMessage);
-    //        return false;
-    //      }
-    //       else 
-    //        throw $e0;
-    //    }
-    //    return true;
-//    }
-//alert(byte_arr.length);
-    //var count = 0;
-//alert(this$static.d.chunker.outBytesProcessed + " " + this$static.d.length_0);
+    
+    this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
+    
+    update_progress(0);
     while ($execute_0(this$static.d)) {
-        /// Get percent done somehow.
-        //pcent = ~~Math.max(Math.min($getProgress_0(this.d) * 100, 2147483647), -2147483648);
-        //alert(  ~~Math.max(Math.min( (toDouble(this$static.d.chunker.outBytesProcessed) / toDouble(this$static.d.length_0))  * 100, 2147483647), -2147483648)        );
-        //++count;
-        //alert(toDouble(this$static.d.chunker.decoder.nowPos64) / (byte_arr.length / 2.333333));
-        //alert(toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0));
         percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-        //alert(percent);
+        update_progress(percent);
     }
-    //alert(percent);
-    //alert(count);
-    /*
-    if ($execute_0(this$static.d)) {
-        //alert("sdfsdf");
-        //return true;
-    }
-    if ($execute_0(this$static.d)) {
-        //alert("sdfsdf");
-        //return true;
-    }*/
+    update_progress(1);
+    
     ioe = this$static.d.exception;
     if (ioe) {
         $wnd.alert('Decompression failed: ' + ioe.detailMessage);
@@ -3592,9 +3542,6 @@ function decompress(byte_arr)
         else 
         throw $e0;
     }
-    //$wnd.alert(text);
-    //return text;
-    //return false;
 }
 
 function $onModuleLoad(this$static){
@@ -3617,8 +3564,6 @@ _.d = null;
 var DEFAULT_COMPRESSION_MODE;
 function init(){
   !!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
-  //$onModuleLoad($LZMADemo(new LZMADemo()));
-  //$onModuleLoad($LZMADemo(new LZMADemo()));
 }
 
 function gwtOnLoad(errFn, modName, modBase){
@@ -3655,8 +3600,9 @@ var modes = [{dictionarySize: 16, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
              {dictionarySize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
              {dictionarySize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}];
 
-var current_mode_number = 1,
-    current_mode = modes[current_mode_number]; /// Default to mode 1.
+var current_mode_number = 1, /// Default to mode 1.
+    current_mode = modes[current_mode_number],
+    current_percent = 0;
 
 function set_mode(mode)
 {
@@ -3675,6 +3621,13 @@ function set_mode(mode)
 function get_mode()
 {
     return current_mode_number;
+}
+
+function update_progress(percent)
+{
+    current_percent = percent;
+    on_progress_update(percent);
+    ///TODO: Calculate ETA.
 }
 
 var on_progress_update = function () {};
