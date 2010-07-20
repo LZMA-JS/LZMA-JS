@@ -1,0 +1,70 @@
+<body>
+<input type=button value="Do something complicated" id=button> <label for=check>Use web workers <input type=checkbox id=check CHECKED></label>
+<div id=thing></div>
+</body>
+<script>
+var button = document.getElementById("button"),
+    check  = document.getElementById("check"),
+    thing  = document.getElementById("thing"),
+    
+    web_workers_loaded     = false,
+    non_web_workers_loaded = false,
+    
+    worker,
+    js_path = "script.js";
+
+button.onclick = run;
+
+
+function receive_message(e)
+{
+    alert("Result: " + e.data);
+}
+
+
+/*
+function errorReceiver(event) {  
+  throw event.data;  
+}*/
+function run()
+{
+    var message = "do";
+    /// Should it use web workers if they are avaiable?
+    if (check.checked && Worker) {
+        if (!web_workers_loaded) {
+            worker = new Worker(js_path);
+            web_workers_loaded = true;
+            worker.onmessage = receive_message;
+            //worker.onerror = errorReceiver
+        }
+        worker.postMessage(message);
+    } else {
+        if (!non_web_workers_loaded) {
+            var script_tag = document.createElement("script");
+            script_tag.type="text/javascript";
+            script_tag.src = js_path;
+            document.body.appendChild(script_tag);
+            non_web_workers_loaded = true;
+            
+            /// Create global postMessage() function that the "worker" will call.
+            window.postMessage = function (e)
+            {
+                receive_message({data: e, type: "message"});
+            };
+
+        }
+        
+        /// The new script tag might not be parsed yet (if run the first time),
+        /// so we need to wait for a moment.
+        setTimeout(function ()
+        {
+            onmessage({data: message});
+        }, 10);
+    }
+    
+}
+
+
+
+
+</script>
