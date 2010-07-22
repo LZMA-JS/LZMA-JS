@@ -62,7 +62,7 @@
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: top;" align="left">
-                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0"></textarea>
+                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=left_text></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -71,7 +71,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="vertical-align: top;" align="left">
-                                                        <select class="gwt-ListBox" tabindex="0">
+                                                        <select class="gwt-ListBox" tabindex="0" id=select_mode>
                                                             <option value="1">
                                                                 Level 1
                                                             </option>
@@ -103,12 +103,12 @@
                                                     </td>
     
                                                     <td style="vertical-align: top;" align="left">
-                                                        <button class="gwt-Button" type="button" tabindex="0">Compress</button>
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=compress_button>Compress</button>
                                                     </td>
                                                     <td style="vertical-align: top;" align="left">
-                                                        <button class="gwt-Button" type="button" tabindex="0">Clear</button>
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=clear_left_button>Clear</button>
                                                     </td>
-                                                    <td style="vertical-align: top;" align="left"></td>
+                                                    <td style="vertical-align: top;" align="left" id=left_output></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -123,7 +123,7 @@
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: top;" align="left">
-                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0"></textarea>
+                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=right_text></textarea>
                                     </td>
                                 </tr>
 
@@ -133,12 +133,12 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="vertical-align: top;" align="left">
-                                                        <button class="gwt-Button" type="button" tabindex= "0">Decompress</button>
+                                                        <button class="gwt-Button" type="button" tabindex= "0" id=decompress_button>Decompress</button>
                                                     </td>
                                                     <td style="vertical-align: top;" align="left">
-                                                        <button class="gwt-Button" type="button" tabindex="0">Clear</button>
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=clear_right_button>Clear</button>
                                                     </td>
-                                                    <td style="vertical-align: top;" align="left"></td>
+                                                    <td style="vertical-align: top;" align="left" id=right_output></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -150,6 +150,6 @@
                 </tr>
             </tbody>
         </table>
-        <script language="javascript" src="lzma_demo.js"></script>
+        <script language="javascript" src="LZMA_demo.js"></script>
     </body>
 </html>
