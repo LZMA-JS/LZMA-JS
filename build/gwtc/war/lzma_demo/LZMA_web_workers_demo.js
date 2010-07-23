@@ -1,70 +1,3 @@
-var LZMA = (function ()
-{
-    var action_compress   = 1,
-        action_decompress = 2,
-        action_get_mode   = 3,
-        action_set_mode   = 4,
-        action_update     = 5,
-        
-        lzma_worker = Worker("LZMA_web_worker.js");
-    
-    function on_progress_update(which_action, percent)
-    {
-        // This is just a dummy function that should be rewritten by the script.
-    }
-    
-    function on_finish(which_action, result)
-    {
-        // This is just a dummy function that should be rewritten by the script.
-    }
-    
-    lzma_worker.onmessage = function (e)
-    {
-        switch (e.data[0]) {
-        case action_compress:
-            on_finish(1, e.data[1]);
-            break;
-        case action_decompress:
-            on_finish(2, e.data[1]);
-            break;
-        case action_get_mode:
-            //on_finish(2, e.data[1]);
-            break;
-        case action_update:
-            on_progress_update(e.data[1][0], e.data[1][1]);
-            break;
-        }
-    };
-    
-    return {
-        compress: function (str)
-        {
-            lzma_worker.postMessage([action_compress, str]);
-        },
-        decompress: function (byte_arr)
-        {
-            lzma_worker.postMessage([action_decompress, byte_arr]);
-        },
-        get_mode: function ()
-        {
-            lzma_worker.postMessage([action_get_mode]);
-        },
-        set_mode: function (mode)
-        {
-            lzma_worker.postMessage([action_set_mode, mode]);
-        },
-        set_on_finish: function (func)
-        {
-            on_finish = func;
-        },
-        set_progress_update: function(func)
-        {
-            on_progress_update = func;
-        }
-    }
-}());
-
-
 (function ()
 {
     var clear_left_button_el  = document.getElementById("clear_left_button"),
@@ -75,7 +8,73 @@ var LZMA = (function ()
         left_output_el        = document.getElementById("left_output"),
         right_text_el         = document.getElementById("right_text"),
         right_output_el       = document.getElementById("right_output"),
-        select_mode_el        = document.getElementById("select_mode");
+        select_mode_el        = document.getElementById("select_mode"),
+    
+        LZMA = (function ()
+        {
+            var action_compress   = 1,
+                action_decompress = 2,
+                action_get_mode   = 3,
+                action_set_mode   = 4,
+                action_update     = 5,
+                
+                lzma_worker = Worker("LZMA_web_worker.js");
+            
+            function on_progress_update(which_action, percent)
+            {
+                // This is just a dummy function that should be rewritten by the script.
+            }
+            
+            function on_finish(which_action, result)
+            {
+                // This is just a dummy function that should be rewritten by the script.
+            }
+            
+            lzma_worker.onmessage = function (e)
+            {
+                switch (e.data[0]) {
+                case action_compress:
+                    on_finish(1, e.data[1]);
+                    break;
+                case action_decompress:
+                    on_finish(2, e.data[1]);
+                    break;
+                case action_get_mode:
+                    //on_finish(2, e.data[1]);
+                    break;
+                case action_update:
+                    on_progress_update(e.data[1][0], e.data[1][1]);
+                    break;
+                }
+            };
+            
+            return {
+                compress: function (str)
+                {
+                    lzma_worker.postMessage([action_compress, str]);
+                },
+                decompress: function (byte_arr)
+                {
+                    lzma_worker.postMessage([action_decompress, byte_arr]);
+                },
+                get_mode: function ()
+                {
+                    lzma_worker.postMessage([action_get_mode]);
+                },
+                set_mode: function (mode)
+                {
+                    lzma_worker.postMessage([action_set_mode, mode]);
+                },
+                set_finish: function (func)
+                {
+                    on_finish = func;
+                },
+                set_progress_update: function(func)
+                {
+                    on_progress_update = func;
+                }
+            }
+        }());
     
     if (!String.prototype.trim) {
         String.prototype.trim = function (){
@@ -192,7 +191,7 @@ var LZMA = (function ()
         update_sizes();
         my_on_progress_update(1, 0);
         
-        LZMA.set_on_finish(function (which_action, compressed)
+        LZMA.set_finish(function (which_action, compressed)
         {
             if (compressed === false) {
                 alert("An error occured during compression.");
@@ -224,7 +223,7 @@ var LZMA = (function ()
             return false;
         }
         
-        LZMA.set_on_finish(function (which_action, decompressed)
+        LZMA.set_finish(function (which_action, decompressed)
         {
             if (decompressed === false) {
                 alert("An error occured during decompression.");
