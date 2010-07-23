@@ -20,7 +20,6 @@
     {
         return typeof(input) === 'object' && (input instanceof Array);
     }
-
     
     function convet_formated_hex_to_bytes(hex_str)
     {
@@ -49,7 +48,6 @@
         
         return hex_data;
     }
-    
     
     function convert_to_formated_hex(byte_arr)
     {
@@ -97,7 +95,7 @@
             right_size = right_size.length;
         }
         
-        if (compare) {
+        if (compare && right_size > 0 && left_size > 0) {
             compare_result = " (" + Math.round((right_size / left_size) * 100) + "%)";
         }
         
@@ -166,7 +164,7 @@
         window.setTimeout(function ()
         {
             decompressed = LZMA.decompress(byte_arr);
-            if (decompressed == false) {
+            if (decompressed === false) {
                 alert("An error occured during decompression.");
                 return;
             }
@@ -184,9 +182,9 @@
     function my_on_progress_update(which_action, percent)
     {
         if (which_action === 1) { // Compression
-            right_output_el.innerHTML = "Compressing... "  + Math.round(percent * 100) + "%";
+            right_output_el.innerHTML = "Compressing... "   + Math.round(percent * 100) + "%";
         } else { // Decompression
-            left_output_el.innerHTML = "Decompressing... " + Math.round(percent * 100) + "%";
+            left_output_el.innerHTML  = "Decompressing... " + Math.round(percent * 100) + "%";
         }
     }
     
