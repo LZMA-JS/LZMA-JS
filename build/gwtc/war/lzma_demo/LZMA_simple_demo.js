@@ -130,7 +130,7 @@
         {
             var compressed = LZMA.compress(left_text_el.value);
             
-            if (compressed == false) {
+            if (compressed === false) {
                 alert("An error occured during compression.");
                 update_sizes();
                 return;
