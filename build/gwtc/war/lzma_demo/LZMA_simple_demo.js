@@ -18,7 +18,7 @@
     
     function is_array(input)
     {
-        return typeof(input) === 'object' && (input instanceof Array);
+        return typeof(input) === "object" && (input instanceof Array);
     }
     
     function convet_formated_hex_to_bytes(hex_str)
@@ -130,8 +130,6 @@
         {
             var compressed = LZMA.compress(left_text_el.value);
             
-            
-            
             if (compressed == false) {
                 alert("An error occured during compression.");
                 update_sizes();
@@ -154,7 +152,7 @@
         
         
         if (byte_arr == false) {
-            ///TODO: Show which character is wrong.  I.e., invalid compressed input: invalid hex character `s'
+            ///TODO: Show which character is wrong.  I.e., invalid compressed input: invalid hex character `s
             alert("invalid compressed input");
             update_sizes();
             return false;
