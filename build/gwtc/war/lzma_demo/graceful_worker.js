@@ -1,4 +1,7 @@
 if (!Worker) {
+    ///NOTE: IE8 needs onmessage to be created first.
+    var onmessage = function (){};
+    
     function Worker(script)
     {
         var return_object = {};
