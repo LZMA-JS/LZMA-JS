@@ -1,0 +1,19 @@
+<body>
+<input type=button value="Do something complicated" id=button>
+<div id=thing></div>
+</body>
+<script src="graceful_worker.js"></script>
+<script>
+var worker = new Worker("script.js");
+
+worker.onmessage = function (e)
+{
+    alert("Result: " + e.data);
+};
+
+document.getElementById("button").onclick = function ()
+{
+    worker.postMessage("do");
+};
+
+</script>
