@@ -3587,14 +3587,14 @@ var LZMA = (function ()
     
     
     var modes = [{dictionarySize: 16, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 20, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 19, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 20, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                {dictionarySize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}];
+                 {dictionarySize: 20, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 19, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 20, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                 {dictionarySize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}];
     
     var current_mode_number = 1, /// Default to mode 1.
         current_mode = modes[current_mode_number],
