@@ -1,12 +1,17 @@
 var LZMA = (function ()
 {
-    var action_compress            = 1,
-        action_decompress          = 2,
-        action_get_mode            = 3,
-        action_set_progress_update = 4,
-        action_set_mode            = 5,
+    var action_compress   = 1,
+        action_decompress = 2,
+        action_get_mode   = 3,
+        action_set_mode   = 4,
+        action_update     = 5,
         
         lzma_worker = Worker("LZMA_worker.js");
+    
+    function on_progress_update(which_action, percent)
+    {
+        // This is just a dummy function that should be rewritten by the script.
+    }
     
     lzma_worker.onmessage = function (e)
     {
@@ -28,7 +33,7 @@ var LZMA = (function ()
         },
         set_progress_update: function(func)
         {
-            lzma_worker.postMessage([action_set_progress_update, func]);
+            on_progress_update = func;
         },
         set_mode: function (mode)
         {
