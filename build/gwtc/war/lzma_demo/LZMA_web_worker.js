@@ -3520,10 +3520,7 @@ var LZMA = (function ()
     {
         var this$static = $LZMADemo(new LZMADemo()),
             percent,
-            $e0,
             data = initValues(_3B_classLit, 0, -1, byte_arr),
-            e,
-            ioe,
             start,
             text;
         
@@ -3549,37 +3546,6 @@ var LZMA = (function ()
         }
         
         setTimeout(do_action, 0);
-        
-        
-        return false;
-        
-        while ($execute_0(this$static.d)) {
-            percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-            update_progress(2, percent);
-        }
-        update_progress(2, 1);
-        
-        
-        
-        
-        ioe = this$static.d.exception;
-        if (ioe) {
-            //$wnd.alert('Decompression failed: ' + ioe.detailMessage);
-            return false;
-        }
-        try {
-            return decode($toByteArray(this$static.d.output));
-        }
-        catch ($e0) {
-            $e0 = caught($e0);
-            if (instanceOf($e0, 11)) {
-                e = $e0;
-                //$wnd.alert('Decompression failed: ' + e.detailMessage);
-                return false;
-            }
-            else 
-            throw $e0;
-        }
     }
     
     function $onModuleLoad(this$static){
