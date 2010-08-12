@@ -3486,19 +3486,34 @@ var LZMA = (function ()
     function compress(str)
     {
         var this$static = $LZMADemo(new LZMADemo()),
-            percent;
+            percent,
+            start;
         
         this$static.mode = current_mode;
         
         this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
-        update_progress(1, 0);
-        while ($execute(this$static.c)) {
-            percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-            update_progress(1, percent);
-        }
-        update_progress(1, 1);
         
-        return $toByteArray(this$static.c.output);
+        update_progress(1, 0);
+        
+        function do_action()
+        {
+            start = (new Date).getTime();
+            while ($execute(this$static.c)) {
+                percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
+                update_progress(1, percent);
+                
+                if ((new Date).getTime() - start > 1000) {
+                    setTimeout(do_action, 0);
+                    return false;
+                }
+            }
+            
+            update_progress(1, 0);
+            
+            postMessage([action_compress, $toByteArray(this$static.c.output)]);
+        }
+        
+        setTimeout(do_action, 1);
     }
     
     function decompress(byte_arr)
@@ -3509,16 +3524,43 @@ var LZMA = (function ()
             data = initValues(_3B_classLit, 0, -1, byte_arr),
             e,
             ioe,
+            start,
             text;
         
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
         
         update_progress(2, 0);
+        
+        function do_action()
+        {
+            start = (new Date).getTime();
+            while ($execute_0(this$static.d)) {
+                percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                update_progress(2, percent);
+                if ((new Date).getTime() - start > 1000) {
+                    setTimeout(do_action, 0);
+                    return false;
+                }
+            }
+            
+            update_progress(1, 1);
+            
+            postMessage([action_decompress, decode($toByteArray(this$static.d.output))]);
+        }
+        
+        setTimeout(do_action, 0);
+        
+        
+        return false;
+        
         while ($execute_0(this$static.d)) {
             percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
             update_progress(2, percent);
         }
         update_progress(2, 1);
+        
+        
+        
         
         ioe = this$static.d.exception;
         if (ioe) {
@@ -3622,6 +3664,8 @@ var LZMA = (function ()
     function update_progress(which_action, percent)
     {
         current_percent = percent;
+        
+        // This function should be set by the client.
         on_progress_update(which_action, percent);
         ///TODO: Calculate ETA.
     }
@@ -3662,10 +3706,10 @@ onmessage = function (e)
 {
     switch (e.data[0]) {
     case action_compress:
-        postMessage([e.data[0], LZMA.compress(e.data[1])]);
+        LZMA.compress(e.data[1]);
         break;
     case action_decompress:
-        postMessage([e.data[0], LZMA.decompress(e.data[1])]);
+        LZMA.decompress(e.data[1]);
         break;
     case action_get_mode:
         postMessage([e.data[0], LZMA.get-mode()]);
