@@ -1,11 +1,7 @@
 var LZMA = (function ()
 {
     var $gwt_version = "1.7.0";
-//    var $wnd = window;
-//    var $doc = $wnd.document;
     var $moduleName, $moduleBase;
-//    var $stats = $wnd.__gwtStatsEvent ? function(a) {return $wnd.__gwtStatsEvent(a);} : null;
-    //$stats && $stats({moduleName:'lzma_demo',subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalStart'});
     
     var _, N8000000000000000_longLit = [0, -9223372036854775808], N1_longLit = [4294967295, -4294967296], P0_longLit = [0, 0], P1_longLit = [1, 0], P4_longLit = [4, 0], P1000_longLit = [4096, 0], Pffffff_longLit = [16777215, 0], P1000000_longLit = [16777216, 0], Pff000000_longLit = [4278190080, 0], Pffffffff_longLit = [4294967295, 0], P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
     function getClass_18(){
@@ -947,10 +943,12 @@ var LZMA = (function ()
     _.pb = 0;
     
     function $execute(this$static){
+    
     var $e0;
     try {
         return $processChunk(this$static.chunker);
     }
+    
     catch ($e0) {
         $e0 = caught($e0);
         if (instanceOf($e0, 10)) {
@@ -959,6 +957,7 @@ var LZMA = (function ()
         else 
         throw $e0;
     }
+    
     }
     
     function $init(this$static, input, output, length_0, mode){
@@ -1036,7 +1035,13 @@ var LZMA = (function ()
     
     function $init_0(this$static, input, output)
     {
-        var decoder, i, properties, r;
+        var decoder,
+            hex_length = "",
+            i,
+            properties,
+            r,
+            temp_length;
+        
         properties = initDim(_3B_classLit, 0, -1, 5, 1);
         for (i = 0; i < properties.length; ++i) {
             r = $read(input);
@@ -1048,8 +1053,6 @@ var LZMA = (function ()
         if (!$SetDecoderProperties(decoder, properties))
             throw $IOException(new IOException(), 'corrupted input');
         
-        var hex_length = "";
-        //  expectedLength = N1_longLit;
         for (i = 0; i < 64; i += 8) {
             r = $read(input);
             if (r == -1)
@@ -1057,10 +1060,7 @@ var LZMA = (function ()
             r = r.toString(16);
             if (r.length == 1) r = "0" + r;
             hex_length = r + "" + hex_length;
-        //    alert("or(" + expectedLength + ", shl(fromInt(" + r + "), " + i + "))) " + shl(fromInt(r), i) + " or " + or(expectedLength, shl(fromInt(r), i)));
-        //    expectedLength = or(expectedLength, shl(fromInt(r), i));
         }
-        //alert(hex_length);
         
         /// Was the length set in the header (if it was compressed from a stream, the length is all f's).
         if (hex_length.toLowerCase() == "ffffffffffffffffff" || hex_length == 0) {
@@ -1068,9 +1068,15 @@ var LZMA = (function ()
             this$static.length_0 = N1_longLit;
         } else {
             ///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
-            this$static.length_0 = fromDouble(parseInt(hex_length, 16));
+            tmp_length = parseInt(hex_length, 16);
+            /// If the length is too long to handle, just set it to unknown.
+            if (tmp_length > 4294967295) {
+                this$static.length_0 = N1_longLit;
+            } else {
+                this$static.length_0 = fromDouble(tmp_length);
+            }
         }
-        //alert(this$static.length_0);
+        
         this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
     }
     
@@ -3533,14 +3539,15 @@ var LZMA = (function ()
             start = (new Date).getTime();
             while ($execute_0(this$static.d)) {
                 percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-                update_progress(2, percent);
-                if ((new Date).getTime() - start > 1000) {
+                /// If about 200 miliseconds have passed, update the progress.
+                if ((new Date).getTime() - start > 200) {
+                    update_progress(2, percent);
                     setTimeout(do_action, 0);
                     return false;
                 }
             }
             
-            update_progress(1, 1);
+            update_progress(2, 1);
             
             postMessage([action_decompress, decode($toByteArray(this$static.d.output))]);
         }
@@ -3589,8 +3596,7 @@ var LZMA = (function ()
     }
     
     var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'), Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'), Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'), Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'), Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptException'), Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptObject$'), _3_3D_classLit = createForArray('', '[[D'), Ljava_io_InputStream_2_classLit = createForClass('java.io.', 'InputStream'), Ljava_io_ByteArrayInputStream_2_classLit = createForClass('java.io.', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'), Ljava_io_OutputStream_2_classLit = createForClass('java.io.', 'OutputStream'), Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('java.io.', 'ByteArrayOutputStream'), Ljava_io_IOException_2_classLit = createForClass('java.io.', 'IOException'), Ljava_lang_Enum_2_classLit = createForClass('java.lang.', 'Enum'), Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang.', 'ArithmeticException'), Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang.', 'ArrayStoreException'), _3C_classLit = createForArray('', '[C'), Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class'), Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang.', 'ClassCastException'), Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang.', 'IllegalArgumentException'), Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang.', 'IllegalStateException'), Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang.', 'IndexOutOfBoundsException'), _3I_classLit = createForArray('', '[I'), Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang.', 'NullPointerException'), Ljava_lang_String_2_classLit = createForClass('java.lang.', 'String'), Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang.', 'StringBuilder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'InWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'BinTree'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'OutWindow'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2;'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenPriceTableEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Decoder'), Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Encoder'), Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('org.dellroad.lzma.client.', 'CompressionMode'), Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMACompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayCompressor'), Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMADecompressor'), Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayDecompressor'), Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo');
-    //$stats && $stats({moduleName:'lzma_demo',subSystem:'startup',evtGroup:'moduleStartup',millis:(new Date()).getTime(),type:'moduleEvalEnd'});
-    //if (lzma_demo) lzma_demo.onScriptLoad();
+    
     gwtOnLoad(function(){},'lzma_demo','');
     
     
@@ -3631,14 +3637,14 @@ var LZMA = (function ()
     {
         current_percent = percent;
         
-        // This function should be set by the client.
+        /// This function should be set by the client.
         on_progress_update(which_action, percent);
         ///TODO: Calculate ETA.
     }
     
     function on_progress_update(which_action, percent)
     {
-        // This is just a dummy function that should be rewritten by the script.
+        /// This is just a dummy function that should be rewritten by the script.
     }
     
     function set_progress_update(func)
@@ -3646,7 +3652,7 @@ var LZMA = (function ()
         on_progress_update = func;
     }
     
-    // Set default mode to 1.
+    /// Set default mode to 1.
     set_mode(1);
     
     return {
