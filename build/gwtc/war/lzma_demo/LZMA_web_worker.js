@@ -943,12 +943,10 @@ var LZMA = (function ()
     _.pb = 0;
     
     function $execute(this$static){
-    
     var $e0;
     try {
         return $processChunk(this$static.chunker);
     }
-    
     catch ($e0) {
         $e0 = caught($e0);
         if (instanceOf($e0, 10)) {
@@ -957,7 +955,6 @@ var LZMA = (function ()
         else 
         throw $e0;
     }
-    
     }
     
     function $init(this$static, input, output, length_0, mode){
@@ -3514,7 +3511,7 @@ var LZMA = (function ()
                 }
             }
             
-            update_progress(1, 0);
+            update_progress(1, 1);
             
             postMessage([action_compress, $toByteArray(this$static.c.output)]);
         }

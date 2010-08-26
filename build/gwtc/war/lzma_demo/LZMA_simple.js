@@ -1036,7 +1036,13 @@ var LZMA = (function ()
     
     function $init_0(this$static, input, output)
     {
-        var decoder, i, properties, r;
+        var decoder,
+            hex_length = "",
+            i,
+            properties,
+            r,
+            temp_length;
+        
         properties = initDim(_3B_classLit, 0, -1, 5, 1);
         for (i = 0; i < properties.length; ++i) {
             r = $read(input);
@@ -1048,8 +1054,6 @@ var LZMA = (function ()
         if (!$SetDecoderProperties(decoder, properties))
             throw $IOException(new IOException(), 'corrupted input');
         
-        var hex_length = "";
-        //  expectedLength = N1_longLit;
         for (i = 0; i < 64; i += 8) {
             r = $read(input);
             if (r == -1)
@@ -1057,10 +1061,7 @@ var LZMA = (function ()
             r = r.toString(16);
             if (r.length == 1) r = "0" + r;
             hex_length = r + "" + hex_length;
-        //    alert("or(" + expectedLength + ", shl(fromInt(" + r + "), " + i + "))) " + shl(fromInt(r), i) + " or " + or(expectedLength, shl(fromInt(r), i)));
-        //    expectedLength = or(expectedLength, shl(fromInt(r), i));
         }
-        //alert(hex_length);
         
         /// Was the length set in the header (if it was compressed from a stream, the length is all f's).
         if (hex_length.toLowerCase() == "ffffffffffffffffff" || hex_length == 0) {
@@ -1068,9 +1069,15 @@ var LZMA = (function ()
             this$static.length_0 = N1_longLit;
         } else {
             ///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
-            this$static.length_0 = fromDouble(parseInt(hex_length, 16));
+            tmp_length = parseInt(hex_length, 16);
+            /// If the length is too long to handle, just set it to unknown.
+            if (tmp_length > 4294967295) {
+                this$static.length_0 = N1_longLit;
+            } else {
+                this$static.length_0 = fromDouble(tmp_length);
+            }
         }
-        //alert(this$static.length_0);
+        
         this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
     }
     
