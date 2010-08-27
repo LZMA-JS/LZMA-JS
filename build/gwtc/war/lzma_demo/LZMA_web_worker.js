@@ -3503,9 +3503,9 @@ var LZMA = (function ()
             start = (new Date).getTime();
             while ($execute(this$static.c)) {
                 percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-                update_progress(1, percent);
-                
-                if ((new Date).getTime() - start > 1000) {
+                /// If about 200 miliseconds have passed, update the progress.
+                if ((new Date).getTime() - start > 200) {
+                    update_progress(1, percent);
                     setTimeout(do_action, 0);
                     return false;
                 }
