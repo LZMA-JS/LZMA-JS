@@ -1,4 +1,5 @@
 <!-- $Id$ -->
+<!-- This file has been modified by nmrugg. -->
 
 <project name="gwt-lzma" default="build"
   xmlns:dellroad="urn:org.dellroad.ant"

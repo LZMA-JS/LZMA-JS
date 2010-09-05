@@ -2,6 +2,8 @@
 /*
  * Copyright (C) 2009 Archie L. Cobbs. All rights reserved.
  *
+ * This file has been modified by nmrugg.
+ *
  * $Id$
  */
 

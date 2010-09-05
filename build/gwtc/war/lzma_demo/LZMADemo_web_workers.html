@@ -7,15 +7,16 @@
         <table cellpadding="0" cellspacing="0">
         <tbody>
             <tr><td style="vertical-align: top;" align="left">
-                <div style="white-space: nowrap;" class="lzmademo-title">LZMA GWT module demo</div>
+                <div style="white-space: nowrap;" class="lzmademo-title">LZMA-JS Web Workers demo</div>
             </td></tr>
             <tr><td style="vertical-align: top;" align="left">
                 <div class="lzmademo-description">
                     <p>
-                    This page is an example <a href="http://code.google.com/webtoolkit/">GWT</a> application that demonstrates
-                    the use of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
-                    The GWT-LZMA compression module implements the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a>
-                    compression algorithm in GWT-compiled Javascript.
+                    This page demonstrates <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a>:
+                    an implementation of the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a> compression algorithm in JavaScript.
+                    It is a standalone version of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
+                    This demo uses <strong>web workers</strong>, which allows the browser to remain interactive even while compressing/decompressing
+                    large amounts of data.  This demo will also gracefully degrade on older browsers that do not support web workers.
                     </p>
 
                     <p>
@@ -23,8 +24,8 @@
                     Enter any content into the left window and press "Compress" to compress it.
                     When finished, the right window will display the hexadecimal representation
                     of the compressed content of the left window (after encoding it in UTF-8).
-                    Use the pulldown to choose from fastest (Level 1) to best (Level 9) compression; lower levels
-                    are more appropriate for Javascript running in a browser.
+                    Use the pulldown to choose from fastest (Level 1) to best (Level 9) compression&mdash;lower levels
+                    are more appropriate for JavaScript running in a browser.
                     </p>
 
                     <p>
@@ -40,15 +41,19 @@
                     <blockquote>
                     <span style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</span>
                     </blockquote>
+                    or
+                    <blockquote>
+                    <span style="white-space: pre; font-family: Courier">$ echo "testing 123" | lzma -3 | hexdump -C | cut -c9-60</span>
+                    </blockquote>
                     </p>
 
                     <p>
-                    <em>Warning:</em> The LZMA algorithm was not designed to run in a browser as Javascript.
+                    <em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
                     Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.
                     </p>
 
                     <p class="lzmademo-footnote">
-                    This GWT-based Javascript application runs entirely within your web browser.
+                    This JavaScript application runs entirely within your web browser.
                     </p>
                 </div>
             </td></tr>
