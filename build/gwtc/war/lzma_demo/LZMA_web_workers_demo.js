@@ -22,12 +22,12 @@
             
             function on_progress_update(which_action, percent)
             {
-                // This is just a dummy function that should be rewritten by the script.
+                /// This is just a dummy function that should be rewritten by the script.
             }
             
             function on_finish(which_action, result)
             {
-                // This is just a dummy function that should be rewritten by the script.
+                /// This is just a dummy function that should be rewritten by the script.
             }
             
             lzma_worker.onmessage = function (e)
@@ -40,7 +40,7 @@
                     on_finish(2, e.data[1]);
                     break;
                 case action_get_mode:
-                    //on_finish(2, e.data[1]);
+                    /// Not used for demo.
                     break;
                 case action_update:
                     on_progress_update(e.data[1][0], e.data[1][1]);
@@ -97,7 +97,7 @@
         
         if (hex_str.trim() == "") return [];
         
-        // Check for invalid hex characters.
+        /// Check for invalid hex characters.
         if (/[^0-9a-fA-F\s]/.test(hex_str)) {
             return false;
         }
