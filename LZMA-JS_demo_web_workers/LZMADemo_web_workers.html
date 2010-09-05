@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <title>GWT-LZMA Demo</title>
+        <link rel="stylesheet" type="text/css" href="LZMADemo.css" />
+    </head>
+    <body bgcolor="white"> 
+        <table cellpadding="0" cellspacing="0">
+        <tbody>
+            <tr><td style="vertical-align: top;" align="left">
+                <div style="white-space: nowrap;" class="lzmademo-title">LZMA-JS Web Workers demo</div>
+            </td></tr>
+            <tr><td style="vertical-align: top;" align="left">
+                <div class="lzmademo-description">
+                    <p>
+                    This page demonstrates <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a>:
+                    an implamentation of the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a> compression algorithm in JavaScript.
+                    It is a standalone version of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
+                    This demo uses <strong>web workers</strong>, which allows the browser to remain interactive even while compressing/decompressing
+                    large amounts of data.  This demo will also gracefully degrade on older browsers that do not support web workers.
+                    </p>
+
+                    <p>
+                    <strong>Compressing:</strong>
+                    Enter any content into the left window and press "Compress" to compress it.
+                    When finished, the right window will display the hexadecimal representation
+                    of the compressed content of the left window (after encoding it in UTF-8).
+                    Use the pulldown to choose from fastest (Level 1) to best (Level 9) compression&mdash;lower levels
+                    are more appropriate for JavaScript running in a browser.
+                    </p>
+
+                    <p>
+                    <strong>Decompressing:</strong>
+                    Enter whitespace-separated hexadecimal bytes in the right window corresponding
+                    to compressed output of the LZMA algorithm.
+                    Press the "Decompress" button to decompress the data and the original will be shown back in
+                    the left window (decoded from UTF-8).
+                    </p>
+
+                    <p>
+                    On UNIX machines, you can generate input for the right window yourself using commands like this:
+                    <blockquote>
+                    <span style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</span>
+                    </blockquote>
+                    or
+                    <blockquote>
+                    <span style="white-space: pre; font-family: Courier">$ echo "testing 123" | lzma -3 | hexdump -C | cut -c9-60</span>
+                    </blockquote>
+                    </p>
+
+                    <p>
+                    <em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
+                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.
+                    </p>
+
+                    <p class="lzmademo-footnote">
+                    This JavaScript application runs entirely within your web browser.
+                    </p>
+                </div>
+            </td></tr>
+        </tbody>
+        </table>
+        <table cellpadding="0" cellspacing="5">
+            <tbody>
+                <tr>
+                    <td style="vertical-align: top;" align="left">
+                        <table class="demo-panel" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td style="vertical-align: top;" align="left">
+                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=left_text></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;" align="left">
+                                        <table cellpadding="0" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="vertical-align: top;" align="left">
+                                                        <select class="gwt-ListBox" tabindex="0" id=select_mode>
+                                                            <option value="1">
+                                                                Level 1
+                                                            </option>
+                                                            <option value="2">
+                                                                Level 2
+                                                            </option>
+                                                            <option value="3">
+                                                                Level 3
+                                                            </option>
+                                                            <option value="4">
+                                                                Level 4
+                                                            </option>
+                                                            <option value="5">
+                                                                Level 5
+                                                            </option>
+                                                            <option value="6">
+                                                                Level 6
+                                                            </option>
+                                                            <option value="7">
+                                                                Level 7
+                                                            </option>
+                                                            <option value="8">
+                                                                Level 8
+                                                            </option>
+                                                            <option value="9">
+                                                                Level 9
+                                                            </option>
+                                                        </select>
+                                                    </td>
+    
+                                                    <td style="vertical-align: top;" align="left">
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=compress_button>Compress</button>
+                                                    </td>
+                                                    <td style="vertical-align: top;" align="left">
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=clear_left_button>Clear</button>
+                                                    </td>
+                                                    <td style="vertical-align: top;" align="left" id=left_output></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+    
+                    <td style="vertical-align: top;" align="left">
+                        <table class="demo-panel" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td style="vertical-align: top;" align="left">
+                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=right_text></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="vertical-align: top;" align="left">
+                                        <table cellpadding="0" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="vertical-align: top;" align="left">
+                                                        <button class="gwt-Button" type="button" tabindex= "0" id=decompress_button>Decompress</button>
+                                                    </td>
+                                                    <td style="vertical-align: top;" align="left">
+                                                        <button class="gwt-Button" type="button" tabindex="0" id=clear_right_button>Clear</button>
+                                                    </td>
+                                                    <td style="vertical-align: top;" align="left" id=right_output></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--[if IE]>
+        <script language="javascript" src="fix_ie_split.js"></script>
+        <![endif]-->
+        <script language="javascript" src="graceful_worker.js"></script>
+        <script language="javascript" src="LZMA_web_workers_demo.js"></script>
+    </body>
+</html>
