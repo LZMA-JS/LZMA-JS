@@ -3513,7 +3513,9 @@ var LZMA = (function ()
             
             update_progress(1, 1);
             
-            postMessage([action_compress, $toByteArray(this$static.c.output)]);
+            /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
+            /// .slice(0) simply returns the entire array by value.
+            postMessage([action_compress, $toByteArray(this$static.c.output).slice(0)]);
         }
         
         setTimeout(do_action, 1);
