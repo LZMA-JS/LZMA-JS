@@ -1,17 +1,23 @@
 if (!Worker) {
-    ///NOTE: IE8 needs onmessage to be created first.
-    var onmessage = function (){};
+    ///NOTE: IE8 needs onmessage to be created first, IE9 cannot, IE7- do not care.
+    /*@cc_on
+        /// Is this IE8-?
+        @if (@_jscript_version < 9)
+            var onmessage = function (){};
+        @end
+    @*/
     
-    function Worker(script)
+    /// If this were a regular function statement, IE9 would run it first and therefore make the Worker variable truthy because of hoisting.
+    var Worker = function(script)
     {
         var return_object = {};
         
         function load_script(script)
         {
-            //NOTE: Determine if there are better/other ways to do this.
-            var script_tag = document.createElement("script");
-            script_tag.type="text/javascript";
-            script_tag.src = script;
+            ///NOTE: Determine if there are better/other ways to do this.
+            var script_tag  = document.createElement("script");
+            script_tag.type ="text/javascript";
+            script_tag.src  = script;
             document.body.appendChild(script_tag);
         }
         
