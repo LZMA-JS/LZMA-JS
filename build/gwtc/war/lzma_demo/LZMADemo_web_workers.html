@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>GWT-LZMA Demo</title>
+        <title>LZMA-JS Demo</title>
         <link rel="stylesheet" type="text/css" href="LZMADemo.css" />
     </head>
     <body bgcolor="white"> 
@@ -16,7 +16,8 @@
                     an implementation of the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a> compression algorithm in JavaScript.
                     It is a standalone version of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
                     This demo uses <strong>web workers</strong>, which allows the browser to remain interactive even while compressing/decompressing
-                    large amounts of data.  This demo will also gracefully degrade on older browsers that do not support web workers.
+                    large amounts of data.  This demo will also <strong>gracefully degrade</strong> on older browsers that do not support web workers.
+                    (It even works on IE6!)
                     </p>
                     
                     <p>
@@ -52,8 +53,8 @@
                     </p>
 
                     <p>
-                    <em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
-                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.
+                    <small><em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
+                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.</small>
                     </p>
 
                     <p class="lzmademo-footnote">
