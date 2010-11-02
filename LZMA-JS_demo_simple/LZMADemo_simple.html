@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>GWT-LZMA Demo</title>
+        <title>LZMA-JS Simple Demo</title>
         <link rel="stylesheet" type="text/css" href="LZMADemo.css" />
     </head>
     <body bgcolor="white"> 
@@ -15,6 +15,11 @@
                     This page demonstrates <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a>:
                     an implementation of the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a> compression algorithm in JavaScript.
                     It is a standalone version of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
+                    </p>
+                    
+                    <p>
+                    This simple demo blocks all page interaction while the encoding and decoding is taking place.  A much better demo that does not
+                    block can be found <a href="../LZMA-JS_demo_web_workers/LZMADemo_web_workers.html">here</a>.
                     </p>
                     
                     <p>
@@ -50,8 +55,8 @@
                     </p>
 
                     <p>
-                    <em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
-                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.
+                    <small><em>Warning:</em> The LZMA algorithm was not originally designed to run in a browser.
+                    Use of the higher compression levels (in either direction) and/or large files may cause your browser to explode.</small>
                     </p>
 
                     <p class="lzmademo-footnote">
