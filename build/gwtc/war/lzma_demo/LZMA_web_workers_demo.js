@@ -18,7 +18,7 @@
                 action_set_mode   = 4,
                 action_update     = 5,
                 
-                lzma_worker = Worker("LZMA_web_worker.js");
+                lzma_worker = new Worker("LZMA_web_worker.js");
             
             function on_progress_update(which_action, percent)
             {
