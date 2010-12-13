@@ -3432,7 +3432,7 @@ var LZMA = (function ()
         y = utf[++i] & 255;
         if ((y & 192) != 128)
             throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
-        $append(buf.data, (x & 31) << 6 & 65535 | y & 63);
+        $append(buf.data, String.fromCharCode((x & 31) << 6 & 65535 | y & 63));
         }
         else if ((x & 240) == 224) {
         if (i + 2 >= utf.length)
