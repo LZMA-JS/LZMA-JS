@@ -875,42 +875,46 @@ var LZMA = (function ()
     _ = StringBuilder.prototype = new Object_0();
     _.getClass$ = getClass_20;
     _.typeId$ = 0;
-    function arraycopy(src, srcOfs, dest, destOfs, len){
-    var destArray, destEnd, destTypeName, destlen, srcArray, srcTypeName, srclen;
-    if (src == null || dest == null) {
-        throw new NullPointerException();
-    }
-    srcTypeName = (src.typeMarker$ == nullMethod || src.typeId$ == 2?src.getClass$():Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
-    destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2?dest.getClass$():Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
-    if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
-        throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
-    }
-    if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
-        throw $ArrayStoreException(new ArrayStoreException(), 'Array types must match');
-    }
-    srclen = src.length;
-    destlen = dest.length;
-    if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-        throw new IndexOutOfBoundsException();
-    }
-    if ((srcTypeName.charCodeAt(1) == 76 || srcTypeName.charCodeAt(1) == 91) && !$equals(srcTypeName, destTypeName)) {
-        srcArray = dynamicCast(src, 3);
-        destArray = dynamicCast(dest, 3);
-        if ((src == null?null:src) === (dest == null?null:dest) && srcOfs < destOfs) {
-        srcOfs += len;
-        for (destEnd = destOfs + len; destEnd-- > destOfs;) {
-            setCheck(destArray, destEnd, srcArray[--srcOfs]);
+    function arraycopy(src, srcOfs, dest, destOfs, len) {
+        var destArray, destEnd, destTypeName, destlen, i, srcArray, srcTypeName, srclen;
+        
+        if (src == null || dest == null) {
+            throw new NullPointerException();
         }
+        
+        srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
+        destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
+        
+        if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
+            throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
         }
-        else {
-        for (destEnd = destOfs + len; destOfs < destEnd;) {
-            setCheck(destArray, destOfs++, srcArray[srcOfs++]);
+        if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
+            throw $ArrayStoreException(new ArrayStoreException(), 'Array types must match');
         }
+        
+        srclen  = src.length;
+        destlen = dest.length;
+        if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
+            throw new IndexOutOfBoundsException();
         }
-    }
-    else {
-        Array.prototype.splice.apply(dest, [destOfs, len].concat(src.slice(srcOfs, srcOfs + len)));
-    }
+        if ((srcTypeName.charCodeAt(1) == 76 || srcTypeName.charCodeAt(1) == 91) && !$equals(srcTypeName, destTypeName)) {
+            srcArray  = dynamicCast(src, 3);
+            destArray = dynamicCast(dest, 3);
+            if ((src == null ? null : src) === (dest == null ? null : dest) && srcOfs < destOfs) {
+                srcOfs += len;
+                for (destEnd = destOfs + len; destEnd-- > destOfs;) {
+                    setCheck(destArray, destEnd, srcArray[--srcOfs]);
+                }
+            } else {
+                for (destEnd = destOfs + len; destOfs < destEnd;) {
+                    setCheck(destArray, destOfs++, srcArray[srcOfs++]);
+                }
+            }
+        } else {
+            for (i = 0; i < len; ++i) {
+                dest[destOfs + i] = src[srcOfs + i]
+            }
+        }
     }
     
     
