@@ -911,7 +911,9 @@ var LZMA = (function ()
                 }
             }
         } else {
-            Array.prototype.splice.apply(dest, [destOfs, len].concat(src.slice(srcOfs, srcOfs + len)));
+            for (i = 0; i < len; ++i) {
+                dest[destOfs + i] = src[srcOfs + i]
+            }
         }
     }
     
