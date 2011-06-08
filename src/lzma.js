@@ -116,7 +116,7 @@ this.LZMA = function (lzma_path) {
         
         return {
             compress: function (string, mode, on_finish, on_progress) {
-                send_to_worker(action_compress, string, mode, on_finish, on_progress);
+                send_to_worker(action_compress, String(string), mode, on_finish, on_progress);
             },
             decompress: function (byte_arr, on_finish, on_progress) {
                 send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
