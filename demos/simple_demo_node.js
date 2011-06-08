@@ -1,19 +1,19 @@
-var LZMA = require("../src/lzma.js").LZMA();
-
-var compress_me = "Hello, world."
+var LZMA = require("../src/lzma.js").LZMA(),
+    compress_me = "Hello, world.",
+    compression_mode = 1;
 
 /// First, let's compress it.
-LZMA.compress(compress_me, 1, function (result) {
+LZMA.compress(compress_me, compression_mode, function (result) {
     console.log("Compressed: " + result);
     
     /// Now, let's try to decompress it to make sure it works both ways.
     LZMA.decompress(result, function (result) {
         console.log("Decompressed: " + result);
-    }, function (progress) {
+    }, function (percent) {
         /// Decompressing progress code goes here.
-        console.log("Decompressing: " + (progress * 100) + "%");
+        console.log("Decompressing: " + (percent * 100) + "%");
     });
-}, function (progress) {
+}, function (percent) {
     /// Compressing progress code goes here.
-    console.log("Compressing: " + (progress * 100) + "%");
+    console.log("Compressing: " + (percent * 100) + "%");
 });
