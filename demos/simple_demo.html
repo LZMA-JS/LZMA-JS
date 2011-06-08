@@ -1,0 +1,28 @@
+<head>
+    <title>Simple Demo</title>
+</head>
+<body>
+<script src="../src/lzma.js"></script>
+<script>
+
+var compress_me = "Hello, world.",
+    my_lzma = new LZMA("../src/lzma_worker.js");
+
+/// First, let's compress it.
+my_lzma.compress(compress_me, 1, function (result) {
+    alert("Compressed: " + result);
+    
+    /// Now, let's try to decompress it to make sure it works both ways.
+    my_lzma.decompress(result, function (result) {
+        alert("Decompressed: " + result);
+    }, function (progress) {
+        /// Decompressing progress code goes here.
+        document.title = "Decompressing: " + (progress * 100) + "%";
+    });
+}, function (progress) {
+    /// Compressing progress code goes here.
+    document.title = "Compressing: " + (progress * 100) + "%";
+});
+
+</script>
+</body>
