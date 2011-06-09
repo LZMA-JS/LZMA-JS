@@ -1,0 +1,38 @@
+<head>
+    <title>Simple Demo</title>
+</head>
+<body>
+<p>This is a very simple demonstration of <a href="http://github.com/nmrugg/LZMA-JS/">LZMA.JS</a>,
+a browser-based implementation of the LZMA compression algorithm.</p>
+<p>You can find a more advanced demo <a href="advanced_demo.html">here</a>.</p>
+
+<textarea id=compression_el>Hello, world.</textarea><br>
+<button id=go>Go</button>
+<script src="../src/lzma.js"></script>
+<script>
+
+var compression_mode = 1,
+    my_lzma = new LZMA("../src/lzma_worker.js");
+
+document.getElementById("go").onclick = function () {
+    /// First, let's compress it.
+    my_lzma.compress(document.getElementById("compression_el").value, compression_mode, function (result) {
+        alert("Compressed: " + result);
+        
+        /// Now, let's try to decompress it to make sure it works both ways.
+        my_lzma.decompress(result, function (result) {
+            alert("Decompressed: " + result);
+        }, function (percent) {
+            /// Decompressing progress code goes here.
+            document.title = "Decompressing: " + (percent * 100) + "%";
+        });
+    }, function (percent) {
+        /// Compressing progress code goes here.
+        document.title = "Compressing: " + (percent * 100) + "%";
+    });
+}
+
+
+
+</script>
+</body>
