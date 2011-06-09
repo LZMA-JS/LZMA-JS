@@ -1,13 +1,13 @@
 <html>
     <head>
-        <title>LZMA-JS Web Workers Demo</title>
-        <link rel="stylesheet" type="text/css" href="LZMADemo.css" />
+        <title>LZMA.JS Advanced Demo</title>
+        <link rel="stylesheet" type="text/css" href="assets/LZMADemo.css" />
     </head>
     <body bgcolor="white"> 
         <table cellpadding="0" cellspacing="0">
         <tbody>
             <tr><td style="vertical-align: top;" align="left">
-                <div style="white-space: nowrap;" class="lzmademo-title">LZMA-JS Web Workers demo</div>
+                <div style="white-space: nowrap;" class="lzmademo-title">LZMA.JS Advanced Demo</div>
             </td></tr>
             <tr><td style="vertical-align: top;" align="left">
                 <div class="lzmademo-description">
@@ -15,13 +15,9 @@
                     This page demonstrates <a href="http://github.com/nmrugg/LZMA-JS/">LZMA.JS</a>:
                     an implementation of the <a href="http://en.wikipedia.org/wiki/Lzma">LZMA</a> compression algorithm in JavaScript.
                     It is a standalone version of the <a href="http://gwt-lzma.googlecode.com/">GWT-LZMA</a> compression module.
-                    This demo uses <strong>web workers</strong>, which allows the browser to remain interactive even while compressing/decompressing
-                    large amounts of data.  This demo will also <strong>gracefully degrade</strong> on older browsers that do not support web workers.
-                    (It even works on IE6!)
-                    </p>
-                    
-                    <p>
-                    This demo can be downloaded <a href="http://github.com/nmrugg/LZMA-JS/raw/master/LZMA-JS_demo_web_workers_latest.tar.gz">here</a>.
+                    LZMA.JS will use web workers, if available, which allows the browser to remain interactive even while compressing/decompressing
+                    large amounts of data.  It will also gracefully degrade on older browsers that do not support web workers.
+                    (It even works on IE6!) You can find a simpler demo <a href="simple_demo.html">here</a>.
                     </p>
 
                     <p>
@@ -44,11 +40,7 @@
                     <p>
                     On UNIX machines, you can generate input for the right window yourself using commands like this:
                     <blockquote>
-                    <span style="white-space: pre; font-family: Courier">$ cat /etc/motd | lzma -3 | hexdump -C | cut -c9-60</span>
-                    </blockquote>
-                    or
-                    <blockquote>
-                    <span style="white-space: pre; font-family: Courier">$ echo "testing 123" | lzma -3 | hexdump -C | cut -c9-60</span>
+                    <span style="white-space: pre; font-family: Courier">$ echo "Hello, world." | lzma -3 | hexdump -C | cut -c9-60</span>
                     </blockquote>
                     </p>
 
@@ -72,7 +64,7 @@
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: top;" align="left">
-                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=left_text></textarea>
+                                        <textarea rows="25" cols="70" class="gwt-TextArea" tabindex="0" id=left_text>Hello, world.</textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -161,7 +153,7 @@
             </tbody>
         </table>
         <!--[if IE]>
-        <script language="javascript" src="fix_ie_split.js"></script>
+        <script language="javascript" src="assets/fix_ie_split.js"></script>
         <![endif]-->
         <script language="javascript" src="../src/lzma.js"></script>
         <script>
@@ -187,7 +179,7 @@
                 return typeof(input) === "object" && (input instanceof Array);
             }
             
-            function convet_formated_hex_to_bytes(hex_str) {
+            function convert_formated_hex_to_bytes(hex_str) {
                 var count = 0,
                     hex_arr,
                     hex_data = [],
@@ -250,7 +242,7 @@
             function update_sizes(compare) {
                 var compare_result = "",
                     left_size  = left_text_el.value.length,
-                    right_size = convet_formated_hex_to_bytes(right_text_el.value);
+                    right_size = convert_formated_hex_to_bytes(right_text_el.value);
                 
                 if (right_size === false) {
                     right_size = "invalid hex input";
@@ -288,7 +280,7 @@
                 
                 my_lzma.compress(left_text_el.value, select_mode_el.value, function (result) {
                     if (result === false) {
-                        alert("An error occured during compression.");
+                        alert("An error occurred during compression.");
                         update_sizes();
                         return;
                     }
@@ -301,7 +293,7 @@
             }
             
             decompress_button_el.onclick = function () {
-                var byte_arr = convet_formated_hex_to_bytes(right_text_el.value),
+                var byte_arr = convert_formated_hex_to_bytes(right_text_el.value),
                     decompressed;
                 
                 left_text_el.value = "";
@@ -317,7 +309,7 @@
                 
                 my_lzma.decompress(byte_arr, function (result) {
                     if (result === false) {
-                        alert("An error occured during decompression.");
+                        alert("An error occurred during decompression.");
                         return;
                     }
                     

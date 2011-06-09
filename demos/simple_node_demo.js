@@ -1,5 +1,7 @@
+/// Usage: $ node simple_node_demo.js [text]
+
 var LZMA = require("../src/lzma.js").LZMA(),
-    compress_me = "Hello, world.",
+    compress_me = (process.argv[2] || "Hello, world."),
     compression_mode = 1;
 
 /// First, let's compress it.
