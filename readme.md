@@ -27,6 +27,7 @@ Create the LZMA object.
     
     /// LZMA([optional path])
     /// If lzma_worker.js is in the same director, you don't need to set the path.
+    /// You should be able to do the first two steps simultaneously in Node.js: var LZMA = require("../src/lzma.js").LZMA();
     var my_lzma = new LZMA("../src/lzma_worker.js");
 
 (De)Compress stuff.
