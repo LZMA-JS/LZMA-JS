@@ -42,5 +42,10 @@ Notes
 ---
 
 The calls to compress() and decompress() are asynchronous, so you need to supply a callback function if you
-want to use the (de)compressed data.  There was a synchronous version, which you can find in [the archives](https://github.com/nmrugg/LZMA-JS/archives/ef453c278e5087de68b869b2f0d023a0ff922aa2),
+want to use the (de)compressed data.  There was a synchronous version, which you can find in
+[the archives](https://github.com/nmrugg/LZMA-JS/archives/ef453c278e5087de68b869b2f0d023a0ff922aa2),
 but it is no longer maintained.
+
+LZMA.JS will use [web workers](www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
+environment does not support web workers, it will create a few global functions (Worker(), onmessage(), and
+postMessage()) to mimic the functionality.
