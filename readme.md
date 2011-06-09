@@ -33,13 +33,14 @@ Create the LZMA object.
 
     /// To compress:
     ///NOTE: mode can be 1-9 (1 is fast but not as good; 9 will probably make your browser crash).
-    my_lzma.compress(string, mode, on_finish(result) {}, on_progress (precent) {});
+    my_lzma.compress(string, mode, on_finish(result) {}, on_progress (percent) {});
     
     /// To decompress:
-    my_lzma.decompress(byte_array, on_finish(result) {}, on_progress (precent) {});
+    my_lzma.decompress(byte_array, on_finish(result) {}, on_progress (percent) {});
 
-Note
+Notes
 ---
 
-The calls to compress() and decompress() are asyncronous, so you need to supply a callback function if you
-want to use the (de)compressed data.
+The calls to compress() and decompress() are asynchronous, so you need to supply a callback function if you
+want to use the (de)compressed data.  There was a synchronous version, which you can find in [the archives](https://github.com/nmrugg/LZMA-JS/archives/ef453c278e5087de68b869b2f0d023a0ff922aa2),
+but it is no longer maintained.
