@@ -39,7 +39,7 @@ Create the LZMA object.
     /// To decompress:
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress (percent) {});
 
-Node.JS Installation
+Node.js Installation
 ---
 
 LZMA.JS is available in the npm repository.  If you have [npm](https://github.com/isaacs/npm) installed, you can install it by running
