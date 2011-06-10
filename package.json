@@ -1,0 +1,9 @@
+{
+    "name": "lzma",
+    "version": "1.0.0",
+    "description": "A standalone JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm",
+    "homepage": "https://github.com/nmrugg/LZMA-JS",
+    "author": "Nathan Rugg <nmrugg@gmail.com>",
+    "keywords": ["lzma", "compression", "decompression"],
+    "bin" : { "node-inspector" : "./bin/inspector.js" }
+}

@@ -27,7 +27,7 @@ Create the LZMA object.
     
     /// LZMA([optional path])
     /// If lzma_worker.js is in the same director, you don't need to set the path.
-    /// You should be able to do the first two steps simultaneously in Node.js: var LZMA = require("../src/lzma.js").LZMA();
+    /// You should be able to do the first two steps simultaneously in Node.js: var my_lzma = require("../src/lzma.js").LZMA();
     var my_lzma = new LZMA("../src/lzma_worker.js");
 
 (De)Compress stuff.
@@ -38,6 +38,18 @@ Create the LZMA object.
     
     /// To decompress:
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress (percent) {});
+
+Node.JS Installation
+---
+
+LZMA.JS is available in the npm repository.  If you have [npm](https://github.com/isaacs/npm) installed, you can install it by running
+    
+    $ npm install lzma
+
+and load it with the following code:
+    
+    var my_lzma = require("lzma").LZMA();
+    
 
 Notes
 ---
