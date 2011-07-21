@@ -8,11 +8,12 @@ var LZMA,
  * MIT Licensed.
  */
 // Inspired by base2 and Prototype
+var $Class;
 (function () {
 	var initializing = false,
-		fnTest = /xyz/.test(function () { return xyz; }) ? /\b_super\b/ : /.*/;
+		fnTest = /xyz/.test(function () { return 'xyz'; }) ? /\b_super\b/ : /.*/;
 	// The base Class implementation (does nothing)
-	this.$Class = function () {};
+	$Class = function () {};
 
 	// Create a new Class that inherits from this class
 	$Class.extend = function (prop) {
@@ -1152,18 +1153,6 @@ LZMA = (function () {
 	StringBuilder.prototype.getClass$ = getClass_20;
 	StringBuilder.prototype.typeId$ = 0;
 	
-	function $SetDictionarySize(this$static, dictionarySize) {
-		if (dictionarySize < 0) {
-			return false;
-		}
-		if (this$static.m_DictionarySize != dictionarySize) {
-			this$static.m_DictionarySize = dictionarySize;
-			this$static.m_DictionarySizeCheck = max(this$static.m_DictionarySize, 1);
-			this$static.m_OutWindow.Create(max(this$static.m_DictionarySizeCheck, 4096));
-		}
-		return true;
-	}
-	
 	function $configure(this$static, encoder) {
 		if (!encoder.SetDictionarySize(1 << this$static.dictionarySize)) {
 			throw $RuntimeException(new RuntimeException(), 'unexpected failure');
@@ -1196,37 +1185,6 @@ LZMA = (function () {
 	CompressionMode.prototype.matchFinder = 0;
 	CompressionMode.prototype.pb = 0;
 	
-	function $GetDecoder(this$static, pos, prevByte) {
-		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this$static.m_NumPrevBits)];
-	}
-	
-	function $DecodeNormal(this$static, rangeDecoder) {
-		var symbol;
-		symbol = 1;
-		do {
-			symbol = symbol << 1 | rangeDecoder.DecodeBit(this$static.m_Decoders, symbol);
-		} while (symbol < 256);
-		return symbol << 24 >> 24;
-	}
-	
-	function $DecodeWithMatchByte(this$static, rangeDecoder, matchByte) {
-		var bit, matchBit, symbol;
-		symbol = 1;
-		do {
-			matchBit = matchByte >> 7 & 1;
-			matchByte <<= 1;
-			bit = rangeDecoder.DecodeBit(this$static.m_Decoders, (1 + matchBit << 8) + symbol);
-			symbol = symbol << 1 | bit;
-			if (matchBit != bit) {
-				while (symbol < 256) {
-					symbol = symbol << 1 | rangeDecoder.DecodeBit(this$static.m_Decoders, symbol);
-				}
-				break;
-			}
-		} while (symbol < 256);
-		return symbol << 24 >> 24;
-	}
-	
 	function StateUpdateChar(index) {
 		if (index < 4) {
 			return 0;
@@ -1235,20 +1193,6 @@ LZMA = (function () {
 			return index - 3;
 		}
 		return index - 6;
-	}
-	
-	function $Decode(this$static, rangeDecoder, posState) {
-		var symbol;
-		if (rangeDecoder.DecodeBit(this$static.m_Choice, 0) == 0) {
-			return this$static.m_LowCoder[posState].Decode(rangeDecoder);
-		}
-		symbol = 8;
-		if (rangeDecoder.DecodeBit(this$static.m_Choice, 1) == 0) {
-			symbol += this$static.m_MidCoder[posState].Decode(rangeDecoder);
-		} else {
-			symbol += 8 + this$static.m_HighCoder.Decode(rangeDecoder);
-		}
-		return symbol;
 	}
 	
 	function GetLenToPosState(len) {
@@ -1302,11 +1246,11 @@ LZMA = (function () {
 		var decoder2, distance, len, numDirectBits, posSlot, posState;
 		posState = lowBits_0(this$static.nowPos64) & this$static.m_PosStateMask;
 		if (this$static.m_RangeDecoder.DecodeBit(this$static.m_IsMatchDecoders, (this$static.state << 4) + posState) == 0) {
-			decoder2 = $GetDecoder(this$static.m_LiteralDecoder, lowBits_0(this$static.nowPos64), this$static.prevByte);
+			decoder2 = this$static.m_LiteralDecoder.GetDecoder(lowBits_0(this$static.nowPos64), this$static.prevByte);
 			if (this$static.state < 7) {
-				this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
+				this$static.prevByte = decoder2.DecodeNormal(this$static.m_RangeDecoder);
 			} else {
-				this$static.prevByte = $DecodeWithMatchByte(decoder2, this$static.m_RangeDecoder, this$static.m_OutWindow.GetByte(this$static.rep0));
+				this$static.prevByte = decoder2.DecodeWithMatchByte(this$static.m_RangeDecoder, this$static.m_OutWindow.GetByte(this$static.rep0));
 			}
 			this$static.m_OutWindow.PutByte(this$static.prevByte);
 			this$static.state = StateUpdateChar(this$static.state);
@@ -1335,14 +1279,14 @@ LZMA = (function () {
 					this$static.rep0 = distance;
 				}
 				if (len == 0) {
-					len = $Decode(this$static.m_RepLenDecoder, this$static.m_RangeDecoder, posState) + 2;
+					len = this$static.m_RepLenDecoder.Decode(this$static.m_RangeDecoder, posState) + 2;
 					this$static.state = this$static.state < 7 ? 8 : 11;
 				}
 			} else {
 				this$static.rep3 = this$static.rep2;
 				this$static.rep2 = this$static.rep1;
 				this$static.rep1 = this$static.rep0;
-				len = 2 + $Decode(this$static.m_LenDecoder, this$static.m_RangeDecoder, posState);
+				len = 2 + this$static.m_LenDecoder.Decode(this$static.m_RangeDecoder, posState);
 				this$static.state = this$static.state < 7 ? 7 : 10;
 				posSlot = this$static.m_PosSlotDecoder[GetLenToPosState(len)].Decode(this$static.m_RangeDecoder);
 				if (posSlot >= 4) {
@@ -1973,6 +1917,62 @@ LZMA = (function () {
 	};
 	
 	
+	var RangeCoderDecoder = $Class.extend();
+	
+	// Static members
+	RangeCoderDecoder.InitBitModels = function (probs) {
+		var i;
+		for (i = 0; i < probs.length; i += 1) {
+			probs[i] = 1024;
+		}
+	};
+
+	// Instance members	
+	RangeCoderDecoder.prototype.getClass$ = getClass_44;
+	RangeCoderDecoder.prototype.typeMarker$ = nullMethod;
+	RangeCoderDecoder.prototype.typeId$ = 0;
+	RangeCoderDecoder.prototype.Code = 0;
+	RangeCoderDecoder.prototype.Range = 0;
+	RangeCoderDecoder.prototype.Stream = null;
+	RangeCoderDecoder.prototype.DecodeDirectBits = function (numTotalBits) {
+		var i, result, t;
+		result = 0;
+		for (i = numTotalBits; i != 0; i -= 1) {
+			this.Range >>>= 1;
+			t = this.Code - this.Range >>> 31;
+			this.Code -= this.Range & t - 1;
+			result = result << 1 | 1 - t;
+			if ((this.Range & -16777216) == 0) {
+				this.Code = this.Code << 8 | $read(this.Stream);
+				this.Range <<= 8;
+			}
+		}
+		return result;
+	};
+	RangeCoderDecoder.prototype.DecodeBit = function (probs, index) {
+		var newBound, prob;
+		prob = probs[index];
+		newBound = (this.Range >>> 11) * prob;
+		if ((this.Code ^ -2147483648) < (newBound ^ -2147483648)) {
+			this.Range = newBound;
+			probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
+			if ((this.Range & -16777216) == 0) {
+				this.Code = this.Code << 8 | $read(this.Stream);
+				this.Range <<= 8;
+			}
+			return 0;
+		} else {
+			this.Range -= newBound;
+			this.Code -= newBound;
+			probs[index] = prob - (prob >>> 5) << 16 >> 16;
+			if ((this.Range & -16777216) == 0) {
+				this.Code = this.Code << 8 | $read(this.Stream);
+				this.Range <<= 8;
+			}
+			return 1;
+		}
+	};
+	
 	
 	var LenEncoder = $Class.extend({
 		init: function () {
@@ -2168,8 +2168,8 @@ LZMA = (function () {
 		}
 	});
 
-	Optimal.prototype = new Object_0();
 	Optimal.prototype.getClass$ = getClass_37;
+	Optimal.prototype.typeMarker$ = nullMethod;
 	Optimal.prototype.typeId$ = 19;
 	Optimal.prototype.BackPrev = 0;
 	Optimal.prototype.BackPrev2 = 0;
@@ -3036,9 +3036,6 @@ LZMA = (function () {
 	};
 	
 	
-	
-	
-	
 	function $clinit_60() {
 		if (dontExecute.$clinit_60) {
 			return;
@@ -3074,9 +3071,6 @@ LZMA = (function () {
 			this$static.kFixHashSize = 0;
 		}
 	}
-	
-	
-	
 	
 	
 	function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv) {
@@ -3306,14 +3300,6 @@ LZMA = (function () {
 		}
 	}
 	
-	function $Decoder$LenDecoder(this$static) {
-		this$static.m_Choice = initDim(_3S_classLit, 0, -1, 2, 1);
-		this$static.m_LowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
-		this$static.m_MidCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
-		this$static.m_HighCoder = new BitTreeDecoder(8);
-		return this$static;
-	}
-	
 	function OutWindow() {
 	}
 	OutWindow.prototype.getClass$ = getClass_41;
@@ -3394,158 +3380,191 @@ LZMA = (function () {
 	};
 	
 	
-	
-	
-	function RangeCoderDecoder() {
-	}
-	// Static members
-	RangeCoderDecoder.InitBitModels = function (probs) {
-		var i;
-		for (i = 0; i < probs.length; i += 1) {
-			probs[i] = 1024;
+	var LenDecoder = $Class.extend({
+		init: function () {
+			this.m_Choice = initDim(_3S_classLit, 0, -1, 2, 1);
+			this.m_LowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
+			this.m_MidCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
+			this.m_HighCoder = new BitTreeDecoder(8);
+		},
+		Create: function (numPosStates) {
+			for (; this.m_NumPosStates < numPosStates; this.m_NumPosStates += 1) {
+				this.m_LowCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
+				this.m_MidCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
+			}
+		},
+		Init: function () {
+			var posState;
+			RangeCoderDecoder.InitBitModels(this.m_Choice);
+			for (posState = 0; posState < this.m_NumPosStates; posState += 1) {
+				RangeCoderDecoder.InitBitModels(this.m_LowCoder[posState].Models);
+				RangeCoderDecoder.InitBitModels(this.m_MidCoder[posState].Models);
+			}
+			RangeCoderDecoder.InitBitModels(this.m_HighCoder.Models);
+		},
+		Decode: function (rangeDecoder, posState) {
+			var symbol;
+			if (rangeDecoder.DecodeBit(this.m_Choice, 0) == 0) {
+				return this.m_LowCoder[posState].Decode(rangeDecoder);
+			}
+			symbol = 8;
+			if (rangeDecoder.DecodeBit(this.m_Choice, 1) == 0) {
+				symbol += this.m_MidCoder[posState].Decode(rangeDecoder);
+			} else {
+				symbol += 8 + this.m_HighCoder.Decode(rangeDecoder);
+			}
+			return symbol;
 		}
-	};
+	});
 
-	// Instance members	
-	RangeCoderDecoder.prototype.getClass$ = getClass_44;
-	RangeCoderDecoder.prototype.typeMarker$ = nullMethod;
-	RangeCoderDecoder.prototype.typeId$ = 0;
-	RangeCoderDecoder.prototype.Code = 0;
-	RangeCoderDecoder.prototype.Range = 0;
-	RangeCoderDecoder.prototype.Stream = null;
-	RangeCoderDecoder.prototype.DecodeDirectBits = function (numTotalBits) {
-		var i, result, t;
-		result = 0;
-		for (i = numTotalBits; i != 0; i -= 1) {
-			this.Range >>>= 1;
-			t = this.Code - this.Range >>> 31;
-			this.Code -= this.Range & t - 1;
-			result = result << 1 | 1 - t;
-			if ((this.Range & -16777216) == 0) {
-				this.Code = this.Code << 8 | $read(this.Stream);
-				this.Range <<= 8;
+	LenDecoder.prototype.getClass$ = getClass_29;
+	LenDecoder.prototype.typeMarker$ = nullMethod;
+	LenDecoder.prototype.typeId$ = 0;
+	LenDecoder.prototype.m_NumPosStates = 0;
+	
+	var Decoder2 = $Class.extend({
+		init: function () {
+			this.m_Decoders = initDim(_3S_classLit, 0, -1, 768, 1);
+		},
+		DecodeNormal: function (rangeDecoder) {
+			var symbol;
+			symbol = 1;
+			do {
+				symbol = symbol << 1 | rangeDecoder.DecodeBit(this.m_Decoders, symbol);
+			} while (symbol < 256);
+			return symbol << 24 >> 24;
+		},
+		DecodeWithMatchByte: function (rangeDecoder, matchByte) {
+			var bit, matchBit, symbol;
+			symbol = 1;
+			do {
+				matchBit = matchByte >> 7 & 1;
+				matchByte <<= 1;
+				bit = rangeDecoder.DecodeBit(this.m_Decoders, (1 + matchBit << 8) + symbol);
+				symbol = symbol << 1 | bit;
+				if (matchBit != bit) {
+					while (symbol < 256) {
+						symbol = symbol << 1 | rangeDecoder.DecodeBit(this.m_Decoders, symbol);
+					}
+					break;
+				}
+			} while (symbol < 256);
+			return symbol << 24 >> 24;
+		}
+	});
+	Decoder2.prototype.getClass$ = getClass_30;
+	Decoder2.prototype.typeMarker$ = nullMethod;
+	Decoder2.prototype.typeId$ = 17;
+
+
+	var LiteralDecoder = $Class.extend({
+		GetDecoder: function (pos, prevByte) {
+			return this.m_Coders[((pos & this.m_PosMask) << this.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this.m_NumPrevBits)];
+		},
+		Create: function (numPosBits, numPrevBits) {
+			var i, numStates;
+			if (this.m_Coders != null && this.m_NumPrevBits == numPrevBits && this.m_NumPosBits == numPosBits) {
+				return;
+			}
+			this.m_NumPosBits = numPosBits;
+			this.m_PosMask = (1 << numPosBits) - 1;
+			this.m_NumPrevBits = numPrevBits;
+			numStates = 1 << this.m_NumPrevBits + this.m_NumPosBits;
+			this.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit, 0, 4, numStates, 0);
+			for (i = 0; i < numStates; i += 1) {
+				this.m_Coders[i] = new Decoder2();
 			}
 		}
-		return result;
-	};
-	RangeCoderDecoder.prototype.DecodeBit = function (probs, index) {
-		var newBound, prob;
-		prob = probs[index];
-		newBound = (this.Range >>> 11) * prob;
-		if ((this.Code ^ -2147483648) < (newBound ^ -2147483648)) {
-			this.Range = newBound;
-			probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
-			if ((this.Range & -16777216) == 0) {
-				this.Code = this.Code << 8 | $read(this.Stream);
-				this.Range <<= 8;
+	});
+
+	LiteralDecoder.prototype.getClass$ = getClass_31;
+	LiteralDecoder.prototype.typeMarker$ = nullMethod;
+	LiteralDecoder.prototype.typeId$ = 0;
+	LiteralDecoder.prototype.m_Coders = null;
+	LiteralDecoder.prototype.m_NumPosBits = 0;
+	LiteralDecoder.prototype.m_NumPrevBits = 0;
+	LiteralDecoder.prototype.m_PosMask = 0;
+	
+	var Decoder = $Class.extend({
+		init: function () {
+			var i;
+			this.m_OutWindow = new OutWindow();
+			this.m_RangeDecoder = new RangeCoderDecoder();
+			this.m_IsMatchDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
+			this.m_IsRepDecoders = initDim(_3S_classLit, 0, -1, 12, 1);
+			this.m_IsRepG0Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
+			this.m_IsRepG1Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
+			this.m_IsRepG2Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
+			this.m_IsRep0LongDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
+			this.m_PosSlotDecoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 4, 0);
+			this.m_PosDecoders = initDim(_3S_classLit, 0, -1, 114, 1);
+			this.m_PosAlignDecoder = new BitTreeDecoder(4);
+			this.m_LenDecoder = new LenDecoder();
+			this.m_RepLenDecoder = new LenDecoder();
+			this.m_LiteralDecoder = new LiteralDecoder();
+			for (i = 0; i < 4; i += 1) {
+				this.m_PosSlotDecoder[i] = new BitTreeDecoder(6);
 			}
-			return 0;
-		} else {
-			this.Range -= newBound;
-			this.Code -= newBound;
-			probs[index] = prob - (prob >>> 5) << 16 >> 16;
-			if ((this.Range & -16777216) == 0) {
-				this.Code = this.Code << 8 | $read(this.Stream);
-				this.Range <<= 8;
+		},
+		SetDictionarySize: function (dictionarySize) {
+			if (dictionarySize < 0) {
+				return false;
 			}
-			return 1;
+			if (this.m_DictionarySize != dictionarySize) {
+				this.m_DictionarySize = dictionarySize;
+				this.m_DictionarySizeCheck = max(this.m_DictionarySize, 1);
+				this.m_OutWindow.Create(max(this.m_DictionarySizeCheck, 4096));
+			}
+			return true;
+		},
+		SetDecoderProperties: function (properties) {
+			var dictionarySize, i, lc, lp, pb, remainder, val;
+			if (properties.length < 5) {
+				return false;
+			}
+			val = properties[0] & 255;
+			lc = val % 9;
+			remainder = ~~(val / 9);
+			lp = remainder % 5;
+			pb = ~~(remainder / 5);
+			dictionarySize = 0;
+			for (i = 0; i < 4; i += 1) {
+				dictionarySize += (properties[1 + i] & 255) << i * 8;
+			}
+			if (!this.SetLcLpPb(lc, lp, pb)) {
+				return false;
+			}
+			return this.SetDictionarySize(dictionarySize);
+		},
+		SetLcLpPb: function (lc, lp, pb) {
+			var numPosStates;
+			if (lc > 8 || lp > 4 || pb > 4) {
+				return false;
+			}
+			this.m_LiteralDecoder.Create(lp, lc);
+			numPosStates = 1 << pb;
+			this.m_LenDecoder.Create(numPosStates);
+			this.m_RepLenDecoder.Create(numPosStates);
+			this.m_PosStateMask = numPosStates - 1;
+			return true;
 		}
-	};
+	});
+
+	Decoder.prototype.getClass$ = getClass_32;
+	Decoder.prototype.typeMarker$ = nullMethod;
+	Decoder.prototype.typeId$ = 0;
+	Decoder.prototype.m_DictionarySize = -1;
+	Decoder.prototype.m_DictionarySizeCheck = -1;
+	Decoder.prototype.m_PosStateMask = 0;
+	Decoder.prototype.nowPos64 = P0_longLit;
+	Decoder.prototype.outSize = P0_longLit;
+	Decoder.prototype.prevByte = 0;
+	Decoder.prototype.rep0 = 0;
+	Decoder.prototype.rep1 = 0;
+	Decoder.prototype.rep2 = 0;
+	Decoder.prototype.rep3 = 0;
+	Decoder.prototype.state = 0;
 	
-	
-	function Decoder$LenDecoder() {
-	}
-	
-	function Decoder$LiteralDecoder() {
-	}
-	
-	function Decoder() {
-	}
-	
-	function $Decoder(this$static) {
-		var i;
-		this$static.m_OutWindow = new OutWindow();
-		this$static.m_RangeDecoder = new RangeCoderDecoder();
-		this$static.m_IsMatchDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static.m_IsRepDecoders = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static.m_IsRepG0Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static.m_IsRepG1Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static.m_IsRepG2Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static.m_IsRep0LongDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static.m_PosSlotDecoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 4, 0);
-		this$static.m_PosDecoders = initDim(_3S_classLit, 0, -1, 114, 1);
-		this$static.m_PosAlignDecoder = new BitTreeDecoder(4);
-		this$static.m_LenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
-		this$static.m_RepLenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
-		this$static.m_LiteralDecoder = new Decoder$LiteralDecoder();
-		for (i = 0; i < 4; i += 1) {
-			this$static.m_PosSlotDecoder[i] = new BitTreeDecoder(6);
-		}
-		return this$static;
-	}
-	
-	function $Decoder$LiteralDecoder$Decoder2(this$static) {
-		this$static.m_Decoders = initDim(_3S_classLit, 0, -1, 768, 1);
-		return this$static;
-	}
-	
-	function Decoder$LiteralDecoder$Decoder2() {
-	}
-	
-	function $Create_0(this$static, numPosBits, numPrevBits) {
-		var i, numStates;
-		if (this$static.m_Coders != null && this$static.m_NumPrevBits == numPrevBits && this$static.m_NumPosBits == numPosBits) {
-			return;
-		}
-		this$static.m_NumPosBits = numPosBits;
-		this$static.m_PosMask = (1 << numPosBits) - 1;
-		this$static.m_NumPrevBits = numPrevBits;
-		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-		this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit, 0, 4, numStates, 0);
-		for (i = 0; i < numStates; i += 1) {
-			this$static.m_Coders[i] = $Decoder$LiteralDecoder$Decoder2(new Decoder$LiteralDecoder$Decoder2());
-		}
-	}
-	
-	function $Create(this$static, numPosStates) {
-		for (; this$static.m_NumPosStates < numPosStates; this$static.m_NumPosStates += 1) {
-			this$static.m_LowCoder[this$static.m_NumPosStates] = new BitTreeDecoder(3);
-			this$static.m_MidCoder[this$static.m_NumPosStates] = new BitTreeDecoder(3);
-		}
-	}
-	
-	function $SetLcLpPb(this$static, lc, lp, pb) {
-		var numPosStates;
-		if (lc > 8 || lp > 4 || pb > 4) {
-			return false;
-		}
-		$Create_0(this$static.m_LiteralDecoder, lp, lc);
-		numPosStates = 1 << pb;
-		$Create(this$static.m_LenDecoder, numPosStates);
-		$Create(this$static.m_RepLenDecoder, numPosStates);
-		this$static.m_PosStateMask = numPosStates - 1;
-		return true;
-	}
-	
-	function $SetDecoderProperties(this$static, properties) {
-		var dictionarySize, i, lc, lp, pb, remainder, val;
-		if (properties.length < 5) {
-			return false;
-		}
-		val = properties[0] & 255;
-		lc = val % 9;
-		remainder = ~~(val / 9);
-		lp = remainder % 5;
-		pb = ~~(remainder / 5);
-		dictionarySize = 0;
-		for (i = 0; i < 4; i += 1) {
-			dictionarySize += (properties[1 + i] & 255) << i * 8;
-		}
-		if (!$SetLcLpPb(this$static, lc, lp, pb)) {
-			return false;
-		}
-		return $SetDictionarySize(this$static, dictionarySize);
-	}
 	
 	function $Init_0(this$static) {
 		var i, numStates;
@@ -3553,16 +3572,6 @@ LZMA = (function () {
 		for (i = 0; i < numStates; i += 1) {
 			RangeCoderDecoder.InitBitModels(this$static.m_Coders[i].m_Decoders);
 		}
-	}
-	
-	function $Init(this$static) {
-		var posState;
-		RangeCoderDecoder.InitBitModels(this$static.m_Choice);
-		for (posState = 0; posState < this$static.m_NumPosStates; posState += 1) {
-			RangeCoderDecoder.InitBitModels(this$static.m_LowCoder[posState].Models);
-			RangeCoderDecoder.InitBitModels(this$static.m_MidCoder[posState].Models);
-		}
-		RangeCoderDecoder.InitBitModels(this$static.m_HighCoder.Models);
 	}
 	
 	function $Init_8(this$static) {
@@ -3588,8 +3597,8 @@ LZMA = (function () {
 		for (i = 0; i < 4; i += 1) {
 			RangeCoderDecoder.InitBitModels(this$static.m_PosSlotDecoder[i].Models);
 		}
-		$Init(this$static.m_LenDecoder);
-		$Init(this$static.m_RepLenDecoder);
+		this$static.m_LenDecoder.Init();
+		this$static.m_RepLenDecoder.Init();
 		RangeCoderDecoder.InitBitModels(this$static.m_PosAlignDecoder.Models);
 		$Init_8(this$static.m_RangeDecoder);
 	}
@@ -3625,8 +3634,8 @@ LZMA = (function () {
 			}
 			properties[i] = r << 24 >> 24;
 		}
-		decoder = $Decoder(new Decoder());
-		if (!$SetDecoderProperties(decoder, properties)) {
+		decoder = new Decoder();
+		if (!decoder.SetDecoderProperties(properties)) {
 			throw $IOException(new IOException(), 'corrupted input');
 		}
 		
@@ -3748,46 +3757,18 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit;
 	}
 	
-	Decoder.prototype = new Object_0();
-	Decoder.prototype.getClass$ = getClass_32;
-	Decoder.prototype.typeId$ = 0;
-	Decoder.prototype.m_DictionarySize = -1;
-	Decoder.prototype.m_DictionarySizeCheck = -1;
-	Decoder.prototype.m_PosStateMask = 0;
-	Decoder.prototype.nowPos64 = P0_longLit;
-	Decoder.prototype.outSize = P0_longLit;
-	Decoder.prototype.prevByte = 0;
-	Decoder.prototype.rep0 = 0;
-	Decoder.prototype.rep1 = 0;
-	Decoder.prototype.rep2 = 0;
-	Decoder.prototype.rep3 = 0;
-	Decoder.prototype.state = 0;
 	function getClass_29() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit;
 	}
 	
-	Decoder$LenDecoder.prototype = new Object_0();
-	Decoder$LenDecoder.prototype.getClass$ = getClass_29;
-	Decoder$LenDecoder.prototype.typeId$ = 0;
-	Decoder$LenDecoder.prototype.m_NumPosStates = 0;
 	function getClass_31() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit;
 	}
 	
-	Decoder$LiteralDecoder.prototype = new Object_0();
-	Decoder$LiteralDecoder.prototype.getClass$ = getClass_31;
-	Decoder$LiteralDecoder.prototype.typeId$ = 0;
-	Decoder$LiteralDecoder.prototype.m_Coders = null;
-	Decoder$LiteralDecoder.prototype.m_NumPosBits = 0;
-	Decoder$LiteralDecoder.prototype.m_NumPrevBits = 0;
-	Decoder$LiteralDecoder.prototype.m_PosMask = 0;
 	function getClass_30() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit;
 	}
 	
-	Decoder$LiteralDecoder$Decoder2.prototype = new Object_0();
-	Decoder$LiteralDecoder$Decoder2.prototype.getClass$ = getClass_30;
-	Decoder$LiteralDecoder$Decoder2.prototype.typeId$ = 17;
 	function getClass_38() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
 	}
@@ -4037,7 +4018,6 @@ LZMA = (function () {
 		decompress: decompress
 	};
 }());
-
 
 onmessage = function (e) {
 	if (e.data.action === action_compress) {
