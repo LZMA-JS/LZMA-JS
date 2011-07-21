@@ -1096,65 +1096,17 @@ LZMA = (function () {
 		return true;
 	}
 	
-	function $SetNumFastBytes(this$static, numFastBytes) {
-		if (numFastBytes < 5 || numFastBytes > 273) {
-			return false;
-		}
-		this$static._numFastBytes = numFastBytes;
-		return true;
-	}
-	
-	function $SetMatchFinder(this$static, matchFinderIndex) {
-		var matchFinderIndexPrev;
-		if (matchFinderIndex < 0 || matchFinderIndex > 2) {
-			return false;
-		}
-		matchFinderIndexPrev = this$static._matchFinderType;
-		this$static._matchFinderType = matchFinderIndex;
-		if (!!this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
-			this$static._dictionarySizePrev = -1;
-			this$static._matchFinder = null;
-		}
-		return true;
-	}
-	
-	function $SetLcLpPb_0(this$static, lc, lp, pb) {
-		if (lp < 0 || lp > 4 || lc < 0 || lc > 8 || pb < 0 || pb > 4) {
-			return false;
-		}
-		this$static._numLiteralPosStateBits = lp;
-		this$static._numLiteralContextBits = lc;
-		this$static._posStateBits = pb;
-		this$static._posStateMask = (1 << this$static._posStateBits) - 1;
-		return true;
-	}
-	
-	function $SetDictionarySize_0(this$static, dictionarySize) {
-		var dicLogSize;
-		if (dictionarySize < 1 || dictionarySize > 536870912) {
-			return false;
-		}
-		this$static._dictionarySize = dictionarySize;
-		for (dicLogSize = 0;; dicLogSize += 1) {
-			if (dictionarySize >= 1 << dicLogSize) {
-				break;
-			}
-		}
-		this$static._distTableSize = dicLogSize * 2;
-		return true;
-	}
-	
 	function $configure(this$static, encoder) {
-		if (!$SetDictionarySize_0(encoder, 1 << this$static.dictionarySize)) {
+		if (!encoder.SetDictionarySize(1 << this$static.dictionarySize)) {
 			throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 		}
-		if (!$SetNumFastBytes(encoder, this$static.fb)) {
+		if (!encoder.SetNumFastBytes(this$static.fb)) {
 			throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 		}
-		if (!$SetMatchFinder(encoder, this$static.matchFinder)) {
+		if (!encoder.SetMatchFinder(this$static.matchFinder)) {
 			throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 		}
-		if (!$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb)) {
+		if (!encoder.SetLcLpPb(this$static.lc, this$static.lp, this$static.pb)) {
 			throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 		}
 	}
@@ -1420,13 +1372,6 @@ LZMA = (function () {
 		$ReduceOffsets(this$static, -1);
 	}
 	
-	function $ReleaseMFStream(this$static) {
-		if (!!this$static._matchFinder && this$static._needReleaseMFStream) {
-			this$static._matchFinder._stream = null;
-			this$static._needReleaseMFStream = false;
-		}
-	}
-	
 	function $clinit_66() {
 		var end, i, j, start;
 		if (dontExecute.$clinit_66) {
@@ -1452,32 +1397,6 @@ LZMA = (function () {
 		return this$static._prices[posState * 272 + symbol];
 	}
 	
-	function $SetPrices(this$static, posState, numSymbols, prices, st) {
-		var a0, a1, b0, b1, i;
-		
-		$clinit_66();
-		a0 = ProbPrices[this$static._choice[0] >>> 2];
-		a1 = ProbPrices[2048 - this$static._choice[0] >>> 2];
-		b0 = a1 + ProbPrices[this$static._choice[1] >>> 2];
-		b1 = a1 + ProbPrices[2048 - this$static._choice[1] >>> 2];
-		i = 0;
-		for (i = 0; i < 8; i += 1) {
-			if (i >= numSymbols) {
-				return;
-			}
-			prices[st + i] = a0 + this$static._lowCoder[posState].GetPrice(i);
-		}
-		for (; i < 16; i += 1) {
-			if (i >= numSymbols) {
-				return;
-			}
-			prices[st + i] = b0 + this$static._midCoder[posState].GetPrice(i - 8);
-		}
-		for (; i < numSymbols; i += 1) {
-			prices[st + i] = b1 + this$static._highCoder.GetPrice(i - 8 - 8);
-		}
-	}
-		
 	function $Encode_3(this$static, probs, index, symbol) {
 		var newBound, prob;
 		prob = probs[index];
@@ -1575,90 +1494,13 @@ LZMA = (function () {
 	
 	
 	
-	function $Encode(this$static, rangeEncoder, symbol, posState) {
-		if (symbol < 8) {
-			$Encode_3(rangeEncoder, this$static._choice, 0, 0);
-			this$static._lowCoder[posState].Encode(rangeEncoder, symbol);
-		} else {
-			symbol -= 8;
-			$Encode_3(rangeEncoder, this$static._choice, 0, 1);
-			if (symbol < 8) {
-				$Encode_3(rangeEncoder, this$static._choice, 1, 0);
-				this$static._midCoder[posState].Encode(rangeEncoder, symbol);
-			} else {
-				$Encode_3(rangeEncoder, this$static._choice, 1, 1);
-				this$static._highCoder.Encode(rangeEncoder, symbol - 8);
-			}
-		}
-	}
-	
 	function $Encode_0(this$static, rangeEncoder, symbol, posState) {
-		$Encode(this$static, rangeEncoder, symbol, posState);
+		this$static.Encode(rangeEncoder, symbol, posState);
 		this$static._counters[posState] -= 1;
 		if (this$static._counters[posState] == 0) {
-			$SetPrices(this$static, posState, this$static._tableSize, this$static._prices, posState * 272);
+			this$static.SetPrices(posState, this$static._tableSize, this$static._prices, posState * 272);
 			this$static._counters[posState] = this$static._tableSize;
 		}
-	}
-	
-	function $WriteEndMarker(this$static, posState) {
-		var lenToPosState;
-		if (!this$static._writeEndMark) {
-			return;
-		}
-		$Encode_3(this$static._rangeEncoder, this$static._isMatch, (this$static._state << 4) + posState, 1);
-		$Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 0);
-		this$static._state = this$static._state < 7 ? 7 : 10;
-		$Encode_0(this$static._lenEncoder, this$static._rangeEncoder, 0, posState);
-		lenToPosState = GetLenToPosState(2);
-		this$static._posSlotEncoder[lenToPosState].Encode(this$static._rangeEncoder, 63);
-		this$static._rangeEncoder.EncodeDirectBits(67108863, 26);
-		this$static._posAlignEncoder.ReverseEncode(this$static._rangeEncoder, 15);
-	}
-	
-	function $Flush(this$static, nowPos) {
-		$ReleaseMFStream(this$static);
-		$WriteEndMarker(this$static, nowPos & this$static._posStateMask);
-		this$static._rangeEncoder.FlushData();
-	}
-	
-	function $Encode_1(this$static, rangeEncoder, symbol) {
-		var bit, context, i;
-		context = 1;
-		for (i = 7; i >= 0; i -= 1) {
-			bit = symbol >> i & 1;
-			$Encode_3(rangeEncoder, this$static.m_Encoders, context, bit);
-			context = context << 1 | bit;
-		}
-	}
-	
-	function $GetSubCoder(this$static, pos, prevByte) {
-		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this$static.m_NumPrevBits)];
-	}
-	
-	function $GetPrice_0(this$static, matchMode, matchByte, symbol) {
-		var bit, context, i, matchBit, price;
-		price = 0;
-		context = 1;
-		i = 7;
-		if (matchMode) {
-			for (; i >= 0; i -= 1) {
-				matchBit = matchByte >> i & 1;
-				bit = symbol >> i & 1;
-				price += GetPrice(this$static.m_Encoders[(1 + matchBit << 8) + context], bit);
-				context = context << 1 | bit;
-				if (matchBit != bit) {
-					i -= 1;
-					break;
-				}
-			}
-		}
-		for (; i >= 0; i -= 1) {
-			bit = symbol >> i & 1;
-			price += GetPrice(this$static.m_Encoders[context], bit);
-			context = context << 1 | bit;
-		}
-		return price;
 	}
 	
 	function $MakeAsChar(this$static) {
@@ -1671,30 +1513,6 @@ LZMA = (function () {
 		this$static.Prev1IsChar = false;
 	}
 	
-	function $GetRepLen1Price(this$static, state, posState) {
-		$clinit_66();
-		return ProbPrices[this$static._isRepG0[state] >>> 2] + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2];
-	}
-	
-	function $GetPureRepPrice(this$static, repIndex, state, posState) {
-		var price;
-		if (repIndex == 0) {
-			$clinit_66();
-			price = ProbPrices[this$static._isRepG0[state] >>> 2];
-			price += ProbPrices[2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
-		} else {
-			$clinit_66();
-			price = ProbPrices[2048 - this$static._isRepG0[state] >>> 2];
-			if (repIndex == 1) {
-				price += ProbPrices[this$static._isRepG1[state] >>> 2];
-			} else {
-				price += ProbPrices[2048 - this$static._isRepG1[state] >>> 2];
-				price += GetPrice(this$static._isRepG2[state], repIndex - 2);
-			}
-		}
-		return price;
-	}
-	
 	function GetPosSlot2(pos) {
 		if (pos < 131072) {
 			return g_FastPos[pos >> 6] + 12;
@@ -1703,45 +1521,6 @@ LZMA = (function () {
 			return g_FastPos[pos >> 16] + 32;
 		}
 		return g_FastPos[pos >> 26] + 52;
-	}
-	
-	function $GetPosLenPrice(this$static, pos, len, posState) {
-		var lenToPosState, price;
-		lenToPosState = GetLenToPosState(len);
-		if (pos < 128) {
-			price = this$static._distancesPrices[lenToPosState * 128 + pos];
-		} else {
-			price = this$static._posSlotPrices[(lenToPosState << 6) + GetPosSlot2(pos)] + this$static._alignPrices[pos & 15];
-		}
-		return price + $GetPrice(this$static._lenEncoder, len - 2, posState);
-	}
-	
-	function $Backward(this$static, cur) {
-		var backCur, backMem, posMem, posPrev;
-		this$static._optimumEndIndex = cur;
-		posMem = this$static._optimum[cur].PosPrev;
-		backMem = this$static._optimum[cur].BackPrev;
-		do {
-			if (this$static._optimum[cur].Prev1IsChar) {
-				$MakeAsChar(this$static._optimum[posMem]);
-				this$static._optimum[posMem].PosPrev = posMem - 1;
-				if (this$static._optimum[cur].Prev2) {
-					this$static._optimum[posMem - 1].Prev1IsChar = false;
-					this$static._optimum[posMem - 1].PosPrev = this$static._optimum[cur].PosPrev2;
-					this$static._optimum[posMem - 1].BackPrev = this$static._optimum[cur].BackPrev2;
-				}
-			}
-			posPrev = posMem;
-			backCur = backMem;
-			backMem = this$static._optimum[posPrev].BackPrev;
-			posMem = this$static._optimum[posPrev].PosPrev;
-			this$static._optimum[posPrev].BackPrev = backCur;
-			this$static._optimum[posPrev].PosPrev = cur;
-			cur = posPrev;
-		} while (cur > 0);
-		this$static.backRes = this$static._optimum[0].BackPrev;
-		this$static._optimumCurrentIndex = this$static._optimum[0].PosPrev;
-		return this$static._optimumCurrentIndex;
 	}
 	
 	function $GetIndexByte(this$static, index) {
@@ -1872,13 +1651,6 @@ LZMA = (function () {
 			$MovePos_0(this$static);
 			num -= 1;
 		} while (num != 0);
-	}
-	
-	function $MovePos(this$static, num) {
-		if (num > 0) {
-			$Skip(this$static._matchFinder, num);
-			this$static._additionalOffset += num;
-		}
 	}
 	
 	function $GetMatches(this$static, distances) {
@@ -2014,438 +1786,6 @@ LZMA = (function () {
 		return i;
 	}
 	
-	function $ReadMatchDistances(this$static) {
-		var lenRes;
-		lenRes = 0;
-		this$static._numDistancePairs = $GetMatches(this$static._matchFinder, this$static._matchDistances);
-		if (this$static._numDistancePairs > 0) {
-			lenRes = this$static._matchDistances[this$static._numDistancePairs - 2];
-			if (lenRes == this$static._numFastBytes) {
-				lenRes += $GetMatchLen(this$static._matchFinder, lenRes - 1, this$static._matchDistances[this$static._numDistancePairs - 1], 273 - lenRes);
-			}
-		}
-		this$static._additionalOffset += 1;
-		return lenRes;
-	}
-	
-	function $GetOptimum(this$static, position) {
-		var cur, curAnd1Price, curAndLenCharPrice, curAndLenPrice, curBack, curPrice, currentByte, distance, i, len, lenEnd, lenMain, lenRes, lenTest, lenTest2, lenTestTemp, matchByte, matchPrice, newLen, nextIsChar, nextMatchPrice, nextOptimum, nextRepMatchPrice, normalMatchPrice, numAvailableBytes, numAvailableBytesFull, numDistancePairs, offs, offset, opt, optimum, pos, posPrev, posState, posStateNext, price_4, repIndex, repLen, repMatchPrice, repMaxIndex, shortRepPrice, startLen, state, state2, t, price, price_0, price_1, price_2, price_3;
-		if (this$static._optimumEndIndex != this$static._optimumCurrentIndex) {
-			lenRes = this$static._optimum[this$static._optimumCurrentIndex].PosPrev - this$static._optimumCurrentIndex;
-			this$static.backRes = this$static._optimum[this$static._optimumCurrentIndex].BackPrev;
-			this$static._optimumCurrentIndex = this$static._optimum[this$static._optimumCurrentIndex].PosPrev;
-			return lenRes;
-		}
-		this$static._optimumCurrentIndex = this$static._optimumEndIndex = 0;
-		if (this$static._longestMatchWasFound) {
-			lenMain = this$static._longestMatchLength;
-			this$static._longestMatchWasFound = false;
-		} else {
-			lenMain = $ReadMatchDistances(this$static);
-		}
-		numDistancePairs = this$static._numDistancePairs;
-		numAvailableBytes = $GetNumAvailableBytes(this$static._matchFinder) + 1;
-		if (numAvailableBytes < 2) {
-			this$static.backRes = -1;
-			return 1;
-		}
-		if (numAvailableBytes > 273) {
-			numAvailableBytes = 273;
-		}
-		repMaxIndex = 0;
-		for (i = 0; i < 4; i += 1) {
-			this$static.reps[i] = this$static._repDistances[i];
-			this$static.repLens[i] = $GetMatchLen(this$static._matchFinder, -1, this$static.reps[i], 273);
-			if (this$static.repLens[i] > this$static.repLens[repMaxIndex]) {
-				repMaxIndex = i;
-			}
-		}
-		if (this$static.repLens[repMaxIndex] >= this$static._numFastBytes) {
-			this$static.backRes = repMaxIndex;
-			lenRes = this$static.repLens[repMaxIndex];
-			$MovePos(this$static, lenRes - 1);
-			return lenRes;
-		}
-		if (lenMain >= this$static._numFastBytes) {
-			this$static.backRes = this$static._matchDistances[numDistancePairs - 1] + 4;
-			$MovePos(this$static, lenMain - 1);
-			return lenMain;
-		}
-		currentByte = $GetIndexByte(this$static._matchFinder, -1);
-		matchByte = $GetIndexByte(this$static._matchFinder, -this$static._repDistances[0] - 1 - 1);
-		if (lenMain < 2 && currentByte != matchByte && this$static.repLens[repMaxIndex] < 2) {
-			this$static.backRes = -1;
-			return 1;
-		}
-		this$static._optimum[0].State = this$static._state;
-		posState = position & this$static._posStateMask;
-		$clinit_66();
-		this$static._optimum[1].Price = (ProbPrices[this$static._isMatch[(this$static._state << 4) + posState] >>> 2]) + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position, this$static._previousByte), this$static._state >= 7, matchByte, currentByte);
-		$MakeAsChar(this$static._optimum[1]);
-		matchPrice = ProbPrices[2048 - this$static._isMatch[(this$static._state << 4) + posState] >>> 2];
-		repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[this$static._state] >>> 2];
-		if (matchByte == currentByte) {
-			shortRepPrice = repMatchPrice + $GetRepLen1Price(this$static, this$static._state, posState);
-			if (shortRepPrice < this$static._optimum[1].Price) {
-				this$static._optimum[1].Price = shortRepPrice;
-				$MakeAsShortRep(this$static._optimum[1]);
-			}
-		}
-		lenEnd = lenMain >= this$static.repLens[repMaxIndex] ? lenMain : this$static.repLens[repMaxIndex];
-		if (lenEnd < 2) {
-			this$static.backRes = this$static._optimum[1].BackPrev;
-			return 1;
-		}
-		this$static._optimum[1].PosPrev = 0;
-		this$static._optimum[0].Backs0 = this$static.reps[0];
-		this$static._optimum[0].Backs1 = this$static.reps[1];
-		this$static._optimum[0].Backs2 = this$static.reps[2];
-		this$static._optimum[0].Backs3 = this$static.reps[3];
-		len = lenEnd;
-		do {
-			this$static._optimum[len].Price = 268435455;
-			len -= 1;
-		} while (len >= 2);
-		for (i = 0; i < 4; i += 1) {
-			repLen = this$static.repLens[i];
-			if (repLen < 2) {
-				continue;
-			}
-			price_4 = repMatchPrice + $GetPureRepPrice(this$static, i, this$static._state, posState);
-			do {
-				curAndLenPrice = price_4 + $GetPrice(this$static._repMatchLenEncoder, repLen - 2, posState);
-				optimum = this$static._optimum[repLen];
-				if (curAndLenPrice < optimum.Price) {
-					optimum.Price = curAndLenPrice;
-					optimum.PosPrev = 0;
-					optimum.BackPrev = i;
-					optimum.Prev1IsChar = false;
-				}
-				repLen -= 1;
-			} while (repLen >= 2);
-		}
-		normalMatchPrice = matchPrice + ProbPrices[this$static._isRep[this$static._state] >>> 2];
-		len = this$static.repLens[0] >= 2 ? this$static.repLens[0] + 1 : 2;
-		if (len <= lenMain) {
-			offs = 0;
-			while (len > this$static._matchDistances[offs]) {
-				offs += 2;
-			}
-			for (;; len += 1) {
-				distance = this$static._matchDistances[offs + 1];
-				curAndLenPrice = normalMatchPrice + $GetPosLenPrice(this$static, distance, len, posState);
-				optimum = this$static._optimum[len];
-				if (curAndLenPrice < optimum.Price) {
-					optimum.Price = curAndLenPrice;
-					optimum.PosPrev = 0;
-					optimum.BackPrev = distance + 4;
-					optimum.Prev1IsChar = false;
-				}
-				if (len == this$static._matchDistances[offs]) {
-					offs += 2;
-					if (offs == numDistancePairs) {
-						break;
-					}
-				}
-			}
-		}
-		cur = 0;
-		while (true) {
-			cur += 1;
-			if (cur == lenEnd) {
-				return $Backward(this$static, cur);
-			}
-			newLen = $ReadMatchDistances(this$static);
-			numDistancePairs = this$static._numDistancePairs;
-			if (newLen >= this$static._numFastBytes) {
-				this$static._longestMatchLength = newLen;
-				this$static._longestMatchWasFound = true;
-				return $Backward(this$static, cur);
-			}
-			position += 1;
-			posPrev = this$static._optimum[cur].PosPrev;
-			if (this$static._optimum[cur].Prev1IsChar) {
-				posPrev -= 1;
-				if (this$static._optimum[cur].Prev2) {
-					state = this$static._optimum[this$static._optimum[cur].PosPrev2].State;
-					if (this$static._optimum[cur].BackPrev2 < 4) {
-						state = (state < 7) ? 8 : 11;
-					} else {
-						state = (state < 7) ? 7 : 10;
-					}
-				} else {
-					state = this$static._optimum[posPrev].State;
-				}
-				state = StateUpdateChar(state);
-			} else {
-				state = this$static._optimum[posPrev].State;
-			}
-			if (posPrev == cur - 1) {
-				if (this$static._optimum[cur].BackPrev == 0) {
-					state = state < 7 ? 9 : 11;
-				} else {
-					state = StateUpdateChar(state);
-				}
-			} else {
-				if (this$static._optimum[cur].Prev1IsChar && this$static._optimum[cur].Prev2) {
-					posPrev = this$static._optimum[cur].PosPrev2;
-					pos = this$static._optimum[cur].BackPrev2;
-					state = state < 7 ? 8 : 11;
-				} else {
-					pos = this$static._optimum[cur].BackPrev;
-					if (pos < 4) {
-						state = state < 7 ? 8 : 11;
-					} else {
-						state = state < 7 ? 7 : 10;
-					}
-				}
-				opt = this$static._optimum[posPrev];
-				if (pos < 4) {
-					if (pos == 0) {
-						this$static.reps[0] = opt.Backs0;
-						this$static.reps[1] = opt.Backs1;
-						this$static.reps[2] = opt.Backs2;
-						this$static.reps[3] = opt.Backs3;
-					} else if (pos == 1) {
-						this$static.reps[0] = opt.Backs1;
-						this$static.reps[1] = opt.Backs0;
-						this$static.reps[2] = opt.Backs2;
-						this$static.reps[3] = opt.Backs3;
-					} else if (pos == 2) {
-						this$static.reps[0] = opt.Backs2;
-						this$static.reps[1] = opt.Backs0;
-						this$static.reps[2] = opt.Backs1;
-						this$static.reps[3] = opt.Backs3;
-					} else {
-						this$static.reps[0] = opt.Backs3;
-						this$static.reps[1] = opt.Backs0;
-						this$static.reps[2] = opt.Backs1;
-						this$static.reps[3] = opt.Backs2;
-					}
-				} else {
-					this$static.reps[0] = pos - 4;
-					this$static.reps[1] = opt.Backs0;
-					this$static.reps[2] = opt.Backs1;
-					this$static.reps[3] = opt.Backs2;
-				}
-			}
-			this$static._optimum[cur].State = state;
-			this$static._optimum[cur].Backs0 = this$static.reps[0];
-			this$static._optimum[cur].Backs1 = this$static.reps[1];
-			this$static._optimum[cur].Backs2 = this$static.reps[2];
-			this$static._optimum[cur].Backs3 = this$static.reps[3];
-			curPrice = this$static._optimum[cur].Price;
-			currentByte = $GetIndexByte(this$static._matchFinder, -1);
-			matchByte = $GetIndexByte(this$static._matchFinder, -this$static.reps[0] - 1 - 1);
-			posState = position & this$static._posStateMask;
-			curAnd1Price = curPrice + ProbPrices[this$static._isMatch[(state << 4) + posState] >>> 2] + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position, $GetIndexByte(this$static._matchFinder, -2)), state >= 7, matchByte, currentByte);
-			nextOptimum = this$static._optimum[cur + 1];
-			nextIsChar = false;
-			if (curAnd1Price < nextOptimum.Price) {
-				nextOptimum.Price = curAnd1Price;
-				nextOptimum.PosPrev = cur;
-				nextOptimum.BackPrev = -1;
-				nextOptimum.Prev1IsChar = false;
-				nextIsChar = true;
-			}
-			matchPrice = curPrice + ProbPrices[2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
-			repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[state] >>> 2];
-			if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
-				shortRepPrice = repMatchPrice + (ProbPrices[this$static._isRepG0[state] >>> 2] + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2]);
-				if (shortRepPrice <= nextOptimum.Price) {
-					nextOptimum.Price = shortRepPrice;
-					nextOptimum.PosPrev = cur;
-					nextOptimum.BackPrev = 0;
-					nextOptimum.Prev1IsChar = false;
-					nextIsChar = true;
-				}
-			}
-			numAvailableBytesFull = $GetNumAvailableBytes(this$static._matchFinder) + 1;
-			numAvailableBytesFull = 4095 - cur < numAvailableBytesFull ? 4095 - cur : numAvailableBytesFull;
-			numAvailableBytes = numAvailableBytesFull;
-			if (numAvailableBytes < 2) {
-				continue;
-			}
-			if (numAvailableBytes > this$static._numFastBytes) {
-				numAvailableBytes = this$static._numFastBytes;
-			}
-			if (!nextIsChar && matchByte != currentByte) {
-				t = min(numAvailableBytesFull - 1, this$static._numFastBytes);
-				lenTest2 = $GetMatchLen(this$static._matchFinder, 0, this$static.reps[0], t);
-				if (lenTest2 >= 2) {
-					state2 = StateUpdateChar(state);
-					posStateNext = position + 1 & this$static._posStateMask;
-					nextRepMatchPrice = curAnd1Price + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
-					offset = cur + 1 + lenTest2;
-					while (lenEnd < offset) {
-						lenEnd += 1;
-						this$static._optimum[lenEnd].Price = 268435455;
-					}
-					
-					price = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext);
-					curAndLenPrice = nextRepMatchPrice + price + $GetPureRepPrice(this$static, 0, state2, posStateNext);
-					optimum = this$static._optimum[offset];
-					if (curAndLenPrice < optimum.Price) {
-						optimum.Price = curAndLenPrice;
-						optimum.PosPrev = cur + 1;
-						optimum.BackPrev = 0;
-						optimum.Prev1IsChar = true;
-						optimum.Prev2 = false;
-					}
-				}
-			}
-			startLen = 2;
-			for (repIndex = 0; repIndex < 4; repIndex += 1) {
-				lenTest = $GetMatchLen(this$static._matchFinder, -1, this$static.reps[repIndex], numAvailableBytes);
-				if (lenTest < 2) {
-					continue;
-				}
-				lenTestTemp = lenTest;
-				do {
-					while (lenEnd < cur + lenTest) {
-						lenEnd += 1;
-						this$static._optimum[lenEnd].Price = 268435455;
-					}
-					
-					price_0 = $GetPrice(this$static._repMatchLenEncoder, lenTest - 2, posState);
-					curAndLenPrice = repMatchPrice + price_0 + $GetPureRepPrice(this$static, repIndex, state, posState);
-					optimum = this$static._optimum[cur + lenTest];
-					if (curAndLenPrice < optimum.Price) {
-						optimum.Price = curAndLenPrice;
-						optimum.PosPrev = cur;
-						optimum.BackPrev = repIndex;
-						optimum.Prev1IsChar = false;
-					}
-					lenTest -= 1;
-				} while (lenTest >= 2);
-				lenTest = lenTestTemp;
-				if (repIndex == 0) {
-					startLen = lenTest + 1;
-				}
-				if (lenTest < numAvailableBytesFull) {
-					t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
-					lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, this$static.reps[repIndex], t);
-					if (lenTest2 >= 2) {
-						state2 = state < 7 ? 8 : 11;
-						posStateNext = position + lenTest & this$static._posStateMask;
-						
-						price_1 = $GetPrice(this$static._repMatchLenEncoder, lenTest - 2, posState);
-
-						curAndLenCharPrice = repMatchPrice + price_1 + $GetPureRepPrice(this$static, repIndex, state, posState) + ProbPrices[this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position + lenTest, $GetIndexByte(this$static._matchFinder, lenTest - 1 - 1)), true, $GetIndexByte(this$static._matchFinder, lenTest - 1 - (this$static.reps[repIndex] + 1)), $GetIndexByte(this$static._matchFinder, lenTest - 1));
-						state2 = StateUpdateChar(state2);
-						posStateNext = position + lenTest + 1 & this$static._posStateMask;
-						nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
-						nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
-						offset = lenTest + 1 + lenTest2;
-						while (lenEnd < cur + offset) {
-							lenEnd += 1;
-							this$static._optimum[lenEnd].Price = 268435455;
-						}
-						
-						price_2 = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext);
-						curAndLenPrice = nextRepMatchPrice + price_2 + $GetPureRepPrice(this$static, 0, state2, posStateNext);
-						optimum = this$static._optimum[cur + offset];
-						if (curAndLenPrice < optimum.Price) {
-							optimum.Price = curAndLenPrice;
-							optimum.PosPrev = cur + lenTest + 1;
-							optimum.BackPrev = 0;
-							optimum.Prev1IsChar = true;
-							optimum.Prev2 = true;
-							optimum.PosPrev2 = cur;
-							optimum.BackPrev2 = repIndex;
-						}
-					}
-				}
-			}
-			if (newLen > numAvailableBytes) {
-				newLen = numAvailableBytes;
-				for (numDistancePairs = 0;; numDistancePairs += 2) {
-					if (newLen <= this$static._matchDistances[numDistancePairs]) {
-						break;
-					}
-				}
-				this$static._matchDistances[numDistancePairs] = newLen;
-				numDistancePairs += 2;
-			}
-			if (newLen >= startLen) {
-				normalMatchPrice = matchPrice + ProbPrices[this$static._isRep[state] >>> 2];
-				while (lenEnd < cur + newLen) {
-					lenEnd += 1;
-					this$static._optimum[lenEnd].Price = 268435455;
-				}
-				offs = 0;
-				while (startLen > this$static._matchDistances[offs]) {
-					offs += 2;
-				}
-				for (lenTest = startLen;; lenTest += 1) {
-					curBack = this$static._matchDistances[offs + 1];
-					curAndLenPrice = normalMatchPrice + $GetPosLenPrice(this$static, curBack, lenTest, posState);
-					optimum = this$static._optimum[cur + lenTest];
-					if (curAndLenPrice < optimum.Price) {
-						optimum.Price = curAndLenPrice;
-						optimum.PosPrev = cur;
-						optimum.BackPrev = curBack + 4;
-						optimum.Prev1IsChar = false;
-					}
-					if (lenTest == this$static._matchDistances[offs]) {
-						if (lenTest < numAvailableBytesFull) {
-							t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
-							lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, curBack, t);
-							if (lenTest2 >= 2) {
-								state2 = state < 7 ? 7 : 10;
-								posStateNext = position + lenTest & this$static._posStateMask;
-								curAndLenCharPrice = curAndLenPrice + ProbPrices[this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position + lenTest, $GetIndexByte(this$static._matchFinder, lenTest - 1 - 1)), true, $GetIndexByte(this$static._matchFinder, lenTest - (curBack + 1) - 1), $GetIndexByte(this$static._matchFinder, lenTest - 1));
-								state2 = StateUpdateChar(state2);
-								posStateNext = position + lenTest + 1 & this$static._posStateMask;
-								nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
-								nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
-								offset = lenTest + 1 + lenTest2;
-								while (lenEnd < cur + offset) {
-									lenEnd += 1;
-									this$static._optimum[lenEnd].Price = 268435455;
-								}
-
-								price_3 = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext);
-								curAndLenPrice = nextRepMatchPrice + price_3 + $GetPureRepPrice(this$static, 0, state2, posStateNext);
-								optimum = this$static._optimum[cur + offset];
-								if (curAndLenPrice < optimum.Price) {
-									optimum.Price = curAndLenPrice;
-									optimum.PosPrev = cur + lenTest + 1;
-									optimum.BackPrev = 0;
-									optimum.Prev1IsChar = true;
-									optimum.Prev2 = true;
-									optimum.PosPrev2 = cur;
-									optimum.BackPrev2 = curBack + 4;
-								}
-							}
-						}
-						offs += 2;
-						if (offs == numDistancePairs) {
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	function $EncodeMatched(this$static, rangeEncoder, matchByte, symbol) {
-		var bit, context, i, matchBit, same, state;
-		context = 1;
-		same = true;
-		for (i = 7; i >= 0; i -= 1) {
-			bit = symbol >> i & 1;
-			state = context;
-			if (same) {
-				matchBit = matchByte >> i & 1;
-				state += 1 + matchBit << 8;
-				same = matchBit == bit;
-			}
-			$Encode_3(rangeEncoder, this$static.m_Encoders, state, bit);
-			context = context << 1 | bit;
-		}
-	}
-	
 	function GetPosSlot(pos) {
 		if (pos < 2048) {
 			return g_FastPos[pos];
@@ -2456,190 +1796,11 @@ LZMA = (function () {
 		return g_FastPos[pos >> 20] + 40;
 	}
 	
-	function $FillDistancesPrices(this$static) {
-		var baseVal, encoder, footerBits, i, lenToPosState, posSlot, st, st2;
-		for (i = 4; i < 128; i += 1) {
-			posSlot = GetPosSlot(i);
-			footerBits = (posSlot >> 1) - 1;
-			baseVal = (2 | posSlot & 1) << footerBits;
-			this$static.tempPrices[i] = BitTreeEncoder.ReverseGetPrice(this$static._posEncoders, baseVal - posSlot - 1, footerBits, i - baseVal);
-		}
-		for (lenToPosState = 0; lenToPosState < 4; lenToPosState += 1) {
-			encoder = this$static._posSlotEncoder[lenToPosState];
-			st = lenToPosState << 6;
-			for (posSlot = 0; posSlot < this$static._distTableSize; posSlot += 1) {
-				this$static._posSlotPrices[st + posSlot] = encoder.GetPrice(posSlot);
-			}
-			for (posSlot = 14; posSlot < this$static._distTableSize; posSlot += 1) {
-				this$static._posSlotPrices[st + posSlot] += (posSlot >> 1) - 1 - 4 << 6;
-			}
-			st2 = lenToPosState * 128;
-			for (i = 0; i < 4; i += 1) {
-				this$static._distancesPrices[st2 + i] = this$static._posSlotPrices[st + i];
-			}
-			for (; i < 128; i += 1) {
-				this$static._distancesPrices[st2 + i] = this$static._posSlotPrices[st + GetPosSlot(i)] + this$static.tempPrices[i];
-			}
-		}
-		this$static._matchPriceCount = 0;
-	}
-	
-	function $FillAlignPrices(this$static) {
-		var i;
-		for (i = 0; i < 16; i += 1) {
-			this$static._alignPrices[i] = this$static._posAlignEncoder.ReverseGetPrice(i);
-		}
-		this$static._alignPriceCount = 0;
-	}
-	
-	function $CodeOneBlock(this$static, inSize, outSize, finished) {
-		var baseVal, complexState, curByte, distance, footerBits, i, len, lenToPosState, matchByte, pos, posReduced, posSlot, posState, progressPosValuePrev, subCoder;
-		inSize[0] = P0_longLit;
-		outSize[0] = P0_longLit;
-		finished[0] = true;
-		if (this$static._inStream) {
-			this$static._matchFinder._stream = this$static._inStream;
-			$Init_5(this$static._matchFinder);
-			this$static._needReleaseMFStream = true;
-			this$static._inStream = null;
-		}
-		if (this$static._finished) {
-			return;
-		}
-		this$static._finished = true;
-		progressPosValuePrev = this$static.nowPos64;
-		if (eq(this$static.nowPos64, P0_longLit)) {
-			if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
-				$Flush(this$static, lowBits_0(this$static.nowPos64));
-				return;
-			}
-			$ReadMatchDistances(this$static);
-			posState = lowBits_0(this$static.nowPos64) & this$static._posStateMask;
-			$Encode_3(this$static._rangeEncoder, this$static._isMatch, (this$static._state << 4) + posState, 0);
-			this$static._state = StateUpdateChar(this$static._state);
-			curByte = $GetIndexByte(this$static._matchFinder, -this$static._additionalOffset);
-			$Encode_1($GetSubCoder(this$static._literalEncoder, lowBits_0(this$static.nowPos64), this$static._previousByte), this$static._rangeEncoder, curByte);
-			this$static._previousByte = curByte;
-			this$static._additionalOffset -= 1;
-			this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
-		}
-		if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
-			$Flush(this$static, lowBits_0(this$static.nowPos64));
-			return;
-		}
-		while (true) {
-			len = $GetOptimum(this$static, lowBits_0(this$static.nowPos64));
-			pos = this$static.backRes;
-			posState = lowBits_0(this$static.nowPos64) & this$static._posStateMask;
-			complexState = (this$static._state << 4) + posState;
-			if (len == 1 && pos == -1) {
-				$Encode_3(this$static._rangeEncoder, this$static._isMatch, complexState, 0);
-				curByte = $GetIndexByte(this$static._matchFinder, -this$static._additionalOffset);
-				subCoder = $GetSubCoder(this$static._literalEncoder, lowBits_0(this$static.nowPos64), this$static._previousByte);
-				if (this$static._state < 7) {
-					$Encode_1(subCoder, this$static._rangeEncoder, curByte);
-				} else {
-					matchByte = $GetIndexByte(this$static._matchFinder, -this$static._repDistances[0] - 1 - this$static._additionalOffset);
-					$EncodeMatched(subCoder, this$static._rangeEncoder, matchByte, curByte);
-				}
-				this$static._previousByte = curByte;
-				this$static._state = StateUpdateChar(this$static._state);
-			} else {
-				$Encode_3(this$static._rangeEncoder, this$static._isMatch, complexState, 1);
-				if (pos < 4) {
-					$Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 1);
-					if (pos == 0) {
-						$Encode_3(this$static._rangeEncoder, this$static._isRepG0, this$static._state, 0);
-						if (len == 1) {
-							$Encode_3(this$static._rangeEncoder, this$static._isRep0Long, complexState, 0);
-						} else {
-							$Encode_3(this$static._rangeEncoder, this$static._isRep0Long, complexState, 1);
-						}
-					} else {
-						$Encode_3(this$static._rangeEncoder, this$static._isRepG0, this$static._state, 1);
-						if (pos == 1) {
-							$Encode_3(this$static._rangeEncoder, this$static._isRepG1, this$static._state, 0);
-						} else {
-							$Encode_3(this$static._rangeEncoder, this$static._isRepG1, this$static._state, 1);
-							$Encode_3(this$static._rangeEncoder, this$static._isRepG2, this$static._state, pos - 2);
-						}
-					}
-					if (len == 1) {
-						this$static._state = this$static._state < 7 ? 9 : 11;
-					} else {
-						$Encode_0(this$static._repMatchLenEncoder, this$static._rangeEncoder, len - 2, posState);
-						this$static._state = this$static._state < 7 ? 8 : 11;
-					}
-					distance = this$static._repDistances[pos];
-					if (pos != 0) {
-						for (i = pos; i >= 1; i -= 1) {
-							this$static._repDistances[i] = this$static._repDistances[i - 1];
-						}
-						this$static._repDistances[0] = distance;
-					}
-				} else {
-					$Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 0);
-					this$static._state = this$static._state < 7 ? 7 : 10;
-					$Encode_0(this$static._lenEncoder, this$static._rangeEncoder, len - 2, posState);
-					pos -= 4;
-					posSlot = GetPosSlot(pos);
-					lenToPosState = GetLenToPosState(len);
-					this$static._posSlotEncoder[lenToPosState].Encode(this$static._rangeEncoder, posSlot);
-					if (posSlot >= 4) {
-						footerBits = (posSlot >> 1) - 1;
-						baseVal = (2 | posSlot & 1) << footerBits;
-						posReduced = pos - baseVal;
-						if (posSlot < 14) {
-							BitTreeEncoder.ReverseEncode(this$static._posEncoders, baseVal - posSlot - 1, this$static._rangeEncoder, footerBits, posReduced);
-						} else {
-							this$static._rangeEncoder.EncodeDirectBits(posReduced >> 4, footerBits - 4);
-							this$static._posAlignEncoder.ReverseEncode(this$static._rangeEncoder, posReduced & 15);
-							this$static._alignPriceCount += 1;
-						}
-					}
-					distance = pos;
-					for (i = 3; i >= 1; i -= 1) {
-						this$static._repDistances[i] = this$static._repDistances[i - 1];
-					}
-					this$static._repDistances[0] = distance;
-					this$static._matchPriceCount += 1;
-				}
-				this$static._previousByte = $GetIndexByte(this$static._matchFinder, len - 1 - this$static._additionalOffset);
-			}
-			this$static._additionalOffset -= len;
-			this$static.nowPos64 = add(this$static.nowPos64, fromInt(len));
-			if (this$static._additionalOffset == 0) {
-				if (this$static._matchPriceCount >= 128) {
-					$FillDistancesPrices(this$static);
-				}
-				if (this$static._alignPriceCount >= 16) {
-					$FillAlignPrices(this$static);
-				}
-				inSize[0] = this$static.nowPos64;
-				outSize[0] = this$static._rangeEncoder.GetProcessedSizeAdd();
-				if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
-					$Flush(this$static, lowBits_0(this$static.nowPos64));
-					return;
-				}
-				if (compare(sub(this$static.nowPos64, progressPosValuePrev), P1000_longLit) >= 0) {
-					this$static._finished = false;
-					finished[0] = false;
-					return;
-				}
-			}
-		}
-	}
-	
-	function $ReleaseStreams(this$static) {
-		$ReleaseMFStream(this$static);
-		this$static._rangeEncoder.Stream = null;
-	}
-	
 	function $processEncoderChunk(this$static) {
-		$CodeOneBlock(this$static.encoder, this$static.encoder.processedInSize, this$static.encoder.processedOutSize, this$static.encoder.finished);
+		this$static.encoder.CodeOneBlock(this$static.encoder.processedInSize, this$static.encoder.processedOutSize, this$static.encoder.finished);
 		this$static.inBytesProcessed = this$static.encoder.processedInSize[0];
 		if (this$static.encoder.finished[0]) {
-			$ReleaseStreams(this$static.encoder);
+			this$static.encoder.ReleaseStreams();
 			this$static.alive = false;
 		}
 	}
@@ -2699,6 +1860,16 @@ LZMA = (function () {
 	
 	function RangeCoderEncoder() {
 	}
+	// Static members
+	RangeCoderEncoder.InitBitModels = function (probs) {
+		$clinit_66();
+		var i;
+		for (i = 0; i < probs.length; i += 1) {
+			probs[i] = 1024;
+		}
+	};
+
+	// Instance members
 	RangeCoderEncoder.prototype.getClass$ = getClass_45;
 	RangeCoderEncoder.prototype.typeMarker$ = nullMethod;
 	RangeCoderEncoder.prototype.typeId$ = 0;
@@ -2748,85 +1919,1022 @@ LZMA = (function () {
 	};
 	
 	
+	
 	function Encoder$LenPriceTableEncoder() {
 	}
 	
-	function $Encoder$LenEncoder(this$static) {
+	function LenEncoder() {
 		var posState;
-		this$static._choice = initDim(_3S_classLit, 0, -1, 2, 1);
-		this$static._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this$static._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this$static._highCoder = new BitTreeEncoder(8);
+		this._choice = initDim(_3S_classLit, 0, -1, 2, 1);
+		this._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+		this._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+		this._highCoder = new BitTreeEncoder(8);
 		for (posState = 0; posState < 16; posState += 1) {
-			this$static._lowCoder[posState] = new BitTreeEncoder(3);
-			this$static._midCoder[posState] = new BitTreeEncoder(3);
+			this._lowCoder[posState] = new BitTreeEncoder(3);
+			this._midCoder[posState] = new BitTreeEncoder(3);
 		}
-		return this$static;
 	}
+	LenEncoder.prototype = new Object_0();
+	LenEncoder.prototype.getClass$ = getClass_33;
+	LenEncoder.prototype.typeId$ = 0;
+	LenEncoder.prototype.Encode = function (rangeEncoder, symbol, posState) {
+		if (symbol < 8) {
+			$Encode_3(rangeEncoder, this._choice, 0, 0);
+			this._lowCoder[posState].Encode(rangeEncoder, symbol);
+		} else {
+			symbol -= 8;
+			$Encode_3(rangeEncoder, this._choice, 0, 1);
+			if (symbol < 8) {
+				$Encode_3(rangeEncoder, this._choice, 1, 0);
+				this._midCoder[posState].Encode(rangeEncoder, symbol);
+			} else {
+				$Encode_3(rangeEncoder, this._choice, 1, 1);
+				this._highCoder.Encode(rangeEncoder, symbol - 8);
+			}
+		}
+	};
+	LenEncoder.prototype.SetPrices = function (posState, numSymbols, prices, st) {
+		var a0, a1, b0, b1, i;
+		
+		$clinit_66();
+		a0 = ProbPrices[this._choice[0] >>> 2];
+		a1 = ProbPrices[2048 - this._choice[0] >>> 2];
+		b0 = a1 + ProbPrices[this._choice[1] >>> 2];
+		b1 = a1 + ProbPrices[2048 - this._choice[1] >>> 2];
+		i = 0;
+		for (i = 0; i < 8; i += 1) {
+			if (i >= numSymbols) {
+				return;
+			}
+			prices[st + i] = a0 + this._lowCoder[posState].GetPrice(i);
+		}
+		for (; i < 16; i += 1) {
+			if (i >= numSymbols) {
+				return;
+			}
+			prices[st + i] = b0 + this._midCoder[posState].GetPrice(i - 8);
+		}
+		for (; i < numSymbols; i += 1) {
+			prices[st + i] = b1 + this._highCoder.GetPrice(i - 8 - 8);
+		}
+	};
+	LenEncoder.prototype.Init = function (numPosStates) {
+		var posState;
+		RangeCoderEncoder.InitBitModels(this._choice);
+		for (posState = 0; posState < numPosStates; posState += 1) {
+			RangeCoderDecoder.InitBitModels(this._lowCoder[posState].Models);
+			RangeCoderDecoder.InitBitModels(this._midCoder[posState].Models);
+		}
+		RangeCoderDecoder.InitBitModels(this._highCoder.Models);
+	};
+	
 	
 	function $Encoder$LenPriceTableEncoder(this$static) {
-		$Encoder$LenEncoder(this$static);
+		LenEncoder.apply(this$static);
 		this$static._prices = initDim(_3I_classLit, 0, -1, 4352, 1);
 		this$static._counters = initDim(_3I_classLit, 0, -1, 16, 1);
 		return this$static;
 	}
 	
-	function Encoder$LiteralEncoder() {
+	function Encoder2() {
+		this.m_Encoders = initDim(_3S_classLit, 0, -1, 768, 1);
 	}
+	Encoder2.prototype.getClass$ = getClass_35;
+	Object_0.prototype.typeMarker$ = nullMethod;
+	Encoder2.prototype.typeId$ = 18;
+	Encoder2.prototype.EncodeMatched = function (rangeEncoder, matchByte, symbol) {
+		var bit, context, i, matchBit, same, state;
+		context = 1;
+		same = true;
+		for (i = 7; i >= 0; i -= 1) {
+			bit = symbol >> i & 1;
+			state = context;
+			if (same) {
+				matchBit = matchByte >> i & 1;
+				state += 1 + matchBit << 8;
+				same = matchBit == bit;
+			}
+			$Encode_3(rangeEncoder, this.m_Encoders, state, bit);
+			context = context << 1 | bit;
+		}
+	};
+	Encoder2.prototype.GetPrice = function (matchMode, matchByte, symbol) {
+		var bit, context, i, matchBit, price;
+		price = 0;
+		context = 1;
+		i = 7;
+		if (matchMode) {
+			for (; i >= 0; i -= 1) {
+				matchBit = matchByte >> i & 1;
+				bit = symbol >> i & 1;
+				price += GetPrice(this.m_Encoders[(1 + matchBit << 8) + context], bit);
+				context = context << 1 | bit;
+				if (matchBit != bit) {
+					i -= 1;
+					break;
+				}
+			}
+		}
+		for (; i >= 0; i -= 1) {
+			bit = symbol >> i & 1;
+			price += GetPrice(this.m_Encoders[context], bit);
+			context = context << 1 | bit;
+		}
+		return price;
+	};
+	Encoder2.prototype.Encode = function (rangeEncoder, symbol) {
+		var bit, context, i;
+		context = 1;
+		for (i = 7; i >= 0; i -= 1) {
+			bit = symbol >> i & 1;
+			$Encode_3(rangeEncoder, this.m_Encoders, context, bit);
+			context = context << 1 | bit;
+		}
+	};
+
+	function LiteralEncoder() {
+	}
+	LiteralEncoder.prototype.getClass$ = getClass_36;
+	LiteralEncoder.prototype.typeMarker$ = nullMethod;
+	LiteralEncoder.prototype.typeId$ = 0;
+	LiteralEncoder.prototype.m_Coders = null;
+	LiteralEncoder.prototype.m_NumPosBits = 0;
+	LiteralEncoder.prototype.m_NumPrevBits = 0;
+	LiteralEncoder.prototype.m_PosMask = 0;
+	LiteralEncoder.prototype.Create = function (numPosBits, numPrevBits) {
+		var i, numStates;
+		if (this.m_Coders != null && this.m_NumPrevBits == numPrevBits && this.m_NumPosBits == numPosBits) {
+			return;
+		}
+		this.m_NumPosBits = numPosBits;
+		this.m_PosMask = (1 << numPosBits) - 1;
+		this.m_NumPrevBits = numPrevBits;
+		numStates = 1 << this.m_NumPrevBits + this.m_NumPosBits;
+		this.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit, 0, 5, numStates, 0);
+		for (i = 0; i < numStates; i += 1) {
+			this.m_Coders[i] = new Encoder2();
+		}
+	};
+	LiteralEncoder.prototype.GetSubCoder = function (pos, prevByte) {
+		return this.m_Coders[((pos & this.m_PosMask) << this.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this.m_NumPrevBits)];
+	};
+	
+	
 	
 	function Encoder$Optimal() {
 	}
 	
 	function Encoder() {
-	}
-	
-	function $Encoder(this$static) {
 		var i;
 		$clinit_59();
-		this$static._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
-		this$static._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
+		this._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
+		this._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
 		$clinit_66();
-		this$static._rangeEncoder = new RangeCoderEncoder();
-		this$static._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static._isRepG0 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this$static._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
-		this$static._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
-		this$static._posAlignEncoder = new BitTreeEncoder(4);
-		this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
-		this$static._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
-		this$static._literalEncoder = new Encoder$LiteralEncoder();
-		this$static._matchDistances = initDim(_3I_classLit, 0, -1, 548, 1);
-		this$static._posSlotPrices = initDim(_3I_classLit, 0, -1, 256, 1);
-		this$static._distancesPrices = initDim(_3I_classLit, 0, -1, 512, 1);
-		this$static._alignPrices = initDim(_3I_classLit, 0, -1, 16, 1);
-		this$static.reps = initDim(_3I_classLit, 0, -1, 4, 1);
-		this$static.repLens = initDim(_3I_classLit, 0, -1, 4, 1);
-		this$static.processedInSize = initDim(_3J_classLit, 0, -1, 1, 3);
-		this$static.processedOutSize = initDim(_3J_classLit, 0, -1, 1, 3);
-		this$static.finished = initDim(_3Z_classLit, 0, -1, 1, 2);
-		this$static.properties = initDim(_3B_classLit, 0, -1, 5, 1);
-		this$static.tempPrices = initDim(_3I_classLit, 0, -1, 128, 1);
+		this._rangeEncoder = new RangeCoderEncoder();
+		this._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
+		this._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
+		this._isRepG0 = initDim(_3S_classLit, 0, -1, 12, 1);
+		this._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
+		this._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
+		this._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
+		this._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
+		this._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
+		this._posAlignEncoder = new BitTreeEncoder(4);
+		this._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
+		this._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
+		this._literalEncoder = new LiteralEncoder();
+		this._matchDistances = initDim(_3I_classLit, 0, -1, 548, 1);
+		this._posSlotPrices = initDim(_3I_classLit, 0, -1, 256, 1);
+		this._distancesPrices = initDim(_3I_classLit, 0, -1, 512, 1);
+		this._alignPrices = initDim(_3I_classLit, 0, -1, 16, 1);
+		this.reps = initDim(_3I_classLit, 0, -1, 4, 1);
+		this.repLens = initDim(_3I_classLit, 0, -1, 4, 1);
+		this.processedInSize = initDim(_3J_classLit, 0, -1, 1, 3);
+		this.processedOutSize = initDim(_3J_classLit, 0, -1, 1, 3);
+		this.finished = initDim(_3Z_classLit, 0, -1, 1, 2);
+		this.properties = initDim(_3B_classLit, 0, -1, 5, 1);
+		this.tempPrices = initDim(_3I_classLit, 0, -1, 128, 1);
 		for (i = 0; i < 4096; i += 1) {
-			this$static._optimum[i] = new Encoder$Optimal();
+			this._optimum[i] = new Encoder$Optimal();
 		}
 		for (i = 0; i < 4; i += 1) {
-			this$static._posSlotEncoder[i] = new BitTreeEncoder(6);
+			this._posSlotEncoder[i] = new BitTreeEncoder(6);
 		}
-		return this$static;
 	}
-	
-	function $WriteCoderProperties(this$static, outStream) {
+	Encoder.prototype = new Object_0();
+	Encoder.prototype.getClass$ = getClass_38;
+	Encoder.prototype.typeId$ = 0;
+	Encoder.prototype._additionalOffset = 0;
+	Encoder.prototype._alignPriceCount = 0;
+	Encoder.prototype._dictionarySize = 4194304;
+	Encoder.prototype._dictionarySizePrev = -1;
+	Encoder.prototype._distTableSize = 44;
+	Encoder.prototype._finished = false;
+	Encoder.prototype._inStream = null;
+	Encoder.prototype._longestMatchLength = 0;
+	Encoder.prototype._longestMatchWasFound = false;
+	Encoder.prototype._matchFinder = null;
+	Encoder.prototype._matchFinderType = 1;
+	Encoder.prototype._matchPriceCount = 0;
+	Encoder.prototype._needReleaseMFStream = false;
+	Encoder.prototype._numDistancePairs = 0;
+	Encoder.prototype._numFastBytes = 32;
+	Encoder.prototype._numFastBytesPrev = -1;
+	Encoder.prototype._numLiteralContextBits = 3;
+	Encoder.prototype._numLiteralPosStateBits = 0;
+	Encoder.prototype._optimumCurrentIndex = 0;
+	Encoder.prototype._optimumEndIndex = 0;
+	Encoder.prototype._posStateBits = 2;
+	Encoder.prototype._posStateMask = 3;
+	Encoder.prototype._previousByte = 0;
+	Encoder.prototype._state = 0;
+	Encoder.prototype._writeEndMark = false;
+	Encoder.prototype.backRes = 0;
+	Encoder.prototype.nowPos64 = P0_longLit;
+	Encoder.prototype.ReadMatchDistances = function () {
+		var lenRes;
+		lenRes = 0;
+		this._numDistancePairs = $GetMatches(this._matchFinder, this._matchDistances);
+		if (this._numDistancePairs > 0) {
+			lenRes = this._matchDistances[this._numDistancePairs - 2];
+			if (lenRes == this._numFastBytes) {
+				lenRes += $GetMatchLen(this._matchFinder, lenRes - 1, this._matchDistances[this._numDistancePairs - 1], 273 - lenRes);
+			}
+		}
+		this._additionalOffset += 1;
+		return lenRes;
+	};
+	Encoder.prototype.MovePos = function (num) {
+		if (num > 0) {
+			$Skip(this._matchFinder, num);
+			this._additionalOffset += num;
+		}
+	};
+	Encoder.prototype.GetRepLen1Price = function (state, posState) {
+		$clinit_66();
+		return ProbPrices[this._isRepG0[state] >>> 2] + ProbPrices[this._isRep0Long[(state << 4) + posState] >>> 2];
+	};
+	Encoder.prototype.GetPureRepPrice = function (repIndex, state, posState) {
+		var price;
+		if (repIndex == 0) {
+			$clinit_66();
+			price = ProbPrices[this._isRepG0[state] >>> 2];
+			price += ProbPrices[2048 - this._isRep0Long[(state << 4) + posState] >>> 2];
+		} else {
+			$clinit_66();
+			price = ProbPrices[2048 - this._isRepG0[state] >>> 2];
+			if (repIndex == 1) {
+				price += ProbPrices[this._isRepG1[state] >>> 2];
+			} else {
+				price += ProbPrices[2048 - this._isRepG1[state] >>> 2];
+				price += GetPrice(this._isRepG2[state], repIndex - 2);
+			}
+		}
+		return price;
+	};
+	Encoder.prototype.GetPosLenPrice = function (pos, len, posState) {
+		var lenToPosState, price;
+		lenToPosState = GetLenToPosState(len);
+		if (pos < 128) {
+			price = this._distancesPrices[lenToPosState * 128 + pos];
+		} else {
+			price = this._posSlotPrices[(lenToPosState << 6) + GetPosSlot2(pos)] + this._alignPrices[pos & 15];
+		}
+		return price + $GetPrice(this._lenEncoder, len - 2, posState);
+	};
+	Encoder.prototype.Backward = function (cur) {
+		var backCur, backMem, posMem, posPrev;
+		this._optimumEndIndex = cur;
+		posMem = this._optimum[cur].PosPrev;
+		backMem = this._optimum[cur].BackPrev;
+		do {
+			if (this._optimum[cur].Prev1IsChar) {
+				$MakeAsChar(this._optimum[posMem]);
+				this._optimum[posMem].PosPrev = posMem - 1;
+				if (this._optimum[cur].Prev2) {
+					this._optimum[posMem - 1].Prev1IsChar = false;
+					this._optimum[posMem - 1].PosPrev = this._optimum[cur].PosPrev2;
+					this._optimum[posMem - 1].BackPrev = this._optimum[cur].BackPrev2;
+				}
+			}
+			posPrev = posMem;
+			backCur = backMem;
+			backMem = this._optimum[posPrev].BackPrev;
+			posMem = this._optimum[posPrev].PosPrev;
+			this._optimum[posPrev].BackPrev = backCur;
+			this._optimum[posPrev].PosPrev = cur;
+			cur = posPrev;
+		} while (cur > 0);
+		this.backRes = this._optimum[0].BackPrev;
+		this._optimumCurrentIndex = this._optimum[0].PosPrev;
+		return this._optimumCurrentIndex;
+	};
+	Encoder.prototype.GetOptimum = function (position) {
+		var cur,
+			curAnd1Price,
+			curAndLenCharPrice,
+			curAndLenPrice,
+			curBack,
+			curPrice,
+			currentByte,
+			distance,
+			i,
+			len,
+			lenEnd,
+			lenMain,
+			lenRes,
+			lenTest,
+			lenTest2,
+			lenTestTemp,
+			matchByte,
+			matchPrice,
+			newLen,
+			nextIsChar,
+			nextMatchPrice,
+			nextOptimum,
+			nextRepMatchPrice,
+			normalMatchPrice,
+			numAvailableBytes,
+			numAvailableBytesFull,
+			numDistancePairs,
+			offs,
+			offset,
+			opt,
+			optimum,
+			pos,
+			posPrev,
+			posState,
+			posStateNext,
+			price_4,
+			repIndex,
+			repLen,
+			repMatchPrice,
+			repMaxIndex,
+			shortRepPrice,
+			startLen,
+			state,
+			state2,
+			t,
+			price,
+			price_0,
+			price_1,
+			price_2,
+			price_3;
+
+		if (this._optimumEndIndex != this._optimumCurrentIndex) {
+			lenRes = this._optimum[this._optimumCurrentIndex].PosPrev - this._optimumCurrentIndex;
+			this.backRes = this._optimum[this._optimumCurrentIndex].BackPrev;
+			this._optimumCurrentIndex = this._optimum[this._optimumCurrentIndex].PosPrev;
+			return lenRes;
+		}
+		this._optimumCurrentIndex = this._optimumEndIndex = 0;
+		if (this._longestMatchWasFound) {
+			lenMain = this._longestMatchLength;
+			this._longestMatchWasFound = false;
+		} else {
+			lenMain = this.ReadMatchDistances();
+		}
+		numDistancePairs = this._numDistancePairs;
+		numAvailableBytes = $GetNumAvailableBytes(this._matchFinder) + 1;
+		if (numAvailableBytes < 2) {
+			this.backRes = -1;
+			return 1;
+		}
+		if (numAvailableBytes > 273) {
+			numAvailableBytes = 273;
+		}
+		repMaxIndex = 0;
+		for (i = 0; i < 4; i += 1) {
+			this.reps[i] = this._repDistances[i];
+			this.repLens[i] = $GetMatchLen(this._matchFinder, -1, this.reps[i], 273);
+			if (this.repLens[i] > this.repLens[repMaxIndex]) {
+				repMaxIndex = i;
+			}
+		}
+		if (this.repLens[repMaxIndex] >= this._numFastBytes) {
+			this.backRes = repMaxIndex;
+			lenRes = this.repLens[repMaxIndex];
+			this.MovePos(lenRes - 1);
+			return lenRes;
+		}
+		if (lenMain >= this._numFastBytes) {
+			this.backRes = this._matchDistances[numDistancePairs - 1] + 4;
+			this.MovePos(lenMain - 1);
+			return lenMain;
+		}
+		currentByte = $GetIndexByte(this._matchFinder, -1);
+		matchByte = $GetIndexByte(this._matchFinder, -this._repDistances[0] - 1 - 1);
+		if (lenMain < 2 && currentByte != matchByte && this.repLens[repMaxIndex] < 2) {
+			this.backRes = -1;
+			return 1;
+		}
+		this._optimum[0].State = this._state;
+		posState = position & this._posStateMask;
+		$clinit_66();
+		this._optimum[1].Price = (ProbPrices[this._isMatch[(this._state << 4) + posState] >>> 2]) + this._literalEncoder.GetSubCoder(position, this._previousByte).GetPrice(this._state >= 7, matchByte, currentByte);
+		$MakeAsChar(this._optimum[1]);
+		matchPrice = ProbPrices[2048 - this._isMatch[(this._state << 4) + posState] >>> 2];
+		repMatchPrice = matchPrice + ProbPrices[2048 - this._isRep[this._state] >>> 2];
+		if (matchByte == currentByte) {
+			shortRepPrice = repMatchPrice + this.GetRepLen1Price(this._state, posState);
+			if (shortRepPrice < this._optimum[1].Price) {
+				this._optimum[1].Price = shortRepPrice;
+				$MakeAsShortRep(this._optimum[1]);
+			}
+		}
+		lenEnd = lenMain >= this.repLens[repMaxIndex] ? lenMain : this.repLens[repMaxIndex];
+		if (lenEnd < 2) {
+			this.backRes = this._optimum[1].BackPrev;
+			return 1;
+		}
+		this._optimum[1].PosPrev = 0;
+		this._optimum[0].Backs0 = this.reps[0];
+		this._optimum[0].Backs1 = this.reps[1];
+		this._optimum[0].Backs2 = this.reps[2];
+		this._optimum[0].Backs3 = this.reps[3];
+		len = lenEnd;
+		do {
+			this._optimum[len].Price = 268435455;
+			len -= 1;
+		} while (len >= 2);
+		for (i = 0; i < 4; i += 1) {
+			repLen = this.repLens[i];
+			if (repLen < 2) {
+				continue;
+			}
+			price_4 = repMatchPrice + this.GetPureRepPrice(i, this._state, posState);
+			do {
+				curAndLenPrice = price_4 + $GetPrice(this._repMatchLenEncoder, repLen - 2, posState);
+				optimum = this._optimum[repLen];
+				if (curAndLenPrice < optimum.Price) {
+					optimum.Price = curAndLenPrice;
+					optimum.PosPrev = 0;
+					optimum.BackPrev = i;
+					optimum.Prev1IsChar = false;
+				}
+				repLen -= 1;
+			} while (repLen >= 2);
+		}
+		normalMatchPrice = matchPrice + ProbPrices[this._isRep[this._state] >>> 2];
+		len = this.repLens[0] >= 2 ? this.repLens[0] + 1 : 2;
+		if (len <= lenMain) {
+			offs = 0;
+			while (len > this._matchDistances[offs]) {
+				offs += 2;
+			}
+			for (;; len += 1) {
+				distance = this._matchDistances[offs + 1];
+				curAndLenPrice = normalMatchPrice + this.GetPosLenPrice(distance, len, posState);
+				optimum = this._optimum[len];
+				if (curAndLenPrice < optimum.Price) {
+					optimum.Price = curAndLenPrice;
+					optimum.PosPrev = 0;
+					optimum.BackPrev = distance + 4;
+					optimum.Prev1IsChar = false;
+				}
+				if (len == this._matchDistances[offs]) {
+					offs += 2;
+					if (offs == numDistancePairs) {
+						break;
+					}
+				}
+			}
+		}
+		cur = 0;
+		while (true) {
+			cur += 1;
+			if (cur == lenEnd) {
+				return this.Backward(cur);
+			}
+			newLen = this.ReadMatchDistances();
+			numDistancePairs = this._numDistancePairs;
+			if (newLen >= this._numFastBytes) {
+				this._longestMatchLength = newLen;
+				this._longestMatchWasFound = true;
+				return this.Backward(cur);
+			}
+			position += 1;
+			posPrev = this._optimum[cur].PosPrev;
+			if (this._optimum[cur].Prev1IsChar) {
+				posPrev -= 1;
+				if (this._optimum[cur].Prev2) {
+					state = this._optimum[this._optimum[cur].PosPrev2].State;
+					if (this._optimum[cur].BackPrev2 < 4) {
+						state = (state < 7) ? 8 : 11;
+					} else {
+						state = (state < 7) ? 7 : 10;
+					}
+				} else {
+					state = this._optimum[posPrev].State;
+				}
+				state = StateUpdateChar(state);
+			} else {
+				state = this._optimum[posPrev].State;
+			}
+			if (posPrev == cur - 1) {
+				if (this._optimum[cur].BackPrev == 0) {
+					state = state < 7 ? 9 : 11;
+				} else {
+					state = StateUpdateChar(state);
+				}
+			} else {
+				if (this._optimum[cur].Prev1IsChar && this._optimum[cur].Prev2) {
+					posPrev = this._optimum[cur].PosPrev2;
+					pos = this._optimum[cur].BackPrev2;
+					state = state < 7 ? 8 : 11;
+				} else {
+					pos = this._optimum[cur].BackPrev;
+					if (pos < 4) {
+						state = state < 7 ? 8 : 11;
+					} else {
+						state = state < 7 ? 7 : 10;
+					}
+				}
+				opt = this._optimum[posPrev];
+				if (pos < 4) {
+					if (pos == 0) {
+						this.reps[0] = opt.Backs0;
+						this.reps[1] = opt.Backs1;
+						this.reps[2] = opt.Backs2;
+						this.reps[3] = opt.Backs3;
+					} else if (pos == 1) {
+						this.reps[0] = opt.Backs1;
+						this.reps[1] = opt.Backs0;
+						this.reps[2] = opt.Backs2;
+						this.reps[3] = opt.Backs3;
+					} else if (pos == 2) {
+						this.reps[0] = opt.Backs2;
+						this.reps[1] = opt.Backs0;
+						this.reps[2] = opt.Backs1;
+						this.reps[3] = opt.Backs3;
+					} else {
+						this.reps[0] = opt.Backs3;
+						this.reps[1] = opt.Backs0;
+						this.reps[2] = opt.Backs1;
+						this.reps[3] = opt.Backs2;
+					}
+				} else {
+					this.reps[0] = pos - 4;
+					this.reps[1] = opt.Backs0;
+					this.reps[2] = opt.Backs1;
+					this.reps[3] = opt.Backs2;
+				}
+			}
+			this._optimum[cur].State = state;
+			this._optimum[cur].Backs0 = this.reps[0];
+			this._optimum[cur].Backs1 = this.reps[1];
+			this._optimum[cur].Backs2 = this.reps[2];
+			this._optimum[cur].Backs3 = this.reps[3];
+			curPrice = this._optimum[cur].Price;
+			currentByte = $GetIndexByte(this._matchFinder, -1);
+			matchByte = $GetIndexByte(this._matchFinder, -this.reps[0] - 1 - 1);
+			posState = position & this._posStateMask;
+			curAnd1Price = curPrice + ProbPrices[this._isMatch[(state << 4) + posState] >>> 2] + this._literalEncoder.GetSubCoder(position, $GetIndexByte(this._matchFinder, -2)).GetPrice(state >= 7, matchByte, currentByte);
+			nextOptimum = this._optimum[cur + 1];
+			nextIsChar = false;
+			if (curAnd1Price < nextOptimum.Price) {
+				nextOptimum.Price = curAnd1Price;
+				nextOptimum.PosPrev = cur;
+				nextOptimum.BackPrev = -1;
+				nextOptimum.Prev1IsChar = false;
+				nextIsChar = true;
+			}
+			matchPrice = curPrice + ProbPrices[2048 - this._isMatch[(state << 4) + posState] >>> 2];
+			repMatchPrice = matchPrice + ProbPrices[2048 - this._isRep[state] >>> 2];
+			if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
+				shortRepPrice = repMatchPrice + (ProbPrices[this._isRepG0[state] >>> 2] + ProbPrices[this._isRep0Long[(state << 4) + posState] >>> 2]);
+				if (shortRepPrice <= nextOptimum.Price) {
+					nextOptimum.Price = shortRepPrice;
+					nextOptimum.PosPrev = cur;
+					nextOptimum.BackPrev = 0;
+					nextOptimum.Prev1IsChar = false;
+					nextIsChar = true;
+				}
+			}
+			numAvailableBytesFull = $GetNumAvailableBytes(this._matchFinder) + 1;
+			numAvailableBytesFull = 4095 - cur < numAvailableBytesFull ? 4095 - cur : numAvailableBytesFull;
+			numAvailableBytes = numAvailableBytesFull;
+			if (numAvailableBytes < 2) {
+				continue;
+			}
+			if (numAvailableBytes > this._numFastBytes) {
+				numAvailableBytes = this._numFastBytes;
+			}
+			if (!nextIsChar && matchByte != currentByte) {
+				t = min(numAvailableBytesFull - 1, this._numFastBytes);
+				lenTest2 = $GetMatchLen(this._matchFinder, 0, this.reps[0], t);
+				if (lenTest2 >= 2) {
+					state2 = StateUpdateChar(state);
+					posStateNext = position + 1 & this._posStateMask;
+					nextRepMatchPrice = curAnd1Price + ProbPrices[2048 - this._isMatch[(state2 << 4) + posStateNext] >>> 2] + ProbPrices[2048 - this._isRep[state2] >>> 2];
+					offset = cur + 1 + lenTest2;
+					while (lenEnd < offset) {
+						lenEnd += 1;
+						this._optimum[lenEnd].Price = 268435455;
+					}
+					
+					price = $GetPrice(this._repMatchLenEncoder, lenTest2 - 2, posStateNext);
+					curAndLenPrice = nextRepMatchPrice + price + this.GetPureRepPrice(0, state2, posStateNext);
+					optimum = this._optimum[offset];
+					if (curAndLenPrice < optimum.Price) {
+						optimum.Price = curAndLenPrice;
+						optimum.PosPrev = cur + 1;
+						optimum.BackPrev = 0;
+						optimum.Prev1IsChar = true;
+						optimum.Prev2 = false;
+					}
+				}
+			}
+			startLen = 2;
+			for (repIndex = 0; repIndex < 4; repIndex += 1) {
+				lenTest = $GetMatchLen(this._matchFinder, -1, this.reps[repIndex], numAvailableBytes);
+				if (lenTest < 2) {
+					continue;
+				}
+				lenTestTemp = lenTest;
+				do {
+					while (lenEnd < cur + lenTest) {
+						lenEnd += 1;
+						this._optimum[lenEnd].Price = 268435455;
+					}
+					
+					price_0 = $GetPrice(this._repMatchLenEncoder, lenTest - 2, posState);
+					curAndLenPrice = repMatchPrice + price_0 + this.GetPureRepPrice(repIndex, state, posState);
+					optimum = this._optimum[cur + lenTest];
+					if (curAndLenPrice < optimum.Price) {
+						optimum.Price = curAndLenPrice;
+						optimum.PosPrev = cur;
+						optimum.BackPrev = repIndex;
+						optimum.Prev1IsChar = false;
+					}
+					lenTest -= 1;
+				} while (lenTest >= 2);
+				lenTest = lenTestTemp;
+				if (repIndex == 0) {
+					startLen = lenTest + 1;
+				}
+				if (lenTest < numAvailableBytesFull) {
+					t = min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
+					lenTest2 = $GetMatchLen(this._matchFinder, lenTest, this.reps[repIndex], t);
+					if (lenTest2 >= 2) {
+						state2 = state < 7 ? 8 : 11;
+						posStateNext = position + lenTest & this._posStateMask;
+						
+						price_1 = $GetPrice(this._repMatchLenEncoder, lenTest - 2, posState);
+
+						curAndLenCharPrice = repMatchPrice + price_1 + this.GetPureRepPrice(repIndex, state, posState) + ProbPrices[this._isMatch[(state2 << 4) + posStateNext] >>> 2] + this._literalEncoder.GetSubCoder(position + lenTest, $GetIndexByte(this._matchFinder, lenTest - 1 - 1)).GetPrice(true, $GetIndexByte(this._matchFinder, lenTest - 1 - (this.reps[repIndex] + 1)), $GetIndexByte(this._matchFinder, lenTest - 1));
+						state2 = StateUpdateChar(state2);
+						posStateNext = position + lenTest + 1 & this._posStateMask;
+						nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this._isMatch[(state2 << 4) + posStateNext] >>> 2];
+						nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this._isRep[state2] >>> 2];
+						offset = lenTest + 1 + lenTest2;
+						while (lenEnd < cur + offset) {
+							lenEnd += 1;
+							this._optimum[lenEnd].Price = 268435455;
+						}
+						
+						price_2 = $GetPrice(this._repMatchLenEncoder, lenTest2 - 2, posStateNext);
+						curAndLenPrice = nextRepMatchPrice + price_2 + this.GetPureRepPrice(0, state2, posStateNext);
+						optimum = this._optimum[cur + offset];
+						if (curAndLenPrice < optimum.Price) {
+							optimum.Price = curAndLenPrice;
+							optimum.PosPrev = cur + lenTest + 1;
+							optimum.BackPrev = 0;
+							optimum.Prev1IsChar = true;
+							optimum.Prev2 = true;
+							optimum.PosPrev2 = cur;
+							optimum.BackPrev2 = repIndex;
+						}
+					}
+				}
+			}
+			if (newLen > numAvailableBytes) {
+				newLen = numAvailableBytes;
+				for (numDistancePairs = 0;; numDistancePairs += 2) {
+					if (newLen <= this._matchDistances[numDistancePairs]) {
+						break;
+					}
+				}
+				this._matchDistances[numDistancePairs] = newLen;
+				numDistancePairs += 2;
+			}
+			if (newLen >= startLen) {
+				normalMatchPrice = matchPrice + ProbPrices[this._isRep[state] >>> 2];
+				while (lenEnd < cur + newLen) {
+					lenEnd += 1;
+					this._optimum[lenEnd].Price = 268435455;
+				}
+				offs = 0;
+				while (startLen > this._matchDistances[offs]) {
+					offs += 2;
+				}
+				for (lenTest = startLen;; lenTest += 1) {
+					curBack = this._matchDistances[offs + 1];
+					curAndLenPrice = normalMatchPrice + this.GetPosLenPrice(curBack, lenTest, posState);
+					optimum = this._optimum[cur + lenTest];
+					if (curAndLenPrice < optimum.Price) {
+						optimum.Price = curAndLenPrice;
+						optimum.PosPrev = cur;
+						optimum.BackPrev = curBack + 4;
+						optimum.Prev1IsChar = false;
+					}
+					if (lenTest == this._matchDistances[offs]) {
+						if (lenTest < numAvailableBytesFull) {
+							t = min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
+							lenTest2 = $GetMatchLen(this._matchFinder, lenTest, curBack, t);
+							if (lenTest2 >= 2) {
+								state2 = state < 7 ? 7 : 10;
+								posStateNext = position + lenTest & this._posStateMask;
+								curAndLenCharPrice = curAndLenPrice + ProbPrices[this._isMatch[(state2 << 4) + posStateNext] >>> 2] + this._literalEncoder.GetSubCoder(position + lenTest, $GetIndexByte(this._matchFinder, lenTest - 1 - 1)).GetPrice(true, $GetIndexByte(this._matchFinder, lenTest - (curBack + 1) - 1), $GetIndexByte(this._matchFinder, lenTest - 1));
+								state2 = StateUpdateChar(state2);
+								posStateNext = position + lenTest + 1 & this._posStateMask;
+								nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this._isMatch[(state2 << 4) + posStateNext] >>> 2];
+								nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this._isRep[state2] >>> 2];
+								offset = lenTest + 1 + lenTest2;
+								while (lenEnd < cur + offset) {
+									lenEnd += 1;
+									this._optimum[lenEnd].Price = 268435455;
+								}
+
+								price_3 = $GetPrice(this._repMatchLenEncoder, lenTest2 - 2, posStateNext);
+								curAndLenPrice = nextRepMatchPrice + price_3 + this.GetPureRepPrice(0, state2, posStateNext);
+								optimum = this._optimum[cur + offset];
+								if (curAndLenPrice < optimum.Price) {
+									optimum.Price = curAndLenPrice;
+									optimum.PosPrev = cur + lenTest + 1;
+									optimum.BackPrev = 0;
+									optimum.Prev1IsChar = true;
+									optimum.Prev2 = true;
+									optimum.PosPrev2 = cur;
+									optimum.BackPrev2 = curBack + 4;
+								}
+							}
+						}
+						offs += 2;
+						if (offs == numDistancePairs) {
+							break;
+						}
+					}
+				}
+			}
+		}
+	};
+	Encoder.prototype.WriteEndMarker = function (posState) {
+		var lenToPosState;
+		if (!this._writeEndMark) {
+			return;
+		}
+		$Encode_3(this._rangeEncoder, this._isMatch, (this._state << 4) + posState, 1);
+		$Encode_3(this._rangeEncoder, this._isRep, this._state, 0);
+		this._state = this._state < 7 ? 7 : 10;
+		$Encode_0(this._lenEncoder, this._rangeEncoder, 0, posState);
+		lenToPosState = GetLenToPosState(2);
+		this._posSlotEncoder[lenToPosState].Encode(this._rangeEncoder, 63);
+		this._rangeEncoder.EncodeDirectBits(67108863, 26);
+		this._posAlignEncoder.ReverseEncode(this._rangeEncoder, 15);
+	};
+	Encoder.prototype.Flush = function (nowPos) {
+		this.ReleaseMFStream();
+		this.WriteEndMarker(nowPos & this._posStateMask);
+		this._rangeEncoder.FlushData();
+	};
+	Encoder.prototype.ReleaseMFStream = function () {
+		if (!!this._matchFinder && this._needReleaseMFStream) {
+			this._matchFinder._stream = null;
+			this._needReleaseMFStream = false;
+		}
+	};
+	Encoder.prototype.ReleaseStreams = function () {
+		this.ReleaseMFStream();
+		this._rangeEncoder.Stream = null;
+	};
+	Encoder.prototype.CodeOneBlock = function (inSize, outSize, finished) {
+		var baseVal, complexState, curByte, distance, footerBits, i, len, lenToPosState, matchByte, pos, posReduced, posSlot, posState, progressPosValuePrev, subCoder;
+		inSize[0] = P0_longLit;
+		outSize[0] = P0_longLit;
+		finished[0] = true;
+		if (this._inStream) {
+			this._matchFinder._stream = this._inStream;
+			$Init_5(this._matchFinder);
+			this._needReleaseMFStream = true;
+			this._inStream = null;
+		}
+		if (this._finished) {
+			return;
+		}
+		this._finished = true;
+		progressPosValuePrev = this.nowPos64;
+		if (eq(this.nowPos64, P0_longLit)) {
+			if ($GetNumAvailableBytes(this._matchFinder) == 0) {
+				this.Flush(lowBits_0(this.nowPos64));
+				return;
+			}
+			this.ReadMatchDistances();
+			posState = lowBits_0(this.nowPos64) & this._posStateMask;
+			$Encode_3(this._rangeEncoder, this._isMatch, (this._state << 4) + posState, 0);
+			this._state = StateUpdateChar(this._state);
+			curByte = $GetIndexByte(this._matchFinder, -this._additionalOffset);
+			this._literalEncoder.GetSubCoder(lowBits_0(this.nowPos64), this._previousByte).Encode(this._rangeEncoder, curByte);
+			this._previousByte = curByte;
+			this._additionalOffset -= 1;
+			this.nowPos64 = add(this.nowPos64, P1_longLit);
+		}
+		if ($GetNumAvailableBytes(this._matchFinder) == 0) {
+			this.Flush(lowBits_0(this.nowPos64));
+			return;
+		}
+		while (true) {
+			len = this.GetOptimum(lowBits_0(this.nowPos64));
+			pos = this.backRes;
+			posState = lowBits_0(this.nowPos64) & this._posStateMask;
+			complexState = (this._state << 4) + posState;
+			if (len == 1 && pos == -1) {
+				$Encode_3(this._rangeEncoder, this._isMatch, complexState, 0);
+				curByte = $GetIndexByte(this._matchFinder, -this._additionalOffset);
+				subCoder = this._literalEncoder.GetSubCoder(lowBits_0(this.nowPos64), this._previousByte);
+				if (this._state < 7) {
+					subCoder.Encode(this._rangeEncoder, curByte);
+				} else {
+					matchByte = $GetIndexByte(this._matchFinder, -this._repDistances[0] - 1 - this._additionalOffset);
+					subCoder.EncodeMatched(this._rangeEncoder, matchByte, curByte);
+				}
+				this._previousByte = curByte;
+				this._state = StateUpdateChar(this._state);
+			} else {
+				$Encode_3(this._rangeEncoder, this._isMatch, complexState, 1);
+				if (pos < 4) {
+					$Encode_3(this._rangeEncoder, this._isRep, this._state, 1);
+					if (pos == 0) {
+						$Encode_3(this._rangeEncoder, this._isRepG0, this._state, 0);
+						if (len == 1) {
+							$Encode_3(this._rangeEncoder, this._isRep0Long, complexState, 0);
+						} else {
+							$Encode_3(this._rangeEncoder, this._isRep0Long, complexState, 1);
+						}
+					} else {
+						$Encode_3(this._rangeEncoder, this._isRepG0, this._state, 1);
+						if (pos == 1) {
+							$Encode_3(this._rangeEncoder, this._isRepG1, this._state, 0);
+						} else {
+							$Encode_3(this._rangeEncoder, this._isRepG1, this._state, 1);
+							$Encode_3(this._rangeEncoder, this._isRepG2, this._state, pos - 2);
+						}
+					}
+					if (len == 1) {
+						this._state = this._state < 7 ? 9 : 11;
+					} else {
+						$Encode_0(this._repMatchLenEncoder, this._rangeEncoder, len - 2, posState);
+						this._state = this._state < 7 ? 8 : 11;
+					}
+					distance = this._repDistances[pos];
+					if (pos != 0) {
+						for (i = pos; i >= 1; i -= 1) {
+							this._repDistances[i] = this._repDistances[i - 1];
+						}
+						this._repDistances[0] = distance;
+					}
+				} else {
+					$Encode_3(this._rangeEncoder, this._isRep, this._state, 0);
+					this._state = this._state < 7 ? 7 : 10;
+					$Encode_0(this._lenEncoder, this._rangeEncoder, len - 2, posState);
+					pos -= 4;
+					posSlot = GetPosSlot(pos);
+					lenToPosState = GetLenToPosState(len);
+					this._posSlotEncoder[lenToPosState].Encode(this._rangeEncoder, posSlot);
+					if (posSlot >= 4) {
+						footerBits = (posSlot >> 1) - 1;
+						baseVal = (2 | posSlot & 1) << footerBits;
+						posReduced = pos - baseVal;
+						if (posSlot < 14) {
+							BitTreeEncoder.ReverseEncode(this._posEncoders, baseVal - posSlot - 1, this._rangeEncoder, footerBits, posReduced);
+						} else {
+							this._rangeEncoder.EncodeDirectBits(posReduced >> 4, footerBits - 4);
+							this._posAlignEncoder.ReverseEncode(this._rangeEncoder, posReduced & 15);
+							this._alignPriceCount += 1;
+						}
+					}
+					distance = pos;
+					for (i = 3; i >= 1; i -= 1) {
+						this._repDistances[i] = this._repDistances[i - 1];
+					}
+					this._repDistances[0] = distance;
+					this._matchPriceCount += 1;
+				}
+				this._previousByte = $GetIndexByte(this._matchFinder, len - 1 - this._additionalOffset);
+			}
+			this._additionalOffset -= len;
+			this.nowPos64 = add(this.nowPos64, fromInt(len));
+			if (this._additionalOffset == 0) {
+				if (this._matchPriceCount >= 128) {
+					this.FillDistancesPrices();
+				}
+				if (this._alignPriceCount >= 16) {
+					this.FillAlignPrices();
+				}
+				inSize[0] = this.nowPos64;
+				outSize[0] = this._rangeEncoder.GetProcessedSizeAdd();
+				if ($GetNumAvailableBytes(this._matchFinder) == 0) {
+					this.Flush(lowBits_0(this.nowPos64));
+					return;
+				}
+				if (compare(sub(this.nowPos64, progressPosValuePrev), P1000_longLit) >= 0) {
+					this._finished = false;
+					finished[0] = false;
+					return;
+				}
+			}
+		}
+	};
+	Encoder.prototype.WriteCoderProperties = function (outStream) {
 		var i;
-		this$static.properties[0] = (this$static._posStateBits * 5 + this$static._numLiteralPosStateBits) * 9 + this$static._numLiteralContextBits << 24 >> 24;
+		this.properties[0] = (this._posStateBits * 5 + this._numLiteralPosStateBits) * 9 + this._numLiteralContextBits << 24 >> 24;
 		for (i = 0; i < 4; i += 1) {
-			this$static.properties[1 + i] = this$static._dictionarySize >> 8 * i << 24 >> 24;
+			this.properties[1 + i] = this._dictionarySize >> 8 * i << 24 >> 24;
 		}
-		$write_0(outStream, this$static.properties, 0, 5);
-	}
+		$write_0(outStream, this.properties, 0, 5);
+	};
+	Encoder.prototype.FillDistancesPrices = function () {
+		var baseVal, encoder, footerBits, i, lenToPosState, posSlot, st, st2;
+		for (i = 4; i < 128; i += 1) {
+			posSlot = GetPosSlot(i);
+			footerBits = (posSlot >> 1) - 1;
+			baseVal = (2 | posSlot & 1) << footerBits;
+			this.tempPrices[i] = BitTreeEncoder.ReverseGetPrice(this._posEncoders, baseVal - posSlot - 1, footerBits, i - baseVal);
+		}
+		for (lenToPosState = 0; lenToPosState < 4; lenToPosState += 1) {
+			encoder = this._posSlotEncoder[lenToPosState];
+			st = lenToPosState << 6;
+			for (posSlot = 0; posSlot < this._distTableSize; posSlot += 1) {
+				this._posSlotPrices[st + posSlot] = encoder.GetPrice(posSlot);
+			}
+			for (posSlot = 14; posSlot < this._distTableSize; posSlot += 1) {
+				this._posSlotPrices[st + posSlot] += (posSlot >> 1) - 1 - 4 << 6;
+			}
+			st2 = lenToPosState * 128;
+			for (i = 0; i < 4; i += 1) {
+				this._distancesPrices[st2 + i] = this._posSlotPrices[st + i];
+			}
+			for (; i < 128; i += 1) {
+				this._distancesPrices[st2 + i] = this._posSlotPrices[st + GetPosSlot(i)] + this.tempPrices[i];
+			}
+		}
+		this._matchPriceCount = 0;
+	};
+	Encoder.prototype.FillAlignPrices = function () {
+		var i;
+		for (i = 0; i < 16; i += 1) {
+			this._alignPrices[i] = this._posAlignEncoder.ReverseGetPrice(i);
+		}
+		this._alignPriceCount = 0;
+	};
+	Encoder.prototype.SetDictionarySize = function (dictionarySize) {
+		var dicLogSize;
+		if (dictionarySize < 1 || dictionarySize > 536870912) {
+			return false;
+		}
+		this._dictionarySize = dictionarySize;
+		for (dicLogSize = 0;; dicLogSize += 1) {
+			if (dictionarySize >= 1 << dicLogSize) {
+				break;
+			}
+		}
+		this._distTableSize = dicLogSize * 2;
+		return true;
+	};
+	Encoder.prototype.SetNumFastBytes = function (numFastBytes) {
+		if (numFastBytes < 5 || numFastBytes > 273) {
+			return false;
+		}
+		this._numFastBytes = numFastBytes;
+		return true;
+	};
+	Encoder.prototype.SetMatchFinder = function (matchFinderIndex) {
+		var matchFinderIndexPrev;
+		if (matchFinderIndex < 0 || matchFinderIndex > 2) {
+			return false;
+		}
+		matchFinderIndexPrev = this._matchFinderType;
+		this._matchFinderType = matchFinderIndex;
+		if (!!this._matchFinder && matchFinderIndexPrev != this._matchFinderType) {
+			this._dictionarySizePrev = -1;
+			this._matchFinder = null;
+		}
+		return true;
+	};
+	Encoder.prototype.SetLcLpPb = function (lc, lp, pb) {
+		if (lp < 0 || lp > 4 || lc < 0 || lc > 8 || pb < 0 || pb > 4) {
+			return false;
+		}
+		this._numLiteralPosStateBits = lp;
+		this._numLiteralContextBits = lc;
+		this._posStateBits = pb;
+		this._posStateMask = (1 << this._posStateBits) - 1;
+		return true;
+	};
+	
+	
+	
+	
 	
 	function $clinit_60() {
 		if (dontExecute.$clinit_60) {
@@ -2864,28 +2972,9 @@ LZMA = (function () {
 		}
 	}
 	
-	function Encoder$LiteralEncoder$Encoder2() {
-	}
 	
-	function $Encoder$LiteralEncoder$Encoder2(this$static) {
-		this$static.m_Encoders = initDim(_3S_classLit, 0, -1, 768, 1);
-		return this$static;
-	}
 	
-	function $Create_1(this$static, numPosBits, numPrevBits) {
-		var i, numStates;
-		if (this$static.m_Coders != null && this$static.m_NumPrevBits == numPrevBits && this$static.m_NumPosBits == numPosBits) {
-			return;
-		}
-		this$static.m_NumPosBits = numPosBits;
-		this$static.m_PosMask = (1 << numPosBits) - 1;
-		this$static.m_NumPrevBits = numPrevBits;
-		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-		this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit, 0, 5, numStates, 0);
-		for (i = 0; i < numStates; i += 1) {
-			this$static.m_Coders[i] = $Encoder$LiteralEncoder$Encoder2(new Encoder$LiteralEncoder$Encoder2());
-		}
-	}
+	
 	
 	function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv) {
 		var blockSize;
@@ -2950,7 +3039,7 @@ LZMA = (function () {
 			$SetType(bt, numHashBytes);
 			this$static._matchFinder = bt;
 		}
-		$Create_1(this$static._literalEncoder, this$static._numLiteralPosStateBits, this$static._numLiteralContextBits);
+		this$static._literalEncoder.Create(this$static._numLiteralPosStateBits, this$static._numLiteralContextBits);
 		if (this$static._dictionarySize == this$static._dictionarySizePrev && this$static._numFastBytesPrev == this$static._numFastBytes) {
 			return;
 		}
@@ -2976,57 +3065,32 @@ LZMA = (function () {
 		this$static._cache = 0;
 	}
 	
-	function InitBitModels_0(probs) {
-		$clinit_66();
-		var i;
-		for (i = 0; i < probs.length; i += 1) {
-			probs[i] = 1024;
-		}
-	}
-	
 	function $Init_3(this$static) {
 		var i, numStates;
 		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
 		for (i = 0; i < numStates; i += 1) {
-			InitBitModels_0(this$static.m_Coders[i].m_Encoders);
+			RangeCoderEncoder.InitBitModels(this$static.m_Coders[i].m_Encoders);
 		}
-	}
-	
-	function InitBitModels(probs) {
-		var i;
-		for (i = 0; i < probs.length; i += 1) {
-			probs[i] = 1024;
-		}
-	}
-	
-	function $Init_2(this$static, numPosStates) {
-		var posState;
-		InitBitModels_0(this$static._choice);
-		for (posState = 0; posState < numPosStates; posState += 1) {
-			InitBitModels(this$static._lowCoder[posState].Models);
-			InitBitModels(this$static._midCoder[posState].Models);
-		}
-		InitBitModels(this$static._highCoder.Models);
 	}
 	
 	function $Init_4(this$static) {
 		var i;
 		$BaseInit(this$static);
 		$Init_9(this$static._rangeEncoder);
-		InitBitModels_0(this$static._isMatch);
-		InitBitModels_0(this$static._isRep0Long);
-		InitBitModels_0(this$static._isRep);
-		InitBitModels_0(this$static._isRepG0);
-		InitBitModels_0(this$static._isRepG1);
-		InitBitModels_0(this$static._isRepG2);
-		InitBitModels_0(this$static._posEncoders);
+		RangeCoderEncoder.InitBitModels(this$static._isMatch);
+		RangeCoderEncoder.InitBitModels(this$static._isRep0Long);
+		RangeCoderEncoder.InitBitModels(this$static._isRep);
+		RangeCoderEncoder.InitBitModels(this$static._isRepG0);
+		RangeCoderEncoder.InitBitModels(this$static._isRepG1);
+		RangeCoderEncoder.InitBitModels(this$static._isRepG2);
+		RangeCoderEncoder.InitBitModels(this$static._posEncoders);
 		$Init_3(this$static._literalEncoder);
 		for (i = 0; i < 4; i += 1) {
-			InitBitModels(this$static._posSlotEncoder[i].Models);
+			RangeCoderDecoder.InitBitModels(this$static._posSlotEncoder[i].Models);
 		}
-		$Init_2(this$static._lenEncoder, 1 << this$static._posStateBits);
-		$Init_2(this$static._repMatchLenEncoder, 1 << this$static._posStateBits);
-		InitBitModels(this$static._posAlignEncoder.Models);
+		this$static._lenEncoder.Init(1 << this$static._posStateBits);
+		this$static._repMatchLenEncoder.Init(1 << this$static._posStateBits);
+		RangeCoderDecoder.InitBitModels(this$static._posAlignEncoder.Models);
 		this$static._longestMatchWasFound = false;
 		this$static._optimumEndIndex = 0;
 		this$static._optimumCurrentIndex = 0;
@@ -3036,7 +3100,7 @@ LZMA = (function () {
 	function $UpdateTables(this$static, numPosStates) {
 		var posState;
 		for (posState = 0; posState < numPosStates; posState += 1) {
-			$SetPrices(this$static, posState, this$static._tableSize, this$static._prices, posState * 272);
+			this$static.SetPrices(posState, this$static._tableSize, this$static._prices, posState * 272);
 			this$static._counters[posState] = this$static._tableSize;
 		}
 	}
@@ -3067,10 +3131,10 @@ LZMA = (function () {
 			throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_0(length_0));
 		}
 		this$static.length_0 = length_0;
-		encoder = $Encoder(new Encoder());
+		encoder = new Encoder();
 		$configure(mode, encoder);
 		encoder._writeEndMark = true;
-		$WriteCoderProperties(encoder, output);
+		encoder.WriteCoderProperties(output);
 		for (i = 0; i < 64; i += 8) {
 			$write(output, lowBits_0(shr(length_0, i)) & 255);
 		}
@@ -3081,8 +3145,8 @@ LZMA = (function () {
 		$Create_2(encoder);
 		encoder._rangeEncoder.Stream = output;
 		$Init_4(encoder);
-		$FillDistancesPrices(encoder);
-		$FillAlignPrices(encoder);
+		encoder.FillDistancesPrices();
+		encoder.FillAlignPrices();
 		encoder._lenEncoder._tableSize = encoder._numFastBytes + 1 - 2;
 		$UpdateTables(encoder._lenEncoder, 1 << encoder._posStateBits);
 		encoder._repMatchLenEncoder._tableSize = encoder._numFastBytes + 1 - 2;
@@ -3239,6 +3303,15 @@ LZMA = (function () {
 	
 	function RangeCoderDecoder() {
 	}
+	// Static members
+	RangeCoderDecoder.InitBitModels = function (probs) {
+		var i;
+		for (i = 0; i < probs.length; i += 1) {
+			probs[i] = 1024;
+		}
+	};
+
+	// Instance members	
 	RangeCoderDecoder.prototype.getClass$ = getClass_44;
 	RangeCoderDecoder.prototype.typeMarker$ = nullMethod;
 	RangeCoderDecoder.prototype.typeId$ = 0;
@@ -3383,18 +3456,18 @@ LZMA = (function () {
 		var i, numStates;
 		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
 		for (i = 0; i < numStates; i += 1) {
-			InitBitModels(this$static.m_Coders[i].m_Decoders);
+			RangeCoderDecoder.InitBitModels(this$static.m_Coders[i].m_Decoders);
 		}
 	}
 	
 	function $Init(this$static) {
 		var posState;
-		InitBitModels(this$static.m_Choice);
+		RangeCoderDecoder.InitBitModels(this$static.m_Choice);
 		for (posState = 0; posState < this$static.m_NumPosStates; posState += 1) {
-			InitBitModels(this$static.m_LowCoder[posState].Models);
-			InitBitModels(this$static.m_MidCoder[posState].Models);
+			RangeCoderDecoder.InitBitModels(this$static.m_LowCoder[posState].Models);
+			RangeCoderDecoder.InitBitModels(this$static.m_MidCoder[posState].Models);
 		}
-		InitBitModels(this$static.m_HighCoder.Models);
+		RangeCoderDecoder.InitBitModels(this$static.m_HighCoder.Models);
 	}
 	
 	function $Init_8(this$static) {
@@ -3409,20 +3482,20 @@ LZMA = (function () {
 	function $Init_1(this$static) {
 		var i;
 		this$static.m_OutWindow.Init(false);
-		InitBitModels(this$static.m_IsMatchDecoders);
-		InitBitModels(this$static.m_IsRep0LongDecoders);
-		InitBitModels(this$static.m_IsRepDecoders);
-		InitBitModels(this$static.m_IsRepG0Decoders);
-		InitBitModels(this$static.m_IsRepG1Decoders);
-		InitBitModels(this$static.m_IsRepG2Decoders);
-		InitBitModels(this$static.m_PosDecoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsMatchDecoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsRep0LongDecoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsRepDecoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsRepG0Decoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsRepG1Decoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_IsRepG2Decoders);
+		RangeCoderDecoder.InitBitModels(this$static.m_PosDecoders);
 		$Init_0(this$static.m_LiteralDecoder);
 		for (i = 0; i < 4; i += 1) {
-			InitBitModels(this$static.m_PosSlotDecoder[i].Models);
+			RangeCoderDecoder.InitBitModels(this$static.m_PosSlotDecoder[i].Models);
 		}
 		$Init(this$static.m_LenDecoder);
 		$Init(this$static.m_RepLenDecoder);
-		InitBitModels(this$static.m_PosAlignDecoder.Models);
+		RangeCoderDecoder.InitBitModels(this$static.m_PosAlignDecoder.Models);
 		$Init_8(this$static.m_RangeDecoder);
 	}
 	
@@ -3624,51 +3697,15 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
 	}
 	
-	Encoder.prototype = new Object_0();
-	Encoder.prototype.getClass$ = getClass_38;
-	Encoder.prototype.typeId$ = 0;
-	Encoder.prototype._additionalOffset = 0;
-	Encoder.prototype._alignPriceCount = 0;
-	Encoder.prototype._dictionarySize = 4194304;
-	Encoder.prototype._dictionarySizePrev = -1;
-	Encoder.prototype._distTableSize = 44;
-	Encoder.prototype._finished = false;
-	Encoder.prototype._inStream = null;
-	Encoder.prototype._longestMatchLength = 0;
-	Encoder.prototype._longestMatchWasFound = false;
-	Encoder.prototype._matchFinder = null;
-	Encoder.prototype._matchFinderType = 1;
-	Encoder.prototype._matchPriceCount = 0;
-	Encoder.prototype._needReleaseMFStream = false;
-	Encoder.prototype._numDistancePairs = 0;
-	Encoder.prototype._numFastBytes = 32;
-	Encoder.prototype._numFastBytesPrev = -1;
-	Encoder.prototype._numLiteralContextBits = 3;
-	Encoder.prototype._numLiteralPosStateBits = 0;
-	Encoder.prototype._optimumCurrentIndex = 0;
-	Encoder.prototype._optimumEndIndex = 0;
-	Encoder.prototype._posStateBits = 2;
-	Encoder.prototype._posStateMask = 3;
-	Encoder.prototype._previousByte = 0;
-	Encoder.prototype._state = 0;
-	Encoder.prototype._writeEndMark = false;
-	Encoder.prototype.backRes = 0;
-	Encoder.prototype.nowPos64 = P0_longLit;
 	function getClass_33() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit;
 	}
 	
-	function Encoder$LenEncoder() {
-	}
-	
-	Encoder$LenEncoder.prototype = new Object_0();
-	Encoder$LenEncoder.prototype.getClass$ = getClass_33;
-	Encoder$LenEncoder.prototype.typeId$ = 0;
 	function getClass_34() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
 	}
 	
-	Encoder$LenPriceTableEncoder.prototype = new Encoder$LenEncoder();
+	Encoder$LenPriceTableEncoder.prototype = new LenEncoder();
 	Encoder$LenPriceTableEncoder.prototype.getClass$ = getClass_34;
 	Encoder$LenPriceTableEncoder.prototype.typeId$ = 0;
 	Encoder$LenPriceTableEncoder.prototype._tableSize = 0;
@@ -3676,20 +3713,10 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
 	}
 	
-	Encoder$LiteralEncoder.prototype = new Object_0();
-	Encoder$LiteralEncoder.prototype.getClass$ = getClass_36;
-	Encoder$LiteralEncoder.prototype.typeId$ = 0;
-	Encoder$LiteralEncoder.prototype.m_Coders = null;
-	Encoder$LiteralEncoder.prototype.m_NumPosBits = 0;
-	Encoder$LiteralEncoder.prototype.m_NumPrevBits = 0;
-	Encoder$LiteralEncoder.prototype.m_PosMask = 0;
 	function getClass_35() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit;
 	}
 	
-	Encoder$LiteralEncoder$Encoder2.prototype = new Object_0();
-	Encoder$LiteralEncoder$Encoder2.prototype.getClass$ = getClass_35;
-	Encoder$LiteralEncoder$Encoder2.prototype.typeId$ = 18;
 	function getClass_37() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
 	}
