@@ -277,15 +277,6 @@ LZMA = (function () {
 		return this$static;
 	}
 	
-	function BitTreeEncoder() {
-	}
-	
-	function $BitTreeEncoder(this$static, numBitLevels) {
-		this$static.NumBitLevels = numBitLevels;
-		this$static.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
-		return this$static;
-	}
-	
 	function canCastUnsafe(srcId, dstId) {
 		return srcId && typeIdArray[srcId][dstId];
 	}
@@ -390,11 +381,11 @@ LZMA = (function () {
 	
 	function Object_0() {
 	}
-	
 	Object_0.prototype = {};
 	Object_0.prototype.getClass$ = getClass_18;
 	Object_0.prototype.typeMarker$ = nullMethod;
 	Object_0.prototype.typeId$ = 1;
+	
 	function getClass_22() {
 		return Ljava_lang_Throwable_2_classLit;
 	}
@@ -1584,19 +1575,6 @@ LZMA = (function () {
 		return ProbPrices[((Prob - symbol ^ -symbol) & 2047) >>> 2];
 	}
 	
-	function $GetPrice_1(this$static, symbol) {
-		var bit, bitIndex, m, price;
-		price = 0;
-		m = 1;
-		for (bitIndex = this$static.NumBitLevels; bitIndex != 0;) {
-			bitIndex -= 1;
-			bit = symbol >>> bitIndex & 1;
-			price += GetPrice(this$static.Models[m], bit);
-			m = (m << 1) + bit;
-		}
-		return price;
-	}
-	
 	function $GetPrice(this$static, symbol, posState) {
 		return this$static._prices[posState * 272 + symbol];
 	}
@@ -1614,16 +1592,16 @@ LZMA = (function () {
 			if (i >= numSymbols) {
 				return;
 			}
-			prices[st + i] = a0 + $GetPrice_1(this$static._lowCoder[posState], i);
+			prices[st + i] = a0 + this$static._lowCoder[posState].GetPrice(i);
 		}
 		for (; i < 16; i += 1) {
 			if (i >= numSymbols) {
 				return;
 			}
-			prices[st + i] = b0 + $GetPrice_1(this$static._midCoder[posState], i - 8);
+			prices[st + i] = b0 + this$static._midCoder[posState].GetPrice(i - 8);
 		}
 		for (; i < numSymbols; i += 1) {
-			prices[st + i] = b1 + $GetPrice_1(this$static._highCoder, i - 8 - 8);
+			prices[st + i] = b1 + this$static._highCoder.GetPrice(i - 8 - 8);
 		}
 	}
 		
@@ -1645,30 +1623,95 @@ LZMA = (function () {
 		}
 	}
 	
-	function $Encode_2(this$static, rangeEncoder, symbol) {
-		var bit, bitIndex, m;
+	function BitTreeEncoder(numBitLevels) {
+		this.NumBitLevels = numBitLevels;
+		this.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
+	}
+	// Static members
+	BitTreeEncoder.ReverseEncode = function (Models, startIndex, rangeEncoder, NumBitLevels, symbol) {
+		var bit, i, m;
 		m = 1;
-		for (bitIndex = this$static.NumBitLevels; bitIndex != 0;) {
-			bitIndex -= 1;
-			bit = symbol >>> bitIndex & 1;
-			$Encode_3(rangeEncoder, this$static.Models, m, bit);
+		for (i = 0; i < NumBitLevels; i += 1) {
+			bit = symbol & 1;
+			$Encode_3(rangeEncoder, Models, startIndex + m, bit);
+			m = m << 1 | bit;
+			symbol >>= 1;
+		}
+	};
+	BitTreeEncoder.ReverseGetPrice = function (Models, startIndex, NumBitLevels, symbol) {
+		var bit, i, m, price;
+		price = 0;
+		m = 1;
+		for (i = NumBitLevels; i != 0; i -= 1) {
+			bit = symbol & 1;
+			symbol >>>= 1;
+			$clinit_66();
+			price += ProbPrices[((Models[startIndex + m] - bit ^ -bit) & 2047) >>> 2];
 			m = m << 1 | bit;
 		}
-	}
+		return price;
+	};
+
+	// Member variables
+	BitTreeEncoder.prototype.typeMarker$ = nullMethod;
+	BitTreeEncoder.prototype.getClass$ = getClass_43;
+	BitTreeEncoder.prototype.typeId$ = 21;
+	BitTreeEncoder.prototype.Models = null;
+	BitTreeEncoder.prototype.NumBitLevels = 0;
+	BitTreeEncoder.prototype.ReverseEncode = function (rangeEncoder, symbol) {
+		// Call static version with member variables
+		return BitTreeEncoder.ReverseEncode(this.Models, 0, rangeEncoder, this.NumBitLevels, symbol);
+	};
+	BitTreeEncoder.prototype.GetPrice = function (symbol) {
+		var bit, bitIndex, m, price;
+
+		price = 0;
+		m = 1;
+		for (bitIndex = this.NumBitLevels; bitIndex != 0;) {
+			bitIndex -= 1;
+			bit = symbol >>> bitIndex & 1;
+			price += GetPrice(this.Models[m], bit);
+			m = (m << 1) + bit;
+		}
+		return price;
+	};
+	BitTreeEncoder.prototype.ReverseGetPrice = function (symbol) {
+		var bit, i, m, price;
+		price = 0;
+		m = 1;
+		for (i = this.NumBitLevels; i != 0; i -= 1) {
+			bit = symbol & 1;
+			symbol >>>= 1;
+			price += GetPrice(this.Models[m], bit);
+			m = m << 1 | bit;
+		}
+		return price;
+	};
+	BitTreeEncoder.prototype.Encode = function (rangeEncoder, symbol) {
+		var bit, bitIndex, m;
+		m = 1;
+		for (bitIndex = this.NumBitLevels; bitIndex != 0;) {
+			bitIndex -= 1;
+			bit = symbol >>> bitIndex & 1;
+			$Encode_3(rangeEncoder, this.Models, m, bit);
+			m = m << 1 | bit;
+		}
+	};
+	
 	
 	function $Encode(this$static, rangeEncoder, symbol, posState) {
 		if (symbol < 8) {
 			$Encode_3(rangeEncoder, this$static._choice, 0, 0);
-			$Encode_2(this$static._lowCoder[posState], rangeEncoder, symbol);
+			this$static._lowCoder[posState].Encode(rangeEncoder, symbol);
 		} else {
 			symbol -= 8;
 			$Encode_3(rangeEncoder, this$static._choice, 0, 1);
 			if (symbol < 8) {
 				$Encode_3(rangeEncoder, this$static._choice, 1, 0);
-				$Encode_2(this$static._midCoder[posState], rangeEncoder, symbol);
+				this$static._midCoder[posState].Encode(rangeEncoder, symbol);
 			} else {
 				$Encode_3(rangeEncoder, this$static._choice, 1, 1);
-				$Encode_2(this$static._highCoder, rangeEncoder, symbol - 8);
+				this$static._highCoder.Encode(rangeEncoder, symbol - 8);
 			}
 		}
 	}
@@ -1696,28 +1739,6 @@ LZMA = (function () {
 		}
 	}
 	
-	function ReverseEncode(Models, startIndex, rangeEncoder, NumBitLevels, symbol) {
-		var bit, i, m;
-		m = 1;
-		for (i = 0; i < NumBitLevels; i += 1) {
-			bit = symbol & 1;
-			$Encode_3(rangeEncoder, Models, startIndex + m, bit);
-			m = m << 1 | bit;
-			symbol >>= 1;
-		}
-	}
-	
-	function $ReverseEncode(this$static, rangeEncoder, symbol) {
-		var bit, i, m;
-		m = 1;
-		for (i = 0; i < this$static.NumBitLevels; i += 1) {
-			bit = symbol & 1;
-			$Encode_3(rangeEncoder, this$static.Models, m, bit);
-			m = m << 1 | bit;
-			symbol >>= 1;
-		}
-	}
-	
 	function $WriteEndMarker(this$static, posState) {
 		var lenToPosState;
 		if (!this$static._writeEndMark) {
@@ -1728,9 +1749,9 @@ LZMA = (function () {
 		this$static._state = this$static._state < 7 ? 7 : 10;
 		$Encode_0(this$static._lenEncoder, this$static._rangeEncoder, 0, posState);
 		lenToPosState = GetLenToPosState(2);
-		$Encode_2(this$static._posSlotEncoder[lenToPosState], this$static._rangeEncoder, 63);
+		this$static._posSlotEncoder[lenToPosState].Encode(this$static._rangeEncoder, 63);
 		$EncodeDirectBits(this$static._rangeEncoder, 67108863, 26);
-		$ReverseEncode(this$static._posAlignEncoder, this$static._rangeEncoder, 15);
+		this$static._posAlignEncoder.ReverseEncode(this$static._rangeEncoder, 15);
 	}
 	
 	function $FlushData(this$static) {
@@ -2580,46 +2601,19 @@ LZMA = (function () {
 		return g_FastPos[pos >> 20] + 40;
 	}
 	
-	function $ReverseGetPrice(this$static, symbol) {
-		var bit, i, m, price;
-		price = 0;
-		m = 1;
-		for (i = this$static.NumBitLevels; i != 0; i -= 1) {
-			bit = symbol & 1;
-			symbol >>>= 1;
-			price += GetPrice(this$static.Models[m], bit);
-			m = m << 1 | bit;
-		}
-		return price;
-	}
-	
-	function ReverseGetPrice(Models, startIndex, NumBitLevels, symbol) {
-		var bit, i, m, price;
-		price = 0;
-		m = 1;
-		for (i = NumBitLevels; i != 0; i -= 1) {
-			bit = symbol & 1;
-			symbol >>>= 1;
-			$clinit_66();
-			price += ProbPrices[((Models[startIndex + m] - bit ^ -bit) & 2047) >>> 2];
-			m = m << 1 | bit;
-		}
-		return price;
-	}
-	
 	function $FillDistancesPrices(this$static) {
 		var baseVal, encoder, footerBits, i, lenToPosState, posSlot, st, st2;
 		for (i = 4; i < 128; i += 1) {
 			posSlot = GetPosSlot(i);
 			footerBits = (posSlot >> 1) - 1;
 			baseVal = (2 | posSlot & 1) << footerBits;
-			this$static.tempPrices[i] = ReverseGetPrice(this$static._posEncoders, baseVal - posSlot - 1, footerBits, i - baseVal);
+			this$static.tempPrices[i] = BitTreeEncoder.ReverseGetPrice(this$static._posEncoders, baseVal - posSlot - 1, footerBits, i - baseVal);
 		}
 		for (lenToPosState = 0; lenToPosState < 4; lenToPosState += 1) {
 			encoder = this$static._posSlotEncoder[lenToPosState];
 			st = lenToPosState << 6;
 			for (posSlot = 0; posSlot < this$static._distTableSize; posSlot += 1) {
-				this$static._posSlotPrices[st + posSlot] = $GetPrice_1(encoder, posSlot);
+				this$static._posSlotPrices[st + posSlot] = encoder.GetPrice(posSlot);
 			}
 			for (posSlot = 14; posSlot < this$static._distTableSize; posSlot += 1) {
 				this$static._posSlotPrices[st + posSlot] += (posSlot >> 1) - 1 - 4 << 6;
@@ -2638,7 +2632,7 @@ LZMA = (function () {
 	function $FillAlignPrices(this$static) {
 		var i;
 		for (i = 0; i < 16; i += 1) {
-			this$static._alignPrices[i] = $ReverseGetPrice(this$static._posAlignEncoder, i);
+			this$static._alignPrices[i] = this$static._posAlignEncoder.ReverseGetPrice(i);
 		}
 		this$static._alignPriceCount = 0;
 	}
@@ -2739,16 +2733,16 @@ LZMA = (function () {
 					pos -= 4;
 					posSlot = GetPosSlot(pos);
 					lenToPosState = GetLenToPosState(len);
-					$Encode_2(this$static._posSlotEncoder[lenToPosState], this$static._rangeEncoder, posSlot);
+					this$static._posSlotEncoder[lenToPosState].Encode(this$static._rangeEncoder, posSlot);
 					if (posSlot >= 4) {
 						footerBits = (posSlot >> 1) - 1;
 						baseVal = (2 | posSlot & 1) << footerBits;
 						posReduced = pos - baseVal;
 						if (posSlot < 14) {
-							ReverseEncode(this$static._posEncoders, baseVal - posSlot - 1, this$static._rangeEncoder, footerBits, posReduced);
+							BitTreeEncoder.ReverseEncode(this$static._posEncoders, baseVal - posSlot - 1, this$static._rangeEncoder, footerBits, posReduced);
 						} else {
 							$EncodeDirectBits(this$static._rangeEncoder, posReduced >> 4, footerBits - 4);
-							$ReverseEncode(this$static._posAlignEncoder, this$static._rangeEncoder, posReduced & 15);
+							this$static._posAlignEncoder.ReverseEncode(this$static._rangeEncoder, posReduced & 15);
 							this$static._alignPriceCount += 1;
 						}
 					}
@@ -2863,10 +2857,10 @@ LZMA = (function () {
 		this$static._choice = initDim(_3S_classLit, 0, -1, 2, 1);
 		this$static._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
 		this$static._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this$static._highCoder = $BitTreeEncoder(new BitTreeEncoder(), 8);
+		this$static._highCoder = new BitTreeEncoder(8);
 		for (posState = 0; posState < 16; posState += 1) {
-			this$static._lowCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
-			this$static._midCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
+			this$static._lowCoder[posState] = new BitTreeEncoder(3);
+			this$static._midCoder[posState] = new BitTreeEncoder(3);
 		}
 		return this$static;
 	}
@@ -2902,7 +2896,7 @@ LZMA = (function () {
 		this$static._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
 		this$static._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
 		this$static._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
-		this$static._posAlignEncoder = $BitTreeEncoder(new BitTreeEncoder(), 4);
+		this$static._posAlignEncoder = new BitTreeEncoder(4);
 		this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
 		this$static._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
 		this$static._literalEncoder = new Encoder$LiteralEncoder();
@@ -2921,7 +2915,7 @@ LZMA = (function () {
 			this$static._optimum[i] = new Encoder$Optimal();
 		}
 		for (i = 0; i < 4; i += 1) {
-			this$static._posSlotEncoder[i] = $BitTreeEncoder(new BitTreeEncoder(), 6);
+			this$static._posSlotEncoder[i] = new BitTreeEncoder(6);
 		}
 		return this$static;
 	}
@@ -3726,11 +3720,6 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit;
 	}
 	
-	BitTreeEncoder.prototype = new Object_0();
-	BitTreeEncoder.prototype.getClass$ = getClass_43;
-	BitTreeEncoder.prototype.typeId$ = 21;
-	BitTreeEncoder.prototype.Models = null;
-	BitTreeEncoder.prototype.NumBitLevels = 0;
 	function getClass_44() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit;
 	}
