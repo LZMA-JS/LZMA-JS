@@ -15,7 +15,7 @@ Live demos can be found [here](http://nmrugg.github.com/LZMA-JS/ "Demos").
 How to Use
 ---
 
-First, load the bootstraping code.
+First, load the bootstrapping code.
     
     /// In a browser:
     <script src="../src/lzma.js"></script>
@@ -26,7 +26,7 @@ First, load the bootstraping code.
 Create the LZMA object.
     
     /// LZMA([optional path])
-    /// If lzma_worker.js is in the same director, you don't need to set the path.
+    /// If lzma_worker.js is in the same directory, you don't need to set the path.
     /// You should be able to do the first two steps simultaneously in Node.js: var my_lzma = require("../src/lzma.js").LZMA();
     var my_lzma = new LZMA("../src/lzma_worker.js");
 
