@@ -1,7 +1,7 @@
 LZMA in a Browser
 ===
 
-LZMA.JS is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
+[LZMA.JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
 The JavaScript, CSS, and HTML is licensed under the MIT license.  See LICENSE for more details.
 
 It is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
@@ -34,10 +34,10 @@ Create the LZMA object.
 
     /// To compress:
     ///NOTE: mode can be 1-9 (1 is fast but not as good; 9 will probably make your browser crash).
-    my_lzma.compress(string, mode, on_finish(result) {}, on_progress (percent) {});
+    my_lzma.compress(string, mode, on_finish(result) {}, on_progress(percent) {});
     
     /// To decompress:
-    my_lzma.decompress(byte_array, on_finish(result) {}, on_progress (percent) {});
+    my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
 
 Node.js Installation
 ---
