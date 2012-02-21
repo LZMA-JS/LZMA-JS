@@ -1,0 +1,3 @@
+BitTreeEncoder
+  * Needs init function
+  * Combine ReverseGetPrice (static and instance) if possible
