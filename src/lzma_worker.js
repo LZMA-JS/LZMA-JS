@@ -1,7 +1,9 @@
+/*jslint bitwise: true, continue: true, sloppy: true, eqeq: true, vars: true, white: true, newcap: true, nomen: true, plusplus: true, regexp: true, maxerr: 500, indent: 4 */
+
 var LZMA,
 	action_compress   = 1,
 	action_decompress = 2,
-	action_update	 = 3;
+	action_update     = 3;
 
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
@@ -847,8 +849,7 @@ LZMA = (function () {
 			digits = String(lowBits_0(sub(rem, mul(remDivTenPower, tenPowerLong))));
 			rem = remDivTenPower;
 			if (!(rem[0] == 0 && rem[1] == 0)) {
-				zeroesNeeded = 9 - digits.length;
-				for (; zeroesNeeded > 0; zeroesNeeded -= 1) {
+				for (zeroesNeeded = 9 - digits.length; zeroesNeeded > 0; zeroesNeeded -= 1) {
 					digits = '0' + digits;
 				}
 			}
@@ -946,12 +947,14 @@ LZMA = (function () {
 			destArray = dynamicCast(dest, 3);
 			if (src === dest && srcOfs < destOfs) {
 				srcOfs += len;
-				for (destEnd = destOfs + len; destEnd-- > destOfs;) {
+				destEnd = destOfs + len;
+				while (destEnd-- > destOfs) {
 					srcOfs -= 1;
 					setCheck(destArray, destEnd, srcArray[srcOfs]);
 				}
 			} else {
-				for (destEnd = destOfs + len; destOfs < destEnd;) {
+                destEnd = destOfs + len;
+				while (destOfs < destEnd) {
 					setCheck(destArray, destOfs, srcArray[srcOfs]);
 					destOfs += 1;
 					srcOfs += 1;
@@ -1222,7 +1225,8 @@ LZMA = (function () {
 
 			price = 0;
 			m = 1;
-			for (bitIndex = this.NumBitLevels; bitIndex != 0;) {
+			bitIndex = this.NumBitLevels;
+			while (bitIndex != 0) {
 				bitIndex -= 1;
 				bit = symbol >>> bitIndex & 1;
 				price += GetPrice(this.Models[m], bit);
@@ -1245,7 +1249,8 @@ LZMA = (function () {
 		Encode: function (rangeEncoder, symbol) {
 			var bit, bitIndex, m;
 			m = 1;
-			for (bitIndex = this.NumBitLevels; bitIndex != 0;) {
+			bitIndex = this.NumBitLevels;
+			while (bitIndex != 0) {
 				bitIndex -= 1;
 				bit = symbol >>> bitIndex & 1;
 				$Encode_3(rangeEncoder, this.Models, m, bit);
@@ -1534,13 +1539,13 @@ LZMA = (function () {
 				}
 				prices[st + i] = a0 + this._lowCoder[posState].GetPrice(i);
 			}
-			for (; i < 16; i += 1) {
+			for (i; i < 16; i += 1) {
 				if (i >= numSymbols) {
 					return;
 				}
 				prices[st + i] = b0 + this._midCoder[posState].GetPrice(i - 8);
 			}
-			for (; i < numSymbols; i += 1) {
+			for (i; i < numSymbols; i += 1) {
 				prices[st + i] = b1 + this._highCoder.GetPrice(i - 8 - 8);
 			}
 		},
@@ -1613,7 +1618,7 @@ LZMA = (function () {
 			context = 1;
 			i = 7;
 			if (matchMode) {
-				for (; i >= 0; i -= 1) {
+				for (i; i >= 0; i -= 1) {
 					matchBit = matchByte >> i & 1;
 					bit = symbol >> i & 1;
 					price += GetPrice(this.m_Encoders[(1 + matchBit << 8) + context], bit);
@@ -1624,7 +1629,7 @@ LZMA = (function () {
 					}
 				}
 			}
-			for (; i >= 0; i -= 1) {
+			for (i; i >= 0; i -= 1) {
 				bit = symbol >> i & 1;
 				price += GetPrice(this.m_Encoders[context], bit);
 				context = context << 1 | bit;
@@ -1994,7 +1999,7 @@ LZMA = (function () {
 				while (len > this._matchDistances[offs]) {
 					offs += 2;
 				}
-				for (;; len += 1) {
+				while (true) {
 					distance = this._matchDistances[offs + 1];
 					curAndLenPrice = normalMatchPrice + this.GetPosLenPrice(distance, len, posState);
 					optimum = this._optimum[len];
@@ -2010,6 +2015,7 @@ LZMA = (function () {
 							break;
 						}
 					}
+					len += 1;
 				}
 			}
 			cur = 0;
@@ -2222,7 +2228,7 @@ LZMA = (function () {
 				}
 				if (newLen > numAvailableBytes) {
 					newLen = numAvailableBytes;
-					for (numDistancePairs = 0;; numDistancePairs += 2) {
+					for (numDistancePairs = 0; true; numDistancePairs += 2) {
 						if (newLen <= this._matchDistances[numDistancePairs]) {
 							break;
 						}
@@ -2240,7 +2246,7 @@ LZMA = (function () {
 					while (startLen > this._matchDistances[offs]) {
 						offs += 2;
 					}
-					for (lenTest = startLen;; lenTest += 1) {
+					for (lenTest = startLen; true; lenTest += 1) {
 						curBack = this._matchDistances[offs + 1];
 						curAndLenPrice = normalMatchPrice + this.GetPosLenPrice(curBack, lenTest, posState);
 						optimum = this._optimum[cur + lenTest];
@@ -2486,7 +2492,7 @@ LZMA = (function () {
 				for (i = 0; i < 4; i += 1) {
 					this._distancesPrices[st2 + i] = this._posSlotPrices[st + i];
 				}
-				for (; i < 128; i += 1) {
+				for (i; i < 128; i += 1) {
 					this._distancesPrices[st2 + i] = this._posSlotPrices[st + GetPosSlot(i)] + this.tempPrices[i];
 				}
 			}
@@ -2505,7 +2511,7 @@ LZMA = (function () {
 				return false;
 			}
 			this._dictionarySize = dictionarySize;
-			for (dicLogSize = 0;; dicLogSize += 1) {
+			for (dicLogSize = 0; true; dicLogSize += 1) {
 				if (dictionarySize >= 1 << dicLogSize) {
 					break;
 				}
@@ -3156,7 +3162,7 @@ LZMA = (function () {
 			if (pos < 0) {
 				pos += this._windowSize;
 			}
-			for (; len != 0; len -= 1) {
+			for (len; len != 0; len -= 1) {
 				if (pos >= this._windowSize) {
 					pos = 0;
 				}
@@ -3192,9 +3198,10 @@ LZMA = (function () {
 			this.m_HighCoder = new BitTreeDecoder(8);
 		},
 		Create: function (numPosStates) {
-			for (; this.m_NumPosStates < numPosStates; this.m_NumPosStates += 1) {
+			while (this.m_NumPosStates < numPosStates) {
 				this.m_LowCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
 				this.m_MidCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
+				this.m_NumPosStates += 1
 			}
 		},
 		Init: function () {
