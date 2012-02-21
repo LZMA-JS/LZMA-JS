@@ -1,9 +1,3 @@
 BitTreeEncoder
   * Needs init function
   * Combine ReverseGetPrice (static and instance) if possible
-
-RangeCoderEncoder
-RangeCoderDecoder
-  * Figure out InitBitModels mess
-
-Use Simple Prototypical Inheritence

@@ -3,6 +3,74 @@ var LZMA,
 	action_decompress = 2,
 	action_update	 = 3;
 
+/* Simple JavaScript Inheritance
+ * By John Resig http://ejohn.org/
+ * MIT Licensed.
+ */
+// Inspired by base2 and Prototype
+(function () {
+	var initializing = false,
+		fnTest = /xyz/.test(function () { return xyz; }) ? /\b_super\b/ : /.*/;
+	// The base Class implementation (does nothing)
+	this.$Class = function () {};
+
+	// Create a new Class that inherits from this class
+	$Class.extend = function (prop) {
+		var _super = this.prototype, name, prototype;
+
+		// Instantiate a base class (but only create the instance,
+		// don't run the init constructor)
+		initializing = true;
+		prototype = new this();
+		initializing = false;
+
+		// Copy the properties over onto the new prototype
+		for (name in prop) {
+			// Check if we're overwriting an existing function
+			prototype[name] = typeof prop[name] == "function" && 
+				typeof _super[name] == "function" && fnTest.test(prop[name]) ?
+				(function (name, fn) {
+					return function () {
+						var tmp = this._super, ret;
+			
+						// Add a new ._super() method that is the same method
+						// but on the super-class
+						this._super = _super[name];
+			
+						// The method only need to be bound temporarily, so we
+						// remove it when we're done executing
+						ret = fn.apply(this, arguments);        
+						this._super = tmp;
+			
+						return ret;
+					};
+				}(name, prop[name])) :
+				prop[name];
+		}
+
+		// The dummy class constructor
+		function $Class() {
+			// All construction is actually done in the init method
+			if (!initializing && this.init) {
+				if (this.initialize) {
+					this.initialize.apply(this, arguments);
+				}
+				this.init.apply(this, arguments);
+			}
+		}
+
+		// Populate our constructed prototype object
+		$Class.prototype = prototype;
+
+		// Enforce the constructor to be what we expect
+		$Class.constructor = $Class;
+
+		// And make this class extendable
+		$Class.extend = arguments.callee;
+
+		return $Class;
+	};
+}());
 
 function update_progress(percent, callback_num) {
 	///TODO: Calculate ETA.
@@ -1190,11 +1258,13 @@ LZMA = (function () {
 		}
 		return 3;
 	}
-	
-	function BitTreeDecoder(numBitLevels) {
-		this.NumBitLevels = numBitLevels;
-		this.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
-	}
+
+	var BitTreeDecoder = $Class.extend({
+		init: function (numBitLevels) {
+			this.NumBitLevels = numBitLevels;
+			this.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
+		}
+	});
 
 	// Static members
 	BitTreeDecoder.ReverseDecode = function (Models, startIndex, rangeDecoder, NumBitLevels) {
@@ -1414,11 +1484,14 @@ LZMA = (function () {
 			this$static.ShiftLow();
 		}
 	}
-	
-	function BitTreeEncoder(numBitLevels) {
-		this.NumBitLevels = numBitLevels;
-		this.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
-	}
+
+	var BitTreeEncoder = $Class.extend({
+		init: function (numBitLevels) {
+			this.NumBitLevels = numBitLevels;
+			this.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
+		}
+	});
+
 	// Static members
 	BitTreeEncoder.ReverseEncode = function (Models, startIndex, rangeEncoder, NumBitLevels, symbol) {
 		var bit, i, m;
@@ -1493,25 +1566,6 @@ LZMA = (function () {
 	
 	
 	
-	
-	function $Encode_0(this$static, rangeEncoder, symbol, posState) {
-		this$static.Encode(rangeEncoder, symbol, posState);
-		this$static._counters[posState] -= 1;
-		if (this$static._counters[posState] == 0) {
-			this$static.SetPrices(posState, this$static._tableSize, this$static._prices, posState * 272);
-			this$static._counters[posState] = this$static._tableSize;
-		}
-	}
-	
-	function $MakeAsChar(this$static) {
-		this$static.BackPrev = -1;
-		this$static.Prev1IsChar = false;
-	}
-	
-	function $MakeAsShortRep(this$static) {
-		this$static.BackPrev = 0;
-		this$static.Prev1IsChar = false;
-	}
 	
 	function GetPosSlot2(pos) {
 		if (pos < 131072) {
@@ -1858,8 +1912,8 @@ LZMA = (function () {
 		}
 	}
 	
-	function RangeCoderEncoder() {
-	}
+	var RangeCoderEncoder = $Class.extend();
+
 	// Static members
 	RangeCoderEncoder.InitBitModels = function (probs) {
 		$clinit_66();
@@ -1920,22 +1974,22 @@ LZMA = (function () {
 	
 	
 	
-	function Encoder$LenPriceTableEncoder() {
-	}
-	
-	function LenEncoder() {
-		var posState;
-		this._choice = initDim(_3S_classLit, 0, -1, 2, 1);
-		this._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this._highCoder = new BitTreeEncoder(8);
-		for (posState = 0; posState < 16; posState += 1) {
-			this._lowCoder[posState] = new BitTreeEncoder(3);
-			this._midCoder[posState] = new BitTreeEncoder(3);
+	var LenEncoder = $Class.extend({
+		init: function () {
+			var posState;
+			this._choice = initDim(_3S_classLit, 0, -1, 2, 1);
+			this._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+			this._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+			this._highCoder = new BitTreeEncoder(8);
+			for (posState = 0; posState < 16; posState += 1) {
+				this._lowCoder[posState] = new BitTreeEncoder(3);
+				this._midCoder[posState] = new BitTreeEncoder(3);
+			}
 		}
-	}
-	LenEncoder.prototype = new Object_0();
+	});
+
 	LenEncoder.prototype.getClass$ = getClass_33;
+	LenEncoder.prototype.typeMarker$ = nullMethod;
 	LenEncoder.prototype.typeId$ = 0;
 	LenEncoder.prototype.Encode = function (rangeEncoder, symbol, posState) {
 		if (symbol < 8) {
@@ -1988,19 +2042,41 @@ LZMA = (function () {
 		RangeCoderDecoder.InitBitModels(this._highCoder.Models);
 	};
 	
+	var LenPriceTableEncoder = LenEncoder.extend({
+		init: function () {
+			this._super();
+			this._prices = initDim(_3I_classLit, 0, -1, 4352, 1);
+			this._counters = initDim(_3I_classLit, 0, -1, 16, 1);
+		},
+		UpdateTables: function (numPosStates) {
+			var posState;
+			for (posState = 0; posState < numPosStates; posState += 1) {
+				this.SetPrices(posState, this._tableSize, this._prices, posState * 272);
+				this._counters[posState] = this._tableSize;
+			}
+		},
+		Encode: function (rangeEncoder, symbol, posState) {
+			this._super(rangeEncoder, symbol, posState);
+			this._counters[posState] -= 1;
+			if (this._counters[posState] == 0) {
+				this.SetPrices(posState, this._tableSize, this._prices, posState * 272);
+				this._counters[posState] = this._tableSize;
+			}
+		}
+		
+	});
+	LenPriceTableEncoder.prototype.getClass$ = getClass_34;
+	LenPriceTableEncoder.prototype.typeId$ = 0;
+	LenPriceTableEncoder.prototype._tableSize = 0;
 	
-	function $Encoder$LenPriceTableEncoder(this$static) {
-		LenEncoder.apply(this$static);
-		this$static._prices = initDim(_3I_classLit, 0, -1, 4352, 1);
-		this$static._counters = initDim(_3I_classLit, 0, -1, 16, 1);
-		return this$static;
-	}
-	
-	function Encoder2() {
-		this.m_Encoders = initDim(_3S_classLit, 0, -1, 768, 1);
-	}
+	var Encoder2 = $Class.extend({
+		init: function () {
+			this.m_Encoders = initDim(_3S_classLit, 0, -1, 768, 1);
+		}
+	});
+
 	Encoder2.prototype.getClass$ = getClass_35;
-	Object_0.prototype.typeMarker$ = nullMethod;
+	Encoder2.prototype.typeMarker$ = nullMethod;
 	Encoder2.prototype.typeId$ = 18;
 	Encoder2.prototype.EncodeMatched = function (rangeEncoder, matchByte, symbol) {
 		var bit, context, i, matchBit, same, state;
@@ -2052,8 +2128,8 @@ LZMA = (function () {
 		}
 	};
 
-	function LiteralEncoder() {
-	}
+	var LiteralEncoder = $Class.extend();
+	
 	LiteralEncoder.prototype.getClass$ = getClass_36;
 	LiteralEncoder.prototype.typeMarker$ = nullMethod;
 	LiteralEncoder.prototype.typeId$ = 0;
@@ -2081,48 +2157,75 @@ LZMA = (function () {
 	
 	
 	
-	function Encoder$Optimal() {
-	}
+	var Optimal = $Class.extend({
+		MakeAsChar: function () {
+			this.BackPrev = -1;
+			this.Prev1IsChar = false;
+		},
+		MakeAsShortRep: function () {
+			this.BackPrev = 0;
+			this.Prev1IsChar = false;
+		}
+	});
+
+	Optimal.prototype = new Object_0();
+	Optimal.prototype.getClass$ = getClass_37;
+	Optimal.prototype.typeId$ = 19;
+	Optimal.prototype.BackPrev = 0;
+	Optimal.prototype.BackPrev2 = 0;
+	Optimal.prototype.Backs0 = 0;
+	Optimal.prototype.Backs1 = 0;
+	Optimal.prototype.Backs2 = 0;
+	Optimal.prototype.Backs3 = 0;
+	Optimal.prototype.PosPrev = 0;
+	Optimal.prototype.PosPrev2 = 0;
+	Optimal.prototype.Prev1IsChar = false;
+	Optimal.prototype.Prev2 = false;
+	Optimal.prototype.Price = 0;
+	Optimal.prototype.State = 0;
 	
-	function Encoder() {
-		var i;
-		$clinit_59();
-		this._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
-		this._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
-		$clinit_66();
-		this._rangeEncoder = new RangeCoderEncoder();
-		this._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
-		this._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
-		this._isRepG0 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
-		this._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
-		this._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
-		this._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
-		this._posAlignEncoder = new BitTreeEncoder(4);
-		this._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
-		this._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
-		this._literalEncoder = new LiteralEncoder();
-		this._matchDistances = initDim(_3I_classLit, 0, -1, 548, 1);
-		this._posSlotPrices = initDim(_3I_classLit, 0, -1, 256, 1);
-		this._distancesPrices = initDim(_3I_classLit, 0, -1, 512, 1);
-		this._alignPrices = initDim(_3I_classLit, 0, -1, 16, 1);
-		this.reps = initDim(_3I_classLit, 0, -1, 4, 1);
-		this.repLens = initDim(_3I_classLit, 0, -1, 4, 1);
-		this.processedInSize = initDim(_3J_classLit, 0, -1, 1, 3);
-		this.processedOutSize = initDim(_3J_classLit, 0, -1, 1, 3);
-		this.finished = initDim(_3Z_classLit, 0, -1, 1, 2);
-		this.properties = initDim(_3B_classLit, 0, -1, 5, 1);
-		this.tempPrices = initDim(_3I_classLit, 0, -1, 128, 1);
-		for (i = 0; i < 4096; i += 1) {
-			this._optimum[i] = new Encoder$Optimal();
+	var Encoder = $Class.extend({
+		init: function () {
+			var i;
+			$clinit_59();
+			this._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
+			this._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
+			$clinit_66();
+			this._rangeEncoder = new RangeCoderEncoder();
+			this._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
+			this._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
+			this._isRepG0 = initDim(_3S_classLit, 0, -1, 12, 1);
+			this._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
+			this._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
+			this._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
+			this._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
+			this._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
+			this._posAlignEncoder = new BitTreeEncoder(4);
+			this._lenEncoder = new LenPriceTableEncoder();
+			this._repMatchLenEncoder = new LenPriceTableEncoder();
+			this._literalEncoder = new LiteralEncoder();
+			this._matchDistances = initDim(_3I_classLit, 0, -1, 548, 1);
+			this._posSlotPrices = initDim(_3I_classLit, 0, -1, 256, 1);
+			this._distancesPrices = initDim(_3I_classLit, 0, -1, 512, 1);
+			this._alignPrices = initDim(_3I_classLit, 0, -1, 16, 1);
+			this.reps = initDim(_3I_classLit, 0, -1, 4, 1);
+			this.repLens = initDim(_3I_classLit, 0, -1, 4, 1);
+			this.processedInSize = initDim(_3J_classLit, 0, -1, 1, 3);
+			this.processedOutSize = initDim(_3J_classLit, 0, -1, 1, 3);
+			this.finished = initDim(_3Z_classLit, 0, -1, 1, 2);
+			this.properties = initDim(_3B_classLit, 0, -1, 5, 1);
+			this.tempPrices = initDim(_3I_classLit, 0, -1, 128, 1);
+			for (i = 0; i < 4096; i += 1) {
+				this._optimum[i] = new Optimal();
+			}
+			for (i = 0; i < 4; i += 1) {
+				this._posSlotEncoder[i] = new BitTreeEncoder(6);
+			}
 		}
-		for (i = 0; i < 4; i += 1) {
-			this._posSlotEncoder[i] = new BitTreeEncoder(6);
-		}
-	}
-	Encoder.prototype = new Object_0();
+	});
+
 	Encoder.prototype.getClass$ = getClass_38;
+	Encoder.prototype.typeMarker$ = nullMethod;
 	Encoder.prototype.typeId$ = 0;
 	Encoder.prototype._additionalOffset = 0;
 	Encoder.prototype._alignPriceCount = 0;
@@ -2209,7 +2312,7 @@ LZMA = (function () {
 		backMem = this._optimum[cur].BackPrev;
 		do {
 			if (this._optimum[cur].Prev1IsChar) {
-				$MakeAsChar(this._optimum[posMem]);
+				this._optimum[posMem].MakeAsChar();
 				this._optimum[posMem].PosPrev = posMem - 1;
 				if (this._optimum[cur].Prev2) {
 					this._optimum[posMem - 1].Prev1IsChar = false;
@@ -2332,14 +2435,14 @@ LZMA = (function () {
 		posState = position & this._posStateMask;
 		$clinit_66();
 		this._optimum[1].Price = (ProbPrices[this._isMatch[(this._state << 4) + posState] >>> 2]) + this._literalEncoder.GetSubCoder(position, this._previousByte).GetPrice(this._state >= 7, matchByte, currentByte);
-		$MakeAsChar(this._optimum[1]);
+		this._optimum[1].MakeAsChar();
 		matchPrice = ProbPrices[2048 - this._isMatch[(this._state << 4) + posState] >>> 2];
 		repMatchPrice = matchPrice + ProbPrices[2048 - this._isRep[this._state] >>> 2];
 		if (matchByte == currentByte) {
 			shortRepPrice = repMatchPrice + this.GetRepLen1Price(this._state, posState);
 			if (shortRepPrice < this._optimum[1].Price) {
 				this._optimum[1].Price = shortRepPrice;
-				$MakeAsShortRep(this._optimum[1]);
+				this._optimum[1].MakeAsShortRep();
 			}
 		}
 		lenEnd = lenMain >= this.repLens[repMaxIndex] ? lenMain : this.repLens[repMaxIndex];
@@ -2687,7 +2790,7 @@ LZMA = (function () {
 		$Encode_3(this._rangeEncoder, this._isMatch, (this._state << 4) + posState, 1);
 		$Encode_3(this._rangeEncoder, this._isRep, this._state, 0);
 		this._state = this._state < 7 ? 7 : 10;
-		$Encode_0(this._lenEncoder, this._rangeEncoder, 0, posState);
+		this._lenEncoder.Encode(this._rangeEncoder, 0, posState);
 		lenToPosState = GetLenToPosState(2);
 		this._posSlotEncoder[lenToPosState].Encode(this._rangeEncoder, 63);
 		this._rangeEncoder.EncodeDirectBits(67108863, 26);
@@ -2783,7 +2886,7 @@ LZMA = (function () {
 					if (len == 1) {
 						this._state = this._state < 7 ? 9 : 11;
 					} else {
-						$Encode_0(this._repMatchLenEncoder, this._rangeEncoder, len - 2, posState);
+						this._repMatchLenEncoder.Encode(this._rangeEncoder, len - 2, posState);
 						this._state = this._state < 7 ? 8 : 11;
 					}
 					distance = this._repDistances[pos];
@@ -2796,7 +2899,7 @@ LZMA = (function () {
 				} else {
 					$Encode_3(this._rangeEncoder, this._isRep, this._state, 0);
 					this._state = this._state < 7 ? 7 : 10;
-					$Encode_0(this._lenEncoder, this._rangeEncoder, len - 2, posState);
+					this._lenEncoder.Encode(this._rangeEncoder, len - 2, posState);
 					pos -= 4;
 					posSlot = GetPosSlot(pos);
 					lenToPosState = GetLenToPosState(len);
@@ -3097,14 +3200,6 @@ LZMA = (function () {
 		this$static._additionalOffset = 0;
 	}
 	
-	function $UpdateTables(this$static, numPosStates) {
-		var posState;
-		for (posState = 0; posState < numPosStates; posState += 1) {
-			this$static.SetPrices(posState, this$static._tableSize, this$static._prices, posState * 272);
-			this$static._counters[posState] = this$static._tableSize;
-		}
-	}
-	
 	function Chunker() {
 	}
 	
@@ -3148,9 +3243,9 @@ LZMA = (function () {
 		encoder.FillDistancesPrices();
 		encoder.FillAlignPrices();
 		encoder._lenEncoder._tableSize = encoder._numFastBytes + 1 - 2;
-		$UpdateTables(encoder._lenEncoder, 1 << encoder._posStateBits);
+		encoder._lenEncoder.UpdateTables(1 << encoder._posStateBits);
 		encoder._repMatchLenEncoder._tableSize = encoder._numFastBytes + 1 - 2;
-		$UpdateTables(encoder._repMatchLenEncoder, 1 << encoder._posStateBits);
+		encoder._repMatchLenEncoder.UpdateTables(1 << encoder._posStateBits);
 		encoder.nowPos64 = P0_longLit;
 
 		this$static.chunker = $Chunker_0(new Chunker(), encoder);
@@ -3705,10 +3800,6 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
 	}
 	
-	Encoder$LenPriceTableEncoder.prototype = new LenEncoder();
-	Encoder$LenPriceTableEncoder.prototype.getClass$ = getClass_34;
-	Encoder$LenPriceTableEncoder.prototype.typeId$ = 0;
-	Encoder$LenPriceTableEncoder.prototype._tableSize = 0;
 	function getClass_36() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
 	}
@@ -3721,21 +3812,6 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
 	}
 	
-	Encoder$Optimal.prototype = new Object_0();
-	Encoder$Optimal.prototype.getClass$ = getClass_37;
-	Encoder$Optimal.prototype.typeId$ = 19;
-	Encoder$Optimal.prototype.BackPrev = 0;
-	Encoder$Optimal.prototype.BackPrev2 = 0;
-	Encoder$Optimal.prototype.Backs0 = 0;
-	Encoder$Optimal.prototype.Backs1 = 0;
-	Encoder$Optimal.prototype.Backs2 = 0;
-	Encoder$Optimal.prototype.Backs3 = 0;
-	Encoder$Optimal.prototype.PosPrev = 0;
-	Encoder$Optimal.prototype.PosPrev2 = 0;
-	Encoder$Optimal.prototype.Prev1IsChar = false;
-	Encoder$Optimal.prototype.Prev2 = false;
-	Encoder$Optimal.prototype.Price = 0;
-	Encoder$Optimal.prototype.State = 0;
 	function getClass_42() {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit;
 	}
