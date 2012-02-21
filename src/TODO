@@ -5,3 +5,5 @@ BitTreeEncoder
 RangeCoderEncoder
 RangeCoderDecoder
   * Figure out InitBitModels mess
+
+Use Simple Prototypical Inheritence
