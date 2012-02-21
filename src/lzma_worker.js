@@ -1,4 +1,5 @@
-/*jslint bitwise: true, continue: true, sloppy: true, eqeq: true, vars: true, white: true, newcap: true, nomen: true, plusplus: true, regexp: true, maxerr: 500, indent: 4 */
+/*jslint bitwise: true, continue: true, sloppy: true, eqeq: true, white: true, forin: true, newcap: true, nomen: true, plusplus: true, regexp: true, indent: 4 */
+/*global postMessage, onmessage, setTimeout */
 
 var LZMA,
 	action_compress   = 1,
@@ -21,6 +22,23 @@ var $Class;
 	$Class.extend = function extend(prop) {
 		var _super = this.prototype, name, prototype;
 
+		function func_maker(name, fn) {
+			return function () {
+				var tmp = this._super, ret;
+	
+				// Add a new ._super() method that is the same method
+				// but on the super-class
+				this._super = _super[name];
+	
+				// The method only need to be bound temporarily, so we
+				// remove it when we're done executing
+				ret = fn.apply(this, arguments);
+				this._super = tmp;
+	
+				return ret;
+			};
+		}
+
 		// Instantiate a base class (but only create the instance,
 		// don't run the constructor)
 		initializing = true;
@@ -29,26 +47,11 @@ var $Class;
 
 		// Copy the properties over onto the new prototype
 		for (name in prop) {
-			// Check if we're overwriting an existing function
-			prototype[name] = typeof prop[name] == "function" && 
-				typeof _super[name] == "function" && fnTest.test(prop[name]) ?
-				(function (name, fn) {
-					return function () {
-						var tmp = this._super, ret;
-			
-						// Add a new ._super() method that is the same method
-						// but on the super-class
-						this._super = _super[name];
-			
-						// The method only need to be bound temporarily, so we
-						// remove it when we're done executing
-						ret = fn.apply(this, arguments);        
-						this._super = tmp;
-			
-						return ret;
-					};
-				}(name, prop[name])) :
-				prop[name];
+			if (prop.hasOwnProperty(name)) {
+				// Check if we're overwriting an existing function
+				prototype[name] = typeof prop[name] == "function" && 
+					typeof _super[name] == "function" && fnTest.test(prop[name]) ? func_maker(name, prop[name]) : prop[name];
+			}
 		}
 
 		// The dummy class constructor
@@ -85,6 +88,10 @@ function update_progress(percent, callback_num) {
 }
 
 LZMA = (function () {
+	function nullMethod() {}
+	
+	var getClass_11;
+	
 	var Class = $Class.extend({
 		getClass$: getClass_11,
 		typeMarker$: nullMethod,
@@ -106,6 +113,12 @@ LZMA = (function () {
 		return clazz;
 	}
 	
+	var Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class');
+	
+	getClass_11 = function getClass_11() {
+		return Ljava_lang_Class_2_classLit;
+	};
+	
 	var Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'),
 		Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'),
 		Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'),
@@ -121,7 +134,6 @@ LZMA = (function () {
 		Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang.', 'ArithmeticException'),
 		Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang.', 'ArrayStoreException'),
 		_3C_classLit = createForArray('', '[C'),
-		Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class'),
 		Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang.', 'ClassCastException'),
 		Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang.', 'IllegalArgumentException'),
 		Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang.', 'IllegalStateException'),
@@ -210,9 +222,42 @@ LZMA = (function () {
 
 	var dontExecute = {};
 
-	function nullMethod() {
+	function getClass_5() {
+		return Ljava_io_IOException_2_classLit;
 	}
-		
+	
+	function getClass_8() {
+		return Ljava_lang_ArithmeticException_2_classLit;
+	}
+	
+	function getClass_9() {
+		return Ljava_lang_ArrayStoreException_2_classLit;
+	}
+	
+	function getClass_10() {
+		return Ljava_lang_ClassCastException_2_classLit;
+	}
+	
+	function getClass_14() {
+		return Ljava_lang_IllegalArgumentException_2_classLit;
+	}
+	
+	function getClass_15() {
+		return Ljava_lang_IllegalStateException_2_classLit;
+	}
+	
+	function getClass_16() {
+		return Ljava_lang_IndexOutOfBoundsException_2_classLit;
+	}
+	
+	function getClass_17() {
+		return Ljava_lang_NullPointerException_2_classLit;
+	}
+	
+	function getClass_21() {
+		return Ljava_lang_String_2_classLit;
+	}
+
 	function getClass_22() {
 		return Ljava_lang_Throwable_2_classLit;
 	}
@@ -306,6 +351,10 @@ LZMA = (function () {
 		typeId$: 12
 	});
 	
+	function getClass_7() {
+		return Ljava_io_OutputStream_2_classLit;
+	}
+	
 	var OutputStream = $Class.extend({
 		getClass$: getClass_7,
 		typeMarker$: nullMethod,
@@ -322,6 +371,10 @@ LZMA = (function () {
 				i += 1;
 			}
 		}
+	}
+
+	function getClass_2() {
+		return this.arrayClass$;
 	}
 
 	var Array_0 = $Class.extend({
@@ -505,10 +558,6 @@ LZMA = (function () {
 		a[a.explicitLength] = s_0;
 		a.explicitLength += 1;
 		return s_0;
-	}
-	
-	function getClass_2() {
-		return this.arrayClass$;
 	}
 	
 	function setCheck(array, index, value) {
@@ -900,18 +949,7 @@ LZMA = (function () {
 		this$static.pos += 1;
 		return ret;
 	}
-	
-	function getClass_7() {
-		return Ljava_io_OutputStream_2_classLit;
-	}
-	
-	function $equals(this$static, other) {
-		if (other == null) {
-			return false;
-		}
-		return String(this$static) == other;
-	}
-	
+
 	function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
 		var srcIdx;
 		for (srcIdx = srcBegin; srcIdx < srcEnd; srcIdx += 1) {
@@ -953,7 +991,7 @@ LZMA = (function () {
 					setCheck(destArray, destEnd, srcArray[srcOfs]);
 				}
 			} else {
-                destEnd = destOfs + len;
+				destEnd = destOfs + len;
 				while (destOfs < destEnd) {
 					setCheck(destArray, destOfs, srcArray[srcOfs]);
 					destOfs += 1;
@@ -1018,45 +1056,6 @@ LZMA = (function () {
 		}
 	});
 	
-	function getClass_5() {
-		return Ljava_io_IOException_2_classLit;
-	}
-	
-	function getClass_8() {
-		return Ljava_lang_ArithmeticException_2_classLit;
-	}
-	
-	function getClass_9() {
-		return Ljava_lang_ArrayStoreException_2_classLit;
-	}
-	
-	function getClass_11() {
-		return Ljava_lang_Class_2_classLit;
-	}
-	
-	function getClass_10() {
-		return Ljava_lang_ClassCastException_2_classLit;
-	}
-	
-	function getClass_14() {
-		return Ljava_lang_IllegalArgumentException_2_classLit;
-	}
-	
-	function getClass_15() {
-		return Ljava_lang_IllegalStateException_2_classLit;
-	}
-	
-	function getClass_16() {
-		return Ljava_lang_IndexOutOfBoundsException_2_classLit;
-	}
-	
-	function getClass_17() {
-		return Ljava_lang_NullPointerException_2_classLit;
-	}
-	
-	function getClass_21() {
-		return Ljava_lang_String_2_classLit;
-	}
 	
 	String.prototype.getClass$ = getClass_21;
 	String.prototype.typeId$ = 2;
@@ -1109,6 +1108,79 @@ LZMA = (function () {
 		}
 		return 3;
 	}
+	
+	function getClass_40() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit;
+	}
+	
+	function getClass_39() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit;
+	}
+	
+	function getClass_41() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit;
+	}
+	
+	function getClass_28() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit;
+	}
+	
+	function getClass_32() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit;
+	}
+	
+	function getClass_29() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit;
+	}
+	
+	function getClass_31() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit;
+	}
+	
+	function getClass_30() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit;
+	}
+	
+	function getClass_38() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
+	}
+	
+	function getClass_33() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit;
+	}
+	
+	function getClass_34() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
+	}
+	
+	function getClass_36() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
+	}
+	
+	function getClass_35() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit;
+	}
+	
+	function getClass_37() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
+	}
+	
+	function getClass_42() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit;
+	}
+	
+	function getClass_43() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit;
+	}
+	
+	function getClass_44() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit;
+	}
+	
+	function getClass_45() {
+		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit;
+	}
+	
 
 	var BitTreeDecoder = $Class.extend({
 		construct: function (numBitLevels) {
@@ -1699,6 +1771,402 @@ LZMA = (function () {
 		Price: 0,
 		State: 0
 	});
+	
+	function $clinit_60() {
+		if (dontExecute.$clinit_60) {
+			return;
+		}
+		dontExecute.$clinit_60 = true;
+		var i, j, r;
+		CrcTable = initDim(_3I_classLit, 0, -1, 256, 1);
+		for (i = 0; i < 256; i += 1) {
+			r = i;
+			for (j = 0; j < 8; j += 1) {
+				if ((r & 1) != 0) {
+					r = r >>> 1 ^ -306674912;
+				} else {
+					r >>>= 1;
+				}
+			}
+			CrcTable[i] = r;
+		}
+	}
+	
+	var InWindow = $Class.extend({
+		getClass$: getClass_40,
+		typeMarker$: nullMethod,
+		typeId$: 0,
+		_blockSize: 0,
+		_bufferBase: null,
+		_bufferOffset: 0,
+		_keepSizeAfter: 0,
+		_keepSizeBefore: 0,
+		_pointerToLastSafePosition: 0,
+		_pos: 0,
+		_posLimit: 0,
+		_stream: null,
+		_streamEndWasReached: false,
+		_streamPos: 0,
+		ReadBlock: function () {
+			var numReadBytes, pointerToPostion, size;
+			if (this._streamEndWasReached) {
+				return;
+			}
+			while (true) {
+				size = -this._bufferOffset + this._blockSize - this._streamPos;
+				if (size == 0) {
+					return;
+				}
+				numReadBytes = $read_0(this._stream, this._bufferBase, this._bufferOffset + this._streamPos, size);
+				if (numReadBytes == -1) {
+					this._posLimit = this._streamPos;
+					pointerToPostion = this._bufferOffset + this._posLimit;
+					if (pointerToPostion > this._pointerToLastSafePosition) {
+						this._posLimit = this._pointerToLastSafePosition - this._bufferOffset;
+					}
+					this._streamEndWasReached = true;
+					return;
+				}
+				this._streamPos += numReadBytes;
+				if (this._streamPos >= this._pos + this._keepSizeAfter) {
+					this._posLimit = this._streamPos - this._keepSizeAfter;
+				}
+			}
+		},
+		MoveBlock: function () {
+			var i, numBytes, offset;
+			offset = this._bufferOffset + this._pos - this._keepSizeBefore;
+			if (offset > 0) {
+				offset -= 1;
+			}
+			numBytes = this._bufferOffset + this._streamPos - offset;
+			for (i = 0; i < numBytes; i += 1) {
+				this._bufferBase[i] = this._bufferBase[offset + i];
+			}
+			this._bufferOffset -= offset;
+		},
+		MovePos: function () {
+			var pointerToPostion;
+			this._pos += 1;
+			if (this._pos > this._posLimit) {
+				pointerToPostion = this._bufferOffset + this._pos;
+				if (pointerToPostion > this._pointerToLastSafePosition) {
+					this.MoveBlock();
+				}
+				this.ReadBlock();
+			}
+		},
+		ReduceOffsets: function (subValue) {
+			this._bufferOffset += subValue;
+			this._posLimit -= subValue;
+			this._pos -= subValue;
+			this._streamPos -= subValue;
+		},
+		Create: function (keepSizeBefore, keepSizeAfter, keepSizeReserv) {
+			var blockSize;
+			this._keepSizeBefore = keepSizeBefore;
+			this._keepSizeAfter = keepSizeAfter;
+			blockSize = keepSizeBefore + keepSizeAfter + keepSizeReserv;
+			if (this._bufferBase == null || this._blockSize != blockSize) {
+				this._bufferBase = null;
+				this._blockSize = blockSize;
+				this._bufferBase = initDim(_3B_classLit, 0, -1, this._blockSize, 1);
+			}
+			this._pointerToLastSafePosition = this._blockSize - keepSizeAfter;
+		},
+		Init: function () {
+			this._bufferOffset = 0;
+			this._pos = 0;
+			this._streamPos = 0;
+			this._streamEndWasReached = false;
+			this.ReadBlock();
+		}
+	});
+	
+	var BinTree = InWindow.extend({
+		getClass$: getClass_39,
+		typeId$: 0,
+		HASH_ARRAY: true,
+		_cutValue: 255,
+		_cyclicBufferPos: 0,
+		_cyclicBufferSize: 0,
+		_hash: null,
+		_hashMask: 0,
+		_hashSizeSum: 0,
+		_matchMaxLen: 0,
+		_son: null,
+		kFixHashSize: 66560,
+		kMinMatchCheck: 4,
+		kNumHashDirectBytes: 0,
+		MovePos: function () {
+			var subValue;
+			this._cyclicBufferPos += 1;
+			if (this._cyclicBufferPos >= this._cyclicBufferSize) {
+				this._cyclicBufferPos = 0;
+			}
+			this._super();
+			if (this._pos == 1073741823) {
+				subValue = this._pos - this._cyclicBufferSize;
+				this.NormalizeLinks(this._son, this._cyclicBufferSize * 2, subValue);
+				this.NormalizeLinks(this._hash, this._hashSizeSum, subValue);
+				this.ReduceOffsets(subValue);
+			}
+		},
+		GetMatches: function (distances) {
+			var count, cur, curMatch, curMatch2, curMatch3, cyclicPos, delta, hash2Value, hash3Value, hashValue, len, len0, len1, lenLimit, matchMinPos, maxLen, offset, pby1, ptr0, ptr1, temp;
+			if (this._pos + this._matchMaxLen <= this._streamPos) {
+				lenLimit = this._matchMaxLen;
+			} else {
+				lenLimit = this._streamPos - this._pos;
+				if (lenLimit < this.kMinMatchCheck) {
+					this.MovePos();
+					return 0;
+				}
+			}
+			offset = 0;
+			matchMinPos = this._pos > this._cyclicBufferSize ? this._pos - this._cyclicBufferSize : 0;
+			cur = this._bufferOffset + this._pos;
+			maxLen = 1;
+			hash2Value = 0;
+			hash3Value = 0;
+			if (this.HASH_ARRAY) {
+				temp = CrcTable[this._bufferBase[cur] & 255] ^ this._bufferBase[cur + 1] & 255;
+				hash2Value = temp & 1023;
+				temp ^= (this._bufferBase[cur + 2] & 255) << 8;
+				hash3Value = temp & 65535;
+				hashValue = (temp ^ CrcTable[this._bufferBase[cur + 3] & 255] << 5) & this._hashMask;
+			} else {
+				hashValue = this._bufferBase[cur] & 255 ^ (this._bufferBase[cur + 1] & 255) << 8;
+			}
+
+			curMatch = this._hash[this.kFixHashSize + hashValue];
+			if (this.HASH_ARRAY) {
+				curMatch2 = this._hash[hash2Value];
+				curMatch3 = this._hash[1024 + hash3Value];
+				this._hash[hash2Value] = this._pos;
+				this._hash[1024 + hash3Value] = this._pos;
+				if (curMatch2 > matchMinPos) {
+					if (this._bufferBase[this._bufferOffset + curMatch2] == this._bufferBase[cur]) {
+						distances[offset] = maxLen = 2;
+						offset += 1;
+						distances[offset] = this._pos - curMatch2 - 1;
+						offset += 1;
+					}
+				}
+				if (curMatch3 > matchMinPos) {
+					if (this._bufferBase[this._bufferOffset + curMatch3] == this._bufferBase[cur]) {
+						if (curMatch3 == curMatch2) {
+							offset -= 2;
+						}
+						distances[offset] = maxLen = 3;
+						offset += 1;
+						distances[offset] = this._pos - curMatch3 - 1;
+						offset += 1;
+						curMatch2 = curMatch3;
+					}
+				}
+				if (offset != 0 && curMatch2 == curMatch) {
+					offset -= 2;
+					maxLen = 1;
+				}
+			}
+			this._hash[this.kFixHashSize + hashValue] = this._pos;
+			ptr0 = (this._cyclicBufferPos << 1) + 1;
+			ptr1 = this._cyclicBufferPos << 1;
+			len0 = len1 = this.kNumHashDirectBytes;
+			if (this.kNumHashDirectBytes != 0) {
+				if (curMatch > matchMinPos) {
+					if (this._bufferBase[this._bufferOffset + curMatch + this.kNumHashDirectBytes] != this._bufferBase[cur + this.kNumHashDirectBytes]) {
+						distances[offset] = maxLen = this.kNumHashDirectBytes;
+						offset += 1;
+						distances[offset] = this._pos - curMatch - 1;
+						offset += 1;
+					}
+				}
+			}
+			count = this._cutValue;
+			while (true) {
+				if (curMatch <= matchMinPos || count-- == 0) {
+					this._son[ptr0] = this._son[ptr1] = 0;
+					break;
+				}
+				delta = this._pos - curMatch;
+				cyclicPos = (delta <= this._cyclicBufferPos ? this._cyclicBufferPos - delta : this._cyclicBufferPos - delta + this._cyclicBufferSize) << 1;
+				pby1 = this._bufferOffset + curMatch;
+				len = len0 < len1 ? len0 : len1;
+				if (this._bufferBase[pby1 + len] == this._bufferBase[cur + len]) {
+					for (len += 1; len != lenLimit; len += 1) {
+						if (this._bufferBase[pby1 + len] != this._bufferBase[cur + len]) {
+							break;
+						}
+					}
+					if (maxLen < len) {
+						distances[offset] = maxLen = len;
+						offset += 1;
+						distances[offset] = delta - 1;
+						offset += 1;
+						if (len == lenLimit) {
+							this._son[ptr1] = this._son[cyclicPos];
+							this._son[ptr0] = this._son[cyclicPos + 1];
+							break;
+						}
+					}
+				}
+				if ((this._bufferBase[pby1 + len] & 255) < (this._bufferBase[cur + len] & 255)) {
+					this._son[ptr1] = curMatch;
+					ptr1 = cyclicPos + 1;
+					curMatch = this._son[ptr1];
+					len1 = len;
+				} else {
+					this._son[ptr0] = curMatch;
+					ptr0 = cyclicPos;
+					curMatch = this._son[ptr0];
+					len0 = len;
+				}
+			}
+			this.MovePos();
+			return offset;
+		},
+		SetType: function (numHashBytes) {
+			this.HASH_ARRAY = numHashBytes > 2;
+			if (this.HASH_ARRAY) {
+				this.kNumHashDirectBytes = 0;
+				this.kMinMatchCheck = 4;
+				this.kFixHashSize = 66560;
+			} else {
+				this.kNumHashDirectBytes = 2;
+				this.kMinMatchCheck = 3;
+				this.kFixHashSize = 0;
+			}
+		},
+		Skip: function (num) {
+			var count, cur, curMatch, cyclicPos, delta, hash2Value, hash3Value, hashValue, len, len0, len1, lenLimit, matchMinPos, pby1, ptr0, ptr1, temp;
+			do {
+				if (this._pos + this._matchMaxLen <= this._streamPos) {
+					lenLimit = this._matchMaxLen;
+				} else {
+					lenLimit = this._streamPos - this._pos;
+					if (lenLimit < this.kMinMatchCheck) {
+						this.MovePos();
+						continue;
+					}
+				}
+				matchMinPos = this._pos > this._cyclicBufferSize ? this._pos - this._cyclicBufferSize : 0;
+				cur = this._bufferOffset + this._pos;
+				if (this.HASH_ARRAY) {
+					temp = CrcTable[this._bufferBase[cur] & 255] ^ this._bufferBase[cur + 1] & 255;
+					hash2Value = temp & 1023;
+					this._hash[hash2Value] = this._pos;
+					temp ^= (this._bufferBase[cur + 2] & 255) << 8;
+					hash3Value = temp & 65535;
+					this._hash[1024 + hash3Value] = this._pos;
+					hashValue = (temp ^ CrcTable[this._bufferBase[cur + 3] & 255] << 5) & this._hashMask;
+				} else {
+					hashValue = this._bufferBase[cur] & 255 ^ (this._bufferBase[cur + 1] & 255) << 8;
+				}
+				curMatch = this._hash[this.kFixHashSize + hashValue];
+				this._hash[this.kFixHashSize + hashValue] = this._pos;
+				ptr0 = (this._cyclicBufferPos << 1) + 1;
+				ptr1 = this._cyclicBufferPos << 1;
+				len0 = len1 = this.kNumHashDirectBytes;
+				count = this._cutValue;
+				while (true) {
+					if (curMatch <= matchMinPos || count-- == 0) {
+						this._son[ptr0] = this._son[ptr1] = 0;
+						break;
+					}
+					delta = this._pos - curMatch;
+					cyclicPos = (delta <= this._cyclicBufferPos ? this._cyclicBufferPos - delta : this._cyclicBufferPos - delta + this._cyclicBufferSize) << 1;
+					pby1 = this._bufferOffset + curMatch;
+					len = len0 < len1 ? len0 : len1;
+					if (this._bufferBase[pby1 + len] == this._bufferBase[cur + len]) {
+						for (len += 1; len != lenLimit; len += 1) {
+							if (this._bufferBase[pby1 + len] != this._bufferBase[cur + len]) {
+								break;
+							}
+						}
+						if (len == lenLimit) {
+							this._son[ptr1] = this._son[cyclicPos];
+							this._son[ptr0] = this._son[cyclicPos + 1];
+							break;
+						}
+					}
+					if ((this._bufferBase[pby1 + len] & 255) < (this._bufferBase[cur + len] & 255)) {
+						this._son[ptr1] = curMatch;
+						ptr1 = cyclicPos + 1;
+						curMatch = this._son[ptr1];
+						len1 = len;
+					} else {
+						this._son[ptr0] = curMatch;
+						ptr0 = cyclicPos;
+						curMatch = this._son[ptr0];
+						len0 = len;
+					}
+				}
+				this.MovePos();
+				num -= 1;
+			} while (num != 0);
+		},
+		NormalizeLinks: function (items, numItems, subValue) {
+			var i, value;
+			for (i = 0; i < numItems; i += 1) {
+				value = items[i];
+				if (value <= subValue) {
+					value = 0;
+				} else {
+					value -= subValue;
+				}
+				items[i] = value;
+			}
+		},
+		Create: function (historySize, keepAddBufferBefore, matchMaxLen, keepAddBufferAfter) {
+			var cyclicBufferSize, hs, windowReservSize;
+			if (historySize > 1073741567) {
+				return false;
+			}
+
+			this._cutValue = 16 + (matchMaxLen >> 1);
+			windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
+			this._super(historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
+			this._matchMaxLen = matchMaxLen;
+			cyclicBufferSize = historySize + 1;
+			if (this._cyclicBufferSize != cyclicBufferSize) {
+				this._son = initDim(_3I_classLit, 0, -1, (this._cyclicBufferSize = cyclicBufferSize) * 2, 1);
+			}
+
+			hs = 65536;
+			if (this.HASH_ARRAY) {
+				hs = historySize - 1;
+				hs |= hs >> 1;
+				hs |= hs >> 2;
+				hs |= hs >> 4;
+				hs |= hs >> 8;
+				hs >>= 1;
+				hs |= 65535;
+				if (hs > 16777216) {
+					hs >>= 1;
+				}
+				this._hashMask = hs;
+				hs += 1;
+				hs += this.kFixHashSize;
+			}
+
+			if (hs != this._hashSizeSum) {
+				this._hash = initDim(_3I_classLit, 0, -1, this._hashSizeSum = hs, 1);
+			}
+			return true;
+		},
+		Init: function () {
+			var i;
+			this._super();
+			for (i = 0; i < this._hashSizeSum; i += 1) {
+				this._hash[i] = 0;
+			}
+			this._cyclicBufferPos = 0;
+			this.ReduceOffsets(-1);
+		}
+	});
+
 
 	var Encoder = $Class.extend({
 		construct: function () {
@@ -2571,400 +3039,6 @@ LZMA = (function () {
 		}
 	});
 	
-	function $clinit_60() {
-		if (dontExecute.$clinit_60) {
-			return;
-		}
-		dontExecute.$clinit_60 = true;
-		var i, j, r;
-		CrcTable = initDim(_3I_classLit, 0, -1, 256, 1);
-		for (i = 0; i < 256; i += 1) {
-			r = i;
-			for (j = 0; j < 8; j += 1) {
-				if ((r & 1) != 0) {
-					r = r >>> 1 ^ -306674912;
-				} else {
-					r >>>= 1;
-				}
-			}
-			CrcTable[i] = r;
-		}
-	}
-	
-	var InWindow = $Class.extend({
-		getClass$: getClass_40,
-		typeMarker$: nullMethod,
-		typeId$: 0,
-		_blockSize: 0,
-		_bufferBase: null,
-		_bufferOffset: 0,
-		_keepSizeAfter: 0,
-		_keepSizeBefore: 0,
-		_pointerToLastSafePosition: 0,
-		_pos: 0,
-		_posLimit: 0,
-		_stream: null,
-		_streamEndWasReached: false,
-		_streamPos: 0,
-		ReadBlock: function () {
-			var numReadBytes, pointerToPostion, size;
-			if (this._streamEndWasReached) {
-				return;
-			}
-			while (true) {
-				size = -this._bufferOffset + this._blockSize - this._streamPos;
-				if (size == 0) {
-					return;
-				}
-				numReadBytes = $read_0(this._stream, this._bufferBase, this._bufferOffset + this._streamPos, size);
-				if (numReadBytes == -1) {
-					this._posLimit = this._streamPos;
-					pointerToPostion = this._bufferOffset + this._posLimit;
-					if (pointerToPostion > this._pointerToLastSafePosition) {
-						this._posLimit = this._pointerToLastSafePosition - this._bufferOffset;
-					}
-					this._streamEndWasReached = true;
-					return;
-				}
-				this._streamPos += numReadBytes;
-				if (this._streamPos >= this._pos + this._keepSizeAfter) {
-					this._posLimit = this._streamPos - this._keepSizeAfter;
-				}
-			}
-		},
-		MoveBlock: function () {
-			var i, numBytes, offset;
-			offset = this._bufferOffset + this._pos - this._keepSizeBefore;
-			if (offset > 0) {
-				offset -= 1;
-			}
-			numBytes = this._bufferOffset + this._streamPos - offset;
-			for (i = 0; i < numBytes; i += 1) {
-				this._bufferBase[i] = this._bufferBase[offset + i];
-			}
-			this._bufferOffset -= offset;
-		},
-		MovePos: function () {
-			var pointerToPostion;
-			this._pos += 1;
-			if (this._pos > this._posLimit) {
-				pointerToPostion = this._bufferOffset + this._pos;
-				if (pointerToPostion > this._pointerToLastSafePosition) {
-					this.MoveBlock();
-				}
-				this.ReadBlock();
-			}
-		},
-		ReduceOffsets: function (subValue) {
-			this._bufferOffset += subValue;
-			this._posLimit -= subValue;
-			this._pos -= subValue;
-			this._streamPos -= subValue;
-		},
-		Create: function (keepSizeBefore, keepSizeAfter, keepSizeReserv) {
-			var blockSize;
-			this._keepSizeBefore = keepSizeBefore;
-			this._keepSizeAfter = keepSizeAfter;
-			blockSize = keepSizeBefore + keepSizeAfter + keepSizeReserv;
-			if (this._bufferBase == null || this._blockSize != blockSize) {
-				this._bufferBase = null;
-				this._blockSize = blockSize;
-				this._bufferBase = initDim(_3B_classLit, 0, -1, this._blockSize, 1);
-			}
-			this._pointerToLastSafePosition = this._blockSize - keepSizeAfter;
-		},
-		Init: function () {
-			this._bufferOffset = 0;
-			this._pos = 0;
-			this._streamPos = 0;
-			this._streamEndWasReached = false;
-			this.ReadBlock();
-		}
-	});
-	
-	var BinTree = InWindow.extend({
-		getClass$: getClass_39,
-		typeId$: 0,
-		HASH_ARRAY: true,
-		_cutValue: 255,
-		_cyclicBufferPos: 0,
-		_cyclicBufferSize: 0,
-		_hash: null,
-		_hashMask: 0,
-		_hashSizeSum: 0,
-		_matchMaxLen: 0,
-		_son: null,
-		kFixHashSize: 66560,
-		kMinMatchCheck: 4,
-		kNumHashDirectBytes: 0,
-		MovePos: function () {
-			var subValue;
-			this._cyclicBufferPos += 1;
-			if (this._cyclicBufferPos >= this._cyclicBufferSize) {
-				this._cyclicBufferPos = 0;
-			}
-			this._super();
-			if (this._pos == 1073741823) {
-				subValue = this._pos - this._cyclicBufferSize;
-				this.NormalizeLinks(this._son, this._cyclicBufferSize * 2, subValue);
-				this.NormalizeLinks(this._hash, this._hashSizeSum, subValue);
-				this.ReduceOffsets(subValue);
-			}
-		},
-		GetMatches: function (distances) {
-			var count, cur, curMatch, curMatch2, curMatch3, cyclicPos, delta, hash2Value, hash3Value, hashValue, len, len0, len1, lenLimit, matchMinPos, maxLen, offset, pby1, ptr0, ptr1, temp;
-			if (this._pos + this._matchMaxLen <= this._streamPos) {
-				lenLimit = this._matchMaxLen;
-			} else {
-				lenLimit = this._streamPos - this._pos;
-				if (lenLimit < this.kMinMatchCheck) {
-					this.MovePos();
-					return 0;
-				}
-			}
-			offset = 0;
-			matchMinPos = this._pos > this._cyclicBufferSize ? this._pos - this._cyclicBufferSize : 0;
-			cur = this._bufferOffset + this._pos;
-			maxLen = 1;
-			hash2Value = 0;
-			hash3Value = 0;
-			if (this.HASH_ARRAY) {
-				temp = CrcTable[this._bufferBase[cur] & 255] ^ this._bufferBase[cur + 1] & 255;
-				hash2Value = temp & 1023;
-				temp ^= (this._bufferBase[cur + 2] & 255) << 8;
-				hash3Value = temp & 65535;
-				hashValue = (temp ^ CrcTable[this._bufferBase[cur + 3] & 255] << 5) & this._hashMask;
-			} else {
-				hashValue = this._bufferBase[cur] & 255 ^ (this._bufferBase[cur + 1] & 255) << 8;
-			}
-
-			curMatch = this._hash[this.kFixHashSize + hashValue];
-			if (this.HASH_ARRAY) {
-				curMatch2 = this._hash[hash2Value];
-				curMatch3 = this._hash[1024 + hash3Value];
-				this._hash[hash2Value] = this._pos;
-				this._hash[1024 + hash3Value] = this._pos;
-				if (curMatch2 > matchMinPos) {
-					if (this._bufferBase[this._bufferOffset + curMatch2] == this._bufferBase[cur]) {
-						distances[offset] = maxLen = 2;
-						offset += 1;
-						distances[offset] = this._pos - curMatch2 - 1;
-						offset += 1;
-					}
-				}
-				if (curMatch3 > matchMinPos) {
-					if (this._bufferBase[this._bufferOffset + curMatch3] == this._bufferBase[cur]) {
-						if (curMatch3 == curMatch2) {
-							offset -= 2;
-						}
-						distances[offset] = maxLen = 3;
-						offset += 1;
-						distances[offset] = this._pos - curMatch3 - 1;
-						offset += 1;
-						curMatch2 = curMatch3;
-					}
-				}
-				if (offset != 0 && curMatch2 == curMatch) {
-					offset -= 2;
-					maxLen = 1;
-				}
-			}
-			this._hash[this.kFixHashSize + hashValue] = this._pos;
-			ptr0 = (this._cyclicBufferPos << 1) + 1;
-			ptr1 = this._cyclicBufferPos << 1;
-			len0 = len1 = this.kNumHashDirectBytes;
-			if (this.kNumHashDirectBytes != 0) {
-				if (curMatch > matchMinPos) {
-					if (this._bufferBase[this._bufferOffset + curMatch + this.kNumHashDirectBytes] != this._bufferBase[cur + this.kNumHashDirectBytes]) {
-						distances[offset] = maxLen = this.kNumHashDirectBytes;
-						offset += 1;
-						distances[offset] = this._pos - curMatch - 1;
-						offset += 1;
-					}
-				}
-			}
-			count = this._cutValue;
-			while (true) {
-				if (curMatch <= matchMinPos || count-- == 0) {
-					this._son[ptr0] = this._son[ptr1] = 0;
-					break;
-				}
-				delta = this._pos - curMatch;
-				cyclicPos = (delta <= this._cyclicBufferPos ? this._cyclicBufferPos - delta : this._cyclicBufferPos - delta + this._cyclicBufferSize) << 1;
-				pby1 = this._bufferOffset + curMatch;
-				len = len0 < len1 ? len0 : len1;
-				if (this._bufferBase[pby1 + len] == this._bufferBase[cur + len]) {
-					for (len += 1; len != lenLimit; len += 1) {
-						if (this._bufferBase[pby1 + len] != this._bufferBase[cur + len]) {
-							break;
-						}
-					}
-					if (maxLen < len) {
-						distances[offset] = maxLen = len;
-						offset += 1;
-						distances[offset] = delta - 1;
-						offset += 1;
-						if (len == lenLimit) {
-							this._son[ptr1] = this._son[cyclicPos];
-							this._son[ptr0] = this._son[cyclicPos + 1];
-							break;
-						}
-					}
-				}
-				if ((this._bufferBase[pby1 + len] & 255) < (this._bufferBase[cur + len] & 255)) {
-					this._son[ptr1] = curMatch;
-					ptr1 = cyclicPos + 1;
-					curMatch = this._son[ptr1];
-					len1 = len;
-				} else {
-					this._son[ptr0] = curMatch;
-					ptr0 = cyclicPos;
-					curMatch = this._son[ptr0];
-					len0 = len;
-				}
-			}
-			this.MovePos();
-			return offset;
-		},
-		SetType: function (numHashBytes) {
-			this.HASH_ARRAY = numHashBytes > 2;
-			if (this.HASH_ARRAY) {
-				this.kNumHashDirectBytes = 0;
-				this.kMinMatchCheck = 4;
-				this.kFixHashSize = 66560;
-			} else {
-				this.kNumHashDirectBytes = 2;
-				this.kMinMatchCheck = 3;
-				this.kFixHashSize = 0;
-			}
-		},
-		Skip: function (num) {
-			var count, cur, curMatch, cyclicPos, delta, hash2Value, hash3Value, hashValue, len, len0, len1, lenLimit, matchMinPos, pby1, ptr0, ptr1, temp;
-			do {
-				if (this._pos + this._matchMaxLen <= this._streamPos) {
-					lenLimit = this._matchMaxLen;
-				} else {
-					lenLimit = this._streamPos - this._pos;
-					if (lenLimit < this.kMinMatchCheck) {
-						this.MovePos();
-						continue;
-					}
-				}
-				matchMinPos = this._pos > this._cyclicBufferSize ? this._pos - this._cyclicBufferSize : 0;
-				cur = this._bufferOffset + this._pos;
-				if (this.HASH_ARRAY) {
-					temp = CrcTable[this._bufferBase[cur] & 255] ^ this._bufferBase[cur + 1] & 255;
-					hash2Value = temp & 1023;
-					this._hash[hash2Value] = this._pos;
-					temp ^= (this._bufferBase[cur + 2] & 255) << 8;
-					hash3Value = temp & 65535;
-					this._hash[1024 + hash3Value] = this._pos;
-					hashValue = (temp ^ CrcTable[this._bufferBase[cur + 3] & 255] << 5) & this._hashMask;
-				} else {
-					hashValue = this._bufferBase[cur] & 255 ^ (this._bufferBase[cur + 1] & 255) << 8;
-				}
-				curMatch = this._hash[this.kFixHashSize + hashValue];
-				this._hash[this.kFixHashSize + hashValue] = this._pos;
-				ptr0 = (this._cyclicBufferPos << 1) + 1;
-				ptr1 = this._cyclicBufferPos << 1;
-				len0 = len1 = this.kNumHashDirectBytes;
-				count = this._cutValue;
-				while (true) {
-					if (curMatch <= matchMinPos || count-- == 0) {
-						this._son[ptr0] = this._son[ptr1] = 0;
-						break;
-					}
-					delta = this._pos - curMatch;
-					cyclicPos = (delta <= this._cyclicBufferPos ? this._cyclicBufferPos - delta : this._cyclicBufferPos - delta + this._cyclicBufferSize) << 1;
-					pby1 = this._bufferOffset + curMatch;
-					len = len0 < len1 ? len0 : len1;
-					if (this._bufferBase[pby1 + len] == this._bufferBase[cur + len]) {
-						for (len += 1; len != lenLimit; len += 1) {
-							if (this._bufferBase[pby1 + len] != this._bufferBase[cur + len]) {
-								break;
-							}
-						}
-						if (len == lenLimit) {
-							this._son[ptr1] = this._son[cyclicPos];
-							this._son[ptr0] = this._son[cyclicPos + 1];
-							break;
-						}
-					}
-					if ((this._bufferBase[pby1 + len] & 255) < (this._bufferBase[cur + len] & 255)) {
-						this._son[ptr1] = curMatch;
-						ptr1 = cyclicPos + 1;
-						curMatch = this._son[ptr1];
-						len1 = len;
-					} else {
-						this._son[ptr0] = curMatch;
-						ptr0 = cyclicPos;
-						curMatch = this._son[ptr0];
-						len0 = len;
-					}
-				}
-				this.MovePos();
-				num -= 1;
-			} while (num != 0);
-		},
-		NormalizeLinks: function (items, numItems, subValue) {
-			var i, value;
-			for (i = 0; i < numItems; i += 1) {
-				value = items[i];
-				if (value <= subValue) {
-					value = 0;
-				} else {
-					value -= subValue;
-				}
-				items[i] = value;
-			}
-		},
-		Create: function (historySize, keepAddBufferBefore, matchMaxLen, keepAddBufferAfter) {
-			var cyclicBufferSize, hs, windowReservSize;
-			if (historySize > 1073741567) {
-				return false;
-			}
-
-			this._cutValue = 16 + (matchMaxLen >> 1);
-			windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
-			this._super(historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
-			this._matchMaxLen = matchMaxLen;
-			cyclicBufferSize = historySize + 1;
-			if (this._cyclicBufferSize != cyclicBufferSize) {
-				this._son = initDim(_3I_classLit, 0, -1, (this._cyclicBufferSize = cyclicBufferSize) * 2, 1);
-			}
-
-			hs = 65536;
-			if (this.HASH_ARRAY) {
-				hs = historySize - 1;
-				hs |= hs >> 1;
-				hs |= hs >> 2;
-				hs |= hs >> 4;
-				hs |= hs >> 8;
-				hs >>= 1;
-				hs |= 65535;
-				if (hs > 16777216) {
-					hs >>= 1;
-				}
-				this._hashMask = hs;
-				hs += 1;
-				hs += this.kFixHashSize;
-			}
-
-			if (hs != this._hashSizeSum) {
-				this._hash = initDim(_3I_classLit, 0, -1, this._hashSizeSum = hs, 1);
-			}
-			return true;
-		},
-		Init: function () {
-			var i;
-			this._super();
-			for (i = 0; i < this._hashSizeSum; i += 1) {
-				this._hash[i] = 0;
-			}
-			this._cyclicBufferPos = 0;
-			this.ReduceOffsets(-1);
-		}
-	});
 	
 	function $BaseInit(this$static) {
 		var i;
@@ -3201,7 +3275,7 @@ LZMA = (function () {
 			while (this.m_NumPosStates < numPosStates) {
 				this.m_LowCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
 				this.m_MidCoder[this.m_NumPosStates] = new BitTreeDecoder(3);
-				this.m_NumPosStates += 1
+				this.m_NumPosStates += 1;
 			}
 		},
 		Init: function () {
@@ -3292,6 +3366,23 @@ LZMA = (function () {
 		m_NumPrevBits: 0,
 		m_PosMask: 0
 	});
+	
+	function $Init_0(this$static) {
+		var i, numStates;
+		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
+		for (i = 0; i < numStates; i += 1) {
+			RangeCoderDecoder.InitBitModels(this$static.m_Coders[i].m_Decoders);
+		}
+	}
+
+	function $Init_8(this$static) {
+		var i;
+		this$static.Code = 0;
+		this$static.Range = -1;
+		for (i = 0; i < 5; i += 1) {
+			this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
+		}
+	}
 
 	var Decoder = $Class.extend({
 		construct: function () {
@@ -3480,23 +3571,6 @@ LZMA = (function () {
 		}
 	});
 	
-	function $Init_0(this$static) {
-		var i, numStates;
-		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-		for (i = 0; i < numStates; i += 1) {
-			RangeCoderDecoder.InitBitModels(this$static.m_Coders[i].m_Decoders);
-		}
-	}
-	
-	function $Init_8(this$static) {
-		var i;
-		this$static.Code = 0;
-		this$static.Range = -1;
-		for (i = 0; i < 5; i += 1) {
-			this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
-		}
-	}
-	
 	function $init_0(this$static, input, output) {
 		var decoder,
 			hex_length = "",
@@ -3589,79 +3663,7 @@ LZMA = (function () {
 		typeId$: 0,
 		output: null
 	});
-	
-	function getClass_40() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit;
-	}
-	
-	function getClass_39() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit;
-	}
-	
-	function getClass_41() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit;
-	}
-	
-	function getClass_28() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit;
-	}
-	
-	function getClass_32() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit;
-	}
-	
-	function getClass_29() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit;
-	}
-	
-	function getClass_31() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit;
-	}
-	
-	function getClass_30() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit;
-	}
-	
-	function getClass_38() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
-	}
-	
-	function getClass_33() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit;
-	}
-	
-	function getClass_34() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
-	}
-	
-	function getClass_36() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
-	}
-	
-	function getClass_35() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit;
-	}
-	
-	function getClass_37() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
-	}
-	
-	function getClass_42() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit;
-	}
-	
-	function getClass_43() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit;
-	}
-	
-	function getClass_44() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit;
-	}
-	
-	function getClass_45() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit;
-	}
-	
+
 	function decode(utf) {
 		var buf, i, x, y, z;
 		buf = new StringBuilder();
@@ -3748,6 +3750,10 @@ LZMA = (function () {
 	
 	function toDouble(a) {
 		return a[1] + a[0];
+	}
+	
+	function getClass_46() {
+		return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
 	}
 	
 	var LZMADemo = $Class.extend({
@@ -3851,9 +3857,6 @@ LZMA = (function () {
 		setTimeout(do_action, 0);
 	}
 	
-	function getClass_46() {
-		return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
-	}
 	
 	return {
 		compress:   compress,
