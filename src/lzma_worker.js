@@ -178,14 +178,6 @@ LZMA = (function () {
 	function OutputStream() {
 	}
 	
-	function max(x, y) {
-		return x > y ? x : y;
-	}
-	
-	function min(x, y) {
-		return x < y ? x : y;
-	}
-	
 	function initExpandos(protoType, expandoNames, expandoValues) {
 		var i = 0, value, name_0;
 		for (name_0 in protoType) {
@@ -278,8 +270,7 @@ LZMA = (function () {
 		return clazz;
 	}
 
-	var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'),
-		Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'),
+	var Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'),
 		Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'),
 		Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'),
 		Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptException'),
@@ -435,36 +426,22 @@ LZMA = (function () {
 		ZERO = fromInt(0);
 	}
 	
-	function getClass_18() {
-		return Ljava_lang_Object_2_classLit;
-	}
-	
-	function Object_0() {
-	}
-	Object_0.prototype = {};
-	Object_0.prototype.getClass$ = getClass_18;
-	Object_0.prototype.typeMarker$ = nullMethod;
-	Object_0.prototype.typeId$ = 1;
-	
 	function getClass_22() {
 		return Ljava_lang_Throwable_2_classLit;
 	}
 	
-	function Throwable() {
-	}
+	var Throwable = $Class.extend();
 	
-	Throwable.prototype = new Object_0();
 	Throwable.prototype.getClass$ = getClass_22;
+	Throwable.prototype.typeMarker$ = nullMethod;
 	Throwable.prototype.typeId$ = 3;
 	Throwable.prototype.detailMessage = null;
 	function getClass_13() {
 		return Ljava_lang_Exception_2_classLit;
 	}
 	
-	function Exception() {
-	}
+	var Exception = Throwable.extend();
 	
-	Exception.prototype = new Throwable();
 	Exception.prototype.getClass$ = getClass_13;
 	Exception.prototype.typeId$ = 4;
 	function $RuntimeException(this$static, message) {
@@ -476,27 +453,20 @@ LZMA = (function () {
 		return Ljava_lang_RuntimeException_2_classLit;
 	}
 	
-	function RuntimeException() {
-	}
+	var RuntimeException = Exception.extend();
 	
-	RuntimeException.prototype = new Exception();
 	RuntimeException.prototype.getClass$ = getClass_19;
 	RuntimeException.prototype.typeId$ = 5;
-	function $JavaScriptException(this$static) {
-		return this$static;
-	}
 	
 	function getClass_0() {
 		return Lcom_google_gwt_core_client_JavaScriptException_2_classLit;
 	}
 	
-	function JavaScriptException() {
-	}
+	var JavaScriptException = RuntimeException.extend();
 	
 	function NullPointerException() {
 	}
 	
-	JavaScriptException.prototype = new RuntimeException();
 	JavaScriptException.prototype.getClass$ = getClass_0;
 	JavaScriptException.prototype.typeId$ = 6;
 	function $append(a, x) {
@@ -539,8 +509,8 @@ LZMA = (function () {
 		return value;
 	}
 	
-	Array_0.prototype = new Object_0();
 	Array_0.prototype.getClass$ = getClass_2;
+	Array_0.prototype.typeMarker$ = nullMethod;
 	Array_0.prototype.typeId$ = 0;
 	Array_0.prototype.arrayClass$ = null;
 	Array_0.prototype.length = 0;
@@ -569,7 +539,7 @@ LZMA = (function () {
 		if (e != null && canCast(e.typeId$, 2)) {
 			return e;
 		}
-		return $JavaScriptException(new JavaScriptException(), e);
+		return new JavaScriptException(e);
 	}
 	
 	function add(a, b) {
@@ -888,8 +858,8 @@ LZMA = (function () {
 	function InputStream() {
 	}
 	
-	InputStream.prototype = new Object_0();
 	InputStream.prototype.getClass$ = getClass_6;
+	InputStream.prototype.typeMarker$ = nullMethod;
 	InputStream.prototype.typeId$ = 0;
 	function getClass_3() {
 		return Ljava_io_ByteArrayInputStream_2_classLit;
@@ -933,8 +903,8 @@ LZMA = (function () {
 		return Ljava_io_OutputStream_2_classLit;
 	}
 	
-	OutputStream.prototype = new Object_0();
 	OutputStream.prototype.getClass$ = getClass_7;
+	OutputStream.prototype.typeMarker$ = nullMethod;
 	OutputStream.prototype.typeId$ = 0;
 	function $ByteArrayOutputStream(this$static) {
 		this$static.buf = initDim(_3B_classLit, 0, -1, 32, 1);
@@ -1005,7 +975,7 @@ LZMA = (function () {
 		if (this$static.pos >= this$static.count) {
 			return -1;
 		}
-		len = min(len, this$static.count - this$static.pos);
+		len = Math.min(len, this$static.count - this$static.pos);
 		arraycopy(this$static.buf, this$static.pos, buf, off, len);
 		this$static.pos += len;
 		return len;
@@ -1016,7 +986,7 @@ LZMA = (function () {
 		if (len <= this$static.buf.length) {
 			return;
 		}
-		len = max(len, this$static.buf.length * 2);
+		len = Math.max(len, this$static.buf.length * 2);
 		newbuf = initDim(_3B_classLit, 0, -1, len, 1);
 		arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
 		this$static.buf = newbuf;
@@ -1079,8 +1049,8 @@ LZMA = (function () {
 		return Ljava_lang_Class_2_classLit;
 	}
 	
-	Class.prototype = new Object_0();
 	Class.prototype.getClass$ = getClass_11;
+	Class.prototype.typeMarker$ = nullMethod;
 	Class.prototype.typeId$ = 0;
 	Class.prototype.typeName = null;
 	function getClass_10() {
@@ -1097,8 +1067,8 @@ LZMA = (function () {
 	function Enum() {
 	}
 	
-	Enum.prototype = new Object_0();
 	Enum.prototype.getClass$ = getClass_12;
+	Enum.prototype.typeMarker$ = nullMethod;
 	Enum.prototype.typeId$ = 0;
 	function getClass_14() {
 		return Ljava_lang_IllegalArgumentException_2_classLit;
@@ -1149,8 +1119,8 @@ LZMA = (function () {
 	function StringBuilder() {
 	}
 	
-	StringBuilder.prototype = new Object_0();
 	StringBuilder.prototype.getClass$ = getClass_20;
+	StringBuilder.prototype.typeMarker$ = nullMethod;
 	StringBuilder.prototype.typeId$ = 0;
 	
 	function $configure(this$static, encoder) {
@@ -2624,7 +2594,7 @@ LZMA = (function () {
 				numAvailableBytes = this._numFastBytes;
 			}
 			if (!nextIsChar && matchByte != currentByte) {
-				t = min(numAvailableBytesFull - 1, this._numFastBytes);
+				t = Math.min(numAvailableBytesFull - 1, this._numFastBytes);
 				lenTest2 = $GetMatchLen(this._matchFinder, 0, this.reps[0], t);
 				if (lenTest2 >= 2) {
 					state2 = StateUpdateChar(state);
@@ -2677,7 +2647,7 @@ LZMA = (function () {
 					startLen = lenTest + 1;
 				}
 				if (lenTest < numAvailableBytesFull) {
-					t = min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
+					t = Math.min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
 					lenTest2 = $GetMatchLen(this._matchFinder, lenTest, this.reps[repIndex], t);
 					if (lenTest2 >= 2) {
 						state2 = state < 7 ? 8 : 11;
@@ -2743,7 +2713,7 @@ LZMA = (function () {
 					}
 					if (lenTest == this._matchDistances[offs]) {
 						if (lenTest < numAvailableBytesFull) {
-							t = min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
+							t = Math.min(numAvailableBytesFull - 1 - lenTest, this._numFastBytes);
 							lenTest2 = $GetMatchLen(this._matchFinder, lenTest, curBack, t);
 							if (lenTest2 >= 2) {
 								state2 = state < 7 ? 7 : 10;
@@ -3252,8 +3222,8 @@ LZMA = (function () {
 	function LZMACompressor() {
 	}
 	
-	LZMACompressor.prototype = new Object_0();
 	LZMACompressor.prototype.getClass$ = getClass_26;
+	LZMACompressor.prototype.typeMarker$ = nullMethod;
 	LZMACompressor.prototype.typeId$ = 0;
 	LZMACompressor.prototype.chunker = null;
 	
@@ -3512,8 +3482,8 @@ LZMA = (function () {
 			}
 			if (this.m_DictionarySize != dictionarySize) {
 				this.m_DictionarySize = dictionarySize;
-				this.m_DictionarySizeCheck = max(this.m_DictionarySize, 1);
-				this.m_OutWindow.Create(max(this.m_DictionarySizeCheck, 4096));
+				this.m_DictionarySizeCheck = Math.max(this.m_DictionarySize, 1);
+				this.m_OutWindow.Create(Math.max(this.m_DictionarySizeCheck, 4096));
 			}
 			return true;
 		},
@@ -3676,8 +3646,8 @@ LZMA = (function () {
 	function LZMADecompressor() {
 	}
 	
-	LZMADecompressor.prototype = new Object_0();
 	LZMADecompressor.prototype.getClass$ = getClass_27;
+	LZMADecompressor.prototype.typeMarker$ = nullMethod;
 	LZMADecompressor.prototype.typeId$ = 0;
 	LZMADecompressor.prototype.chunker = null;
 	LZMADecompressor.prototype.exception = null;
@@ -3703,11 +3673,10 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit;
 	}
 	
-	function InWindow() {
-	}
+	var InWindow = $Class.extend();
 	
-	InWindow.prototype = new Object_0();
 	InWindow.prototype.getClass$ = getClass_40;
+	InWindow.prototype.typeMarker$ = nullMethod;
 	InWindow.prototype.typeId$ = 0;
 	InWindow.prototype._blockSize = 0;
 	InWindow.prototype._bufferBase = null;
@@ -3747,8 +3716,8 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit;
 	}
 	
-	Chunker.prototype = new Object_0();
 	Chunker.prototype.getClass$ = getClass_28;
+	Chunker.prototype.typeMarker$ = nullMethod;
 	Chunker.prototype.typeId$ = 0;
 	Chunker.prototype.alive = false;
 	Chunker.prototype.decoder = null;
@@ -4007,8 +3976,8 @@ LZMA = (function () {
 		return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
 	}
 	
-	LZMADemo.prototype = new Object_0();
 	LZMADemo.prototype.getClass$ = getClass_46;
+	LZMADemo.prototype.typeMarker$ = nullMethod;
 	LZMADemo.prototype.typeId$ = 0;
 	LZMADemo.prototype.c = null;
 	LZMADemo.prototype.d = null;
