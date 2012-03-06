@@ -84,7 +84,7 @@ function update_progress(percent, callback_num) {
 		action: 3,
 		callback_num: callback_num,
 		result: percent
-	});
+	}, "*");
 }
 
 LZMA = (function () {
@@ -3817,7 +3817,7 @@ LZMA = (function () {
 				action: action_compress,
 				callback_num: callback_num,
 				result: this$static.c.output.toByteArray().slice(0)
-			});
+			}, "*");
 		}
 		
 		setTimeout(do_action, 1);
@@ -3851,7 +3851,7 @@ LZMA = (function () {
 				action: action_decompress,
 				callback_num: callback_num,
 				result: decode(this$static.d.output.toByteArray())
-			});
+			}, "*");
 		}
 		
 		setTimeout(do_action, 0);
