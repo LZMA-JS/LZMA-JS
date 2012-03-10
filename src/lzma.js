@@ -2,12 +2,11 @@
 
 /// Does the environment support web workers?  If not, let's fake it.
 if (!Worker) {
-    ///NOTE: IE8 needs onmessage to be created first, IE9 cannot, IE7- do not care.
+    ///NOTE: IE8 and IE9 needs onmessage to be created first, IE7- do not care.
+    ///NOTE: Because IE9 implements part of the Web Worker's spec, postMessage() must be overwritten.
     /*@cc_on
-        /// Is this IE8-?
-        @if (@_jscript_version < 9)
-            var onmessage = function () {};
-        @end
+        var onmessage   = function () {};
+        var postMessage = function () {};
     @*/
     
     /// If this were a regular function statement, IE9 would run it first and therefore make the Worker variable truthy because of hoisting.
