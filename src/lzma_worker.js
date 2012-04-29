@@ -1,7 +1,7 @@
 var LZMA,
 	action_compress   = 1,
 	action_decompress = 2,
-	action_update	 = 3;
+	action_update	  = 3;
 
 function update_progress(percent, callback_num) {
 	///TODO: Calculate ETA.
@@ -9,7 +9,7 @@ function update_progress(percent, callback_num) {
 		action: 3,
 		callback_num: callback_num,
 		result: percent
-	}, "*");
+	});
 }
 
 LZMA = (function () {
@@ -3642,7 +3642,7 @@ LZMA = (function () {
 				action: action_compress,
 				callback_num: callback_num,
 				result: $toByteArray(this$static.c.output).slice(0)
-			}, "*");
+			});
 		}
 		
 		setTimeout(do_action, 1);
@@ -3677,7 +3677,7 @@ LZMA = (function () {
 				action: action_decompress,
 				callback_num: callback_num,
 				result: decode($toByteArray(this$static.d.output))
-			}, "*");
+			});
 		}
 		
 		setTimeout(do_action, 0);
