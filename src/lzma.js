@@ -1,7 +1,8 @@
 /// This code is licensed under the MIT License.  See LICENSE for more details.
 
 /// Does the environment support web workers?  If not, let's fake it.
-if (!Worker) {
+///NOTE: Since web workers don't work when a page is loaded from the local system, we have to fake it there too. (Take that security measures!)
+if (!Worker || (location && location.protocol === "file:")) {
     ///NOTE: IE8 and IE9 needs onmessage to be created first, IE7- do not care.
     ///NOTE: Because IE9 implements part of the Web Worker's spec, postMessage() must be overwritten.
     /*@cc_on
