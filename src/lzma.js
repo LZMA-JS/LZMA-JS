@@ -28,7 +28,7 @@ if (!Worker) {
                 var script_tag  = document.createElement("script");
                 script_tag.type ="text/javascript";
                 script_tag.src  = path;
-                document.getElementsByTagName('head')[0].appendChild(script_tag);
+                document.getElementsByTagName("head")[0].appendChild(script_tag);
             };
         }
         
@@ -37,12 +37,17 @@ if (!Worker) {
         
         /// This is the function that the main script calls to post a message to the "worker."
         return_object.postMessage = function (message) {
-            /// Delay the call just in case the "worker" script has not had time to load.
-            setTimeout(function () {
+            /// Has the worker script loaded yet?
+            if (global_var.onmessage) {
                 /// Call the global onmessage() created by the "worker."
                 ///NOTE: Wrap the message in an object.
                 global_var.onmessage({data: message});
-            }, 10);
+            } else {
+                /// Since the script has not yet loaded, wait a moment, and then retry.
+                setTimeout(function () {
+                    return_object.postMessage(message);
+                }, 50);
+            }
         };
         
         /// Create a global postMessage() function for the "worker" to call.
