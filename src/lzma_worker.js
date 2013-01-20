@@ -3611,73 +3611,142 @@ LZMA = (function () {
 		return a[1] + a[0];
 	}
 	
-	function compress(str, mode, callback_num) {
+	function compress() {
 		var this$static = $LZMADemo(new LZMADemo()),
 			percent,
-			start;
+			start,
+			/// Arguments
+			str = arguments[0],
+			mode = arguments[1],
+			callback_num,
+			on_finish,
+			on_progress;
+		
+		if (typeof arguments[2] === "function") {
+			on_finish = arguments[2];
+			if (typeof arguments[3] === "function") {
+				on_progress = arguments[3];
+			}
+		} else {
+			callback_num = arguments[2];
+		}
 		
 		this$static.mode = get_mode_obj(mode);
 		
 		this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
 		
-		update_progress(0, callback_num);
+		if (on_progress) {
+			on_progress(0);
+		} else if (typeof callback_num !== "undefined") {
+			update_progress(0, callback_num);
+		}
 		
 		function do_action() {
+			var res;
 			start = (new Date).getTime();
 			while ($execute(this$static.c)) {
 				percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
 				/// If about 200 miliseconds have passed, update the progress.
 				if ((new Date).getTime() - start > 200) {
-					update_progress(percent, callback_num);
+					if (on_progress) {
+						on_progress(percent);
+					} else if (typeof callback_num !== "undefined") {
+						update_progress(percent, callback_num);
+					}
 					setTimeout(do_action, 0);
 					return false;
 				}
 			}
 			
-			update_progress(1, callback_num);
+			if (on_progress) {
+				on_progress(1);
+			} else if (typeof callback_num !== "undefined") {
+				update_progress(1, callback_num);
+			}
 			
 			/// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
 			/// .slice(0) simply returns the entire array by value.
-			postMessage({
-				action: action_compress,
-				callback_num: callback_num,
-				result: $toByteArray(this$static.c.output).slice(0)
-			});
+			res = $toByteArray(this$static.c.output).slice(0);
+			
+			if (on_finish) {
+				on_finish(res);
+			} else if (typeof callback_num !== "undefined") {
+				postMessage({
+					action: action_compress,
+					callback_num: callback_num,
+					result: res
+				});
+			}
 		}
 		
 		setTimeout(do_action, 1);
 	}
 	
-	function decompress(byte_arr, callback_num) {
+	function decompress() {
 		var this$static = $LZMADemo(new LZMADemo()),
 			percent,
-			data = initValues(_3B_classLit, 0, -1, byte_arr),
+			data,
 			start,
-			text;
+			text,
+			/// Arguments
+			byte_arr = arguments[0],
+			callback_num,
+			on_finish,
+			on_progress;
+		
+		if (typeof arguments[1] === "function") {
+			on_finish = arguments[1];
+			if (typeof arguments[2] === "function") {
+				on_progress = arguments[2];
+			}
+		} else {
+			callback_num = arguments[1];
+		}
+		
+		data = initValues(_3B_classLit, 0, -1, byte_arr);
 		
 		this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
 		
-		update_progress(0, callback_num);
+		if (on_progress) {
+			on_progress(0);
+		} else if (typeof callback_num !== "undefined") {
+			update_progress(0, callback_num);
+		}
 		
 		function do_action() {
+			var res;
 			start = (new Date).getTime();
 			while ($execute_0(this$static.d)) {
 				percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
 				/// If about 200 miliseconds have passed, update the progress.
 				if ((new Date).getTime() - start > 200) {
-					update_progress(percent, callback_num);
+					if (on_progress) {
+						on_progress(percent);
+					} else if (typeof callback_num !== "undefined") {
+						update_progress(percent, callback_num);
+					}
 					setTimeout(do_action, 0);
 					return false;
 				}
 			}
 			
-			update_progress(1, callback_num);
+			if (on_progress) {
+				on_progress(1);
+			} else if (typeof callback_num !== "undefined") {
+				update_progress(1, callback_num);
+			}
 			
-			postMessage({
-				action: action_decompress,
-				callback_num: callback_num,
-				result: decode($toByteArray(this$static.d.output))
-			});
+			res = decode($toByteArray(this$static.d.output));
+			
+			if (on_finish) {
+				on_finish(res);
+			} else if (typeof callback_num !== "undefined") {
+				postMessage({
+					action: action_decompress,
+					callback_num: callback_num,
+					result: res
+				});
+			}
 		}
 		
 		setTimeout(do_action, 0);
@@ -3808,6 +3877,8 @@ LZMA = (function () {
 	};
 }());
 
+/// Allow node.js to be able to access this directly if it is included directly.
+this.LZMA = LZMA;
 
 onmessage = function (e) {
 	if (e.data.action === action_compress) {
