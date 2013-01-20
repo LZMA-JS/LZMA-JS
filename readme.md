@@ -7,6 +7,9 @@ The JavaScript, CSS, and HTML is licensed under the MIT license.  See LICENSE fo
 It is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
 Java into JavaScript.  The original Java code is licensed under the Apache License 2.0 license.
 
+Demos
+---
+
 Live demos can be found [here](http://nmrugg.github.com/LZMA-JS/ "Demos").
 
 How to Use
