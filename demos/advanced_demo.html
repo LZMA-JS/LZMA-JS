@@ -112,6 +112,7 @@
                                                         <button class="gwt-Button" type="button" tabindex="0" id=clear_left_button>Clear</button>
                                                     </td>
                                                     <td style="vertical-align: top;" align="left" id=left_output></td>
+                                                    <td style="vertical-align: top;" align="left" id=left_time></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -142,6 +143,7 @@
                                                         <button class="gwt-Button" type="button" tabindex="0" id=clear_right_button>Clear</button>
                                                     </td>
                                                     <td style="vertical-align: top;" align="left" id=right_output></td>
+                                                    <td style="vertical-align: top;" align="left" id=right_time></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -164,8 +166,10 @@
                 decompress_button_el  = document.getElementById("decompress_button"),
                 left_text_el          = document.getElementById("left_text"),
                 left_output_el        = document.getElementById("left_output"),
+                left_time_el          = document.getElementById("left_time"),
                 right_text_el         = document.getElementById("right_text"),
                 right_output_el       = document.getElementById("right_output"),
+                right_time_el         = document.getElementById("right_time"),
                 select_mode_el        = document.getElementById("select_mode"),
                 
                 my_lzma = new LZMA("../src/lzma_worker.js");
@@ -269,17 +273,32 @@
                 update_sizes();
             }
             
+            function format_time(time) {
+                if (time > 1000) {
+                    return (time / 1000) + " sec";
+                }
+                return time + " ms";
+            }
+            
             
             clear_left_button_el.onclick  = clear_left;
             clear_right_button_el.onclick = clear_right;
             
             compress_button_el.onclick = function () {
+                var start_time;
+                
                 right_text_el.value = "";
                 update_sizes();
                 
                 right_output_el.innerHTML = "Compressing... 0%";
                 
+                /// Start the clock.
+                start_time = (new Date).getTime();
+                right_time_el.innerHTML = "";
+                
                 my_lzma.compress(left_text_el.value, select_mode_el.value, function (result) {
+                    right_time_el.innerHTML = format_time((new Date).getTime() - start_time);
+                    
                     if (result === false) {
                         alert("An error occurred during compression.");
                         update_sizes();
@@ -295,7 +314,8 @@
             
             decompress_button_el.onclick = function () {
                 var byte_arr = convert_formated_hex_to_bytes(right_text_el.value),
-                    decompressed;
+                    decompressed,
+                    start_time;
                 
                 left_text_el.value = "";
                 update_sizes();
@@ -308,7 +328,13 @@
                     return false;
                 }
                 
+                /// Start the clock.
+                start_time = (new Date).getTime();
+                left_time_el.innerHTML = "";
+                
                 my_lzma.decompress(byte_arr, function (result) {
+                    left_time_el.innerHTML = format_time((new Date).getTime() - start_time);
+                    
                     if (result === false) {
                         alert("An error occurred during decompression.");
                         return;

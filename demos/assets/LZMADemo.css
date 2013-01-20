@@ -120,3 +120,6 @@ body {
     margin: 5px 5px 5px 5px;
 }
 
+#left_time, #right_time {
+    padding-left: 5px;
+}
