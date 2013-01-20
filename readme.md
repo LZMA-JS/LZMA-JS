@@ -78,7 +78,7 @@ That will create a global <code>LZMA</code> <code>object</code> that you can use
 
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
-This can also be done in Node.JS.
+This can also be done in Node.js.
 
     /// Note that there are no parentheses after ".LZMA" because this LZMA variable is an object, not a function.
-    var my_LZMA = require("lzma/lzma_worker.js").LZMA;
+    var my_lzma = require("lzma/lzma_worker.js").LZMA;
