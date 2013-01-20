@@ -59,3 +59,23 @@ but it is no longer maintained.
 LZMA.JS will use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
 environment does not support web workers, it will create a few global functions (Worker(), onmessage(), and
 postMessage()) to mimic the functionality.
+
+But I don't want to use Web Workers
+---
+
+If you'd prefer not to bother with Web Workers, you can just include <code>lzma_worker.js</code> directly. For example:
+
+    <script src="../src/lzma_worker.js"></script>
+
+That will create a global <code>LZMA</code> <code>object</code> that you can use directly. Like this:
+
+    LZMA.compress(string, mode, on_finish(result) {}, on_progress(percent) {});
+    
+    LZMA.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
+
+Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
+
+This can also be done in Node.JS.
+
+    /// Note that there are no parentheses after ".LZMA" because this LZMA variable is an object, not a function.
+    var my_LZMA = require("lzma/lzma_worker.js").LZMA;
