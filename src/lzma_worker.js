@@ -1,18 +1,17 @@
-var LZMA,
-	action_compress   = 1,
-	action_decompress = 2,
-	action_update	  = 3;
-
-function update_progress(percent, callback_num) {
-	///TODO: Calculate ETA.
-	postMessage({
-		action: 3,
-		callback_num: callback_num,
-		result: percent
-	});
-}
-
-LZMA = (function () {
+var LZMA = (function () {
+	var action_compress   = 1,
+		action_decompress = 2,
+		action_update	  = 3;
+	
+	function update_progress(percent, callback_num) {
+		///TODO: Calculate ETA.
+		postMessage({
+			action: 3,
+			callback_num: callback_num,
+			result: percent
+		});
+	}
+	
 	var $moduleName, $moduleBase;
 	
 	var _,
@@ -3872,6 +3871,15 @@ LZMA = (function () {
 			return modes[mode - 1];
 		}
 	}());
+	
+	/// Create the global onmessage function.
+	onmessage = function (e) {
+		if (e.data.action === action_compress) {
+			LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+		} else {
+			LZMA.decompress(e.data.data, e.data.callback_num);
+		}
+	}
 		
 	return {
 		compress:   compress,
@@ -3881,11 +3889,3 @@ LZMA = (function () {
 
 /// Allow node.js to be able to access this directly if it is included directly.
 this.LZMA = LZMA;
-
-onmessage = function (e) {
-	if (e.data.action === action_compress) {
-		LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-	} else {
-		LZMA.decompress(e.data.data, e.data.callback_num);
-	}
-}
