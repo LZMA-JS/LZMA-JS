@@ -1077,7 +1077,7 @@ var LZMA = (function () {
 			i,
 			properties,
 			r,
-			temp_length;
+			tmp_length;
 		
 		properties = initDim(_3B_classLit, 0, -1, 5, 1);
 		for (i = 0; i < properties.length; ++i) {
@@ -1105,7 +1105,7 @@ var LZMA = (function () {
 			this$static.length_0 = N1_longLit;
 		} else {
 			///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
-			var tmp_length = parseInt(hex_length, 16);
+			tmp_length = parseInt(hex_length, 16);
 			/// If the length is too long to handle, just set it to unknown.
 			if (tmp_length > 4294967295) {
 				this$static.length_0 = N1_longLit;
