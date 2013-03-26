@@ -1077,7 +1077,7 @@ var LZMA = (function () {
 			i,
 			properties,
 			r,
-			temp_length;
+			tmp_length;
 		
 		properties = initDim(_3B_classLit, 0, -1, 5, 1);
 		for (i = 0; i < properties.length; ++i) {
