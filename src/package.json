@@ -2,7 +2,7 @@
   "author": "Nathan Rugg <nmrugg@gmail.com>",
   "name": "lzma",
   "description": "A standalone JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://github.com/nmrugg/LZMA-JS",
   "repository": {
     "type": "git",
