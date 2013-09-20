@@ -1,6 +1,6 @@
 /// Usage: $ node simple_node_demo.js [text]
 
-///NOTE: You can install LZMA.JS via npm with this command: $ npm install lzma
+///NOTE: You can install LZMA-JS via npm with this command: $ npm install lzma
 ///      Then you can load the code with the following code: var my_lzma = require("lzma").LZMA();
 var my_lzma = require("../src/lzma.js").LZMA(),
     compress_me = (process.argv[2] || "Hello, world."),
