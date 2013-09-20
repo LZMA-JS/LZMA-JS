@@ -3887,5 +3887,5 @@ var LZMA = (function () {
 	};
 }());
 
-/// Allow node.js to be able to access this directly if it is included directly.
+/// Allow Node.js to be able to access this directly if it is included directly.
 this.LZMA = LZMA;

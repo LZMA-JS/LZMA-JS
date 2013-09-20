@@ -1,7 +1,7 @@
 LZMA in a Browser
 ===
 
-[LZMA.JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
+[LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
 The JavaScript, CSS, and HTML is licensed under the MIT license.  See LICENSE for more details.
 
 It is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
@@ -42,7 +42,7 @@ Create the LZMA object.
 Node.js Installation
 ---
 
-LZMA.JS is available in the npm repository.  If you have [npm](https://github.com/isaacs/npm) installed, you can install it by running
+LZMA-JS is available in the npm repository.  If you have [npm](https://github.com/isaacs/npm) installed, you can install it by running
     
     $ npm install lzma
 
@@ -59,7 +59,7 @@ want to use the (de)compressed data.  There was a synchronous version, which you
 [the archives](https://github.com/nmrugg/LZMA-JS/archives/ef453c278e5087de68b869b2f0d023a0ff922aa2),
 but it is no longer maintained.
 
-LZMA.JS will use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
+LZMA-JS will use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
 environment does not support web workers, it will create a few global functions (Worker(), onmessage(), and
 postMessage()) to mimic the functionality.
 

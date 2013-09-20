@@ -3,7 +3,7 @@
   "name": "lzma",
   "description": "A standalone JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm",
   "version": "1.2.3",
-  "homepage": "https://github.com/nmrugg/LZMA-JS",
+  "homepage": "http://nmrugg.github.com/LZMA-JS/",
   "repository": {
     "type": "git",
     "url": "git://github.com/nmrugg/LZMA-JS.git"
