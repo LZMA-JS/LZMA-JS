@@ -3876,7 +3876,7 @@ var LZMA = (function () {
 	onmessage = function (e) {
 		if (e.data.action === action_compress) {
 			LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-		} else {
+		} else if(e.data.action === action_decompress || e.data.action === action_update) {
 			LZMA.decompress(e.data.data, e.data.callback_num);
 		}
 	}
