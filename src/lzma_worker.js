@@ -1100,7 +1100,7 @@ var LZMA = (function () {
 		}
 		
 		/// Was the length set in the header (if it was compressed from a stream, the length is all f's).
-		if (hex_length.toLowerCase() == "ffffffffffffffffff" || hex_length == 0) {
+		if (/^0+$|^f+$/i.test(hex_length)) {
 			/// The length is unknown, so set to -1.
 			this$static.length_0 = N1_longLit;
 		} else {
