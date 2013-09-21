@@ -3539,33 +3539,39 @@ var LZMA = (function () {
 			x = utf[i] & 255;
 			if ((x & 128) == 0) {
 				if (x == 0) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+				    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+					return utf;
 				}
 				$appendNonNull(buf.data, String.fromCharCode(x & 65535));
 			} else if ((x & 224) == 192) {
 				if (i + 1 >= utf.length) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+					return utf;
 				}
 				y = utf[++i] & 255;
 				if ((y & 192) != 128) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+					return utf;
 				}
 				$append(buf.data, String.fromCharCode((x & 31) << 6 & 65535 | y & 63));
 			} else if ((x & 240) == 224) {
 				if (i + 2 >= utf.length) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+					return utf;
 				}
 				y = utf[++i] & 255;
 				if ((y & 192) != 128) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+					return utf;
 				}
 				z = utf[++i] & 255;
 				if ((z & 192) != 128) {
-					throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+					return utf;
 				}
 				$appendNonNull(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
 			} else {
-				throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid UTF-8');
+				/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+				return utf;
 			}
 		}
 		return $toString(buf.data);
