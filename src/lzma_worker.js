@@ -3758,7 +3758,8 @@ var LZMA = (function () {
 				postMessage({
 					action: action_decompress,
 					callback_num: callback_num,
-					result: res
+					/// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
+					result: (typeof res !== "string" ? res.slice(0) : res)
 				});
 			}
 		}
