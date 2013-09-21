@@ -290,7 +290,7 @@
                 right_text_el.value = "";
                 update_sizes();
                 
-                right_output_el.innerHTML = "Compressing... 0%";
+                right_output_el.innerHTML = "Compressing...0%";
                 
                 /// Start the clock.
                 start_time = (new Date).getTime();
@@ -307,8 +307,8 @@
                     
                     right_text_el.value = convert_to_formated_hex(result);
                     update_sizes(true);
-                }, function (percent) {
-                    right_output_el.innerHTML = "Compressing... " + Math.round(percent * 100) + "%";
+                }, function progress(percent) {
+                    right_output_el.innerHTML = "Compressing..." + Math.round(percent * 100) + "%";
                 });
             }
             
@@ -319,7 +319,7 @@
                 
                 left_text_el.value = "";
                 update_sizes();
-                left_output_el.innerHTML = "Decompressing... 0%";
+                left_output_el.innerHTML = "Decompressing...0%";
                 
                 if (byte_arr == false) {
                     ///TODO: Show which character is wrong.  I.e., invalid compressed input: invalid hex character `s
@@ -342,8 +342,10 @@
                     
                     left_text_el.value = result;
                     update_sizes(true);
-                }, function (percent) {
-                    left_output_el.innerHTML  = "Decompressing... " + Math.round(percent * 100) + "%";
+                }, function progress(percent) {
+                    ///NOTE: If "percent" is -1, that means that it is not possible to calculate the percent, so you'll just have to wait.
+                    ///      Also, the progress function will not be fired again.
+                    left_output_el.innerHTML  = "Decompressing..." + (percent === -1 ? "" : Math.round(percent * 100) + "%");
                 });
             }
         </script>

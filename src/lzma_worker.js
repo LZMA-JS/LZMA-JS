@@ -3697,7 +3697,9 @@ var LZMA = (function () {
 			byte_arr = arguments[0],
 			callback_num,
 			on_finish,
-			on_progress;
+			on_progress,
+			sent_unknown,
+			has_progress;
 		
 		if (typeof arguments[1] === "function") {
 			on_finish = arguments[1];
@@ -3720,15 +3722,22 @@ var LZMA = (function () {
 		
 		function do_action() {
 			var res;
+				
 			start = (new Date).getTime();
+			
 			while ($execute_0(this$static.d)) {
-				percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-				/// If about 200 miliseconds have passed, update the progress.
 				if ((new Date).getTime() - start > 200) {
-					if (on_progress) {
-						on_progress(percent);
-					} else if (typeof callback_num !== "undefined") {
-						update_progress(percent, callback_num);
+					if (has_progress) {
+						percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+						/// If about 200 miliseconds have passed, update the progress.					
+						if (on_progress) {
+							on_progress(percent);
+						} else if (typeof callback_num !== "undefined") {
+							update_progress(percent, callback_num);
+						}
+					} else if (!sent_unknown) {
+						update_progress(-1, callback_num);
+						sent_unknown = true;
 					}
 					setTimeout(do_action, 0);
 					return false;
@@ -3753,6 +3762,8 @@ var LZMA = (function () {
 				});
 			}
 		}
+		
+		has_progress = toDouble(this$static.d.length_0) > -1;
 		
 		setTimeout(do_action, 0);
 	}
