@@ -7,6 +7,10 @@ The JavaScript, CSS, and HTML is licensed under the MIT license.  See LICENSE fo
 It is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
 Java into JavaScript.  The original Java code is licensed under the Apache License 2.0 license.
 
+Fundraiser
+---
+There's a fundraiser going on at [BountySource](https://www.bountysource.com/fundraisers/475-lzma-js "Fundraiser"). Help get bugs fixed and features added!
+
 Demos
 ---
 
@@ -55,9 +59,9 @@ Notes
 ---
 
 The calls to compress() and decompress() are asynchronous, so you need to supply a callback function if you
-want to use the (de)compressed data.  There was a synchronous version, which you can find in
-[the archives](https://github.com/nmrugg/LZMA-JS/archives/ef453c278e5087de68b869b2f0d023a0ff922aa2),
-but it is no longer maintained.
+want to use the (de)compressed data.
+
+If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value -1.
 
 LZMA-JS will use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
 environment does not support web workers, it will create a few global functions (Worker(), onmessage(), and
