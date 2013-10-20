@@ -2,21 +2,18 @@
 
 var all_tests_pass = true,
     fs = require("fs"),
-    path = require("path"),
     my_lzma = require("../src/lzma.js").LZMA(),
-    
-    compression_mode = process.argv[2] || 1,
+    compression_mode = Number(process.argv[2]) || 1,
     path_to_files = "files";
 
 function display_result(str, pass) {
-    ///NOTE: \033[32m makes green text.
-    ///      \033[31m makes red text.
-    ///      \033[0m  resets the text color.
+    ///NOTE: \u001B[32m makes green text.
+    ///      \u001B[31m makes red text.
+    ///      \u001B[0m  resets the text color.
     console.log("\u001B[3" + (pass ? "2" : "1") + "m" + str + "\u001B[0m");
 }
 
-function buffer2arr(buffer)
-{
+function buffer2arr(buffer) {
     var arr = [],
         i,
         len = buffer.length;
@@ -28,8 +25,7 @@ function buffer2arr(buffer)
     return arr;
 }
 
-function decompression_test(compressed_file, correct_filename, next)
-{
+function decompression_test(compressed_file, correct_filename, next) {
     fs.readFile(correct_filename, function (err, correct_buffer) {
         
         if (err) {
@@ -76,8 +72,7 @@ function decompression_test(compressed_file, correct_filename, next)
     });
 }
 
-function compression_test(file, next)
-{
+function compression_test(file, next) {
     fs.readFile(file, "utf8", function (err, content) {
         var comp_start = (new Date).getTime();
         
@@ -116,7 +111,8 @@ function compression_test(file, next)
 
 fs.readdir(path_to_files, function (err, files) {
     var file_count = files.length,
-        run_test;
+        run_test,
+        path = require("path");
     
     if (err) {
         throw err;
