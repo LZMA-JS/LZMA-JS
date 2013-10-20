@@ -15,39 +15,101 @@ function display_result(str, pass) {
     console.log("\u001B[3" + (pass ? "2" : "1") + "m" + str + "\u001B[0m");
 }
 
-function decompression_test(content, correct_filename, next)
+function buffer2arr(buffer)
 {
-    console.log("TODO: test against " + correct_filename)
-    next();
+    var arr = [],
+        i,
+        len = buffer.length;
+    
+    for (i = 0; i < len; i += 1) {
+        arr[i] = buffer[i];
+    }
+    
+    return arr;
 }
 
-function compression_test(content, next)
+function decompression_test(compressed_file, correct_filename, next)
 {
-    var comp_start = (new Date).getTime();
-    console.log("     Initial size:", content.length);
-    my_lzma.compress(content, compression_mode, function (result) {
-        var comp_speed = (new Date).getTime() - comp_start,
-            deco_start;
-        console.log("  Compressed size:", result.length);
+    fs.readFile(correct_filename, function (err, correct_buffer) {
         
-        deco_start = (new Date).getTime();
-        my_lzma.decompress(result, function (result) {
-            var deco_speed = (new Date).getTime() - deco_start;
-            console.log("Decompressed size:", result.length);
+        if (err) {
+            throw err;
+        }
+        
+        fs.readFile(compressed_file, function (err, buffer) {
+            var orig_arr = buffer2arr(buffer),
+                deco_start,
+                i,
+                len = buffer.length;
             
-            if (content !== result) {
-                display_result("ERROR: files do not match!", false);
-                console.log();
-                all_tests_pass = false;
-            } else {
-                display_result("Test passed", true);
+            if (err) {
+                throw err;
             }
             
-            console.log("  Compression time:", comp_speed);
-            console.log("Decompression time:", deco_speed);
+            deco_start = (new Date).getTime();
+            my_lzma.decompress(orig_arr, function (result) {
+                var deco_speed = (new Date).getTime() - deco_start,
+                    correct_result;
+                
+                console.log("Decompressed size:", result.length);
+                
+                if (typeof result === "string") {
+                    correct_result = correct_buffer.toString();
+                } else {
+                    correct_result = JSON.stringify(buffer2arr(correct_buffer));
+                    result = JSON.stringify(result);
+                }
+                if (correct_result !== result) {
+                    display_result("ERROR: files do not match!", false);
+                    console.log();
+                    all_tests_pass = false;
+                } else {
+                    display_result("Test passed", true);
+                }
+                
+                console.log("Decompression time:", deco_speed);
+                
+                console.log();
+                next();
+            });
+        });
+    });
+}
+
+function compression_test(file, next)
+{
+    fs.readFile(file, "utf8", function (err, content) {
+        var comp_start = (new Date).getTime();
+        
+        if (err) {
+            throw err;
+        }
+        
+        console.log("     Initial size:", content.length);
+        my_lzma.compress(content, compression_mode, function (result) {
+            var comp_speed = (new Date).getTime() - comp_start,
+                deco_start;
+            console.log("  Compressed size:", result.length);
             
-            console.log();
-            next();
+            deco_start = (new Date).getTime();
+            my_lzma.decompress(result, function (result) {
+                var deco_speed = (new Date).getTime() - deco_start;
+                console.log("Decompressed size:", result.length);
+                
+                if (content !== result) {
+                    display_result("ERROR: files do not match!", false);
+                    console.log();
+                    all_tests_pass = false;
+                } else {
+                    display_result("Test passed", true);
+                }
+                
+                console.log("  Compression time:", comp_speed);
+                console.log("Decompression time:", deco_speed);
+                
+                console.log();
+                next();
+            });
         });
     });
 }
@@ -62,6 +124,7 @@ fs.readdir(path_to_files, function (err, files) {
     
     (function run_test(i) {
         var file;
+        
         if (i >= file_count) {
             if (all_tests_pass) {
                 display_result("All tests completed sucessfully", true);
@@ -72,26 +135,20 @@ fs.readdir(path_to_files, function (err, files) {
         }
         file = files[i];
         
-        ///TODO: Preform a decompress test on *.lzma files.
-        console.log("File:", file);
-        fs.readFile(path.join(path_to_files, file), "utf8", function (err, content) {
-            if (err) {
-                throw err;
-            }
-            
-            if (file.slice(-5) === ".lzma") {
-                /// Preform a decompress test on *.lzma files.
-                decompression_test(content, path.join(path_to_files, file.slice(0, -5)), function next()
-                {
-                    run_test(i + 1);
-                });
-            } else {
-                /// Preform a compression/decompression test.
-                compression_test(content, function next()
-                {
-                    run_test(i + 1);
-                });
-            }
-        });
+        console.log(file)
+        
+        if (file.slice(-5) === ".lzma") {
+            /// Preform a decompress test on *.lzma files.
+            decompression_test(path.join(path_to_files, file), path.join(path_to_files, file.slice(0, -5)), function next()
+            {
+                run_test(i + 1);
+            });
+        } else {
+            /// Preform a compression/decompression test.
+            compression_test(path.join(path_to_files, file), function next()
+            {
+                run_test(i + 1);
+            });
+        }
     }(0));
 });
