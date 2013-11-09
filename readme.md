@@ -59,9 +59,8 @@ want to use the (de)compressed data.
 
 If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value -1.
 
-LZMA-JS will use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
-environment does not support web workers, it will create a few global functions (Worker(), onmessage(), and
-postMessage()) to mimic the functionality.
+LZMA-JS will try to use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
+environment does not support web workers, it will just do something else, and it won't pollute the global scope.
 
 But I don't want to use Web Workers
 ---
@@ -78,7 +77,4 @@ That will create a global <code>LZMA</code> <code>object</code> that you can use
 
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
-This can also be done in Node.js.
-
-    /// Note that there are no parentheses after ".LZMA" because this LZMA variable is an object, not a function.
-    var my_lzma = require("lzma/lzma_worker.js").LZMA;
+In Node.js, the Web Worker code is already skipped, so there's no reason to do this on that platform, though you could.
