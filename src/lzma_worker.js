@@ -3904,14 +3904,18 @@ var LZMA = (function () {
 		}
 	}());
 	
-	/// Create the global onmessage function.
-	onmessage = function (e) {
-		if (e.data.action === action_compress) {
-			LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-		} else {
-			LZMA.decompress(e.data.data, e.data.callback_num);
-		}
-	}
+	if (typeof Worker !== "undefined") {
+	   (function create_onmessage() {
+            /// Create the global onmessage function.
+            onmessage = function (e) {
+                if (e.data.action === action_compress) {
+                    LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                } else {
+                    LZMA.decompress(e.data.data, e.data.callback_num);
+                }
+            }
+        }());
+    }
 		
 	return {
 		compress:   compress,
@@ -3921,3 +3925,6 @@ var LZMA = (function () {
 
 /// Allow Node.js to be able to access this directly if it is included directly.
 this.LZMA = LZMA;
+
+/// This is used by browsers that do not support web workers.
+this.LZMA_WORKER = LZMA;
