@@ -3925,3 +3925,6 @@ var LZMA = (function () {
 
 /// Allow Node.js to be able to access this directly if it is included directly.
 this.LZMA = LZMA;
+
+/// This is used by browsers that do not support web workers.
+this.LZMA_WORKER = LZMA;
