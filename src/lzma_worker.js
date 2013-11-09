@@ -3904,7 +3904,9 @@ var LZMA = (function () {
 		}
 	}());
 	
-	if (typeof Worker !== "undefined") {
+	/// Are we in a Web Worker?
+	/// This seems to be the most reliable way to detect this.
+	if (typeof onmessage !== "undefined") {
 	   (function create_onmessage() {
             /// Create the global onmessage function.
             onmessage = function (e) {
