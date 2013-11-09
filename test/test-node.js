@@ -2,7 +2,7 @@
 
 var all_tests_pass = true,
     fs = require("fs"),
-    my_lzma = require("../src/lzma.js").LZMA(),
+    my_lzma = require("../index.js").LZMA(),
     compression_mode = Number(process.argv[2]) || 1,
     path_to_files = "files";
 
