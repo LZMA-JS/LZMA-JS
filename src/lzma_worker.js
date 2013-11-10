@@ -3910,10 +3910,12 @@ var LZMA = (function () {
 	   (function create_onmessage() {
             /// Create the global onmessage function.
             onmessage = function (e) {
-                if (e.data.action === action_compress) {
-                    LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-                } else {
-                    LZMA.decompress(e.data.data, e.data.callback_num);
+                if (e && e.data) {
+                    if (e.data.action === action_compress) {
+                        LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                    } else if (e.data.action === action_decompress) {
+                        LZMA.decompress(e.data.data, e.data.callback_num);
+                    }
                 }
             }
         }());
