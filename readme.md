@@ -20,7 +20,7 @@ First, load the bootstrapping code.
     /// In a browser:
     <script src="../src/lzma.js"></script>
 
-    /// In node:
+    /// In Node.js:
     var LZMA = require("../src/lzma.js").LZMA;
 
 Create the LZMA object.
@@ -42,7 +42,7 @@ Create the LZMA object.
 Node.js Installation
 ---
 
-LZMA-JS is available in the npm repository.  If you have [npm](https://github.com/isaacs/npm) installed, you can install it by running
+LZMA-JS is available in the npm repository.
     
     $ npm install lzma
 
@@ -59,8 +59,8 @@ want to use the (de)compressed data.
 
 If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value -1.
 
-LZMA-JS will try to use [web workers](http://www.whatwg.org/specs/web-workers/current-work/) if they are available.  If the
-environment does not support web workers, it will just do something else, and it won't pollute the global scope.
+LZMA-JS will try to use Web Workers if they are available.  If the environment does not support web workers,
+it will just do something else, and it won't pollute the global scope.
 
 But I don't want to use Web Workers
 ---
@@ -77,4 +77,4 @@ That will create a global <code>LZMA</code> <code>object</code> that you can use
 
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
-In Node.js, the Web Worker code is already skipped, so there's no reason to do this on that platform, though you could.
+In Node.js, the Web Worker code is already skipped, so there's no need to do this.
