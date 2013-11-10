@@ -1,12 +1,12 @@
 var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
-		action_update	  = 3;
+		action_progress	  = 3;
 	
 	function update_progress(percent, callback_num) {
 		///TODO: Calculate ETA.
 		postMessage({
-			action: 3,
+			action: action_progress,
 			callback_num: callback_num,
 			result: percent
 		});
@@ -3910,10 +3910,12 @@ var LZMA = (function () {
 	   (function create_onmessage() {
             /// Create the global onmessage function.
             onmessage = function (e) {
-                if (e.data.action === action_compress) {
-                    LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-                } else {
-                    LZMA.decompress(e.data.data, e.data.callback_num);
+                if (e && e.data) {
+                    if (e.data.action === action_compress) {
+                        LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                    } else if (e.data.action === action_decompress) {
+                        LZMA.decompress(e.data.data, e.data.callback_num);
+                    }
                 }
             }
         }());
