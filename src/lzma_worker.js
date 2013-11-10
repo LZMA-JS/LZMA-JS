@@ -1,7 +1,7 @@
 var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
-		action_update	  = 3;
+		action_progress	  = 3;
 	
 	function update_progress(percent, callback_num) {
 		///TODO: Calculate ETA.
