@@ -6,7 +6,7 @@ var LZMA = (function () {
 	function update_progress(percent, callback_num) {
 		///TODO: Calculate ETA.
 		postMessage({
-			action: 3,
+			action: action_progress,
 			callback_num: callback_num,
 			result: percent
 		});
