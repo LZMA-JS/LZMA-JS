@@ -57,9 +57,9 @@ Notes
 The calls to compress() and decompress() are asynchronous, so you need to supply a callback function if you
 want to use the (de)compressed data.
 
-If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value -1.
+If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value <code>-1</code>.
 
-LZMA-JS will try to use Web Workers if they are available.  If the environment does not support web workers,
+LZMA-JS will try to use Web Workers if they are available.  If the environment does not support Web Workers,
 it will just do something else, and it won't pollute the global scope.
 
 But I don't want to use Web Workers
