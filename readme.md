@@ -46,7 +46,7 @@ LZMA-JS is available in the npm repository.
     
     $ npm install lzma
 
-and load it with the following code:
+It can be loaded with the following code:
     
     var my_lzma = require("lzma").LZMA();
     
