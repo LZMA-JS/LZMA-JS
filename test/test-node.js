@@ -26,6 +26,17 @@ function buffer2arr(buffer) {
     return arr;
 }
 
+function progress(percent)
+{
+    if (process.stdout.isTTY) {
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        if (percent < 1) {
+            process.stdout.write((percent * 100).toFixed(2) + "%");
+        }
+    }
+}
+
 function decompression_test(compressed_file, correct_filename, next) {
     fs.readFile(correct_filename, function (err, correct_buffer) {
         
@@ -70,7 +81,7 @@ function decompression_test(compressed_file, correct_filename, next) {
                     
                     console.log();
                     next();
-                });
+                }, progress);
             } catch (e) {
                 if (p.basename(correct_filename) === "error-" + e.detailMessage) {
                     display_result("Test passed", true);
@@ -95,9 +106,10 @@ function compression_test(file, next) {
         }
         
         console.log("     Initial size:", content.length);
-        my_lzma.compress(content, compression_mode, function (result) {
+        my_lzma.compress(content, compression_mode, function ondone(result) {
             var comp_speed = (new Date).getTime() - comp_start,
                 deco_start;
+            
             console.log("  Compressed size:", result.length);
             
             deco_start = (new Date).getTime();
@@ -118,8 +130,8 @@ function compression_test(file, next) {
                 
                 console.log();
                 next();
-            });
-        });
+            }, progress);
+        }, progress);
     });
 }
 
