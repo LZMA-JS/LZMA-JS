@@ -205,11 +205,7 @@ var LZMA = (function () {
 	function instanceOf(src, dstId) {
 		return src != null && canCast(src.typeId$, dstId);
 	}
-	
-	function round_int(x) {
-		return ~~Math.max(Math.min(x, 2147483647), -2147483648);
-	}
-	
+		
 	var typeIdArray = [
 			{},
 			{},
@@ -249,17 +245,7 @@ var LZMA = (function () {
 		newLow = a[0] + b[0];
 		return create(newLow, newHigh);
 	}
-	
-	function addTimes(accum, a, b) {
-		if (a == 0) {
-			return accum;
-		}
-		if (b == 0) {
-			return accum;
-		}
-		return add(accum, create(a * b, 0));
-	}
-	
+		
 	function and(a, b) {
 		return makeFromBits(~~Math.max(Math.min(a[1] / 4294967296, 2147483647), -2147483648) & ~~Math.max(Math.min(b[1] / 4294967296, 2147483647), -2147483648), lowBits_0(a) & lowBits_0(b));
 	}
@@ -311,49 +297,6 @@ var LZMA = (function () {
 		return [valueLow, valueHigh];
 	}
 	
-	function div(a, b) {
-		var approx, deltaRem, deltaResult, halfa, rem, result;
-		if (b[0] == 0 && b[1] == 0) {
-			throw $ArithmeticException(new ArithmeticException(), '/ by zero');
-		}
-		if (a[0] == 0 && a[1] == 0) {
-			return $clinit_10() , ZERO;
-		}
-		if (eq(a, ($clinit_10() , MIN_VALUE))) {
-			if (eq(b, ONE) || eq(b, NEG_ONE)) {
-				return MIN_VALUE;
-			}
-			halfa = shr(a, 1);
-			approx = shl(div(halfa, b), 1);
-			rem = sub(a, mul(b, approx));
-			return add(approx, div(rem, b));
-		}
-		if (eq(b, MIN_VALUE)) {
-			return ZERO;
-		}
-		if (a[1] < 0) {
-			if (b[1] < 0) {
-				return div(neg(a), neg(b));
-			} else {
-				return neg(div(neg(a), b));
-			}
-		}
-		if (b[1] < 0) {
-			return neg(div(a, neg(b)));
-		}
-		result = ZERO;
-		rem = a;
-		while (compare(rem, b) >= 0) {
-			deltaResult = fromDouble(Math.floor(toDoubleRoundDown(rem) / toDoubleRoundUp(b)));
-			if (deltaResult[0] == 0 && deltaResult[1] == 0) {
-				deltaResult = ONE;
-			}
-			deltaRem = mul(deltaResult, b);
-			result = add(result, deltaResult);
-			rem = sub(rem, deltaRem);
-		}
-		return result;
-	}
 	
 	function eq(a, b) {
 		return a[0] == b[0] && a[1] == b[1];
@@ -414,64 +357,7 @@ var LZMA = (function () {
 		}
 		return [low, high];
 	}
-	
-	function mul(a, b) {
-		var a1, a2, a3, a4, b1, b2, b3, b4, res;
-		if (a[0] == 0 && a[1] == 0) {
-			return $clinit_10() , ZERO;
-		}
-		if (b[0] == 0 && b[1] == 0) {
-			return $clinit_10() , ZERO;
-		}
-		if (eq(a, ($clinit_10() , MIN_VALUE))) {
-			return multByMinValue(b);
-		}
-		if (eq(b, MIN_VALUE)) {
-			return multByMinValue(a);
-		}
-		if (a[1] < 0) {
-			if (b[1] < 0) {
-				return mul(neg(a), neg(b));
-			} else {
-				return neg(mul(neg(a), b));
-			}
-		}
-		if (b[1] < 0) {
-			return neg(mul(a, neg(b)));
-		}
-		if (compare(a, TWO_PWR_24) < 0 && compare(b, TWO_PWR_24) < 0) {
-			return create((a[1] + a[0]) * (b[1] + b[0]), 0);
-		}
-		a3 = a[1] % 281474976710656;
-		a4 = a[1] - a3;
-		a1 = a[0] % 65536;
-		a2 = a[0] - a1;
-		b3 = b[1] % 281474976710656;
-		b4 = b[1] - b3;
-		b1 = b[0] % 65536;
-		b2 = b[0] - b1;
-		res = ZERO;
-		res = addTimes(res, a4, b1);
-		res = addTimes(res, a3, b2);
-		res = addTimes(res, a3, b1);
-		res = addTimes(res, a2, b3);
-		res = addTimes(res, a2, b2);
-		res = addTimes(res, a2, b1);
-		res = addTimes(res, a1, b4);
-		res = addTimes(res, a1, b3);
-		res = addTimes(res, a1, b2);
-		res = addTimes(res, a1, b1);
-		return res;
-	}
-	
-	function multByMinValue(a) {
-		if ((lowBits_0(a) & 1) == 1) {
-			return $clinit_10() , MIN_VALUE;
-		} else {
-			return $clinit_10() , ZERO;
-		}
-	}
-	
+		
 	function neg(a) {
 		var newHigh, newLow;
 		if (eq(a, ($clinit_10() , MIN_VALUE))) {
@@ -548,60 +434,7 @@ var LZMA = (function () {
 		newLow = a[0] - b[0];
 		return create(newLow, newHigh);
 	}
-	
-	function toDoubleRoundDown(a) {
-		var diff, magnitute, toSubtract;
-		magnitute = round_int(Math.log(a[1]) / ($clinit_10() , LN_2));
-		if (magnitute <= 48) {
-			return a[1] + a[0];
-		} else {
-			diff = magnitute - 48;
-			toSubtract = (1 << diff) - 1;
-			return a[1] + (a[0] - toSubtract);
-		}
-	}
-	
-	function toDoubleRoundUp(a) {
-		var diff, magnitute, toAdd;
-		magnitute = round_int(Math.log(a[1]) / ($clinit_10() , LN_2));
-		if (magnitute <= 48) {
-			return a[1] + a[0];
-		} else {
-			diff = magnitute - 48;
-			toAdd = (1 << diff) - 1;
-			return a[1] + (a[0] + toAdd);
-		}
-	}
-	
-	function toString_0(a) {
-		var digits, rem, remDivTenPower, res, tenPowerLong, zeroesNeeded;
-		if (a[0] == 0 && a[1] == 0) {
-			return '0';
-		}
-		if (eq(a, ($clinit_10() , MIN_VALUE))) {
-			return '-9223372036854775808';
-		}
-		if (a[1] < 0) {
-			return '-' + toString_0(neg(a));
-		}
-		rem = a;
-		res = '';
-		while (!(rem[0] == 0 && rem[1] == 0)) {
-			tenPowerLong = fromInt(1000000000);
-			remDivTenPower = div(rem, tenPowerLong);
-			digits = '' + lowBits_0(sub(rem, mul(remDivTenPower, tenPowerLong)));
-			rem = remDivTenPower;
-			if (!(rem[0] == 0 && rem[1] == 0)) {
-				zeroesNeeded = 9 - digits.length;
-				for (; zeroesNeeded > 0; --zeroesNeeded) {
-					digits = '0' + digits;
-				}
-			}
-			res = digits + res;
-		}
-		return res;
-	}
-	
+		
 	function $clinit_9() {
 		$clinit_9 = nullMethod;
 		boxedValues = initDim(_3_3D_classLit, 0, 9, 256, 0);
@@ -743,10 +576,6 @@ var LZMA = (function () {
 	_ = IOException.prototype = new Exception();
 	_.getClass$ = getClass_5;
 	_.typeId$ = 7;
-	function $ArithmeticException(this$static, explanation) {
-		this$static.detailMessage = explanation;
-		return this$static;
-	}
 	
 	function getClass_8() {
 		return Ljava_lang_ArithmeticException_2_classLit;
@@ -1006,7 +835,7 @@ var LZMA = (function () {
 		if (!mode)
 			throw $IllegalArgumentException(new IllegalArgumentException(), 'null mode');
 		if (compare(length_0, N1_longLit) < 0)
-			throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + toString_0(length_0));
+			throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + length_0);
 		this$static.length_0 = length_0;
 		encoder = $Encoder(new Encoder());
 		$configure(mode, encoder);
