@@ -1,11 +1,12 @@
 /* jshint boss:true, unused:true, undef:true, noarg: true, forin:true, -W041, -W021, worker:true, browser:true, node:true */
 
-/* global setTimeout, window, console, onmessage */
+/* global setImmediate, setTimeout, window, console, onmessage */
 
 var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
-		action_progress	  = 3;
+		action_progress	  = 3,
+		wait = typeof setImmediate === "function" ? setImmediate : setTimeout;
 	
 	function update_progress(percent, callback_num) {
 		postMessage({
@@ -1087,10 +1088,11 @@ var LZMA = (function () {
 				throw $IOException(new IOException(), 'truncated input');
 			properties[i] = r << 24 >> 24;
 		}
-		decoder = $Decoder(new Decoder());
-		if (!$SetDecoderProperties(decoder, properties))
-			throw $IOException(new IOException(), 'corrupted input');
 		
+		decoder = $Decoder(new Decoder());
+		if (!$SetDecoderProperties(decoder, properties)) {
+			throw $IOException(new IOException(), 'corrupted input');
+		}
 		for (i = 0; i < 64; i += 8) {
 			r = $read(input);
 			if (r == -1)
@@ -3674,7 +3676,7 @@ var LZMA = (function () {
 					} else if (typeof callback_num !== "undefined") {
 						update_progress(percent, callback_num);
 					}
-					setTimeout(do_action, 0);
+					wait(do_action, 0);
 					return false;
 				}
 			}
@@ -3700,7 +3702,7 @@ var LZMA = (function () {
 			}
 		}
 		
-		setTimeout(do_action, 1);
+		wait(do_action, 1);
 	}
 	
 	function decompress() {
@@ -3737,7 +3739,7 @@ var LZMA = (function () {
 		
 		function do_action() {
 			var res;
-				
+			
 			start = (new Date()).getTime();
 			
 			while ($execute_0(this$static.d)) {
@@ -3754,7 +3756,7 @@ var LZMA = (function () {
 						update_progress(-1, callback_num);
 						sent_unknown = true;
 					}
-					setTimeout(do_action, 0);
+					wait(do_action, 0);
 					return false;
 				}
 			}
@@ -3781,7 +3783,7 @@ var LZMA = (function () {
 		
 		has_progress = toDouble(this$static.d.length_0) > -1;
 		
-		setTimeout(do_action, 0);
+		wait(do_action, 0);
 	}
 	
 	function getClass_46() {
