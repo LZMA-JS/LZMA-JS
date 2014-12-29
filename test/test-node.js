@@ -47,18 +47,16 @@ function decompression_test(compressed_file, correct_filename, next) {
         
         fs.readFile(compressed_file, function (err, buffer) {
             var orig_arr = buffer2arr(buffer),
-                deco_start,
-                i,
-                len = buffer.length;
+                deco_start;
             
             if (err) {
                 throw err;
             }
             
-            deco_start = (new Date).getTime();
+            deco_start = (new Date()).getTime();
             try {
                 my_lzma.decompress(orig_arr, function (result) {
-                    var deco_speed = (new Date).getTime() - deco_start,
+                    var deco_speed = (new Date()).getTime() - deco_start,
                         correct_result;
                     
                     console.log("Decompressed size:", result.length);
@@ -99,7 +97,7 @@ function decompression_test(compressed_file, correct_filename, next) {
 
 function compression_test(file, next) {
     fs.readFile(file, "utf8", function (err, content) {
-        var comp_start = (new Date).getTime();
+        var comp_start = (new Date()).getTime();
         
         if (err) {
             throw err;
@@ -107,14 +105,14 @@ function compression_test(file, next) {
         
         console.log("     Initial size:", content.length);
         my_lzma.compress(content, compression_mode, function ondone(result) {
-            var comp_speed = (new Date).getTime() - comp_start,
+            var comp_speed = (new Date()).getTime() - comp_start,
                 deco_start;
             
             console.log("  Compressed size:", result.length);
             
-            deco_start = (new Date).getTime();
+            deco_start = (new Date()).getTime();
             my_lzma.decompress(result, function (result) {
-                var deco_speed = (new Date).getTime() - deco_start;
+                var deco_speed = (new Date()).getTime() - deco_start;
                 console.log("Decompressed size:", result.length);
                 
                 if (content !== result) {
@@ -137,7 +135,6 @@ function compression_test(file, next) {
 
 fs.readdir(path_to_files, function (err, files) {
     var file_count = files.length,
-        run_test,
         path = require("path");
     
     if (err) {
