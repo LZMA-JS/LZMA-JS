@@ -6,7 +6,8 @@ var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
 		action_progress   = 3,
-		wait = typeof setImmediate === "function" ? setImmediate : setTimeout;
+		wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
+		c = function () {return {typeName: String(this.typeId$)};};
 	
 	function update_progress(percent, callback_num) {
 		postMessage({
@@ -28,67 +29,51 @@ var LZMA = (function () {
 		Pff000000_longLit = [4278190080, 0],
 		Pffffffff_longLit = [4294967295, 0],
 		P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
-
-	function getClass_18() {
-		return Ljava_lang_Object_2_classLit;
-	}
 	
 	function Object_0() {
 	}
 	
 	_ = Object_0.prototype = {};
-	_.getClass$ = getClass_18;
+	_.getClass$ = c;
 	_.typeMarker$ = nullMethod;
 	_.typeId$ = 1;
-	function getClass_22() {
-		return Ljava_lang_Throwable_2_classLit;
-	}
 	
 	function Throwable() {
 	}
 	
 	_ = Throwable.prototype = new Object_0();
-	_.getClass$ = getClass_22;
+	_.getClass$ = c;
 	_.typeId$ = 3;
 	_.detailMessage = null;
-	function getClass_13() {
-		return Ljava_lang_Exception_2_classLit;
-	}
 	
 	function Exception() {
 	}
 	
 	_ = Exception.prototype = new Throwable();
-	_.getClass$ = getClass_13;
+	_.getClass$ = c;
 	_.typeId$ = 4;
 	function $RuntimeException(this$static, message) {
 		this$static.detailMessage = message;
 		return this$static;
 	}
 	
-	function getClass_19() {
-		return Ljava_lang_RuntimeException_2_classLit;
-	}
 	
 	function RuntimeException() {
 	}
 	
 	_ = RuntimeException.prototype = new Exception();
-	_.getClass$ = getClass_19;
+	_.getClass$ = c;
 	_.typeId$ = 5;
 	function $JavaScriptException(this$static) {
 		return this$static;
 	}
 	
-	function getClass_0() {
-		return Lcom_google_gwt_core_client_JavaScriptException_2_classLit;
-	}
 	
 	function JavaScriptException() {
 	}
 	
 	_ = JavaScriptException.prototype = new RuntimeException();
-	_.getClass$ = getClass_0;
+	_.getClass$ = c;
 	_.typeId$ = 6;
 	function $append(a, x) {
 		a[a.explicitLength++] = x;
@@ -454,15 +439,12 @@ var LZMA = (function () {
 	}
 	
 	var LN_2, MAX_VALUE, MIN_VALUE, NEG_ONE, ONE, TWO, TWO_PWR_24, ZERO;
-	function getClass_6() {
-		return Ljava_io_InputStream_2_classLit;
-	}
 	
 	function InputStream() {
 	}
 	
 	_ = InputStream.prototype = new Object_0();
-	_.getClass$ = getClass_6;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $ByteArrayInputStream(this$static, buf) {
 		$ByteArrayInputStream_0(this$static, buf, 0, buf.length);
@@ -492,29 +474,22 @@ var LZMA = (function () {
 		this$static.pos += len;
 		return len;
 	}
-	
-	function getClass_3() {
-		return Ljava_io_ByteArrayInputStream_2_classLit;
-	}
-	
+		
 	function ByteArrayInputStream() {
 	}
 	
 	_ = ByteArrayInputStream.prototype = new InputStream();
-	_.getClass$ = getClass_3;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.buf = null;
 	_.count = 0;
 	_.pos = 0;
-	function getClass_7() {
-		return Ljava_io_OutputStream_2_classLit;
-	}
-	
+		
 	function OutputStream() {
 	}
 	
 	_ = OutputStream.prototype = new Object_0();
-	_.getClass$ = getClass_7;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $ByteArrayOutputStream(this$static) {
 		this$static.buf = initDim(_3B_classLit, 0, -1, 32, 1);
@@ -548,16 +523,12 @@ var LZMA = (function () {
 		arraycopy(buf, off, this$static.buf, this$static.count, len);
 		this$static.count += len;
 	}
-	
-	function getClass_4() {
-		return Ljava_io_ByteArrayOutputStream_2_classLit;
-	}
-	
+		
 	function ByteArrayOutputStream() {
 	}
 	
 	_ = ByteArrayOutputStream.prototype = new OutputStream();
-	_.getClass$ = getClass_4;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.buf = null;
 	_.count = 0;
@@ -565,42 +536,31 @@ var LZMA = (function () {
 		this$static.detailMessage = message;
 		return this$static;
 	}
-	
-	function getClass_5() {
-		return Ljava_io_IOException_2_classLit;
-	}
-	
+		
 	function IOException() {
 	}
 	
 	_ = IOException.prototype = new Exception();
-	_.getClass$ = getClass_5;
+	_.getClass$ = c;
 	_.typeId$ = 7;
-	
-	function getClass_8() {
-		return Ljava_lang_ArithmeticException_2_classLit;
-	}
 	
 	function ArithmeticException() {
 	}
 	
 	_ = ArithmeticException.prototype = new RuntimeException();
-	_.getClass$ = getClass_8;
+	_.getClass$ = c;
 	_.typeId$ = 8;
 	function $ArrayStoreException(this$static, message) {
 		this$static.detailMessage = message;
 		return this$static;
 	}
 	
-	function getClass_9() {
-		return Ljava_lang_ArrayStoreException_2_classLit;
-	}
 	
 	function ArrayStoreException() {
 	}
 	
 	_ = ArrayStoreException.prototype = new RuntimeException();
-	_.getClass$ = getClass_9;
+	_.getClass$ = c;
 	_.typeId$ = 9;
 	function createForArray(packageName, className) {
 		var clazz;
@@ -609,85 +569,52 @@ var LZMA = (function () {
 		return clazz;
 	}
 	
-	function createForClass(packageName, className) {
-		var clazz;
-		clazz = new Class();
-		clazz.typeName = packageName + className;
-		return clazz;
-	}
-	
-	function createForEnum(packageName, className) {
-		var clazz;
-		clazz = new Class();
-		clazz.typeName = packageName + className;
-		return clazz;
-	}
-	
-	function getClass_11() {
-		return Ljava_lang_Class_2_classLit;
-	}
-	
 	function Class() {
 	}
 	
 	_ = Class.prototype = new Object_0();
-	_.getClass$ = getClass_11;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.typeName = null;
-	function getClass_10() {
-		return Ljava_lang_ClassCastException_2_classLit;
-	}
 	
 	function ClassCastException() {
 	}
 	
 	_ = ClassCastException.prototype = new RuntimeException();
-	_.getClass$ = getClass_10;
+	_.getClass$ = c;
 	_.typeId$ = 12;
-	function getClass_12() {
-		return Ljava_lang_Enum_2_classLit;
-	}
 	
 	function Enum() {
 	}
 	
 	_ = Enum.prototype = new Object_0();
-	_.getClass$ = getClass_12;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $IllegalArgumentException(this$static, message) {
 		this$static.detailMessage = message;
 		return this$static;
 	}
 	
-	function getClass_14() {
-		return Ljava_lang_IllegalArgumentException_2_classLit;
-	}
 	
 	function IllegalArgumentException() {
 	}
 	
 	_ = IllegalArgumentException.prototype = new RuntimeException();
-	_.getClass$ = getClass_14;
+	_.getClass$ = c;
 	_.typeId$ = 13;
-	function getClass_15() {
-		return Ljava_lang_IllegalStateException_2_classLit;
-	}
 	
 	function IllegalStateException() {
 	}
 	
 	_ = IllegalStateException.prototype = new RuntimeException();
-	_.getClass$ = getClass_15;
+	_.getClass$ = c;
 	_.typeId$ = 14;
-	function getClass_16() {
-		return Ljava_lang_IndexOutOfBoundsException_2_classLit;
-	}
 	
 	function IndexOutOfBoundsException() {
 	}
 	
 	_ = IndexOutOfBoundsException.prototype = new RuntimeException();
-	_.getClass$ = getClass_16;
+	_.getClass$ = c;
 	_.typeId$ = 15;
 	function max(x, y) {
 		return x > y?x:y;
@@ -697,15 +624,12 @@ var LZMA = (function () {
 		return x < y?x:y;
 	}
 	
-	function getClass_17() {
-		return Ljava_lang_NullPointerException_2_classLit;
-	}
 	
 	function NullPointerException() {
 	}
 	
 	_ = NullPointerException.prototype = new RuntimeException();
-	_.getClass$ = getClass_17;
+	_.getClass$ = c;
 	_.typeId$ = 16;
 	function $equals(this$static, other) {
 		if (other == null) {
@@ -721,12 +645,9 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_21() {
-		return Ljava_lang_String_2_classLit;
-	}
 	
 	_ = String.prototype;
-	_.getClass$ = getClass_21;
+	_.getClass$ = c;
 	_.typeId$ = 2;
 	function $StringBuilder(this$static) {
 		var array;
@@ -734,15 +655,12 @@ var LZMA = (function () {
 		return this$static;
 	}
 	
-	function getClass_20() {
-		return Ljava_lang_StringBuilder_2_classLit;
-	}
 	
 	function StringBuilder() {
 	}
 	
 	_ = StringBuilder.prototype = new Object_0();
-	_.getClass$ = getClass_20;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	function arraycopy(src, srcOfs, dest, destOfs, len) {
 		var destArray, destEnd, destTypeName, destlen, i, srcArray, srcTypeName, srclen;
@@ -751,8 +669,8 @@ var LZMA = (function () {
 			throw new NullPointerException();
 		}
 		
-		srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
-		destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : Lcom_google_gwt_core_client_JavaScriptObject_2_classLit).typeName;
+		srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : c).typeName;
+		destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c).typeName;
 		
 		if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
 			throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
@@ -798,15 +716,12 @@ var LZMA = (function () {
 		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	}
 	
-	function getClass_23() {
-		return Lorg_dellroad_lzma_client_CompressionMode_2_classLit;
-	}
 	
 	function CompressionMode() {
 	}
 	
 	_ = CompressionMode.prototype = new Enum();
-	_.getClass$ = getClass_23;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.dictionarySize = 0;
 	_.fb = 0;
@@ -846,15 +761,12 @@ var LZMA = (function () {
 		this$static.chunker = (encoder._needReleaseMFStream = false , (encoder._inStream = input , encoder._finished = false , $Create_2(encoder) , encoder._rangeEncoder.Stream = output , $Init_4(encoder) , $FillDistancesPrices(encoder) , $FillAlignPrices(encoder) , encoder._lenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._lenEncoder, 1 << encoder._posStateBits) , encoder._repMatchLenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._repMatchLenEncoder, 1 << encoder._posStateBits) , encoder.nowPos64 = P0_longLit , undefined) , $Chunker_0(new Chunker(), encoder));
 	}
 	
-	function getClass_26() {
-		return Lorg_dellroad_lzma_client_LZMACompressor_2_classLit;
-	}
 	
 	function LZMACompressor() {
 	}
 	
 	_ = LZMACompressor.prototype = new Object_0();
-	_.getClass$ = getClass_26;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.chunker = null;
 	
@@ -874,15 +786,12 @@ var LZMA = (function () {
 		return this$static;
 	}
 	
-	function getClass_24() {
-		return Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit;
-	}
 	
 	function LZMAByteArrayCompressor() {
 	}
 	
 	_ = LZMAByteArrayCompressor.prototype = new LZMACompressor();
-	_.getClass$ = getClass_24;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.output = null;
 	function $execute_0(this$static) {
@@ -949,15 +858,12 @@ var LZMA = (function () {
 		this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
 	}
 	
-	function getClass_27() {
-		return Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit;
-	}
 	
 	function LZMADecompressor() {
 	}
 	
 	_ = LZMADecompressor.prototype = new Object_0();
-	_.getClass$ = getClass_27;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.chunker = null;
 	_.exception = null;
@@ -968,15 +874,12 @@ var LZMA = (function () {
 		return this$static;
 	}
 	
-	function getClass_25() {
-		return Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit;
-	}
 	
 	function LZMAByteArrayDecompressor() {
 	}
 	
 	_ = LZMAByteArrayDecompressor.prototype = new LZMADecompressor();
-	_.getClass$ = getClass_25;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.output = null;
 	function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv) {
@@ -1071,15 +974,12 @@ var LZMA = (function () {
 		this$static._streamPos -= subValue;
 	}
 	
-	function getClass_40() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit;
-	}
 	
 	function InWindow() {
 	}
 	
 	_ = InWindow.prototype = new Object_0();
-	_.getClass$ = getClass_40;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_._blockSize = 0;
 	_._bufferBase = null;
@@ -1376,15 +1276,12 @@ var LZMA = (function () {
 		while (--num != 0);
 	}
 	
-	function getClass_39() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit;
-	}
 	
 	function BinTree() {
 	}
 	
 	_ = BinTree.prototype = new InWindow();
-	_.getClass$ = getClass_39;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.HASH_ARRAY = true;
 	_._cutValue = 255;
@@ -1472,15 +1369,12 @@ var LZMA = (function () {
 		this$static._stream = stream;
 	}
 	
-	function getClass_41() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit;
-	}
 	
 	function OutWindow() {
 	}
 	
 	_ = OutWindow.prototype = new Object_0();
-	_.getClass$ = getClass_41;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_._buffer = null;
 	_._pos = 0;
@@ -1563,15 +1457,12 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_28() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit;
-	}
 	
 	function Chunker() {
 	}
 	
 	_ = Chunker.prototype = new Object_0();
-	_.getClass$ = getClass_28;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.alive = false;
 	_.decoder = null;
@@ -1683,7 +1574,7 @@ var LZMA = (function () {
 		this$static.m_IsRepG1Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
 		this$static.m_IsRepG2Decoders = initDim(_3S_classLit, 0, -1, 12, 1);
 		this$static.m_IsRep0LongDecoders = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static.m_PosSlotDecoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 4, 0);
+		this$static.m_PosSlotDecoder = initDim(bitTreeDecoder_2_classLit, 0, 7, 4, 0);
 		this$static.m_PosDecoders = initDim(_3S_classLit, 0, -1, 114, 1);
 		this$static.m_PosAlignDecoder = $BitTreeDecoder(new BitTreeDecoder(), 4);
 		this$static.m_LenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
@@ -1760,15 +1651,12 @@ var LZMA = (function () {
 		return true;
 	}
 	
-	function getClass_32() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit;
-	}
 	
 	function Decoder() {
 	}
 	
 	_ = Decoder.prototype = new Object_0();
-	_.getClass$ = getClass_32;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.m_DictionarySize = -1;
 	_.m_DictionarySizeCheck = -1;
@@ -1804,8 +1692,8 @@ var LZMA = (function () {
 	
 	function $Decoder$LenDecoder(this$static) {
 		this$static.m_Choice = initDim(_3S_classLit, 0, -1, 2, 1);
-		this$static.m_LowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
-		this$static.m_MidCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit, 0, 7, 16, 0);
+		this$static.m_LowCoder = initDim(bitTreeDecoder_2_classLit, 0, 7, 16, 0);
+		this$static.m_MidCoder = initDim(bitTreeDecoder_2_classLit, 0, 7, 16, 0);
 		this$static.m_HighCoder = $BitTreeDecoder(new BitTreeDecoder(), 8);
 		return this$static;
 	}
@@ -1820,15 +1708,12 @@ var LZMA = (function () {
 		InitBitModels(this$static.m_HighCoder.Models);
 	}
 	
-	function getClass_29() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit;
-	}
 	
 	function Decoder$LenDecoder() {
 	}
 	
 	_ = Decoder$LenDecoder.prototype = new Object_0();
-	_.getClass$ = getClass_29;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.m_NumPosStates = 0;
 	function $Create_0(this$static, numPosBits, numPrevBits) {
@@ -1839,7 +1724,7 @@ var LZMA = (function () {
 	this$static.m_PosMask = (1 << numPosBits) - 1;
 	this$static.m_NumPrevBits = numPrevBits;
 	numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-	this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit, 0, 4, numStates, 0);
+	this$static.m_Coders = initDim(decoder2_2_classLit, 0, 4, numStates, 0);
 	for (i = 0; i < numStates; ++i)
 		this$static.m_Coders[i] = $Decoder$LiteralDecoder$Decoder2(new Decoder$LiteralDecoder$Decoder2());
 	}
@@ -1856,15 +1741,12 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_31() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit;
-	}
 	
 	function Decoder$LiteralDecoder() {
 	}
 	
 	_ = Decoder$LiteralDecoder.prototype = new Object_0();
-	_.getClass$ = getClass_31;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.m_Coders = null;
 	_.m_NumPosBits = 0;
@@ -1902,15 +1784,11 @@ var LZMA = (function () {
 		return this$static;
 	}
 	
-	function getClass_30() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit;
-	}
-	
 	function Decoder$LiteralDecoder$Decoder2() {
 	}
 	
 	_ = Decoder$LiteralDecoder$Decoder2.prototype = new Object_0();
-	_.getClass$ = getClass_30;
+	_.getClass$ = c;
 	_.typeId$ = 17;
 	function $clinit_59() {
 		$clinit_59 = nullMethod;
@@ -2125,7 +2003,7 @@ var LZMA = (function () {
 		var i;
 		$clinit_59();
 		this$static._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
-		this$static._optimum = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit, 0, 6, 4096, 0);
+		this$static._optimum = initDim(optimal_2_classLit, 0, 6, 4096, 0);
 		this$static._rangeEncoder = ($clinit_66() , new Encoder_0());
 		this$static._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
 		this$static._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
@@ -2133,7 +2011,7 @@ var LZMA = (function () {
 		this$static._isRepG1 = initDim(_3S_classLit, 0, -1, 12, 1);
 		this$static._isRepG2 = initDim(_3S_classLit, 0, -1, 12, 1);
 		this$static._isRep0Long = initDim(_3S_classLit, 0, -1, 192, 1);
-		this$static._posSlotEncoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 4, 0);
+		this$static._posSlotEncoder = initDim(bitTreeEncoder_2_classLit, 0, 8, 4, 0);
 		this$static._posEncoders = initDim(_3S_classLit, 0, -1, 114, 1);
 		this$static._posAlignEncoder = $BitTreeEncoder(new BitTreeEncoder(), 4);
 		this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
@@ -2755,15 +2633,11 @@ var LZMA = (function () {
 		return g_FastPos[pos >> 26] + 52;
 	}
 	
-	function getClass_38() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit;
-	}
-	
 	function Encoder() {
 	}
 	
 	_ = Encoder.prototype = new Object_0();
-	_.getClass$ = getClass_38;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_._additionalOffset = 0;
 	_._alignPriceCount = 0;
@@ -2813,8 +2687,8 @@ var LZMA = (function () {
 	function $Encoder$LenEncoder(this$static) {
 		var posState;
 		this$static._choice = initDim(_3S_classLit, 0, -1, 2, 1);
-		this$static._lowCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
-		this$static._midCoder = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit, 0, 8, 16, 0);
+		this$static._lowCoder = initDim(bitTreeEncoder_2_classLit, 0, 8, 16, 0);
+		this$static._midCoder = initDim(bitTreeEncoder_2_classLit, 0, 8, 16, 0);
 		this$static._highCoder = $BitTreeEncoder(new BitTreeEncoder(), 8);
 		for (posState = 0; posState < 16; ++posState) {
 			this$static._lowCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
@@ -2855,15 +2729,11 @@ var LZMA = (function () {
 		}
 	}
 		
-	function getClass_33() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit;
-	}
-	
 	function Encoder$LenEncoder() {
 	}
 	
 	_ = Encoder$LenEncoder.prototype = new Object_0();
-	_.getClass$ = getClass_33;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $Encode_0(this$static, rangeEncoder, symbol, posState) {
 		$Encode(this$static, rangeEncoder, symbol, posState);
@@ -2892,15 +2762,11 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_34() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit;
-	}
-	
 	function Encoder$LenPriceTableEncoder() {
 	}
 	
 	_ = Encoder$LenPriceTableEncoder.prototype = new Encoder$LenEncoder();
-	_.getClass$ = getClass_34;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_._tableSize = 0;
 	function $Create_1(this$static, numPosBits, numPrevBits) {
@@ -2912,7 +2778,7 @@ var LZMA = (function () {
 		this$static.m_PosMask = (1 << numPosBits) - 1;
 		this$static.m_NumPrevBits = numPrevBits;
 		numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-		this$static.m_Coders = initDim(_3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit, 0, 5, numStates, 0);
+		this$static.m_Coders = initDim(encoder2_2_classLit, 0, 5, numStates, 0);
 		for (i = 0; i < numStates; ++i) {
 			this$static.m_Coders[i] = $Encoder$LiteralEncoder$Encoder2(new Encoder$LiteralEncoder$Encoder2());
 		}
@@ -2930,15 +2796,11 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_36() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit;
-	}
-	
 	function Encoder$LiteralEncoder() {
 	}
 	
 	_ = Encoder$LiteralEncoder.prototype = new Object_0();
-	_.getClass$ = getClass_36;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.m_Coders = null;
 	_.m_NumPosBits = 0;
@@ -3001,15 +2863,11 @@ var LZMA = (function () {
 		return price;
 	}
 	
-	function getClass_35() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit;
-	}
-	
 	function Encoder$LiteralEncoder$Encoder2() {
 	}
 	
 	_ = Encoder$LiteralEncoder$Encoder2.prototype = new Object_0();
-	_.getClass$ = getClass_35;
+	_.getClass$ = c;
 	_.typeId$ = 18;
 	function $MakeAsChar(this$static) {
 		this$static.BackPrev = -1;
@@ -3021,15 +2879,11 @@ var LZMA = (function () {
 		this$static.Prev1IsChar = false;
 	}
 	
-	function getClass_37() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit;
-	}
-	
 	function Encoder$Optimal() {
 	}
 	
 	_ = Encoder$Optimal.prototype = new Object_0();
-	_.getClass$ = getClass_37;
+	_.getClass$ = c;
 	_.typeId$ = 19;
 	_.BackPrev = 0;
 	_.BackPrev2 = 0;
@@ -3084,15 +2938,11 @@ var LZMA = (function () {
 		return symbol;
 	}
 	
-	function getClass_42() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit;
-	}
-	
 	function BitTreeDecoder() {
 	}
 	
 	_ = BitTreeDecoder.prototype = new Object_0();
-	_.getClass$ = getClass_42;
+	_.getClass$ = c;
 	_.typeId$ = 20;
 	_.Models = null;
 	_.NumBitLevels = 0;
@@ -3174,15 +3024,11 @@ var LZMA = (function () {
 		return price;
 	}
 	
-	function getClass_43() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit;
-	}
-	
 	function BitTreeEncoder() {
 	}
 	
 	_ = BitTreeEncoder.prototype = new Object_0();
-	_.getClass$ = getClass_43;
+	_.getClass$ = c;
 	_.typeId$ = 21;
 	_.Models = null;
 	_.NumBitLevels = 0;
@@ -3242,15 +3088,11 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_44() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit;
-	}
-	
 	function Decoder_0() {
 	}
 	
 	_ = Decoder_0.prototype = new Object_0();
-	_.getClass$ = getClass_44;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.Code = 0;
 	_.Range = 0;
@@ -3348,10 +3190,6 @@ var LZMA = (function () {
 		}
 	}
 	
-	function getClass_45() {
-		return Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit;
-	}
-	
 	function convert_binary_arr(arr)
 	{
 	   var i;
@@ -3369,7 +3207,7 @@ var LZMA = (function () {
 	}
 	
 	_ = Encoder_0.prototype = new Object_0();
-	_.getClass$ = getClass_45;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.Low = P0_longLit;
 	_.Range = 0;
@@ -3615,14 +3453,10 @@ var LZMA = (function () {
 		wait(do_action, 0);
 	}
 	
-	function getClass_46() {
-		return Lorg_dellroad_lzma_demo_client_LZMAJS_2_classLit;
-	}
-	
 	function LZMAJS () {}
 	
 	_ = LZMAJS.prototype = new Object_0();
-	_.getClass$ = getClass_46;
+	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.c = null;
 	_.d = null;
@@ -3630,53 +3464,18 @@ var LZMA = (function () {
 	function nullMethod() {
 	}
 	
-	var Ljava_lang_Object_2_classLit = createForClass('j', 'Object'),
-		Ljava_lang_Throwable_2_classLit = createForClass('j', 'Throwable'),
-		Ljava_lang_Exception_2_classLit = createForClass('j', 'Exception'),
-		Ljava_lang_RuntimeException_2_classLit = createForClass('j', 'RuntimeException'),
-		Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('g', 'JavaScriptException'),
-		Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('g', 'JavaScriptObject$'), _3_3D_classLit = createForArray('', '[[D'),
-		Ljava_io_InputStream_2_classLit = createForClass('j', 'InputStream'),
-		Ljava_io_ByteArrayInputStream_2_classLit = createForClass('j', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'),
-		Ljava_io_OutputStream_2_classLit = createForClass('j', 'OutputStream'),
-		Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('j', 'ByteArrayOutputStream'),
-		Ljava_io_IOException_2_classLit = createForClass('j', 'IOException'),
-		Ljava_lang_Enum_2_classLit = createForClass('j', 'Enum'),
-		Ljava_lang_ArithmeticException_2_classLit = createForClass('j', 'ArithmeticException'),
-		Ljava_lang_ArrayStoreException_2_classLit = createForClass('j', 'ArrayStoreException'), _3C_classLit = createForArray('', '[C'),
-		Ljava_lang_Class_2_classLit = createForClass('j', 'Class'),
-		Ljava_lang_ClassCastException_2_classLit = createForClass('j', 'ClassCastException'),
-		Ljava_lang_IllegalArgumentException_2_classLit = createForClass('j', 'IllegalArgumentException'),
-		Ljava_lang_IllegalStateException_2_classLit = createForClass('j', 'IllegalStateException'),
-		Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('j', 'IndexOutOfBoundsException'), _3I_classLit = createForArray('', '[I'),
-		Ljava_lang_NullPointerException_2_classLit = createForClass('j', 'NullPointerException'),
-		Ljava_lang_String_2_classLit = createForClass('j', 'String'),
-		Ljava_lang_StringBuilder_2_classLit = createForClass('j', 'StringBuilder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('l', 'InWindow'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('l', 'BinTree'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('l', 'OutWindow'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('l.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Ll', 'BitTreeDecoder;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('l.', 'Decoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('l.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Ll.', 'Decoder$LiteralDecoder$Decoder2;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('l.', 'Decoder$LiteralDecoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('l.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Ll.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Ll', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('l.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Ll.', 'Encoder$LiteralEncoder$Encoder2;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('l.', 'Encoder$LiteralEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('l.', 'Encoder$LiteralEncoder$Encoder2'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('l.', 'Encoder$LenEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('l.', 'Encoder$LenPriceTableEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('l.', 'Encoder$Optimal'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('l', 'BitTreeDecoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('l', 'BitTreeEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('l', 'Decoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('l', 'Encoder'),
-		Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('l', 'CompressionMode'),
-		Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('l', 'LZMACompressor'),
-		Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('l', 'LZMAByteArrayCompressor'),
-		Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('l', 'LZMADecompressor'),
-		Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('l', 'LZMAByteArrayDecompressor'),
-		Lorg_dellroad_lzma_demo_client_LZMAJS_2_classLit = createForClass('l', 'LZMAJS');
-	
+	var _3_3D_classLit = createForArray('', '[[D'),
+		_3B_classLit = createForArray('', '[B'),
+		_3C_classLit = createForArray('', '[C'),
+		_3I_classLit = createForArray('', '[I'),
+		_3S_classLit = createForArray('', '[S'),
+		bitTreeDecoder_2_classLit = createForArray('[Ll', 'bd'),
+		decoder2_2_classLit = createForArray('[Ll.', 'd'),
+		optimal_2_classLit = createForArray('[Ll.', 'o'),
+		bitTreeEncoder_2_classLit = createForArray('[Ll', 'be'),
+		_3J_classLit = createForArray('', '[J'),
+		_3Z_classLit = createForArray('', '[Z'),
+		encoder2_2_classLit = createForArray('[Ll.', 'e');
 	
 	var get_mode_obj = (function () {
 		var modes = [
