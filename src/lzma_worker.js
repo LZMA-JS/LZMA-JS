@@ -11,8 +11,6 @@ var LZMA = (function () {
 		});
 	}
 	
-	var $moduleName, $moduleBase;
-	
 	var _,
 		N8000000000000000_longLit = [0, -9223372036854775808],
 		N1_longLit = [4294967295, -4294967296],
@@ -73,7 +71,7 @@ var LZMA = (function () {
 	_ = RuntimeException.prototype = new Exception();
 	_.getClass$ = getClass_19;
 	_.typeId$ = 5;
-	function $JavaScriptException(this$static, e) {
+	function $JavaScriptException(this$static) {
 		return this$static;
 	}
 	
@@ -3705,7 +3703,6 @@ var LZMA = (function () {
 			percent,
 			data,
 			start,
-			text,
 			/// Arguments
 			byte_arr = arguments[0],
 			callback_num,
@@ -3782,11 +3779,6 @@ var LZMA = (function () {
 		setTimeout(do_action, 0);
 	}
 	
-	function $onModuleLoad(this$static) {
-		compress(this$static);
-		decompress(this$static);
-	}
-	
 	function getClass_46() {
 		return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
 	}
@@ -3799,24 +3791,6 @@ var LZMA = (function () {
 	_.c = null;
 	_.d = null;
 	var DEFAULT_COMPRESSION_MODE;
-	function init() {
-		!!$stats && $stats({moduleName:$moduleName, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date()).getTime(), type:'onModuleLoadStart', className:'org.dellroad.lzma.demo.client.LZMADemo'});
-	}
-	
-	function gwtOnLoad(errFn, modName, modBase) {
-		$moduleName = modName;
-		$moduleBase = modBase;
-		if (errFn) {
-			try {
-				init();
-			}
-			catch (e) {
-				errFn(modName);
-			}
-		} else {
-			init();
-		}
-	}
 	
 	function nullMethod() {
 	}
@@ -3867,8 +3841,6 @@ var LZMA = (function () {
 		Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMADecompressor'),
 		Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayDecompressor'),
 		Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo');
-	
-	gwtOnLoad(function() {},'lzma_demo','');
 	
 	
 	var get_mode_obj = (function () {
