@@ -5,7 +5,7 @@
 var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
-		action_progress	  = 3,
+		action_progress   = 3,
 		wait = typeof setImmediate === "function" ? setImmediate : setTimeout;
 	
 	function update_progress(percent, callback_num) {
@@ -3456,7 +3456,7 @@ var LZMA = (function () {
 		return data;
 	}
 	
-	function $LZMADemo(this$static) {
+	function $LZMAJS(this$static) {
 		return this$static;
 	}
 	function toDouble(a) {
@@ -3464,7 +3464,7 @@ var LZMA = (function () {
 	}
 	
 	function compress() {
-		var this$static = $LZMADemo(new LZMADemo()),
+		var this$static = $LZMAJS(new LZMAJS()),
 			percent,
 			start,
 			/// Arguments
@@ -3535,7 +3535,7 @@ var LZMA = (function () {
 	}
 	
 	function decompress() {
-		var this$static = $LZMADemo(new LZMADemo()),
+		var this$static = $LZMAJS(new LZMAJS()),
 			percent,
 			data,
 			start,
@@ -3616,12 +3616,12 @@ var LZMA = (function () {
 	}
 	
 	function getClass_46() {
-		return Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit;
+		return Lorg_dellroad_lzma_demo_client_LZMAJS_2_classLit;
 	}
 	
-	function LZMADemo () {}
+	function LZMAJS () {}
 	
-	_ = LZMADemo.prototype = new Object_0();
+	_ = LZMAJS.prototype = new Object_0();
 	_.getClass$ = getClass_46;
 	_.typeId$ = 0;
 	_.c = null;
@@ -3630,52 +3630,52 @@ var LZMA = (function () {
 	function nullMethod() {
 	}
 	
-	var Ljava_lang_Object_2_classLit = createForClass('java.lang.', 'Object'),
-		Ljava_lang_Throwable_2_classLit = createForClass('java.lang.', 'Throwable'),
-		Ljava_lang_Exception_2_classLit = createForClass('java.lang.', 'Exception'),
-		Ljava_lang_RuntimeException_2_classLit = createForClass('java.lang.', 'RuntimeException'),
-		Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptException'),
-		Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('com.google.gwt.core.client.', 'JavaScriptObject$'), _3_3D_classLit = createForArray('', '[[D'),
-		Ljava_io_InputStream_2_classLit = createForClass('java.io.', 'InputStream'),
-		Ljava_io_ByteArrayInputStream_2_classLit = createForClass('java.io.', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'),
-		Ljava_io_OutputStream_2_classLit = createForClass('java.io.', 'OutputStream'),
-		Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('java.io.', 'ByteArrayOutputStream'),
-		Ljava_io_IOException_2_classLit = createForClass('java.io.', 'IOException'),
-		Ljava_lang_Enum_2_classLit = createForClass('java.lang.', 'Enum'),
-		Ljava_lang_ArithmeticException_2_classLit = createForClass('java.lang.', 'ArithmeticException'),
-		Ljava_lang_ArrayStoreException_2_classLit = createForClass('java.lang.', 'ArrayStoreException'), _3C_classLit = createForArray('', '[C'),
-		Ljava_lang_Class_2_classLit = createForClass('java.lang.', 'Class'),
-		Ljava_lang_ClassCastException_2_classLit = createForClass('java.lang.', 'ClassCastException'),
-		Ljava_lang_IllegalArgumentException_2_classLit = createForClass('java.lang.', 'IllegalArgumentException'),
-		Ljava_lang_IllegalStateException_2_classLit = createForClass('java.lang.', 'IllegalStateException'),
-		Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('java.lang.', 'IndexOutOfBoundsException'), _3I_classLit = createForArray('', '[I'),
-		Ljava_lang_NullPointerException_2_classLit = createForClass('java.lang.', 'NullPointerException'),
-		Ljava_lang_String_2_classLit = createForClass('java.lang.', 'String'),
-		Ljava_lang_StringBuilder_2_classLit = createForClass('java.lang.', 'StringBuilder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'InWindow'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'BinTree'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZ.', 'OutWindow'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Lorg.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2;'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LiteralEncoder$Encoder2'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$LenPriceTableEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.LZMA.', 'Encoder$Optimal'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeDecoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'BitTreeEncoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Decoder'),
-		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('org.dellroad.lzma.client.SevenZip.Compression.RangeCoder.', 'Encoder'),
-		Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('org.dellroad.lzma.client.', 'CompressionMode'),
-		Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMACompressor'),
-		Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayCompressor'),
-		Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMADecompressor'),
-		Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('org.dellroad.lzma.client.', 'LZMAByteArrayDecompressor'),
-		Lorg_dellroad_lzma_demo_client_LZMADemo_2_classLit = createForClass('org.dellroad.lzma.demo.client.', 'LZMADemo');
+	var Ljava_lang_Object_2_classLit = createForClass('j', 'Object'),
+		Ljava_lang_Throwable_2_classLit = createForClass('j', 'Throwable'),
+		Ljava_lang_Exception_2_classLit = createForClass('j', 'Exception'),
+		Ljava_lang_RuntimeException_2_classLit = createForClass('j', 'RuntimeException'),
+		Lcom_google_gwt_core_client_JavaScriptException_2_classLit = createForClass('g', 'JavaScriptException'),
+		Lcom_google_gwt_core_client_JavaScriptObject_2_classLit = createForClass('g', 'JavaScriptObject$'), _3_3D_classLit = createForArray('', '[[D'),
+		Ljava_io_InputStream_2_classLit = createForClass('j', 'InputStream'),
+		Ljava_io_ByteArrayInputStream_2_classLit = createForClass('j', 'ByteArrayInputStream'), _3B_classLit = createForArray('', '[B'),
+		Ljava_io_OutputStream_2_classLit = createForClass('j', 'OutputStream'),
+		Ljava_io_ByteArrayOutputStream_2_classLit = createForClass('j', 'ByteArrayOutputStream'),
+		Ljava_io_IOException_2_classLit = createForClass('j', 'IOException'),
+		Ljava_lang_Enum_2_classLit = createForClass('j', 'Enum'),
+		Ljava_lang_ArithmeticException_2_classLit = createForClass('j', 'ArithmeticException'),
+		Ljava_lang_ArrayStoreException_2_classLit = createForClass('j', 'ArrayStoreException'), _3C_classLit = createForArray('', '[C'),
+		Ljava_lang_Class_2_classLit = createForClass('j', 'Class'),
+		Ljava_lang_ClassCastException_2_classLit = createForClass('j', 'ClassCastException'),
+		Ljava_lang_IllegalArgumentException_2_classLit = createForClass('j', 'IllegalArgumentException'),
+		Ljava_lang_IllegalStateException_2_classLit = createForClass('j', 'IllegalStateException'),
+		Ljava_lang_IndexOutOfBoundsException_2_classLit = createForClass('j', 'IndexOutOfBoundsException'), _3I_classLit = createForArray('', '[I'),
+		Ljava_lang_NullPointerException_2_classLit = createForClass('j', 'NullPointerException'),
+		Ljava_lang_String_2_classLit = createForClass('j', 'String'),
+		Ljava_lang_StringBuilder_2_classLit = createForClass('j', 'StringBuilder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_InWindow_2_classLit = createForClass('l', 'InWindow'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_BinTree_2_classLit = createForClass('l', 'BinTree'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZ_OutWindow_2_classLit = createForClass('l', 'OutWindow'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Chunker_2_classLit = createForClass('l.', 'Chunker'), _3S_classLit = createForArray('', '[S'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForArray('[Ll', 'BitTreeDecoder;'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder_2_classLit = createForClass('l.', 'Decoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LenDecoder_2_classLit = createForClass('l.', 'Decoder$LenDecoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForArray('[Ll.', 'Decoder$LiteralDecoder$Decoder2;'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder_2_classLit = createForClass('l.', 'Decoder$LiteralDecoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Decoder$LiteralDecoder$Decoder2_2_classLit = createForClass('l.', 'Decoder$LiteralDecoder$Decoder2'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForArray('[Ll.', 'Encoder$Optimal;'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForArray('[Ll', 'BitTreeEncoder;'), _3J_classLit = createForArray('', '[J'), _3Z_classLit = createForArray('', '[Z'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder_2_classLit = createForClass('l.', 'Encoder'), _3Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForArray('[Ll.', 'Encoder$LiteralEncoder$Encoder2;'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder_2_classLit = createForClass('l.', 'Encoder$LiteralEncoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LiteralEncoder$Encoder2_2_classLit = createForClass('l.', 'Encoder$LiteralEncoder$Encoder2'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenEncoder_2_classLit = createForClass('l.', 'Encoder$LenEncoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$LenPriceTableEncoder_2_classLit = createForClass('l.', 'Encoder$LenPriceTableEncoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_LZMA_Encoder$Optimal_2_classLit = createForClass('l.', 'Encoder$Optimal'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeDecoder_2_classLit = createForClass('l', 'BitTreeDecoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_BitTreeEncoder_2_classLit = createForClass('l', 'BitTreeEncoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Decoder_2_classLit = createForClass('l', 'Decoder'),
+		Lorg_dellroad_lzma_client_SevenZip_Compression_RangeCoder_Encoder_2_classLit = createForClass('l', 'Encoder'),
+		Lorg_dellroad_lzma_client_CompressionMode_2_classLit = createForEnum('l', 'CompressionMode'),
+		Lorg_dellroad_lzma_client_LZMACompressor_2_classLit = createForClass('l', 'LZMACompressor'),
+		Lorg_dellroad_lzma_client_LZMAByteArrayCompressor_2_classLit = createForClass('l', 'LZMAByteArrayCompressor'),
+		Lorg_dellroad_lzma_client_LZMADecompressor_2_classLit = createForClass('l', 'LZMADecompressor'),
+		Lorg_dellroad_lzma_client_LZMAByteArrayDecompressor_2_classLit = createForClass('l', 'LZMAByteArrayDecompressor'),
+		Lorg_dellroad_lzma_demo_client_LZMAJS_2_classLit = createForClass('l', 'LZMAJS');
 	
 	
 	var get_mode_obj = (function () {
