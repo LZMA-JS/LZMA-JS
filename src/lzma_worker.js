@@ -3797,7 +3797,6 @@ var LZMA = (function () {
 	_.typeId$ = 0;
 	_.c = null;
 	_.d = null;
-	var DEFAULT_COMPRESSION_MODE;
 	
 	function nullMethod() {
 	}
