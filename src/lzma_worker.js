@@ -1,3 +1,7 @@
+/* jshint boss:true, unused:true, undef:true, noarg: true, forin:true, -W041, -W021, worker:true, browser:true, node:true */
+
+/* global setTimeout, window, console, onmessage */
+
 var LZMA = (function () {
 	var action_compress   = 1,
 		action_decompress = 2,
@@ -947,7 +951,7 @@ var LZMA = (function () {
 			}
 		} else {
 			for (i = 0; i < len; ++i) {
-				dest[destOfs + i] = src[srcOfs + i]
+				dest[destOfs + i] = src[srcOfs + i];
 			}
 		}
 	}
@@ -986,8 +990,8 @@ var LZMA = (function () {
 		try {
 			return $processChunk(this$static.chunker);
 		}
-		catch ($e0) {
-			$e0 = caught($e0);
+		catch (err) {
+			$e0 = caught(err);
 			if (instanceOf($e0, 10)) {
 				return false;
 			} else {
@@ -1029,8 +1033,8 @@ var LZMA = (function () {
 		this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
 		try {
 			$init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
-		} catch ($e0) {
-			$e0 = caught($e0);
+		} catch (err) {
+			$e0 = caught(err);
 			if (instanceOf($e0, 10)) {
 				throw $RuntimeException(new RuntimeException(), 'impossible exception');
 			} else {
@@ -1056,8 +1060,8 @@ var LZMA = (function () {
 		try {
 			return $processChunk(this$static.chunker);
 		}
-		catch ($e0) {
-			$e0 = caught($e0);
+		catch (err) {
+			$e0 = caught(err);
 			if (instanceOf($e0, 10)) {
 				e = $e0;
 				this$static.exception = e;
@@ -3659,11 +3663,11 @@ var LZMA = (function () {
 		
 		function do_action() {
 			var res;
-			start = (new Date).getTime();
+			start = (new Date()).getTime();
 			while ($execute(this$static.c)) {
 				percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
 				/// If about 200 miliseconds have passed, update the progress.
-				if ((new Date).getTime() - start > 200) {
+				if ((new Date()).getTime() - start > 200) {
 					if (on_progress) {
 						on_progress(percent);
 					} else if (typeof callback_num !== "undefined") {
@@ -3733,10 +3737,10 @@ var LZMA = (function () {
 		function do_action() {
 			var res;
 				
-			start = (new Date).getTime();
+			start = (new Date()).getTime();
 			
 			while ($execute_0(this$static.d)) {
-				if ((new Date).getTime() - start > 200) {
+				if ((new Date()).getTime() - start > 200) {
 					if (has_progress) {
 						percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
 						/// If about 200 miliseconds have passed, update the progress.					
@@ -3872,13 +3876,14 @@ var LZMA = (function () {
 			}
 			
 			return modes[mode - 1];
-		}
+		};
 	}());
 	
 	/// Are we in a Web Worker?
 	/// This seems to be the most reliable way to detect this.
 	if (typeof onmessage !== "undefined" && (typeof window === "undefined" || typeof window.document === "undefined")) {
 	   (function create_onmessage() {
+	        /* jshint -W020 */
             /// Create the global onmessage function.
             onmessage = function (e) {
                 if (e && e.data) {
@@ -3888,7 +3893,7 @@ var LZMA = (function () {
                         LZMA.decompress(e.data.data, e.data.callback_num);
                     }
                 }
-            }
+            };
         }());
     }
 		
