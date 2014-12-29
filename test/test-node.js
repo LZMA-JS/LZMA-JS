@@ -2,6 +2,7 @@
 
 var all_tests_pass = true,
     fs = require("fs"),
+    p = require("path"),
     my_lzma = require("../index.js").LZMA(),
     compression_mode = Number(process.argv[2]) || 1,
     path_to_files = "files";
@@ -29,7 +30,8 @@ function decompression_test(compressed_file, correct_filename, next) {
     fs.readFile(correct_filename, function (err, correct_buffer) {
         
         if (err) {
-            throw err;
+            console.log("Cannot open " + correct_filename);
+            throw new Error(err);
         }
         
         fs.readFile(compressed_file, function (err, buffer) {
@@ -43,31 +45,43 @@ function decompression_test(compressed_file, correct_filename, next) {
             }
             
             deco_start = (new Date).getTime();
-            my_lzma.decompress(orig_arr, function (result) {
-                var deco_speed = (new Date).getTime() - deco_start,
-                    correct_result;
-                
-                console.log("Decompressed size:", result.length);
-                
-                if (typeof result === "string") {
-                    correct_result = correct_buffer.toString();
-                } else {
-                    correct_result = JSON.stringify(buffer2arr(correct_buffer));
-                    result = JSON.stringify(result);
-                }
-                if (correct_result !== result) {
-                    display_result("ERROR: files do not match!", false);
+            try {
+                my_lzma.decompress(orig_arr, function (result) {
+                    var deco_speed = (new Date).getTime() - deco_start,
+                        correct_result;
+                    
+                    console.log("Decompressed size:", result.length);
+                    
+                    if (typeof result === "string") {
+                        correct_result = correct_buffer.toString();
+                    } else {
+                        correct_result = JSON.stringify(buffer2arr(correct_buffer));
+                        result = JSON.stringify(result);
+                    }
+                    if (correct_result !== result) {
+                        display_result("ERROR: files do not match!", false);
+                        console.log();
+                        all_tests_pass = false;
+                    } else {
+                        display_result("Test passed", true);
+                    }
+                    
+                    console.log("Decompression time:", deco_speed);
+                    
                     console.log();
-                    all_tests_pass = false;
-                } else {
+                    next();
+                });
+            } catch (e) {
+                if (p.basename(correct_filename) === "error-" + e.detailMessage) {
                     display_result("Test passed", true);
+                    console.log("threw correct error: " + e.detailMessage);
+                } else {
+                    display_result("ERROR: " + e.detailMessage, false);
+                    all_tests_pass = false;
                 }
-                
-                console.log("Decompression time:", deco_speed);
-                
                 console.log();
                 next();
-            });
+            }
         });
     });
 }
@@ -131,7 +145,7 @@ fs.readdir(path_to_files, function (err, files) {
         }
         file = files[i];
         
-        console.log(file)
+        console.log(file);
         
         if (file.slice(-5) === ".lzma") {
             /// Preform a decompress test on *.lzma files.
