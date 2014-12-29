@@ -1897,7 +1897,8 @@ var LZMA = (function () {
 		for (i = 0; i < 4; ++i) {
 			dictionarySize += (properties[1 + i] & 255) << i * 8;
 		}
-		if (!$SetLcLpPb(this$static, lc, lp, pb)) {
+		///NOTE: If the input is bad, it might call for an insanely large dictionary size, which would crash the script.
+		if (dictionarySize > 99999999 || !$SetLcLpPb(this$static, lc, lp, pb)) {
 			return false;
 		}
 		return $SetDictionarySize(this$static, dictionarySize);
