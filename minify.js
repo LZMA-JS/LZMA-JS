@@ -124,7 +124,11 @@ files.forEach(function oneach(file)
     console.log(file);
     
     result = uglify.minify(full_path, {
-        mangle: true,
+        mangle: {
+            sort: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+            toplevel: true,
+        },
+        comments: true,
         compress: {
             sequences: true,
             dead_code: true,
@@ -134,8 +138,22 @@ files.forEach(function oneach(file)
             loops: true,
             if_return: true,
             join_vars: true,
+            pure_getters: true,
+            cascade: true,
+            join_vars: true,
+            evaluate: true,
+            comparisons: true,
+            properties: true,
+            negate_iife: true,
+            keep_fargs: false,
+            hoist_vars: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+            hoist_funs: true, /// As TRUE, the plain JS is bigger, but gzipped is smaller!
+            warnings: true,
             unsafe: true,
-        }
+        },
+        output: {
+            comments: /^!|@preserve|@license|@cc_on/i,
+        },
     });
     
     if (file === "lzma_worker.js") {
