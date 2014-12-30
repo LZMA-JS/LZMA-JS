@@ -133,9 +133,10 @@ function compression_test(file, next) {
     });
 }
 
+
+path_to_files = p.join(__dirname, path_to_files);
 fs.readdir(path_to_files, function (err, files) {
-    var file_count = files.length,
-        path = require("path");
+    var file_count = files.length;
     
     if (err) {
         throw err;
@@ -158,13 +159,13 @@ fs.readdir(path_to_files, function (err, files) {
         
         if (file.slice(-5) === ".lzma") {
             /// Preform a decompress test on *.lzma files.
-            decompression_test(path.join(path_to_files, file), path.join(path_to_files, file.slice(0, -5)), function next()
+            decompression_test(p.join(path_to_files, file), p.join(path_to_files, file.slice(0, -5)), function next()
             {
                 run_test(i + 1);
             });
         } else {
             /// Preform a compression/decompression test.
-            compression_test(path.join(path_to_files, file), function next()
+            compression_test(p.join(path_to_files, file), function next()
             {
                 run_test(i + 1);
             });
