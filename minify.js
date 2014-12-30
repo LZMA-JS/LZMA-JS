@@ -20,11 +20,11 @@ function sort_obj(obj)
     });
 }
 
-function calculate_minify_value(params)
+function calculate_minify_value(props)
 {
-    Object.keys(params).forEach(function oneach(param)
+    Object.keys(props).forEach(function oneach(prop])
     {
-        params[param] = param.length * params[param];
+        props[prop]] = prop].length * props[prop]];
     });
 }
 
@@ -55,58 +55,58 @@ function base54_64(arr)
     return new_names;
 }
 
-function minify_parameters(code)
+function minify_properties(code)
 {
-    var params = {},
+    var props = {},
         ignore = ["LZMA_WORKER", "callback_num", "on_progress", "on_finish"],
-        sorted_params,
+        sorted_props,
         new_names,
         prop_regex = /\.([_$a-zA-Z]*[_$][_$a-zA-Z0-9]*|kFixHashSize|kNumHashDirectBytes|kMinMatchCheck|outBytesProcessed|decoder|encoder|nowPos64|outSize|alive|processedInSize|finished|inBytesProcessed|processedInSize|[Ss]tate|prevByte|Prev1IsChar|Prev2|BackPrev|PosPrev|Models|backRes|properties|processedOutSize|tempPrices|backRes|repLens|Price|Backs[0123]|NumBitLevels|Range|Stream|explicitLength|count|pos|buf|chunker|rep[0-3s]|Code|Low|data|mode|output)/g;
     
-    /// We want to replace parameters that have an underscore or a dollar sign.
-    code.replace(prop_regex, function calc(param)
+    /// We want to replace prop]eters that have an underscore or a dollar sign.
+    code.replace(prop_regex, function calc(prop])
     {
-        param = param.substr(1);
-        if (ignore.indexOf(param) === -1) {
-            if (!params[param]) {
-                params[param] = 1;
+        prop] = prop].substr(1);
+        if (ignore.indexOf(prop]) === -1) {
+            if (!props[prop]]) {
+                props[prop]] = 1;
             } else {
-                params[param] += 1;
+                props[prop]] += 1;
             }
         }
     });
     
-    //console.log(params);
-    //console.log(Object.keys(params).length);
-    calculate_minify_value(params);
-    sorted_params = sort_obj(params);
+    //console.log(props);
+    //console.log(Object.keys(props).length);
+    calculate_minify_value(props);
+    sorted_props = sort_obj(props);
     
-    //console.log(params);
-    //console.log(sorted_params);
+    //console.log(props);
+    //console.log(sorted_props);
     /*
-    sorted_params.forEach(function (param)
+    sorted_props.forEach(function (prop])
     {
-        console.log(param, params[param])
+        console.log(prop], props[prop]])
     });
     */
-    new_names = base54_64(sorted_params);
+    new_names = base54_64(sorted_props);
     /*
-    sorted_params.forEach(function (param, i)
+    sorted_props.forEach(function (prop], i)
     {
-        console.log(param, params[param], new_names[i])
+        console.log(prop], props[prop]], new_names[i])
     });
     */
     
-    code = code.replace(prop_regex, function calc(param)
+    code = code.replace(prop_regex, function calc(prop])
     {
         var index,
-            partial_param = param.substr(1);
-        index = sorted_params.indexOf(partial_param);
-        //console.log(param, index);
+            partial_prop] = prop].substr(1);
+        index = sorted_props.indexOf(partial_prop]);
+        //console.log(prop], index);
         if (index > -1) {
             return "." + new_names[index];
         }
-        return param;
+        return prop];
     });
     
     return code;
@@ -138,7 +138,7 @@ files.forEach(function oneach(file)
     });
     
     if (file === "lzma_worker.js") {
-        result.code = minify_parameters(result.code);
+        result.code = minify_properties(result.code);
     }
     
     fs.writeFileSync(min_path, result.code);
