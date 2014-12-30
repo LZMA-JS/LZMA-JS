@@ -76,17 +76,17 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 6;
 	function $append(a, x) {
-		a[a.setLen++] = x;
+		a[a.explicitLength++] = x;
 	}
 	
 	function $appendNonNull(a, x) {
-		a[a.setLen++] = x;
+		a[a.explicitLength++] = x;
 	}
 	
 	function $toString(a) {
 		var s_0, s;
-		s_0 = (s = a.join('') , a.length = a.setLen = 0 , s);
-		a[a.setLen++] = s_0;
+		s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
+		a[a.explicitLength++] = s_0;
 		return s_0;
 	}
 	
@@ -651,7 +651,7 @@ var LZMA = (function () {
 	_.typeId$ = 2;
 	function $StringBuilder(this$static) {
 		var array;
-		this$static.data = (array = [] , array.setLen = 0 , array);
+		this$static.data = (array = [] , array.explicitLength = 0 , array);
 		return this$static;
 	}
 	
