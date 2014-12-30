@@ -1,4 +1,5 @@
-/// This code is licensed under the MIT License.  See LICENSE for more details.
+//! © Nathan Rugg <nmrugg@gmail.com> | MIT
+/// See LICENSE for more details.
 
 /// Does the environment support web workers?  If not, let's load the worker manually (without polluting the global scope).
 if (typeof Worker === "undefined" || (typeof location !== "undefined" && location.protocol === "file:")) {

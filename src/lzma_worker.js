@@ -1,3 +1,6 @@
+/// © Nathan Rugg <nmrugg@gmail.com> | MIT
+/// See LICENSE for more details.
+
 /* jshint boss:true, unused:true, undef:true, noarg: true, forin:true, -W041, -W021, worker:true, browser:true, node:true */
 
 /* global setImmediate, setTimeout, window, console, onmessage */
