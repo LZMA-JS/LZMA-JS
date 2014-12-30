@@ -715,14 +715,15 @@ var LZMA = (function () {
 	
 	
 	function $configure(this$static, encoder) {
+	   var __unexpected_failure = "unexpected failure";
 	if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize))
-		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
+		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
 	if (!$SetNumFastBytes(encoder, this$static.fb))
-		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
+		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
 	if (!$SetMatchFinder(encoder, this$static.matchFinder))
-		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
+		throw $RuntimeException(new RuntimeException(), v);
 	if (!$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
+		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
 	}
 	
 	
