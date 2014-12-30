@@ -19,21 +19,6 @@ var LZMA = (function () {
 		__typeName = "typeName",
 		__getTime = "getTime",
 		__4294967296 = 4294967296,
-		___2147483648 = -2147483648,
-		__1_8446744073709552E19 = 1.8446744073709552E19,
-		___9223372036854775808 = -9223372036854775808,
-		__4294967295 = 4294967295,
-		__16777216 = 16777216,
-		__9223372032559808512 = 9223372032559808512,
-		__2147483647 = 2147483647,
-		__9223372036854775807 = 9223372036854775807,
-		__65535 = 65535,
-		__268435455 = 268435455,
-		__2048 = 2048,
-		__4096 = 4096,
-		__1024 = 1024,
-		__256 = 256,
-		__255 = 255,
 		Math__ = Math,
 		String__ = String;
 	
@@ -46,17 +31,17 @@ var LZMA = (function () {
 	}
 	
 	var _,
-		N8000000000000000_longLit = [0, ___9223372036854775808],
-            N1_longLit = [__4294967295, -__4294967296],
+		N8000000000000000_longLit = [0, -9223372036854775808],
+		N1_longLit = [4294967295, -__4294967296],
 		P0_longLit = [0, 0],
 		P1_longLit = [1, 0],
 		P4_longLit = [4, 0],
-		P1000_longLit = [__4096, 0],
-		Pffffff_longLit = [__16777216 - 1, 0],
-		P1000000_longLit = [__16777216, 0],
+		P1000_longLit = [4096, 0],
+		Pffffff_longLit = [16777215, 0],
+		P1000000_longLit = [16777216, 0],
 		Pff000000_longLit = [4278190080, 0],
-		Pffffffff_longLit = [__4294967295, 0],
-		P7fffffffffffffff_longLit = [__4294967295, __9223372032559808512];
+		Pffffffff_longLit = [4294967295, 0],
+		P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
 	
 	function Object_0() {
 	}
@@ -260,7 +245,7 @@ var LZMA = (function () {
 	}
 		
 	function and(a, b) {
-		return makeFromBits(~~Math__.max(Math__.min(a[1] / __4294967296, __2147483647), ___2147483648) & ~~Math__.max(Math__.min(b[1] / __4294967296, __2147483647), ___2147483648), lowBits_0(a) & lowBits_0(b));
+		return makeFromBits(~~Math__.max(Math__.min(a[1] / __4294967296, 2147483647), -2147483648) & ~~Math__.max(Math__.min(b[1] / __4294967296, 2147483647), -2147483648), lowBits_0(a) & lowBits_0(b));
 	}
 	
 	function compare(a, b) {
@@ -286,8 +271,8 @@ var LZMA = (function () {
 	
 	function create(valueLow, valueHigh) {
 		var diffHigh, diffLow;
-		valueHigh %= __1_8446744073709552E19;
-		valueLow %= __1_8446744073709552E19;
+		valueHigh %= 1.8446744073709552E19;
+		valueLow %= 1.8446744073709552E19;
 		diffHigh = valueHigh % __4294967296;
 		diffLow = Math__.floor(valueLow / __4294967296) * __4294967296;
 		valueHigh = valueHigh - diffHigh + diffLow;
@@ -296,16 +281,16 @@ var LZMA = (function () {
 			valueLow += __4294967296;
 			valueHigh -= __4294967296;
 		}
-		while (valueLow >= __4294967296) {
+		while (valueLow > 4294967295) {
 			valueLow -= __4294967296;
 			valueHigh += __4294967296;
 		}
-		valueHigh = valueHigh % __1_8446744073709552E19;
-		while (valueHigh > __9223372032559808512) {
-			valueHigh -= __1_8446744073709552E19;
+		valueHigh = valueHigh % 1.8446744073709552E19;
+		while (valueHigh > 9223372032559808512) {
+			valueHigh -= 1.8446744073709552E19;
 		}
-		while (valueHigh < ___9223372036854775808) {
-			valueHigh += __1_8446744073709552E19;
+		while (valueHigh < -9223372036854775808) {
+			valueHigh += 1.8446744073709552E19;
 		}
 		return [valueLow, valueHigh];
 	}
@@ -319,10 +304,10 @@ var LZMA = (function () {
 		if (isNaN(value)) {
 			return $clinit_10() , ZERO;
 		}
-		if (value < ___9223372036854775808) {
+		if (value < -9223372036854775808) {
 			return $clinit_10() , MIN_VALUE;
 		}
-		if (value >= __9223372036854775807) {
+		if (value >= 9223372036854775807) {
 			return $clinit_10() , MAX_VALUE;
 		}
 		if (value > 0) {
@@ -354,10 +339,10 @@ var LZMA = (function () {
 	}
 	
 	function lowBits_0(a) {
-		if (a[0] >= -___2147483648) {
-			return ~~Math__.max(Math__.min(a[0] - __4294967296, __2147483647), ___2147483648);
+		if (a[0] >= 2147483648) {
+			return ~~Math__.max(Math__.min(a[0] - __4294967296, 2147483647), -2147483648);
 		} else {
-			return ~~Math__.max(Math__.min(a[0], __2147483647), ___2147483648);
+			return ~~Math__.max(Math__.min(a[0], 2147483647), -2147483648);
 		}
 	}
 	
@@ -378,7 +363,7 @@ var LZMA = (function () {
 		}
 		newHigh = -a[1];
 		newLow = -a[0];
-		if (newLow >= __4294967296) {
+		if (newLow > 4294967295) {
 			newLow -= __4294967296;
 			newHigh += __4294967296;
 		}
@@ -411,13 +396,13 @@ var LZMA = (function () {
 			return neg(shl(neg(a), n));
 		}
 		twoToN = pwrAsDouble(n);
-		newHigh = a[1] * twoToN % __1_8446744073709552E19;
+		newHigh = a[1] * twoToN % 1.8446744073709552E19;
 		newLow = a[0] * twoToN;
 		diff = newLow - newLow % __4294967296;
 		newHigh += diff;
 		newLow -= diff;
-		if (newHigh >= __9223372036854775807) {
-			newHigh -= __1_8446744073709552E19;
+		if (newHigh >= 9223372036854775807) {
+			newHigh -= 1.8446744073709552E19;
 		}
 		return [newLow, newHigh];
 	}
@@ -450,7 +435,7 @@ var LZMA = (function () {
 		
 	function $clinit_9() {
 		$clinit_9 = nullMethod;
-		boxedValues = initDim(_3_3D_classLit, 0, 9, __256, 0);
+		boxedValues = initDim(_3_3D_classLit, 0, 9, 256, 0);
 	}
 	
 	var boxedValues;
@@ -491,7 +476,7 @@ var LZMA = (function () {
 	function $read(this$static) {
 		if (this$static.pos >= this$static.count)
 			return -1;
-		return this$static.buf[this$static.pos++] & __255;
+		return this$static.buf[this$static.pos++] & 255;
 	}
 	
 	function $read_0(this$static, buf, off, len) {
@@ -786,7 +771,7 @@ var LZMA = (function () {
 		encoder._writeEndMark = true;
 		$WriteCoderProperties(encoder, output);
 		for (i = 0; i < 64; i += 8)
-			$write(output, lowBits_0(shr(length_0, i)) & __255);
+			$write(output, lowBits_0(shr(length_0, i)) & 255);
 		this$static.chunker = (encoder._needReleaseMFStream = false , (encoder._inStream = input , encoder._finished = false , $Create_2(encoder) , encoder._rangeEncoder.Stream = output , $Init_4(encoder) , $FillDistancesPrices(encoder) , $FillAlignPrices(encoder) , encoder._lenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._lenEncoder, 1 << encoder._posStateBits) , encoder._repMatchLenEncoder._tableSize = encoder._numFastBytes + 1 - 2 , $UpdateTables(encoder._repMatchLenEncoder, 1 << encoder._posStateBits) , encoder.nowPos64 = P0_longLit , undefined) , $Chunker_0(new Chunker(), encoder));
 	}
 	
@@ -877,7 +862,7 @@ var LZMA = (function () {
 			///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
 			tmp_length = parseInt(hex_length, 16);
 			/// If the length is too long to handle, just set it to unknown.
-			if (tmp_length >= __4294967296) {
+			if (tmp_length > 4294967295) {
 				this$static.length_0 = N1_longLit;
 			} else {
 				this$static.length_0 = fromDouble(tmp_length);
@@ -1024,8 +1009,8 @@ var LZMA = (function () {
 	function $clinit_60() {
 		$clinit_60 = nullMethod;
 		var i, j, r;
-		CrcTable = initDim(_3I_classLit, 0, -1, __256, 1);
-		for (i = 0; i < __256; ++i) {
+		CrcTable = initDim(_3I_classLit, 0, -1, 256, 1);
+		for (i = 0; i < 256; ++i) {
 			r = i;
 			for (j = 0; j < 8; ++j)
 			if ((r & 1) != 0) {
@@ -1044,7 +1029,7 @@ var LZMA = (function () {
 		}
 
 		this$static._cutValue = 16 + (matchMaxLen >> 1);
-		windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + __256;
+		windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
 		$Create_4(this$static, historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
 		this$static._matchMaxLen = matchMaxLen;
 		cyclicBufferSize = historySize + 1;
@@ -1060,8 +1045,8 @@ var LZMA = (function () {
 			hs |= hs >> 4;
 			hs |= hs >> 8;
 			hs >>= 1;
-			hs |= __65535;
-			if (hs > __16777216)
+			hs |= 65535;
+			if (hs > 16777216)
 			hs >>= 1;
 			this$static._hashMask = hs;
 			++hs;
@@ -1092,21 +1077,21 @@ var LZMA = (function () {
 		hash2Value = 0;
 		hash3Value = 0;
 		if (this$static.HASH_ARRAY) {
-			temp = CrcTable[this$static._bufferBase[cur] & __255] ^ this$static._bufferBase[cur + 1] & __255;
+			temp = CrcTable[this$static._bufferBase[cur] & 255] ^ this$static._bufferBase[cur + 1] & 255;
 			hash2Value = temp & 1023;
-			temp ^= (this$static._bufferBase[cur + 2] & __255) << 8;
-			hash3Value = temp & __65535;
-			hashValue = (temp ^ CrcTable[this$static._bufferBase[cur + 3] & __255] << 5) & this$static._hashMask;
+			temp ^= (this$static._bufferBase[cur + 2] & 255) << 8;
+			hash3Value = temp & 65535;
+			hashValue = (temp ^ CrcTable[this$static._bufferBase[cur + 3] & 255] << 5) & this$static._hashMask;
 		} else {
-			hashValue = this$static._bufferBase[cur] & __255 ^ (this$static._bufferBase[cur + 1] & __255) << 8;
+			hashValue = this$static._bufferBase[cur] & 255 ^ (this$static._bufferBase[cur + 1] & 255) << 8;
 		}
 
 		curMatch = this$static._hash[this$static.kFixHashSize + hashValue];
 		if (this$static.HASH_ARRAY) {
 			curMatch2 = this$static._hash[hash2Value];
-			curMatch3 = this$static._hash[__1024 + hash3Value];
+			curMatch3 = this$static._hash[1024 + hash3Value];
 			this$static._hash[hash2Value] = this$static._pos;
-			this$static._hash[__1024 + hash3Value] = this$static._pos;
+			this$static._hash[1024 + hash3Value] = this$static._pos;
 			if (curMatch2 > matchMinPos) {
 				if (this$static._bufferBase[this$static._bufferOffset + curMatch2] == this$static._bufferBase[cur]) {
 					distances[offset++] = maxLen = 2;
@@ -1166,7 +1151,7 @@ var LZMA = (function () {
 					}
 				}
 			}
-			if ((this$static._bufferBase[pby1 + len] & __255) < (this$static._bufferBase[cur + len] & __255)) {
+			if ((this$static._bufferBase[pby1 + len] & 255) < (this$static._bufferBase[cur + len] & 255)) {
 				this$static._son[ptr1] = curMatch;
 				ptr1 = cyclicPos + 1;
 				curMatch = this$static._son[ptr1];
@@ -1251,15 +1236,15 @@ var LZMA = (function () {
 			matchMinPos = this$static._pos > this$static._cyclicBufferSize?this$static._pos - this$static._cyclicBufferSize:0;
 			cur = this$static._bufferOffset + this$static._pos;
 			if (this$static.HASH_ARRAY) {
-				temp = CrcTable[this$static._bufferBase[cur] & __255] ^ this$static._bufferBase[cur + 1] & __255;
+				temp = CrcTable[this$static._bufferBase[cur] & 255] ^ this$static._bufferBase[cur + 1] & 255;
 				hash2Value = temp & 1023;
 				this$static._hash[hash2Value] = this$static._pos;
-				temp ^= (this$static._bufferBase[cur + 2] & __255) << 8;
-				hash3Value = temp & __65535;
-				this$static._hash[__1024 + hash3Value] = this$static._pos;
-				hashValue = (temp ^ CrcTable[this$static._bufferBase[cur + 3] & __255] << 5) & this$static._hashMask;
+				temp ^= (this$static._bufferBase[cur + 2] & 255) << 8;
+				hash3Value = temp & 65535;
+				this$static._hash[1024 + hash3Value] = this$static._pos;
+				hashValue = (temp ^ CrcTable[this$static._bufferBase[cur + 3] & 255] << 5) & this$static._hashMask;
 			} else {
-				hashValue = this$static._bufferBase[cur] & __255 ^ (this$static._bufferBase[cur + 1] & __255) << 8;
+				hashValue = this$static._bufferBase[cur] & 255 ^ (this$static._bufferBase[cur + 1] & 255) << 8;
 			}
 			curMatch = this$static._hash[this$static.kFixHashSize + hashValue];
 			this$static._hash[this$static.kFixHashSize + hashValue] = this$static._pos;
@@ -1288,7 +1273,7 @@ var LZMA = (function () {
 						break;
 					}
 				}
-				if ((this$static._bufferBase[pby1 + len] & __255) < (this$static._bufferBase[cur + len] & __255)) {
+				if ((this$static._bufferBase[pby1 + len] & 255) < (this$static._bufferBase[cur + len] & 255)) {
 					this$static._son[ptr1] = curMatch;
 					ptr1 = cyclicPos + 1;
 					curMatch = this$static._son[ptr1];
@@ -1313,7 +1298,7 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 0;
 	_.HASH_ARRAY = true;
-	_._cutValue = __255;
+	_._cutValue = 255;
 	_._cyclicBufferPos = 0;
 	_._cyclicBufferSize = 0;
 	_._hash = null;
@@ -1639,14 +1624,14 @@ var LZMA = (function () {
 		var dictionarySize, i, lc, lp, pb, remainder, val;
 		if (properties[__length] < 5)
 			return false;
-		val = properties[0] & __255;
+		val = properties[0] & 255;
 		lc = val % 9;
 		remainder = ~~(val / 9);
 		lp = remainder % 5;
 		pb = ~~(remainder / 5);
 		dictionarySize = 0;
 		for (i = 0; i < 4; ++i) {
-			dictionarySize += (properties[1 + i] & __255) << i * 8;
+			dictionarySize += (properties[1 + i] & 255) << i * 8;
 		}
 		///NOTE: If the input is bad, it might call for an insanely large dictionary size, which would crash the script.
 		if (dictionarySize > 99999999 || !$SetLcLpPb(this$static, lc, lp, pb)) {
@@ -1662,7 +1647,7 @@ var LZMA = (function () {
 		if (this$static.m_DictionarySize != dictionarySize) {
 			this$static.m_DictionarySize = dictionarySize;
 			this$static.m_DictionarySizeCheck = max(this$static.m_DictionarySize, 1);
-			$Create_5(this$static.m_OutWindow, max(this$static.m_DictionarySizeCheck, __4096));
+			$Create_5(this$static.m_OutWindow, max(this$static.m_DictionarySizeCheck, 4096));
 		}
 		return true;
 	}
@@ -1759,7 +1744,7 @@ var LZMA = (function () {
 	}
 	
 	function $GetDecoder(this$static, pos, prevByte) {
-		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & __255) >>> 8 - this$static.m_NumPrevBits)];
+		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this$static.m_NumPrevBits)];
 	}
 	
 	function $Init_0(this$static) {
@@ -1786,7 +1771,7 @@ var LZMA = (function () {
 		symbol = 1;
 		do {
 			symbol = symbol << 1 | $DecodeBit(rangeDecoder, this$static.m_Decoders, symbol);
-		} while (symbol < __256);
+		} while (symbol < 256);
 		return symbol << 24 >> 24;
 	}
 	
@@ -1799,12 +1784,12 @@ var LZMA = (function () {
 			bit = $DecodeBit(rangeDecoder, this$static.m_Decoders, (1 + matchBit << 8) + symbol);
 			symbol = symbol << 1 | bit;
 			if (matchBit != bit) {
-				while (symbol < __256) {
+				while (symbol < 256) {
 					symbol = symbol << 1 | $DecodeBit(rangeDecoder, this$static.m_Decoders, symbol);
 				}
 			break;
 			}
-		} while (symbol < __256);
+		} while (symbol < 256);
 		return symbol << 24 >> 24;
 	}
 	
@@ -1822,7 +1807,7 @@ var LZMA = (function () {
 	function $clinit_59() {
 		$clinit_59 = nullMethod;
 		var c, j, k, slotFast;
-		g_FastPos = initDim(_3B_classLit, 0, -1, __2048, 1);
+		g_FastPos = initDim(_3B_classLit, 0, -1, 2048, 1);
 		c = 2;
 		g_FastPos[0] = 0;
 		g_FastPos[1] = 1;
@@ -2023,7 +2008,7 @@ var LZMA = (function () {
 		if (this$static._dictionarySize == this$static._dictionarySizePrev && this$static._numFastBytesPrev == this$static._numFastBytes) {
 			return;
 		}
-		$Create_3(this$static._matchFinder, this$static._dictionarySize, __4096, this$static._numFastBytes, 274);
+		$Create_3(this$static._matchFinder, this$static._dictionarySize, 4096, this$static._numFastBytes, 274);
 		this$static._dictionarySizePrev = this$static._dictionarySize;
 		this$static._numFastBytesPrev = this$static._numFastBytes;
 	}
@@ -2032,7 +2017,7 @@ var LZMA = (function () {
 		var i;
 		$clinit_59();
 		this$static._repDistances = initDim(_3I_classLit, 0, -1, 4, 1);
-		this$static._optimum = initDim(optimal_2_classLit, 0, 6, __4096, 0);
+		this$static._optimum = initDim(optimal_2_classLit, 0, 6, 4096, 0);
 		this$static._rangeEncoder = ($clinit_66() , new Encoder_0());
 		this$static._isMatch = initDim(_3S_classLit, 0, -1, 192, 1);
 		this$static._isRep = initDim(_3S_classLit, 0, -1, 12, 1);
@@ -2047,7 +2032,7 @@ var LZMA = (function () {
 		this$static._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
 		this$static._literalEncoder = new Encoder$LiteralEncoder();
 		this$static._matchDistances = initDim(_3I_classLit, 0, -1, 548, 1);
-		this$static._posSlotPrices = initDim(_3I_classLit, 0, -1, __256, 1);
+		this$static._posSlotPrices = initDim(_3I_classLit, 0, -1, 256, 1);
 		this$static._distancesPrices = initDim(_3I_classLit, 0, -1, 512, 1);
 		this$static._alignPrices = initDim(_3I_classLit, 0, -1, 16, 1);
 		this$static.reps = initDim(_3I_classLit, 0, -1, 4, 1);
@@ -2057,7 +2042,7 @@ var LZMA = (function () {
 		this$static.finished = initDim(_3Z_classLit, 0, -1, 1, 2);
 		this$static.properties = initDim(_3B_classLit, 0, -1, 5, 1);
 		this$static.tempPrices = initDim(_3I_classLit, 0, -1, 128, 1);
-		for (i = 0; i < __4096; ++i) {
+		for (i = 0; i < 4096; ++i) {
 			this$static._optimum[i] = new Encoder$Optimal();
 		}
 		for (i = 0; i < 4; ++i) {
@@ -2161,8 +2146,8 @@ var LZMA = (function () {
 		posState = position & this$static._posStateMask;
 		this$static._optimum[1].Price = ($clinit_66() , ProbPrices[this$static._isMatch[(this$static._state << 4) + posState] >>> 2]) + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position, this$static._previousByte), this$static._state >= 7, matchByte, currentByte);
 		$MakeAsChar(this$static._optimum[1]);
-		matchPrice = ProbPrices[__2048 - this$static._isMatch[(this$static._state << 4) + posState] >>> 2];
-		repMatchPrice = matchPrice + ProbPrices[__2048 - this$static._isRep[this$static._state] >>> 2];
+		matchPrice = ProbPrices[2048 - this$static._isMatch[(this$static._state << 4) + posState] >>> 2];
+		repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[this$static._state] >>> 2];
 		if (matchByte == currentByte) {
 			shortRepPrice = repMatchPrice + $GetRepLen1Price(this$static, this$static._state, posState);
 			if (shortRepPrice < this$static._optimum[1].Price) {
@@ -2182,7 +2167,7 @@ var LZMA = (function () {
 		this$static._optimum[0].Backs3 = this$static.reps[3];
 		len = lenEnd;
 		do {
-			this$static._optimum[len--].Price = __268435455;
+			this$static._optimum[len--].Price = 268435455;
 		} while (len >= 2);
 		for (i = 0; i < 4; ++i) {
 			repLen = this$static.repLens[i];
@@ -2325,8 +2310,8 @@ var LZMA = (function () {
 				nextOptimum.Prev1IsChar = false;
 				nextIsChar = true;
 			}
-			matchPrice = curPrice + ProbPrices[__2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
-			repMatchPrice = matchPrice + ProbPrices[__2048 - this$static._isRep[state] >>> 2];
+			matchPrice = curPrice + ProbPrices[2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
+			repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[state] >>> 2];
 			if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
 				shortRepPrice = repMatchPrice + (ProbPrices[this$static._isRepG0[state] >>> 2] + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2]);
 				if (shortRepPrice <= nextOptimum.Price) {
@@ -2352,10 +2337,10 @@ var LZMA = (function () {
 				if (lenTest2 >= 2) {
 					state2 = StateUpdateChar(state);
 					posStateNext = position + 1 & this$static._posStateMask;
-					nextRepMatchPrice = curAnd1Price + ProbPrices[__2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + ProbPrices[__2048 - this$static._isRep[state2] >>> 2];
+					nextRepMatchPrice = curAnd1Price + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
 					offset = cur + 1 + lenTest2;
 					while (lenEnd < offset) {
-						this$static._optimum[++lenEnd].Price = __268435455;
+						this$static._optimum[++lenEnd].Price = 268435455;
 					}
 					curAndLenPrice = nextRepMatchPrice + (price = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext) , price + $GetPureRepPrice(this$static, 0, state2, posStateNext));
 					optimum = this$static._optimum[offset];
@@ -2377,7 +2362,7 @@ var LZMA = (function () {
 				lenTestTemp = lenTest;
 				do {
 					while (lenEnd < cur + lenTest) {
-						this$static._optimum[++lenEnd].Price = __268435455;
+						this$static._optimum[++lenEnd].Price = 268435455;
 					}
 					curAndLenPrice = repMatchPrice + (price_0 = $GetPrice(this$static._repMatchLenEncoder, lenTest - 2, posState) , price_0 + $GetPureRepPrice(this$static, repIndex, state, posState));
 					optimum = this$static._optimum[cur + lenTest];
@@ -2401,11 +2386,11 @@ var LZMA = (function () {
 						curAndLenCharPrice = repMatchPrice + (price_1 = $GetPrice(this$static._repMatchLenEncoder, lenTest - 2, posState) , price_1 + $GetPureRepPrice(this$static, repIndex, state, posState)) + ProbPrices[this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position + lenTest, $GetIndexByte(this$static._matchFinder, lenTest - 1 - 1)), true, $GetIndexByte(this$static._matchFinder, lenTest - 1 - (this$static.reps[repIndex] + 1)), $GetIndexByte(this$static._matchFinder, lenTest - 1));
 						state2 = StateUpdateChar(state2);
 						posStateNext = position + lenTest + 1 & this$static._posStateMask;
-						nextMatchPrice = curAndLenCharPrice + ProbPrices[__2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
-						nextRepMatchPrice = nextMatchPrice + ProbPrices[__2048 - this$static._isRep[state2] >>> 2];
+						nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
+						nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
 						offset = lenTest + 1 + lenTest2;
 						while (lenEnd < cur + offset) {
-							this$static._optimum[++lenEnd].Price = __268435455;
+							this$static._optimum[++lenEnd].Price = 268435455;
 						}
 						curAndLenPrice = nextRepMatchPrice + (price_2 = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext) , price_2 + $GetPureRepPrice(this$static, 0, state2, posStateNext));
 						optimum = this$static._optimum[cur + offset];
@@ -2431,7 +2416,7 @@ var LZMA = (function () {
 			if (newLen >= startLen) {
 			normalMatchPrice = matchPrice + ProbPrices[this$static._isRep[state] >>> 2];
 			while (lenEnd < cur + newLen) {
-				this$static._optimum[++lenEnd].Price = __268435455;
+				this$static._optimum[++lenEnd].Price = 268435455;
 			}
 			offs = 0;
 			while (startLen > this$static._matchDistances[offs]) {
@@ -2457,11 +2442,11 @@ var LZMA = (function () {
 							curAndLenCharPrice = curAndLenPrice + ProbPrices[this$static._isMatch[(state2 << 4) + posStateNext] >>> 2] + $GetPrice_0($GetSubCoder(this$static._literalEncoder, position + lenTest, $GetIndexByte(this$static._matchFinder, lenTest - 1 - 1)), true, $GetIndexByte(this$static._matchFinder, lenTest - (curBack + 1) - 1), $GetIndexByte(this$static._matchFinder, lenTest - 1));
 							state2 = StateUpdateChar(state2);
 							posStateNext = position + lenTest + 1 & this$static._posStateMask;
-							nextMatchPrice = curAndLenCharPrice + ProbPrices[__2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
-							nextRepMatchPrice = nextMatchPrice + ProbPrices[__2048 - this$static._isRep[state2] >>> 2];
+							nextMatchPrice = curAndLenCharPrice + ProbPrices[2048 - this$static._isMatch[(state2 << 4) + posStateNext] >>> 2];
+							nextRepMatchPrice = nextMatchPrice + ProbPrices[2048 - this$static._isRep[state2] >>> 2];
 							offset = lenTest + 1 + lenTest2;
 							while (lenEnd < cur + offset) {
-								this$static._optimum[++lenEnd].Price = __268435455;
+								this$static._optimum[++lenEnd].Price = 268435455;
 							}
 							curAndLenPrice = nextRepMatchPrice + (price_3 = $GetPrice(this$static._repMatchLenEncoder, lenTest2 - 2, posStateNext) , price_3 + $GetPureRepPrice(this$static, 0, state2, posStateNext));
 							optimum = this$static._optimum[cur + offset];
@@ -2500,13 +2485,13 @@ var LZMA = (function () {
 		var price;
 		if (repIndex == 0) {
 			price = ($clinit_66() , ProbPrices[this$static._isRepG0[state] >>> 2]);
-			price += ProbPrices[__2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
+			price += ProbPrices[2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
 		} else {
-			price = ($clinit_66() , ProbPrices[__2048 - this$static._isRepG0[state] >>> 2]);
+			price = ($clinit_66() , ProbPrices[2048 - this$static._isRepG0[state] >>> 2]);
 			if (repIndex == 1) {
 				price += ProbPrices[this$static._isRepG1[state] >>> 2];
 			} else {
-				price += ProbPrices[__2048 - this$static._isRepG1[state] >>> 2];
+				price += ProbPrices[2048 - this$static._isRepG1[state] >>> 2];
 				price += GetPrice(this$static._isRepG2[state], repIndex - 2);
 			}
 		}
@@ -2643,7 +2628,7 @@ var LZMA = (function () {
 	}
 	
 	function GetPosSlot(pos) {
-		if (pos < __2048) {
+		if (pos < 2048) {
 			return g_FastPos[pos];
 		}
 		if (pos < 2097152) {
@@ -2739,9 +2724,9 @@ var LZMA = (function () {
 	function $SetPrices(this$static, posState, numSymbols, prices, st) {
 		var a0, a1, b0, b1, i;
 		a0 = ($clinit_66() , ProbPrices[this$static._choice[0] >>> 2]);
-		a1 = ProbPrices[__2048 - this$static._choice[0] >>> 2];
+		a1 = ProbPrices[2048 - this$static._choice[0] >>> 2];
 		b0 = a1 + ProbPrices[this$static._choice[1] >>> 2];
-		b1 = a1 + ProbPrices[__2048 - this$static._choice[1] >>> 2];
+		b1 = a1 + ProbPrices[2048 - this$static._choice[1] >>> 2];
 		i = 0;
 		for (i = 0; i < 8; ++i) {
 			if (i >= numSymbols)
@@ -2814,7 +2799,7 @@ var LZMA = (function () {
 	}
 	
 	function $GetSubCoder(this$static, pos, prevByte) {
-		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & __255) >>> 8 - this$static.m_NumPrevBits)];
+		return this$static.m_Coders[((pos & this$static.m_PosMask) << this$static.m_NumPrevBits) + ((prevByte & 255) >>> 8 - this$static.m_NumPrevBits)];
 	}
 	
 	function $Init_3(this$static) {
@@ -3065,10 +3050,10 @@ var LZMA = (function () {
 		var newBound, prob;
 		prob = probs[index];
 		newBound = (this$static.Range >>> 11) * prob;
-		if ((this$static.Code ^ ___2147483648) < (newBound ^ ___2147483648)) {
+		if ((this$static.Code ^ -2147483648) < (newBound ^ -2147483648)) {
 			this$static.Range = newBound;
-			probs[index] = prob + (__2048 - prob >>> 5) << 16 >> 16;
-			if ((this$static.Range & -__16777216) == 0) {
+			probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
+			if ((this$static.Range & -16777216) == 0) {
 				this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
 				this$static.Range <<= 8;
 			}
@@ -3077,7 +3062,7 @@ var LZMA = (function () {
 			this$static.Range -= newBound;
 			this$static.Code -= newBound;
 			probs[index] = prob - (prob >>> 5) << 16 >> 16;
-			if ((this$static.Range & -__16777216) == 0) {
+			if ((this$static.Range & -16777216) == 0) {
 				this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
 				this$static.Range <<= 8;
 			}
@@ -3093,7 +3078,7 @@ var LZMA = (function () {
 			t = this$static.Code - this$static.Range >>> 31;
 			this$static.Code -= this$static.Range & t - 1;
 			result = result << 1 | 1 - t;
-			if ((this$static.Range & -__16777216) == 0) {
+			if ((this$static.Range & -16777216) == 0) {
 				this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
 				this$static.Range <<= 8;
 			}
@@ -3113,7 +3098,7 @@ var LZMA = (function () {
 	function InitBitModels(probs) {
 		var i;
 		for (i = 0; i < probs[__length]; ++i) {
-			probs[i] = __1024;
+			probs[i] = 1024;
 		}
 	}
 	
@@ -3145,13 +3130,13 @@ var LZMA = (function () {
 		newBound = (this$static.Range >>> 11) * prob;
 		if (symbol == 0) {
 			this$static.Range = newBound;
-			probs[index] = prob + (__2048 - prob >>> 5) << 16 >> 16;
+			probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
 		} else {
 			this$static.Low = add(this$static.Low, and(fromInt(newBound), Pffffffff_longLit));
 			this$static.Range -= newBound;
 			probs[index] = prob - (prob >>> 5) << 16 >> 16;
 		}
-		if ((this$static.Range & -__16777216) == 0) {
+		if ((this$static.Range & -16777216) == 0) {
 			this$static.Range <<= 8;
 			$ShiftLow(this$static);
 		}
@@ -3164,7 +3149,7 @@ var LZMA = (function () {
 			if ((v >>> i & 1) == 1) {
 				this$static.Low = add(this$static.Low, fromInt(this$static.Range));
 			}
-			if ((this$static.Range & -__16777216) == 0) {
+			if ((this$static.Range & -16777216) == 0) {
 				this$static.Range <<= 8;
 				$ShiftLow(this$static);
 			}
@@ -3198,7 +3183,7 @@ var LZMA = (function () {
 			temp = this$static._cache;
 			do {
 				$write(this$static.Stream, temp + LowHi);
-				temp = __255;
+				temp = 255;
 			} while (--this$static._cacheSize != 0);
 			this$static._cache = lowBits_0(this$static.Low) >>> 24;
 		}
@@ -3215,7 +3200,7 @@ var LZMA = (function () {
 		$clinit_66();
 		var i;
 		for (i = 0; i < probs[__length]; ++i) {
-			probs[i] = __1024;
+			probs[i] = 1024;
 		}
 	}
 	
@@ -3225,7 +3210,7 @@ var LZMA = (function () {
 	   
 	   for (i = arr[__length] - 1; i >= 0; i -= 1) {
 	       if (arr[i] < 0) {
-	           arr[i] = __256 + arr[i];
+	           arr[i] = 256 + arr[i];
 	       }
 	   }
 	   
@@ -3249,40 +3234,40 @@ var LZMA = (function () {
 		var buf, i, x, y, z;
 		buf = $StringBuilder(new StringBuilder());
 		for (i = 0; i < utf[__length]; ++i) {
-			x = utf[i] & __255;
+			x = utf[i] & 255;
 			if ((x & 128) == 0) {
 				if (x == 0) {
 				    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$appendNonNull(buf.data, String__[__fromCharCode](x & __65535));
+				$appendNonNull(buf.data, String__[__fromCharCode](x & 65535));
 			} else if ((x & 224) == 192) {
 				if (i + 1 >= utf[__length]) {
 				    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				y = utf[++i] & __255;
+				y = utf[++i] & 255;
 				if ((y & 192) != 128) {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$append(buf.data, String__[__fromCharCode]((x & 31) << 6 & __65535 | y & 63));
+				$append(buf.data, String__[__fromCharCode]((x & 31) << 6 & 65535 | y & 63));
 			} else if ((x & 240) == 224) {
 				if (i + 2 >= utf[__length]) {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				y = utf[++i] & __255;
+				y = utf[++i] & 255;
 				if ((y & 192) != 128) {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				z = utf[++i] & __255;
+				z = utf[++i] & 255;
 				if ((z & 192) != 128) {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$appendNonNull(buf.data, String__[__fromCharCode](((x & 15) << 12 | (y & 63) << 6 | z & 63) & __65535));
+				$appendNonNull(buf.data, String__[__fromCharCode](((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
 			} else {
 				/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 				return convert_binary_arr(utf);
@@ -3515,8 +3500,8 @@ var LZMA = (function () {
 						{dicSize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
 						{dicSize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
 						{dicSize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dicSize: 24, fb: __255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dicSize: 25, fb: __255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
+						{dicSize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
 					];
 		
 		function isNumber(n) {
