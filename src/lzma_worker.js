@@ -706,7 +706,7 @@ var LZMA = (function () {
 	
 	
 	function $configure(this$static, encoder) {
-	if (!$SetDictionarySize_0(encoder, 1 << this$static.dictionarySize))
+	if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize))
 		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	if (!$SetNumFastBytes(encoder, this$static.fb))
 		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
@@ -723,7 +723,7 @@ var LZMA = (function () {
 	_ = CompressionMode.prototype = new Enum();
 	_.getClass$ = c;
 	_.typeId$ = 0;
-	_.dictionarySize = 0;
+	_.dicSize = 0;
 	_.fb = 0;
 	_.lc = 0;
 	_.lp = 0;
@@ -3479,15 +3479,15 @@ var LZMA = (function () {
 	
 	var get_mode_obj = (function () {
 		var modes = [
-						{dictionarySize: 16, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 20, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 19, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 20, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-						{dictionarySize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
+						{dicSize: 16, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
+						{dicSize: 20, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
+						{dicSize: 19, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 20, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+						{dicSize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
 					];
 		
 		function isNumber(n) {
