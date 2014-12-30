@@ -10,7 +10,7 @@ Java into JavaScript.  The original Java code is licensed under the Apache Licen
 Demos
 ---
 
-Live demos can be found [here](http://nmrugg.github.com/LZMA-JS/ "Demos").
+Live demos can be found [here](http://nmrugg.github.io/LZMA-JS/ "Demos").
 
 How to Use
 ---
