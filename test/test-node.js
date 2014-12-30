@@ -4,7 +4,6 @@ var all_tests_pass = true,
     fs = require("fs"),
     p = require("path"),
     my_lzma = require("../index.js").LZMA(),
-    compression_mode = Number(process.argv[2]) || 1,
     path_to_files = "files";
 
 function display_result(str, pass) {
@@ -97,10 +96,18 @@ function decompression_test(compressed_file, correct_filename, next) {
 
 function compression_test(file, next) {
     fs.readFile(file, "utf8", function (err, content) {
-        var comp_start = (new Date()).getTime();
+        var comp_start = (new Date()).getTime(),
+            compression_mode = 1,
+            match;
         
         if (err) {
             throw err;
+        }
+        
+        match = p.basename(file, p.extname(file)).match(/^level[ _](\d)/i)
+        
+        if (match) {
+            compression_mode = Number(match[1]) || 1
         }
         
         console.log("     Initial size:", content.length);
