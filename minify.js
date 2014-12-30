@@ -22,9 +22,9 @@ function sort_obj(obj)
 
 function calculate_minify_value(props)
 {
-    Object.keys(props).forEach(function oneach(prop])
+    Object.keys(props).forEach(function oneach(prop)
     {
-        props[prop]] = prop].length * props[prop]];
+        props[prop] = prop.length * props[prop];
     });
 }
 
@@ -63,15 +63,15 @@ function minify_properties(code)
         new_names,
         prop_regex = /\.([_$a-zA-Z]*[_$][_$a-zA-Z0-9]*|kFixHashSize|kNumHashDirectBytes|kMinMatchCheck|outBytesProcessed|decoder|encoder|nowPos64|outSize|alive|processedInSize|finished|inBytesProcessed|processedInSize|[Ss]tate|prevByte|Prev1IsChar|Prev2|BackPrev|PosPrev|Models|backRes|properties|processedOutSize|tempPrices|backRes|repLens|Price|Backs[0123]|NumBitLevels|Range|Stream|explicitLength|count|pos|buf|chunker|rep[0-3s]|Code|Low|data|mode|output)/g;
     
-    /// We want to replace prop]eters that have an underscore or a dollar sign.
-    code.replace(prop_regex, function calc(prop])
+    /// We want to replace propeters that have an underscore or a dollar sign.
+    code.replace(prop_regex, function calc(prop)
     {
-        prop] = prop].substr(1);
-        if (ignore.indexOf(prop]) === -1) {
-            if (!props[prop]]) {
-                props[prop]] = 1;
+        prop = prop.substr(1);
+        if (ignore.indexOf(prop) === -1) {
+            if (!props[prop]) {
+                props[prop] = 1;
             } else {
-                props[prop]] += 1;
+                props[prop] += 1;
             }
         }
     });
@@ -84,29 +84,29 @@ function minify_properties(code)
     //console.log(props);
     //console.log(sorted_props);
     /*
-    sorted_props.forEach(function (prop])
+    sorted_props.forEach(function (prop)
     {
-        console.log(prop], props[prop]])
+        console.log(prop, props[prop])
     });
     */
     new_names = base54_64(sorted_props);
     /*
-    sorted_props.forEach(function (prop], i)
+    sorted_props.forEach(function (prop, i)
     {
-        console.log(prop], props[prop]], new_names[i])
+        console.log(prop, props[prop], new_names[i])
     });
     */
     
-    code = code.replace(prop_regex, function calc(prop])
+    code = code.replace(prop_regex, function calc(prop)
     {
         var index,
-            partial_prop] = prop].substr(1);
-        index = sorted_props.indexOf(partial_prop]);
-        //console.log(prop], index);
+            partial_prop = prop.substr(1);
+        index = sorted_props.indexOf(partial_prop);
+        //console.log(prop, index);
         if (index > -1) {
             return "." + new_names[index];
         }
-        return prop];
+        return prop;
     });
     
     return code;
