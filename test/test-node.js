@@ -3,7 +3,7 @@
 var all_tests_pass = true,
     fs = require("fs"),
     p = require("path"),
-    my_lzma = require("../index.js").LZMA(),
+    my_lzma = require("../src/lzma_worker-min.js").LZMA,
     path_to_files = "files";
 
 function display_result(str, pass) {
