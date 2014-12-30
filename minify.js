@@ -137,7 +137,9 @@ files.forEach(function oneach(file)
         }
     });
     
-    result.code = minify_parameters(result.code);
+    if (file === "lzma_worker.js") {
+        result.code = minify_parameters(result.code);
+    }
     
     fs.writeFileSync(min_path, result.code);
     
@@ -145,6 +147,6 @@ files.forEach(function oneach(file)
     
     console.log("Original size: " + orig_size + " bytes");
     console.log("Minified size: " + min_size + " bytes");
-    console.log("Compression:   " + (orig_size / min_size).toFixed(2) + " x smaller");
+    console.log("Compression:   " + (orig_size / min_size).toFixed(4) + " x smaller");
     console.log("");
 });
