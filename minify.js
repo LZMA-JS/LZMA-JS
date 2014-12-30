@@ -134,6 +134,7 @@ files.forEach(function oneach(file)
             loops: true,
             if_return: true,
             join_vars: true,
+            unsafe: true,
         }
     });
     
