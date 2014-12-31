@@ -1,6 +1,7 @@
 var uglify = require("uglify-js"),
     fs = require("fs"),
     p = require("path"),
+    zlib = require("zlib"),
     files = [
         "lzma_worker.js",
         "lzma.js",
@@ -113,59 +114,83 @@ function minify_properties(code)
 }
 
 
-files.forEach(function oneach(file)
+(function loop(i)
 {
-    var full_path = p.join(__dirname, "src", file),
-        min_path = p.join(__dirname, "src", p.basename(file, p.extname(file)) + "-min" + p.extname(file)),
+    var file,
+        full_path,
+        min_path,
         result,
-        orig_size = filesize(full_path),
-        min_size;
+        orig_size,
+        min_size,
+        gzmin_size,
+        ext;
     
-    console.log(file);
-    
-    result = uglify.minify(full_path, {
-        mangle: {
-            sort: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
-            toplevel: true,
-        },
-        comments: true,
-        compress: {
-            sequences: true,
-            dead_code: true,
-            conditionals: true,
-            booleans: true,
-            unused: true,
-            loops: true,
-            if_return: true,
-            join_vars: true,
-            pure_getters: true,
-            cascade: true,
-            join_vars: true,
-            evaluate: true,
-            comparisons: true,
-            properties: true,
-            negate_iife: true,
-            keep_fargs: false,
-            hoist_vars: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
-            hoist_funs: true, /// As TRUE, the plain JS is bigger, but gzipped is smaller!
-            warnings: true,
-            unsafe: true,
-        },
-        output: {
-            comments: /^!|@preserve|@license|@cc_on/i,
-        },
-    });
-    
-    if (file === "lzma_worker.js") {
-        result.code = minify_properties(result.code);
+    if (i < files.length) {
+        file = files[i];
+        ext = p.extname(file);
+        full_path = p.join(__dirname, "src", file);
+        min_path = p.join(__dirname, "src", p.basename(file, ext) + "-min" + ext);
+        orig_size = filesize(full_path);
+        
+        console.log(file);
+        
+        result = uglify.minify(full_path, {
+            mangle: {
+                sort: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+                toplevel: true,
+            },
+            comments: true,
+            compress: {
+                sequences: true,
+                dead_code: true,
+                conditionals: true,
+                booleans: true,
+                unused: true,
+                loops: true,
+                if_return: true,
+                join_vars: true,
+                pure_getters: true,
+                cascade: true,
+                join_vars: true,
+                evaluate: true,
+                comparisons: true,
+                properties: true,
+                negate_iife: true,
+                keep_fargs: false,
+                hoist_vars: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+                hoist_funs: true, /// As TRUE, the plain JS is bigger, but gzipped is smaller!
+                warnings: true,
+                unsafe: true,
+            },
+            output: {
+                comments: /^!|@preserve|@license|@cc_on/i,
+            },
+        });
+        
+        if (file === "lzma_worker.js") {
+            result.code = minify_properties(result.code);
+        }
+        
+        fs.writeFileSync(min_path, result.code);
+        
+        min_size = filesize(min_path);
+        
+        console.log("Original size: " + orig_size + " bytes");
+        console.log("Minified size: " + min_size + " bytes");
+        console.log("Compression:   " + (orig_size / min_size).toFixed(4) + " x smaller");
+        
+        zlib.gzip(result.code, function(err, buffer) {
+            if (err) {
+                throw err;
+            }
+            
+            gzmin_size = buffer.length;
+            
+            ///NOTE: We could write the file if we wanted to like this: fs.writeFileSync(p.join(__dirname, "src", p.basename(file, ext) + "-min" + ext + ".gz"), buffer);
+            console.log("Gzipped size:  " + gzmin_size + " bytes");
+            console.log("gzipped ratio: " + (orig_size / gzmin_size).toFixed(4) + " x smaller");
+            console.log("");
+            loop(i + 1);
+        });
     }
-    
-    fs.writeFileSync(min_path, result.code);
-    
-    min_size = filesize(min_path);
-    
-    console.log("Original size: " + orig_size + " bytes");
-    console.log("Minified size: " + min_size + " bytes");
-    console.log("Compression:   " + (orig_size / min_size).toFixed(4) + " x smaller");
-    console.log("");
-});
+}(0));
