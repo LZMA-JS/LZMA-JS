@@ -10,17 +10,9 @@ var LZMA = (function () {
 		action_decompress = 2,
 		action_progress   = 3,
 		wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
-		c = function () {return {typeName: this.typeId$ + ""};},
-		__length = "length",
+		c = function () {return {typeName: String(this.typeId$)};},
 		__prototype = "prototype",
-		__fromCharCode = "fromCharCode",
-		__charCodeAt = "charCodeAt",
-		__detailMessage = "detailMessage",
-		__typeName = "typeName",
-		__getTime = "getTime",
-		__4294967296 = 4294967296,
-		Math__ = Math,
-		String__ = String;
+		__4294967296 = 4294967296;
 	
 	function update_progress(percent, callback_num) {
 		postMessage({
@@ -57,7 +49,7 @@ var LZMA = (function () {
 	_ = Throwable[__prototype] = new Object_0();
 	_.getClass$ = c;
 	_.typeId$ = 3;
-	_[__detailMessage] = null;
+	_.detailMessage = null;
 	
 	function Exception() {
 	}
@@ -66,7 +58,7 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 4;
 	function $RuntimeException(this$static, message) {
-		this$static[__detailMessage] = message;
+		this$static.detailMessage = message;
 		return this$static;
 	}
 	
@@ -98,7 +90,7 @@ var LZMA = (function () {
 	
 	function $toString(a) {
 		var s_0, s;
-		s_0 = (s = a.join('') , a[__length] = a.explicitLength = 0 , s);
+		s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
 		a[a.explicitLength++] = s_0;
 		return s_0;
 	}
@@ -157,7 +149,7 @@ var LZMA = (function () {
 	_.getClass$ = getClass_2;
 	_.typeId$ = 0;
 	_.arrayClass$ = null;
-	_[__length] = 0;
+	_.length = 0;
 	_.queryId$ = 0;
 	function $clinit_4() {
 		$clinit_4 = nullMethod;
@@ -179,7 +171,7 @@ var LZMA = (function () {
 	
 	function wrapArray(array, expandoNames, expandoValues) {
 		$clinit_4();
-		for (var i = 0, c = expandoNames[__length]; i < c; ++i) {
+		for (var i = 0, c = expandoNames.length; i < c; ++i) {
 			array[expandoNames[i]] = expandoValues[i];
 		}
 	}
@@ -245,7 +237,7 @@ var LZMA = (function () {
 	}
 		
 	function and(a, b) {
-		return makeFromBits(~~Math__.max(Math__.min(a[1] / __4294967296, 2147483647), -2147483648) & ~~Math__.max(Math__.min(b[1] / __4294967296, 2147483647), -2147483648), lowBits_0(a) & lowBits_0(b));
+		return makeFromBits(~~Math.max(Math.min(a[1] / __4294967296, 2147483647), -2147483648) & ~~Math.max(Math.min(b[1] / __4294967296, 2147483647), -2147483648), lowBits_0(a) & lowBits_0(b));
 	}
 	
 	function compare(a, b) {
@@ -274,7 +266,7 @@ var LZMA = (function () {
 		valueHigh %= 1.8446744073709552E19;
 		valueLow %= 1.8446744073709552E19;
 		diffHigh = valueHigh % __4294967296;
-		diffLow = Math__.floor(valueLow / __4294967296) * __4294967296;
+		diffLow = Math.floor(valueLow / __4294967296) * __4294967296;
 		valueHigh = valueHigh - diffHigh + diffLow;
 		valueLow = valueLow - diffLow + diffHigh;
 		while (valueLow < 0) {
@@ -311,9 +303,9 @@ var LZMA = (function () {
 			return $clinit_10() , MAX_VALUE;
 		}
 		if (value > 0) {
-			return create(Math__.floor(value), 0);
+			return create(Math.floor(value), 0);
 		} else {
-			return create(Math__.ceil(value), 0);
+			return create(Math.ceil(value), 0);
 		}
 	}
 	
@@ -340,9 +332,9 @@ var LZMA = (function () {
 	
 	function lowBits_0(a) {
 		if (a[0] >= 2147483648) {
-			return ~~Math__.max(Math__.min(a[0] - __4294967296, 2147483647), -2147483648);
+			return ~~Math.max(Math.min(a[0] - __4294967296, 2147483647), -2147483648);
 		} else {
-			return ~~Math__.max(Math__.min(a[0], 2147483647), -2147483648);
+			return ~~Math.max(Math.min(a[0], 2147483647), -2147483648);
 		}
 	}
 	
@@ -412,7 +404,7 @@ var LZMA = (function () {
 		n &= 63;
 		shiftFact = pwrAsDouble(n);
 		newHigh = a[1] / shiftFact;
-		newLow = Math__.floor(a[0] / shiftFact);
+		newLow = Math.floor(a[0] / shiftFact);
 		return create(newLow, newHigh);
 	}
 	
@@ -441,7 +433,7 @@ var LZMA = (function () {
 	var boxedValues;
 	function $clinit_10() {
 		$clinit_10 = nullMethod;
-		LN_2 = Math__.log(2);
+		LN_2 = Math.log(2);
 		MAX_VALUE = P7fffffffffffffff_longLit;
 		MIN_VALUE = N8000000000000000_longLit;
 		NEG_ONE = fromInt(-1);
@@ -460,7 +452,7 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $ByteArrayInputStream(this$static, buf) {
-		$ByteArrayInputStream_0(this$static, buf, 0, buf[__length]);
+		$ByteArrayInputStream_0(this$static, buf, 0, buf.length);
 		return this$static;
 	}
 	
@@ -468,8 +460,8 @@ var LZMA = (function () {
 		this$static.buf = buf;
 		this$static.pos = off;
 		this$static.count = off + len;
-		if (this$static.count > buf[__length])
-			this$static.count = buf[__length];
+		if (this$static.count > buf.length)
+			this$static.count = buf.length;
 		return this$static;
 	}
 	
@@ -511,11 +503,11 @@ var LZMA = (function () {
 	
 	function $ensureCapacity(this$static, len) {
 		var newbuf;
-		if (len <= this$static.buf[__length])
+		if (len <= this$static.buf.length)
 			return;
-		len = max(len, this$static.buf[__length] * 2);
+		len = max(len, this$static.buf.length * 2);
 		newbuf = initDim(_3B_classLit, 0, -1, len, 1);
-		arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf[__length]);
+		arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
 		this$static.buf = newbuf;
 	}
 	
@@ -546,7 +538,7 @@ var LZMA = (function () {
 	_.buf = null;
 	_.count = 0;
 	function $IOException(this$static, message) {
-		this$static[__detailMessage] = message;
+		this$static.detailMessage = message;
 		return this$static;
 	}
 		
@@ -564,7 +556,7 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 8;
 	function $ArrayStoreException(this$static, message) {
-		this$static[__detailMessage] = message;
+		this$static.detailMessage = message;
 		return this$static;
 	}
 	
@@ -578,7 +570,7 @@ var LZMA = (function () {
 	function createForArray(packageName, className) {
 		var clazz;
 		clazz = new Class();
-		clazz[__typeName] = packageName + className;
+		clazz.typeName = packageName + className;
 		return clazz;
 	}
 	
@@ -588,7 +580,7 @@ var LZMA = (function () {
 	_ = Class[__prototype] = new Object_0();
 	_.getClass$ = c;
 	_.typeId$ = 0;
-	_[__typeName] = null;
+	_.typeName = null;
 	
 	function ClassCastException() {
 	}
@@ -604,7 +596,7 @@ var LZMA = (function () {
 	_.getClass$ = c;
 	_.typeId$ = 0;
 	function $IllegalArgumentException(this$static, message) {
-		this$static[__detailMessage] = message;
+		this$static.detailMessage = message;
 		return this$static;
 	}
 	
@@ -648,18 +640,18 @@ var LZMA = (function () {
 		if (other == null) {
 			return false;
 		}
-		return String__(this$static) == other;
+		return String(this$static) == other;
 	}
 	
 	function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
 		var srcIdx;
 		for (srcIdx = srcBegin; srcIdx < srcEnd; ++srcIdx) {
-			dst[dstBegin++] = this$static[__charCodeAt](srcIdx);
+			dst[dstBegin++] = this$static.charCodeAt(srcIdx);
 		}
 	}
 	
 	
-	_ = String__[__prototype];
+	_ = String[__prototype];
 	_.getClass$ = c;
 	_.typeId$ = 2;
 	function $StringBuilder(this$static) {
@@ -682,22 +674,22 @@ var LZMA = (function () {
 			throw new NullPointerException();
 		}
 		
-		srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : c())[__typeName];
-		destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c())[__typeName];
+		srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : c()).typeName;
+		destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c()).typeName;
 		
-		if (srcTypeName[__charCodeAt](0) != 91 || destTypeName[__charCodeAt](0) != 91) {
+		if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
 			throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
 		}
-		if (srcTypeName[__charCodeAt](1) != destTypeName[__charCodeAt](1)) {
+		if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
 			throw $ArrayStoreException(new ArrayStoreException(), 'Array types must match');
 		}
 		
-		srclen  = src[__length];
-		destlen = dest[__length];
+		srclen  = src.length;
+		destlen = dest.length;
 		if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
 			throw new IndexOutOfBoundsException();
 		}
-		if ((srcTypeName[__charCodeAt](1) == 76 || srcTypeName[__charCodeAt](1) == 91) && !$equals(srcTypeName, destTypeName)) {
+		if ((srcTypeName.charCodeAt(1) == 76 || srcTypeName.charCodeAt(1) == 91) && !$equals(srcTypeName, destTypeName)) {
 			srcArray  = dynamicCast(src, 3);
 			destArray = dynamicCast(dest, 3);
 			if ((src == null ? null : src) === (dest == null ? null : dest) && srcOfs < destOfs) {
@@ -719,15 +711,14 @@ var LZMA = (function () {
 	
 	
 	function $configure(this$static, encoder) {
-	   var __unexpected_failure = "unexpected failure";
 	if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize))
-		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
+		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	if (!$SetNumFastBytes(encoder, this$static.fb))
-		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
+		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	if (!$SetMatchFinder(encoder, this$static.matchFinder))
-		throw $RuntimeException(new RuntimeException(), v);
+		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	if (!$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-		throw $RuntimeException(new RuntimeException(), __unexpected_failure);
+		throw $RuntimeException(new RuntimeException(), 'unexpected failure');
 	}
 	
 	
@@ -788,7 +779,7 @@ var LZMA = (function () {
 		var $e0;
 		this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
 		try {
-			$init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data[__length]), mode);
+			$init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
 		} catch (err) {
 			$e0 = caught(err);
 			if (instanceOf($e0, 10)) {
@@ -834,7 +825,7 @@ var LZMA = (function () {
 			tmp_length;
 		
 		properties = initDim(_3B_classLit, 0, -1, 5, 1);
-		for (i = 0; i < properties[__length]; ++i) {
+		for (i = 0; i < properties.length; ++i) {
 			r = $read(input);
 			if (r == -1)
 				throw $IOException(new IOException(), 'truncated input');
@@ -850,7 +841,7 @@ var LZMA = (function () {
 			if (r == -1)
 				throw $IOException(new IOException(), 'truncated input');
 			r = r.toString(16);
-			if (r[__length] == 1) r = "0" + r;
+			if (r.length == 1) r = "0" + r;
 			hex_length = r + "" + hex_length;
 		}
 		
@@ -1622,7 +1613,7 @@ var LZMA = (function () {
 	
 	function $SetDecoderProperties(this$static, properties) {
 		var dictionarySize, i, lc, lp, pb, remainder, val;
-		if (properties[__length] < 5)
+		if (properties.length < 5)
 			return false;
 		val = properties[0] & 255;
 		lc = val % 9;
@@ -3097,7 +3088,7 @@ var LZMA = (function () {
 	
 	function InitBitModels(probs) {
 		var i;
-		for (i = 0; i < probs[__length]; ++i) {
+		for (i = 0; i < probs.length; ++i) {
 			probs[i] = 1024;
 		}
 	}
@@ -3199,7 +3190,7 @@ var LZMA = (function () {
 	function InitBitModels_0(probs) {
 		$clinit_66();
 		var i;
-		for (i = 0; i < probs[__length]; ++i) {
+		for (i = 0; i < probs.length; ++i) {
 			probs[i] = 1024;
 		}
 	}
@@ -3208,7 +3199,7 @@ var LZMA = (function () {
 	{
 	   var i;
 	   
-	   for (i = arr[__length] - 1; i >= 0; i -= 1) {
+	   for (i = arr.length - 1; i >= 0; i -= 1) {
 	       if (arr[i] < 0) {
 	           arr[i] = 256 + arr[i];
 	       }
@@ -3233,16 +3224,16 @@ var LZMA = (function () {
 	function decode(utf) {
 		var buf, i, x, y, z;
 		buf = $StringBuilder(new StringBuilder());
-		for (i = 0; i < utf[__length]; ++i) {
+		for (i = 0; i < utf.length; ++i) {
 			x = utf[i] & 255;
 			if ((x & 128) == 0) {
 				if (x == 0) {
 				    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$appendNonNull(buf.data, String__[__fromCharCode](x & 65535));
+				$appendNonNull(buf.data, String.fromCharCode(x & 65535));
 			} else if ((x & 224) == 192) {
-				if (i + 1 >= utf[__length]) {
+				if (i + 1 >= utf.length) {
 				    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
@@ -3251,9 +3242,9 @@ var LZMA = (function () {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$append(buf.data, String__[__fromCharCode]((x & 31) << 6 & 65535 | y & 63));
+				$append(buf.data, String.fromCharCode((x & 31) << 6 & 65535 | y & 63));
 			} else if ((x & 240) == 224) {
-				if (i + 2 >= utf[__length]) {
+				if (i + 2 >= utf.length) {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
@@ -3267,7 +3258,7 @@ var LZMA = (function () {
 					/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 					return convert_binary_arr(utf);
 				}
-				$appendNonNull(buf.data, String__[__fromCharCode](((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
+				$appendNonNull(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
 			} else {
 				/// It appears that this is binary data, so it can't be converted to a string, so just send it back.
 				return convert_binary_arr(utf);
@@ -3278,9 +3269,9 @@ var LZMA = (function () {
 	
 	function encode(s) {
 		var ch, chars, data, elen, i, charArr, n;
-		chars = (n = s[__length] , charArr = initDim(_3C_classLit, 0, -1, n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
+		chars = (n = s.length , charArr = initDim(_3C_classLit, 0, -1, n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
 		elen = 0;
-		for (i = 0; i < s[__length]; ++i) {
+		for (i = 0; i < s.length; ++i) {
 			ch = chars[i];
 			if (ch >= 1 && ch <= 127) {
 				++elen;
@@ -3292,7 +3283,7 @@ var LZMA = (function () {
 		}
 		data = initDim(_3B_classLit, 0, -1, elen, 1);
 		elen = 0;
-		for (i = 0; i < s[__length]; ++i) {
+		for (i = 0; i < s.length; ++i) {
 			ch = chars[i];
 			if (ch >= 1 && ch <= 127) {
 				data[elen++] = ch << 24 >> 24;
@@ -3347,11 +3338,11 @@ var LZMA = (function () {
 		
 		function do_action() {
 			var res;
-			start = new Date()[__getTime]();
+			start = (new Date()).getTime();
 			while ($execute(this$static.c)) {
 				percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
 				/// If about 200 miliseconds have passed, update the progress.
-				if (new Date()[__getTime]() - start > 200) {
+				if ((new Date()).getTime() - start > 200) {
 					if (on_progress) {
 						on_progress(percent);
 					} else if (typeof callback_num !== "undefined") {
@@ -3421,10 +3412,10 @@ var LZMA = (function () {
 		function do_action() {
 			var res;
 			
-			start = new Date()[__getTime]();
+			start = (new Date()).getTime();
 			
 			while ($execute_0(this$static.d)) {
-				if (new Date()[__getTime]() - start > 200) {
+				if ((new Date()).getTime() - start > 200) {
 					if (has_progress) {
 						percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
 						/// If about 200 miliseconds have passed, update the progress.					
