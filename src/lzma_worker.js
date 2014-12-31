@@ -3387,7 +3387,6 @@ var LZMA = (function () {
 			callback_num,
 			on_finish,
 			on_progress,
-			sent_unknown,
 			has_progress;
 		
 		if (typeof arguments[1] === "function") {
@@ -3403,10 +3402,12 @@ var LZMA = (function () {
 		
 		this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
 		
+		has_progress = toDouble(this$static.d.length_0) > -1;
+		
 		if (on_progress) {
-			on_progress(0);
+			on_progress(has_progress ? 0 : -1);
 		} else if (typeof callback_num !== "undefined") {
-			update_progress(0, callback_num);
+			update_progress(has_progress ? 0 : -1, callback_num);
 		}
 		
 		function do_action() {
@@ -3416,28 +3417,29 @@ var LZMA = (function () {
 			
 			while ($execute_0(this$static.d)) {
 				if ((new Date()).getTime() - start > 200) {
-					if (has_progress) {
-						percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-						/// If about 200 miliseconds have passed, update the progress.					
-						if (on_progress) {
-							on_progress(percent);
-						} else if (typeof callback_num !== "undefined") {
-							update_progress(percent, callback_num);
-						}
-					} else if (!sent_unknown) {
-						update_progress(-1, callback_num);
-						sent_unknown = true;
-					}
+				    if (has_progress) {
+                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                        /// If about 200 miliseconds have passed, update the progress.					
+                        if (on_progress) {
+                            on_progress(percent);
+                        } else if (typeof callback_num !== "undefined") {
+                            update_progress(percent, callback_num);
+                        }
+                    }
+                    
+                    /// This allows other code to run, like the browser to update.
 					wait(do_action, 0);
 					return false;
 				}
 			}
 			
-			if (on_progress) {
-				on_progress(1);
-			} else if (typeof callback_num !== "undefined") {
-				update_progress(1, callback_num);
-			}
+			if (has_progress) {
+                if (on_progress) {
+                    on_progress(1);
+                } else if (typeof callback_num !== "undefined") {
+                    update_progress(1, callback_num);
+                }
+            }
 			
 			res = decode($toByteArray(this$static.d.output));
 			
@@ -3452,8 +3454,6 @@ var LZMA = (function () {
 				});
 			}
 		}
-		
-		has_progress = toDouble(this$static.d.length_0) > -1;
 		
 		wait(do_action, 0);
 	}
