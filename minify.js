@@ -37,7 +37,7 @@ function calculate_minify_value(props)
 
 function base54_64(arr)
 {
-    var chars = "_$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$",
         i,
         len = arr.length,
         new_names = [],
