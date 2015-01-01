@@ -1,4 +1,4 @@
-//! © Nathan Rugg <nmrugg@gmail.com> | MIT
+//! © 2015 Nathan Rugg <nmrugg@gmail.com> | MIT
 /// See LICENSE for more details.
 
 /// Does the environment support web workers?  If not, let's load the worker manually (without polluting the global scope).
