@@ -1108,7 +1108,6 @@ var LZMA = (function () {
 	}
 	
 	function $Init_5(this$static) {
-		var i;
 		this$static._bufferOffset = 0;
 		this$static._pos = 0;
 		this$static._streamPos = 0;
