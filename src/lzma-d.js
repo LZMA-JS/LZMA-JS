@@ -423,9 +423,8 @@ var LZMA = (function () {
     }
     
     var Class = make_thing(0);
-    _.typeName = null;
     
-    var Class = make_thing(12, new RuntimeException());
+    var ClassCastException = make_thing(12, new RuntimeException());
     
     
     
