@@ -4,7 +4,12 @@ var uglify = require("uglify-js"),
     zlib = require("zlib"),
     files = [
         "lzma_worker.js",
+        "lzma-d.js",
         "lzma.js",
+    ],
+    minify_props_files = [
+         "lzma_worker.js",
+         "lzma-d.js",
     ];
 
 function filesize(path, cb)
@@ -167,7 +172,7 @@ function minify_properties(code)
             },
         });
         
-        if (file === "lzma_worker.js") {
+        if (minify_props_files.indexOf(file) > -1) {
             result.code = minify_properties(result.code);
         }
         
