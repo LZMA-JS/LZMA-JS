@@ -90,10 +90,6 @@ var LZMA = (function () {
         return array;
     }
     
-    function getClass_2() {
-        return this.arrayClass$;
-    }
-    
     function initDim(arrayClass, typeId, queryId, length_0, seedType) {
         var result;
         result = createFromSeed(seedType, length_0);
@@ -120,8 +116,9 @@ var LZMA = (function () {
     }
     
     var Array_0 = make_thing(0);
-    _.getClass$ = getClass_2;
-    _.arrayClass$ = null;
+    _.getClass$ = function () {
+        return this.arrayClass$;
+    };
     _.length = 0;
     _.queryId$ = 0;
     
@@ -574,13 +571,7 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize))
-            throw $RuntimeException(new RuntimeException(), 'unexpected failure');
-        if (!$SetNumFastBytes(encoder, this$static.fb))
-            throw $RuntimeException(new RuntimeException(), 'unexpected failure');
-        if (!$SetMatchFinder(encoder, this$static.matchFinder))
-            throw $RuntimeException(new RuntimeException(), 'unexpected failure');
-        if (!$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
+        if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
             throw $RuntimeException(new RuntimeException(), 'unexpected failure');
     }
     /** ce */
@@ -723,7 +714,6 @@ var LZMA = (function () {
     
     var InWindow = make_thing(0);
     _._blockSize = 0;
-    _._bufferBase = null;
     _._bufferOffset = 0;
     _._keepSizeAfter = 0;
     _._keepSizeBefore = 0;
@@ -1120,7 +1110,7 @@ var LZMA = (function () {
                 $MakeAsChar(this$static._optimum[posMem]);
                 this$static._optimum[posMem].PosPrev = posMem - 1;
                 if (this$static._optimum[cur].Prev2) {
-                    this$static._optimum[posMem - 1].Prev1IsChar = false;
+                    this$static._optimum[posMem - 1].Prev1IsChar = 0;
                     this$static._optimum[posMem - 1].PosPrev = this$static._optimum[cur].PosPrev2;
                     this$static._optimum[posMem - 1].BackPrev = this$static._optimum[cur].BackPrev2;
                 }
@@ -1474,7 +1464,7 @@ var LZMA = (function () {
                     optimum.Price = curAndLenPrice;
                     optimum.PosPrev = 0;
                     optimum.BackPrev = i;
-                    optimum.Prev1IsChar = false;
+                    optimum.Prev1IsChar = 0;
                 }
             } while (--repLen >= 2);
         }
@@ -1493,7 +1483,7 @@ var LZMA = (function () {
                     optimum.Price = curAndLenPrice;
                     optimum.PosPrev = 0;
                     optimum.BackPrev = distance + 4;
-                    optimum.Prev1IsChar = false;
+                    optimum.Prev1IsChar = 0;
                 }
                 if (len == this$static._matchDistances[offs]) {
                     offs += 2;
@@ -1599,7 +1589,7 @@ var LZMA = (function () {
                 nextOptimum.Price = curAnd1Price;
                 nextOptimum.PosPrev = cur;
                 nextOptimum.BackPrev = -1;
-                nextOptimum.Prev1IsChar = false;
+                nextOptimum.Prev1IsChar = 0;
                 nextIsChar = true;
             }
             matchPrice = curPrice + ProbPrices[2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
@@ -1610,7 +1600,7 @@ var LZMA = (function () {
                     nextOptimum.Price = shortRepPrice;
                     nextOptimum.PosPrev = cur;
                     nextOptimum.BackPrev = 0;
-                    nextOptimum.Prev1IsChar = false;
+                    nextOptimum.Prev1IsChar = 0;
                     nextIsChar = true;
                 }
             }
@@ -1640,8 +1630,8 @@ var LZMA = (function () {
                         optimum.Price = curAndLenPrice;
                         optimum.PosPrev = cur + 1;
                         optimum.BackPrev = 0;
-                        optimum.Prev1IsChar = true;
-                        optimum.Prev2 = false;
+                        optimum.Prev1IsChar = 1;
+                        optimum.Prev2 = 0;
                     }
                 }
             }
@@ -1662,7 +1652,7 @@ var LZMA = (function () {
                         optimum.Price = curAndLenPrice;
                         optimum.PosPrev = cur;
                         optimum.BackPrev = repIndex;
-                        optimum.Prev1IsChar = false;
+                        optimum.Prev1IsChar = 0;
                     }
                 } while (--lenTest >= 2);
                 lenTest = lenTestTemp;
@@ -1690,8 +1680,8 @@ var LZMA = (function () {
                             optimum.Price = curAndLenPrice;
                             optimum.PosPrev = cur + lenTest + 1;
                             optimum.BackPrev = 0;
-                            optimum.Prev1IsChar = true;
-                            optimum.Prev2 = true;
+                            optimum.Prev1IsChar = 1;
+                            optimum.Prev2 = 1;
                             optimum.PosPrev2 = cur;
                             optimum.BackPrev2 = repIndex;
                         }
@@ -1722,7 +1712,7 @@ var LZMA = (function () {
                     optimum.Price = curAndLenPrice;
                     optimum.PosPrev = cur;
                     optimum.BackPrev = curBack + 4;
-                    optimum.Prev1IsChar = false;
+                    optimum.Prev1IsChar = 0;
                 }
                 if (lenTest == this$static._matchDistances[offs]) {
                     if (lenTest < numAvailableBytesFull) {
@@ -1746,8 +1736,8 @@ var LZMA = (function () {
                                 optimum.Price = curAndLenPrice;
                                 optimum.PosPrev = cur + lenTest + 1;
                                 optimum.BackPrev = 0;
-                                optimum.Prev1IsChar = true;
-                                optimum.Prev2 = true;
+                                optimum.Prev1IsChar = 1;
+                                optimum.Prev2 = 1;
                                 optimum.PosPrev2 = cur;
                                 optimum.BackPrev2 = curBack + 4;
                             }
@@ -2150,12 +2140,12 @@ var LZMA = (function () {
     
     function $MakeAsChar(this$static) {
         this$static.BackPrev = -1;
-        this$static.Prev1IsChar = false;
+        this$static.Prev1IsChar = 0;
     }
     
     function $MakeAsShortRep(this$static) {
         this$static.BackPrev = 0;
-        this$static.Prev1IsChar = false;
+        this$static.Prev1IsChar = 0;
     }
     
     var Encoder$Optimal = make_thing(19);
@@ -2167,8 +2157,6 @@ var LZMA = (function () {
     _.Backs3 = 0;
     _.PosPrev = 0;
     _.PosPrev2 = 0;
-    _.Prev1IsChar = false;
-    _.Prev2 = false;
     _.Price = 0;
     _.State = 0;
     /** ce */

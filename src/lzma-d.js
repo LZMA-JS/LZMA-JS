@@ -69,10 +69,6 @@ var LZMA = (function () {
         a[a.explicitLength++] = x;
     }
     
-    function $appendNonNull(a, x) {
-        a[a.explicitLength++] = x;
-    }
-    
     function $toString(a) {
         var s_0, s;
         s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
@@ -92,10 +88,6 @@ var LZMA = (function () {
             }
         }
         return array;
-    }
-    
-    function getClass_2() {
-        return this.arrayClass$;
     }
     
     function initDim(arrayClass, typeId, queryId, length_0, seedType) {
@@ -133,8 +125,9 @@ var LZMA = (function () {
     }
     
     var Array_0 = make_thing(0);
-    _.getClass$ = getClass_2;
-    _.arrayClass$ = null;
+    _.getClass$ = function () {
+        return this.arrayClass$;
+    };
     _.length = 0;
     _.queryId$ = 0;
     
@@ -1172,7 +1165,7 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                $appendNonNull(buf.data, String.fromCharCode(x & 65535));
+                $append(buf.data, String.fromCharCode(x & 65535));
             } else if ((x & 224) == 192) {
                 if (i + 1 >= utf.length) {
                     /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
@@ -1199,7 +1192,7 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                $appendNonNull(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
+                $append(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
             } else {
                 /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
                 return convert_binary_arr(utf);
