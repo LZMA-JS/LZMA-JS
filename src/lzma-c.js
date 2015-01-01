@@ -69,20 +69,6 @@ var LZMA = (function () {
 	_ = RuntimeException[__prototype] = new Exception();
 	_.getClass$ = c;
 	_.typeId$ = 5;
-	function $append(a, x) {
-		a[a.explicitLength++] = x;
-	}
-	
-	function $appendNonNull(a, x) {
-		a[a.explicitLength++] = x;
-	}
-	
-	function $toString(a) {
-		var s_0, s;
-		s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
-		a[a.explicitLength++] = s_0;
-		return s_0;
-	}
 	
 	function createFromSeed(seedType, length_0) {
 		var array = new Array(length_0);
@@ -260,24 +246,7 @@ var LZMA = (function () {
 	function eq(a, b) {
 		return a[0] == b[0] && a[1] == b[1];
 	}
-	
-	function fromDouble(value) {
-		if (isNaN(value)) {
-			return $clinit_10() , ZERO;
-		}
-		if (value < -9223372036854775808) {
-			return $clinit_10() , MIN_VALUE;
-		}
-		if (value >= 9223372036854775807) {
-			return $clinit_10() , MAX_VALUE;
-		}
-		if (value > 0) {
-			return create(Math.floor(value), 0);
-		} else {
-			return create(Math.ceil(value), 0);
-		}
-	}
-	
+		
 	function fromInt(value) {
 		var rebase, result;
 		if (value > -129 && value < 128) {
@@ -433,13 +402,7 @@ var LZMA = (function () {
 			this$static.count = buf.length;
 		return this$static;
 	}
-	
-	function $read(this$static) {
-		if (this$static.pos >= this$static.count)
-			return -1;
-		return this$static.buf[this$static.pos++] & 255;
-	}
-	
+		
 	function $read_0(this$static, buf, off, len) {
 		if (this$static.pos >= this$static.count)
 			return -1;
@@ -506,17 +469,6 @@ var LZMA = (function () {
 	_.typeId$ = 0;
 	_.buf = null;
 	_.count = 0;
-	function $IOException(this$static, message) {
-		this$static.detailMessage = message;
-		return this$static;
-	}
-		
-	function IOException() {
-	}
-	
-	_ = IOException[__prototype] = new Exception();
-	_.getClass$ = c;
-	_.typeId$ = 7;
 	
 	function ArithmeticException() {
 	}
@@ -745,53 +697,7 @@ var LZMA = (function () {
 	_.typeId$ = 0;
 	_.output = null;
 	
-	function $init_0(this$static, input, output) {
-		var decoder,
-			hex_length = "",
-			i,
-			properties,
-			r,
-			tmp_length;
-		
-		properties = initDim(_3B_classLit, 0, -1, 5, 1);
-		for (i = 0; i < properties.length; ++i) {
-			r = $read(input);
-			if (r == -1)
-				throw $IOException(new IOException(), 'truncated input');
-			properties[i] = r << 24 >> 24;
-		}
-		
-		decoder = $Decoder(new Decoder());
-		if (!$SetDecoderProperties(decoder, properties)) {
-			throw $IOException(new IOException(), 'corrupted input');
-		}
-		for (i = 0; i < 64; i += 8) {
-			r = $read(input);
-			if (r == -1)
-				throw $IOException(new IOException(), 'truncated input');
-			r = r.toString(16);
-			if (r.length == 1) r = "0" + r;
-			hex_length = r + "" + hex_length;
-		}
-		
-		/// Was the length set in the header (if it was compressed from a stream, the length is all f's).
-		if (/^0+$|^f+$/i.test(hex_length)) {
-			/// The length is unknown, so set to -1.
-			this$static.length_0 = N1_longLit;
-		} else {
-			///NOTE: If there is a problem with the decoder because of the length, you can always set the length to -1 (N1_longLit) which means unknown.
-			tmp_length = parseInt(hex_length, 16);
-			/// If the length is too long to handle, just set it to unknown.
-			if (tmp_length > 4294967295) {
-				this$static.length_0 = N1_longLit;
-			} else {
-				this$static.length_0 = fromDouble(tmp_length);
-			}
-		}
-		
-		this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
-	}
-	
+
 	
 	function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv) {
 		var blockSize;
@@ -1240,7 +1146,7 @@ var LZMA = (function () {
 			if (this$static.encoder) {
 				$processEncoderChunk(this$static);
 			} else {
-				$processDecoderChunk(this$static);
+				throw new Error("No decoding");
 			}
 			exception = false;
 			return this$static.alive;
@@ -2714,8 +2620,6 @@ var LZMA = (function () {
 		_3C_classLit = createForArray('', '[C'),
 		_3I_classLit = createForArray('', '[I'),
 		_3S_classLit = createForArray('', '[S'),
-		bitTreeDecoder_2_classLit = createForArray('[Ll', 'bd'),
-		decoder2_2_classLit = createForArray('[Ll.', 'd'),
 		optimal_2_classLit = createForArray('[Ll.', 'o'),
 		bitTreeEncoder_2_classLit = createForArray('[Ll', 'be'),
 		_3J_classLit = createForArray('', '[J'),
@@ -2764,8 +2668,6 @@ var LZMA = (function () {
                 if (e && e.data) {
                     if (e.data.action === action_compress) {
                         LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
-                    } else if (e.data.action === action_decompress) {
-                        LZMA.decompress(e.data.data, e.data.callback_num);
                     }
                 }
             };
