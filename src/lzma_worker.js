@@ -10,9 +10,17 @@ var LZMA = (function () {
         action_decompress = 2,
         action_progress   = 3,
         wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
-        c = function () {return {typeName: String(this.typeId$)};},
-        __prototype = "prototype",
+        c = function () {return {typeName: this.typeId$+""};},
         __4294967296 = 4294967296;
+    
+    function make_thing(typeId, proto)
+    {
+        function func() {}
+        _ = func.prototype = proto || new Object_0();
+        _.getClass$ = c;
+        _.typeId$ = typeId;
+        return func;
+    }
     
     function update_progress(percent, callback_num) {
         postMessage({
@@ -35,36 +43,20 @@ var LZMA = (function () {
         Pffffffff_longLit = [4294967295, 0],
         P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
     
-    function Object_0() {}
-    
-    _ = Object_0[__prototype] = {};
-    _.getClass$ = c;
+    var Object_0 = make_thing(1, {});
     _.typeMarker$ = nullMethod;
-    _.typeId$ = 1;
     
-    function Throwable() {}
+    var Throwable = make_thing(3);
     
-    _ = Throwable[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 3;
-    _.detailMessage = null;
+    var Exception = make_thing(4, new Throwable());
     
-    function Exception() {}
-    
-    _ = Exception[__prototype] = new Throwable();
-    _.getClass$ = c;
-    _.typeId$ = 4;
     function $RuntimeException(this$static, message) {
         this$static.detailMessage = message;
         return this$static;
     }
     
+    var RuntimeException = make_thing(5, new Exception());
     
-    function RuntimeException() {}
-    
-    _ = RuntimeException[__prototype] = new Exception();
-    _.getClass$ = c;
-    _.typeId$ = 5;
     function $append(a, x) {
         a[a.explicitLength++] = x;
     }
@@ -129,14 +121,12 @@ var LZMA = (function () {
         return array[index] = value;
     }
     
-    function Array_0() {}
-    
-    _ = Array_0[__prototype] = new Object_0();
+    var Array_0 = make_thing(0);
     _.getClass$ = getClass_2;
-    _.typeId$ = 0;
     _.arrayClass$ = null;
     _.length = 0;
     _.queryId$ = 0;
+    
     function $clinit_4() {
         $clinit_4 = nullMethod;
         expandoNames_0 = [];
@@ -417,10 +407,7 @@ var LZMA = (function () {
     
     var LN_2, MAX_VALUE, MIN_VALUE, NEG_ONE, ONE, TWO, TWO_PWR_24, ZERO;
     
-    function InputStream() {}
-    _ = InputStream[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var InputStream = make_thing(0);
     
     function $ByteArrayInputStream(this$static, buf) {
         $ByteArrayInputStream_0(this$static, buf, 0, buf.length);
@@ -453,17 +440,12 @@ var LZMA = (function () {
         
     function ByteArrayInputStream() {}
     
-    _ = ByteArrayInputStream[__prototype] = new InputStream();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var InputStream = make_thing(0, new InputStream());
     _.buf = null;
     _.count = 0;
     _.pos = 0;
-        
-    function OutputStream() {}
-    _ = OutputStream[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    
+    var OutputStream = make_thing(0);
     
     function $ByteArrayOutputStream(this$static) {
         this$static.buf = initDim(_3B_classLit, 0, -1, 32, 1);
@@ -497,11 +479,8 @@ var LZMA = (function () {
         arraycopy(buf, off, this$static.buf, this$static.count, len);
         this$static.count += len;
     }
-        
-    function ByteArrayOutputStream() {}
-    _ = ByteArrayOutputStream[__prototype] = new OutputStream();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    
+    var ByteArrayOutputStream = make_thing(0, new OutputStream());
     _.buf = null;
     _.count = 0;
     
@@ -509,26 +488,15 @@ var LZMA = (function () {
         this$static.detailMessage = message;
         return this$static;
     }
-        
-    function IOException() {}
-    _ = IOException[__prototype] = new Exception();
-    _.getClass$ = c;
-    _.typeId$ = 7;
     
-    function ArithmeticException() {}
-    _ = ArithmeticException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 8;
+    var IOException = make_thing(7);
     
     function $ArrayStoreException(this$static, message) {
         this$static.detailMessage = message;
         return this$static;
     }
     
-    function ArrayStoreException() {}
-    _ = ArrayStoreException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 9;
+    var ArrayStoreException = make_thing(9, new RuntimeException());
     
     function createForArray(packageName, className) {
         var clazz;
@@ -537,40 +505,21 @@ var LZMA = (function () {
         return clazz;
     }
     
-    function Class() {}
-    _ = Class[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Class = make_thing(0);
     _.typeName = null;
     
-    function ClassCastException() {}
-    _ = ClassCastException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 12;
+    var Class = make_thing(12, new RuntimeException());
     
-    function Enum() {}
-    _ = Enum[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
     function $IllegalArgumentException(this$static, message) {
         this$static.detailMessage = message;
         return this$static;
     }
     
-    function IllegalArgumentException() {}
-    _ = IllegalArgumentException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 13;
+    var IllegalArgumentException = make_thing(13, new RuntimeException());
     
-    function IllegalStateException() {}
-    _ = IllegalStateException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 14;
+    var IllegalStateException = make_thing(14, new RuntimeException());
     
-    function IndexOutOfBoundsException() {}
-    _ = IndexOutOfBoundsException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 15;
+    var IndexOutOfBoundsException = make_thing(15, new RuntimeException());
     
     function max(x, y) {
         return x > y?x:y;
@@ -580,11 +529,7 @@ var LZMA = (function () {
         return x < y?x:y;
     }
     
-    
-    function NullPointerException() {}
-    _ = NullPointerException[__prototype] = new RuntimeException();
-    _.getClass$ = c;
-    _.typeId$ = 16;
+    var NullPointerException = make_thing(16, new RuntimeException());
     
     function $equals(this$static, other) {
         if (other == null) {
@@ -600,7 +545,7 @@ var LZMA = (function () {
         }
     }
     
-    _ = String[__prototype];
+    _ = String.prototype;
     _.getClass$ = c;
     _.typeId$ = 2;
     
@@ -611,11 +556,8 @@ var LZMA = (function () {
     }
     
     
-    function StringBuilder() {}
+    var StringBuilder = make_thing(0);
     
-    _ = StringBuilder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
     function arraycopy(src, srcOfs, dest, destOfs, len) {
         var destArray, destEnd, destTypeName, destlen, i, srcArray, srcTypeName, srclen;
         
@@ -658,7 +600,6 @@ var LZMA = (function () {
         }
     }
     
-    
     function $configure(this$static, encoder) {
     if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize))
         throw $RuntimeException(new RuntimeException(), 'unexpected failure');
@@ -670,24 +611,12 @@ var LZMA = (function () {
         throw $RuntimeException(new RuntimeException(), 'unexpected failure');
     }
     
-    
-    function CompressionMode() {}
-    _ = CompressionMode[__prototype] = new Enum();
-    _.getClass$ = c;
-    _.typeId$ = 0;
-    _.dicSize = 0;
-    _.fb = 0;
-    _.lc = 0;
-    _.lp = 0;
-    _.matchFinder = 0;
-    _.pb = 0;
-    
     function $execute(this$static) {
         try {
             return $processChunk(this$static.chunker);
         } catch (err) {
-        this$static.exception = err;
-        return false;
+            this$static.exception = err;
+            return false;
         }
     }
     
@@ -708,12 +637,7 @@ var LZMA = (function () {
     }
     
     
-    function LZMACompressor() {
-    }
-    
-    _ = LZMACompressor[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var LZMACompressor = make_thing(0);
     _.chunker = null;
     
     function $LZMAByteArrayCompressor(this$static, data, mode) {
@@ -727,10 +651,7 @@ var LZMA = (function () {
     }
     
     
-    function LZMAByteArrayCompressor() {}
-    _ = LZMAByteArrayCompressor[__prototype] = new LZMACompressor();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var LZMAByteArrayCompressor = make_thing(0, new LZMACompressor());
     _.output = null;
     
     function $init_0(this$static, input, output) {
@@ -780,11 +701,7 @@ var LZMA = (function () {
         this$static.chunker = $CodeInChunks(decoder, input, output, this$static.length_0);
     }
     
-    
-    function LZMADecompressor() {}
-    _ = LZMADecompressor[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var LZMADecompressor = make_thing(0);
     _.chunker = null;
     _.exception = null;
     _.length_0 = P0_longLit;
@@ -796,10 +713,7 @@ var LZMA = (function () {
     }
     
     
-    function LZMAByteArrayDecompressor() {}
-    _ = LZMAByteArrayDecompressor[__prototype] = new LZMADecompressor();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var LZMAByteArrayDecompressor = make_thing(0, new LZMADecompressor());
     _.output = null;
     
     function $Create_4(this$static, keepSizeBefore, keepSizeAfter, keepSizeReserv) {
@@ -895,10 +809,7 @@ var LZMA = (function () {
     }
     
     
-    function InWindow() {}
-    _ = InWindow[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var InWindow = make_thing(0);
     _._blockSize = 0;
     _._bufferBase = null;
     _._bufferOffset = 0;
@@ -1191,11 +1102,7 @@ var LZMA = (function () {
         while (--num != 0);
     }
     
-    
-    function BinTree() {}
-    _ = BinTree[__prototype] = new InWindow();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var BinTree = make_thing(0, new InWindow());
     _.HASH_ARRAY = true;
     _._cutValue = 255;
     _._cyclicBufferPos = 0;
@@ -1284,10 +1191,7 @@ var LZMA = (function () {
     }
     
     
-    function OutWindow() {}
-    _ = OutWindow[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var OutWindow = make_thing(0);
     _._buffer = null;
     _._pos = 0;
     _._stream = null;
@@ -1371,10 +1275,7 @@ var LZMA = (function () {
     }
     
     
-    function Chunker() {}
-    _ = Chunker[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Chunker = make_thing(0);
     _.alive = false;
     _.decoder = null;
     _.encoder = null;
@@ -1563,11 +1464,7 @@ var LZMA = (function () {
         return true;
     }
     
-    
-    function Decoder() {}
-    _ = Decoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Decoder = make_thing(0);
     _.m_DictionarySize = -1;
     _.m_DictionarySizeCheck = -1;
     _.m_PosStateMask = 0;
@@ -1620,10 +1517,7 @@ var LZMA = (function () {
     }
     
     
-    function Decoder$LenDecoder() {}
-    _ = Decoder$LenDecoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Decoder$LenDecoder = make_thing(0);
     _.m_NumPosStates = 0;
     
     function $Create_0(this$static, numPosBits, numPrevBits) {
@@ -1652,10 +1546,7 @@ var LZMA = (function () {
     }
     
     
-    function Decoder$LiteralDecoder() {}
-    _ = Decoder$LiteralDecoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Decoder$LiteralDecoder = make_thing(0);
     _.m_Coders = null;
     _.m_NumPosBits = 0;
     _.m_NumPrevBits = 0;
@@ -1693,11 +1584,8 @@ var LZMA = (function () {
         return this$static;
     }
     
-    function Decoder$LiteralDecoder$Decoder2() {}
-    _ = Decoder$LiteralDecoder$Decoder2[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 17;
-    
+    var Decoder$LiteralDecoder$Decoder2 = make_thing(17);
+        
     function $clinit_59() {
         $clinit_59 = nullMethod;
         var c, j, k, slotFast;
@@ -2541,10 +2429,7 @@ var LZMA = (function () {
         return g_FastPos[pos >> 26] + 52;
     }
     
-    function Encoder() {}
-    _ = Encoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Encoder = make_thing(0);
     _._additionalOffset = 0;
     _._alignPriceCount = 0;
     _._dictionarySize = 4194304;
@@ -2635,13 +2520,9 @@ var LZMA = (function () {
             prices[st + i] = b1 + $GetPrice_1(this$static._highCoder, i - 8 - 8);
         }
     }
-        
-    function Encoder$LenEncoder() {
-    }
     
-    _ = Encoder$LenEncoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Encoder$LenEncoder = make_thing(0);
+    
     function $Encode_0(this$static, rangeEncoder, symbol, posState) {
         $Encode(this$static, rangeEncoder, symbol, posState);
         if (--this$static._counters[posState] == 0) {
@@ -2669,13 +2550,9 @@ var LZMA = (function () {
         }
     }
     
-    function Encoder$LenPriceTableEncoder() {
-    }
-    
-    _ = Encoder$LenPriceTableEncoder[__prototype] = new Encoder$LenEncoder();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Encoder$LenPriceTableEncoder = make_thing(0, new Encoder$LenEncoder());
     _._tableSize = 0;
+    
     function $Create_1(this$static, numPosBits, numPrevBits) {
         var i, numStates;
         if (this$static.m_Coders != null && this$static.m_NumPrevBits == numPrevBits && this$static.m_NumPosBits == numPosBits) {
@@ -2703,10 +2580,7 @@ var LZMA = (function () {
         }
     }
     
-    function Encoder$LiteralEncoder() {}
-    _ = Encoder$LiteralEncoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Encoder$LiteralEncoder = make_thing(0);
     _.m_Coders = null;
     _.m_NumPosBits = 0;
     _.m_NumPrevBits = 0;
@@ -2769,12 +2643,8 @@ var LZMA = (function () {
         return price;
     }
     
-    function Encoder$LiteralEncoder$Encoder2() {
-    }
+    var Encoder$LiteralEncoder$Encoder2 = make_thing(18);
     
-    _ = Encoder$LiteralEncoder$Encoder2[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 18;
     function $MakeAsChar(this$static) {
         this$static.BackPrev = -1;
         this$static.Prev1IsChar = false;
@@ -2785,10 +2655,7 @@ var LZMA = (function () {
         this$static.Prev1IsChar = false;
     }
     
-    function Encoder$Optimal() {}
-    _ = Encoder$Optimal[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 19;
+    var Encoder$Optimal = make_thing(19);
     _.BackPrev = 0;
     _.BackPrev2 = 0;
     _.Backs0 = 0;
@@ -2843,14 +2710,10 @@ var LZMA = (function () {
         return symbol;
     }
     
-    function BitTreeDecoder() {
-    }
-    
-    _ = BitTreeDecoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 20;
+    var BitTreeDecoder = make_thing(20);
     _.Models = null;
     _.NumBitLevels = 0;
+    
     function $BitTreeEncoder(this$static, numBitLevels) {
         this$static.NumBitLevels = numBitLevels;
         this$static.Models = initDim(_3S_classLit, 0, -1, 1 << numBitLevels, 1);
@@ -2929,10 +2792,7 @@ var LZMA = (function () {
         return price;
     }
     
-    function BitTreeEncoder() {}
-    _ = BitTreeEncoder[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 21;
+    var BitTreeEncoder = make_thing(21);
     _.Models = null;
     _.NumBitLevels = 0;
     
@@ -2992,10 +2852,7 @@ var LZMA = (function () {
         }
     }
     
-    function Decoder_0() {}
-    _ = Decoder_0[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Decoder_0 = make_thing(0);
     _.Code = 0;
     _.Range = 0;
     _.Stream = null;
@@ -3106,10 +2963,7 @@ var LZMA = (function () {
         return arr;
     }
     
-    function Encoder_0() {}
-    _ = Encoder_0[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var Encoder_0 = make_thing(0);
     _.Low = P0_longLit;
     _.Range = 0;
     _.Stream = null;
@@ -3355,10 +3209,7 @@ var LZMA = (function () {
         wait(do_action, 0);
     }
     
-    function LZMAJS () {}
-    _ = LZMAJS[__prototype] = new Object_0();
-    _.getClass$ = c;
-    _.typeId$ = 0;
+    var LZMAJS = make_thing(0);
     _.c = null;
     _.d = null;
     
