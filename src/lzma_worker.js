@@ -1114,9 +1114,6 @@ var LZMA = (function () {
 		this$static._streamPos = 0;
 		this$static._streamEndWasReached = false;
 		$ReadBlock(this$static);
-		for (i = 0; i < this$static._hashSizeSum; ++i) {
-			this$static._hash[i] = 0;
-		}
 		this$static._cyclicBufferPos = 0;
 		$ReduceOffsets(this$static, -1);
 	}
