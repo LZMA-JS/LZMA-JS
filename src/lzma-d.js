@@ -60,17 +60,6 @@ var LZMA = (function () {
 	_ = RuntimeException[__prototype] = new Exception();
 	_.getClass$ = c;
 	_.typeId$ = 5;
-	function $JavaScriptException(this$static) {
-		return this$static;
-	}
-	
-	
-	function JavaScriptException() {
-	}
-	
-	_ = JavaScriptException[__prototype] = new RuntimeException();
-	_.getClass$ = c;
-	_.typeId$ = 6;
 	function $append(a, x) {
 		a[a.explicitLength++] = x;
 	}
@@ -168,10 +157,7 @@ var LZMA = (function () {
 	}
 	
 	var expandoNames_0, expandoValues_0;
-	function canCast(srcId, dstId) {
-		return srcId && !!typeIdArray[srcId][dstId];
-	}
-	
+		
 	function canCastUnsafe(srcId, dstId) {
 		return srcId && typeIdArray[srcId][dstId];
 	}
@@ -182,11 +168,7 @@ var LZMA = (function () {
 		}
 		return src;
 	}
-	
-	function instanceOf(src, dstId) {
-		return src != null && canCast(src.typeId$, dstId);
-	}
-		
+			
 	var typeIdArray = [
 			{},
 			{},
@@ -212,13 +194,6 @@ var LZMA = (function () {
 			{8:1},
 			{9:1}
 		];
-
-	function caught(e) {
-		if (e != null && canCast(e.typeId$, 2)) {
-			return e;
-		}
-		return $JavaScriptException(new JavaScriptException(), e);
-	}
 	
 	function add(a, b) {
 		var newHigh, newLow;
@@ -590,19 +565,11 @@ var LZMA = (function () {
 	}
 	
 	function $execute_0(this$static) {
-		var $e0, e;
 		try {
 			return $processChunk(this$static.chunker);
-		}
-		catch (err) {
-			$e0 = caught(err);
-			if (instanceOf($e0, 10)) {
-				e = $e0;
-				this$static.exception = e;
-				return false;
-			} else {
-				throw $e0;
-			}
+		} catch (err) {
+		  this$static.exception = err;
+		  return false;
 		}
 	}
 	
