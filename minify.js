@@ -19,7 +19,6 @@ function filesize(path, cb)
     return fs.statSync(path).size;
 }
 
-
 function sort_obj(obj)
 {
     return Object.keys(obj).sort(function sorter(a, b)
@@ -74,7 +73,7 @@ function minify_properties(code)
     /// We want to replace propeters that have an underscore or a dollar sign.
     code.replace(prop_regex, function calc(prop)
     {
-        prop = prop.substr(1);
+        prop = prop.substr(1); /// Remove the perios.
         if (ignore.indexOf(prop) === -1) {
             if (!props[prop]) {
                 props[prop] = 1;
@@ -84,33 +83,18 @@ function minify_properties(code)
         }
     });
     
-    //console.log(props);
-    //console.log(Object.keys(props).length);
     calculate_minify_value(props);
     sorted_props = sort_obj(props);
     
-    //console.log(props);
-    //console.log(sorted_props);
-    /*
-    sorted_props.forEach(function (prop)
-    {
-        console.log(prop, props[prop])
-    });
-    */
     new_names = base54_64(sorted_props);
-    /*
-    sorted_props.forEach(function (prop, i)
-    {
-        console.log(prop, props[prop], new_names[i])
-    });
-    */
     
     code = code.replace(prop_regex, function calc(prop)
     {
         var index,
-            partial_prop = prop.substr(1);
+            partial_prop = prop.substr(1); /// Remove the perios.
+        
         index = sorted_props.indexOf(partial_prop);
-        //console.log(prop, index);
+        
         if (index > -1) {
             return "." + new_names[index];
         }
@@ -143,31 +127,30 @@ function minify_properties(code)
         
         result = uglify.minify(full_path, {
             mangle: {
-                sort: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+                sort:     false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
                 toplevel: true,
             },
-            comments: true,
             compress: {
-                sequences: true,
-                dead_code: true,
+                sequences:    true,
+                dead_code:    true,
                 conditionals: true,
-                booleans: true,
-                unused: true,
-                loops: true,
-                if_return: true,
-                join_vars: true,
+                booleans:     true,
+                unused:       true,
+                loops:        true,
+                if_return:    true,
+                join_vars:    true,
                 pure_getters: true,
-                cascade: true,
-                join_vars: true,
-                evaluate: true,
-                comparisons: true,
-                properties: true,
-                negate_iife: true,
-                keep_fargs: false,
-                hoist_vars: false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
-                hoist_funs: true, /// As TRUE, the plain JS is bigger, but gzipped is smaller!
-                warnings: true,
-                unsafe: true,
+                cascade:      true,
+                join_vars:    true,
+                evaluate:     true,
+                comparisons:  true,
+                properties:   true,
+                negate_iife:  true,
+                keep_fargs:   false,
+                hoist_vars:   false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
+                hoist_funs:   true, /// As TRUE, the plain JS is bigger, but gzipped is smaller!
+                warnings:     true,
+                unsafe:       true,
             },
             output: {
                 comments: /^!|@preserve|@license|@cc_on/i,
