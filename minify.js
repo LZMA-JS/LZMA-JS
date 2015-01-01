@@ -4,11 +4,13 @@ var uglify = require("uglify-js"),
     zlib = require("zlib"),
     files = [
         "lzma_worker.js",
+        "lzma-c.js",
         "lzma-d.js",
         "lzma.js",
     ],
     minify_props_files = [
          "lzma_worker.js",
+         "lzma-c.js",
          "lzma-d.js",
     ];
 
