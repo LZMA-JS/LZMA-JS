@@ -6,8 +6,7 @@
 /* global setImmediate, setTimeout, window, onmessage */
 
 var LZMA = (function () {
-	var action_compress   = 1,
-		action_decompress = 2,
+	var action_decompress = 2,
 		action_progress   = 3,
 		wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
 		c = function () {return {typeName: String(this.typeId$)};},
