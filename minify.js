@@ -205,7 +205,7 @@ split_lzma_worker();
             
             ///NOTE: We could write the file if we wanted to like this: fs.writeFileSync(p.join(__dirname, "src", p.basename(file, ext) + "-min" + ext + ".gz"), buffer);
             console.log("Gzipped size:  " + gzmin_size + " bytes");
-            console.log("gzipped ratio: " + (orig_size / gzmin_size).toFixed(4) + " x smaller");
+            console.log("Gzipped ratio: " + (orig_size / gzmin_size).toFixed(4) + " x smaller");
             console.log("");
             loop(i + 1);
         });
