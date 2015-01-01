@@ -45,8 +45,7 @@ function decompression_test(compressed_file, correct_filename, next) {
         }
         
         fs.readFile(compressed_file, function (err, buffer) {
-            var orig_arr = buffer2arr(buffer),
-                deco_start;
+            var deco_start;
             
             if (err) {
                 throw err;
@@ -54,7 +53,7 @@ function decompression_test(compressed_file, correct_filename, next) {
             
             deco_start = (new Date()).getTime();
             try {
-                my_lzma.decompress(orig_arr, function (result) {
+                my_lzma.decompress(buffer, function (result) {
                     var deco_speed = (new Date()).getTime() - deco_start,
                         correct_result;
                     
@@ -63,7 +62,7 @@ function decompression_test(compressed_file, correct_filename, next) {
                     if (typeof result === "string") {
                         correct_result = correct_buffer.toString();
                     } else {
-                        correct_result = JSON.stringify(buffer2arr(correct_buffer));
+                        correct_result = JSON.stringify(correct_buffer);
                         result = JSON.stringify(result);
                     }
                     if (correct_result !== result) {
