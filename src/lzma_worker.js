@@ -1401,70 +1401,70 @@ var LZMA = (function () {
     }
     
     function $CodeOneChunk(this$static) {
-    var decoder2, distance, len, numDirectBits, posSlot, posState;
-    posState = lowBits_0(this$static.nowPos64) & this$static.m_PosStateMask;
-    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsMatchDecoders, (this$static.state << 4) + posState) == 0) {
-        decoder2 = $GetDecoder(this$static.m_LiteralDecoder, lowBits_0(this$static.nowPos64), this$static.prevByte);
-        if (this$static.state < 7) {
-        this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
-        }
-        else {
-        this$static.prevByte = $DecodeWithMatchByte(decoder2, this$static.m_RangeDecoder, $GetByte(this$static.m_OutWindow, this$static.rep0));
-        }
-        $PutByte(this$static.m_OutWindow, this$static.prevByte);
-        this$static.state = StateUpdateChar(this$static.state);
-        this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
-    } else {
-        if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepDecoders, this$static.state) == 1) {
-            len = 0;
-            if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG0Decoders, this$static.state) == 0) {
-                if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRep0LongDecoders, (this$static.state << 4) + posState) == 0) {
-                    this$static.state = this$static.state < 7?9:11;
-                    len = 1;
+        var decoder2, distance, len, numDirectBits, posSlot, posState;
+        posState = lowBits_0(this$static.nowPos64) & this$static.m_PosStateMask;
+        if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsMatchDecoders, (this$static.state << 4) + posState) == 0) {
+            decoder2 = $GetDecoder(this$static.m_LiteralDecoder, lowBits_0(this$static.nowPos64), this$static.prevByte);
+            if (this$static.state < 7) {
+            this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
+            }
+            else {
+            this$static.prevByte = $DecodeWithMatchByte(decoder2, this$static.m_RangeDecoder, $GetByte(this$static.m_OutWindow, this$static.rep0));
+            }
+            $PutByte(this$static.m_OutWindow, this$static.prevByte);
+            this$static.state = StateUpdateChar(this$static.state);
+            this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
+        } else {
+            if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepDecoders, this$static.state) == 1) {
+                len = 0;
+                if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG0Decoders, this$static.state) == 0) {
+                    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRep0LongDecoders, (this$static.state << 4) + posState) == 0) {
+                        this$static.state = this$static.state < 7?9:11;
+                        len = 1;
+                    }
+                } else {
+                    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG1Decoders, this$static.state) == 0) {
+                        distance = this$static.rep1;
+                    } else {
+                        if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG2Decoders, this$static.state) == 0) {
+                            distance = this$static.rep2;
+                        } else {
+                            distance = this$static.rep3;
+                            this$static.rep3 = this$static.rep2;
+                        }
+                        this$static.rep2 = this$static.rep1;
+                    }
+                    this$static.rep1 = this$static.rep0;
+                    this$static.rep0 = distance;
+                }
+                if (len == 0) {
+                    len = $Decode(this$static.m_RepLenDecoder, this$static.m_RangeDecoder, posState) + 2;
+                    this$static.state = this$static.state < 7?8:11;
                 }
             } else {
-                if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG1Decoders, this$static.state) == 0) {
-                    distance = this$static.rep1;
-                } else {
-                    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG2Decoders, this$static.state) == 0) {
-                        distance = this$static.rep2;
-                    } else {
-                        distance = this$static.rep3;
-                        this$static.rep3 = this$static.rep2;
-                    }
-                    this$static.rep2 = this$static.rep1;
-                }
+                this$static.rep3 = this$static.rep2;
+                this$static.rep2 = this$static.rep1;
                 this$static.rep1 = this$static.rep0;
-                this$static.rep0 = distance;
-            }
-            if (len == 0) {
-                len = $Decode(this$static.m_RepLenDecoder, this$static.m_RangeDecoder, posState) + 2;
-                this$static.state = this$static.state < 7?8:11;
-            }
-        } else {
-            this$static.rep3 = this$static.rep2;
-            this$static.rep2 = this$static.rep1;
-            this$static.rep1 = this$static.rep0;
-            len = 2 + $Decode(this$static.m_LenDecoder, this$static.m_RangeDecoder, posState);
-            this$static.state = this$static.state < 7?7:10;
-            posSlot = $Decode_0(this$static.m_PosSlotDecoder[GetLenToPosState(len)], this$static.m_RangeDecoder);
-            if (posSlot >= 4) {
-                numDirectBits = (posSlot >> 1) - 1;
-                this$static.rep0 = (2 | posSlot & 1) << numDirectBits;
-                if (posSlot < 14) {
-                    this$static.rep0 += ReverseDecode(this$static.m_PosDecoders, this$static.rep0 - posSlot - 1, this$static.m_RangeDecoder, numDirectBits);
-                } else {
-                    this$static.rep0 += $DecodeDirectBits(this$static.m_RangeDecoder, numDirectBits - 4) << 4;
-                    this$static.rep0 += $ReverseDecode(this$static.m_PosAlignDecoder, this$static.m_RangeDecoder);
-                    if (this$static.rep0 < 0) {
-                        if (this$static.rep0 == -1) {
-                            return 1;
+                len = 2 + $Decode(this$static.m_LenDecoder, this$static.m_RangeDecoder, posState);
+                this$static.state = this$static.state < 7?7:10;
+                posSlot = $Decode_0(this$static.m_PosSlotDecoder[GetLenToPosState(len)], this$static.m_RangeDecoder);
+                if (posSlot >= 4) {
+                    numDirectBits = (posSlot >> 1) - 1;
+                    this$static.rep0 = (2 | posSlot & 1) << numDirectBits;
+                    if (posSlot < 14) {
+                        this$static.rep0 += ReverseDecode(this$static.m_PosDecoders, this$static.rep0 - posSlot - 1, this$static.m_RangeDecoder, numDirectBits);
+                    } else {
+                        this$static.rep0 += $DecodeDirectBits(this$static.m_RangeDecoder, numDirectBits - 4) << 4;
+                        this$static.rep0 += $ReverseDecode(this$static.m_PosAlignDecoder, this$static.m_RangeDecoder);
+                        if (this$static.rep0 < 0) {
+                            if (this$static.rep0 == -1) {
+                                return 1;
+                            }
+                            return -1;
                         }
-                        return -1;
                     }
-                }
-            } else 
-                this$static.rep0 = posSlot;
+                } else 
+                    this$static.rep0 = posSlot;
             }
             if (compare(fromInt(this$static.rep0), this$static.nowPos64) >= 0 || this$static.rep0 >= this$static.m_DictionarySizeCheck) {
                 return -1;
