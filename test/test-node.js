@@ -140,21 +140,6 @@ function compression_test(file, next) {
     });
 }
 
-function has_enough_memory()
-{
-    return process.execArgv.some(function onsome(arg)
-    {
-        var match = arg.match(/^-?-max-old-space-size=(\d+)/);
-        return match && Number(match[1]) >= 900;
-    });
-}
-
-if (!has_enough_memory()) {
-    ///NOTE: In order to run level 9 compression, we need to ask for extra RAM.
-    ///      So, we'll run this script again with the proper parameter.
-    ///NOTE: Ideally, we would keep the process.execArgv, but it shouldn't matter.
-    return require("child_process").spawn(process.execPath, ["--max-old-space-size=1000", process.argv[1]], {stdio: [0, 1, 2], env: process.env}).on("close", function () {});
-}
 
 path_to_files = p.join(__dirname, path_to_files);
 
