@@ -104,6 +104,32 @@ function minify_properties(code)
     return code;
 }
 
+function split_lzma_worker()
+{
+    var data = fs.readFileSync(p.join(__dirname, "src", "lzma_worker.js"), "utf8"),
+        c,
+        d;
+    
+    /// Delete both only code.
+    data = data.replace(/\/\*\* xs \*\/[\S\s]*?\/\*\* xe \*\//g, "");
+    
+    /// Delete decompress code.
+    c = data.replace(/\/\*\* ds \*\/[\S\s]*?\/\*\* de \*\//g, "");
+    
+    /// Enable compress only code.
+    c = c.replace(/\/\/\/ co:/g, "");
+    
+    /// Delete decompress code.
+    d = data.replace(/\/\*\* cs \*\/[\S\s]*?\/\*\* ce \*\//g, "");
+    
+    /// Enable compress only code.
+    d = d.replace(/\/\/\/ do:/g, "");
+    
+    fs.writeFileSync(p.join(__dirname, "src", "lzma-c.js"), c);
+    fs.writeFileSync(p.join(__dirname, "src", "lzma-d.js"), d);
+}
+
+split_lzma_worker();
 
 (function loop(i)
 {
