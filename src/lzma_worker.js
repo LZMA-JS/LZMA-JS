@@ -88,9 +88,11 @@ var LZMA = (function () {
 		var array = new Array(length_0);
 		if (seedType > 0) {
 			var value = [null, 0, false, [0, 0]][seedType];
-			for (var i = 0; i < length_0; ++i) {
-				array[i] = value;
-			}
+			if (typeof value !== "number") {
+                for (var i = 0; i < length_0; ++i) {
+                    array[i] = value;
+                }
+            }
 		}
 		return array;
 	}
