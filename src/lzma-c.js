@@ -22,7 +22,7 @@ var LZMA = (function () {
         /** ce */
         
         action_progress   = 3,
-        wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
+        wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
         c = function () {return {typeName: this.typeId$+""};},
         __4294967296 = 4294967296;
     
@@ -2400,7 +2400,6 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress, sync) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            start,
             callback_num,
             on_finish,
             on_progress;
@@ -2421,8 +2420,8 @@ var LZMA = (function () {
         }
         
         function do_action() {
-            var res;
-            start = (new Date()).getTime();
+            var res, start = (new Date()).getTime();
+            
             while ($execute(this$static.c)) {
                 if (!sync) {
                     percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
@@ -2518,17 +2517,17 @@ var LZMA = (function () {
     
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
-    if (typeof onmessage !== "undefined" && (typeof window === "undefined" || typeof window.document === "undefined")) {
+    if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
     (function create_onmessage() {
             /* jshint -W020 */
             /// Create the global onmessage function.
             onmessage = function (e) {
                 if (e && e.data) {
                     
-                    if (e.data.action === action_compress) {
+                    if (e.data.action == action_compress) {
                         LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
                     }
-                    /// do:if (e.data.action === action_decompress) {
+                    /// do:if (e.data.action == action_decompress) {
                     /// do:    LZMA.decompress(e.data.data, e.data.callback_num);
                     /// do:}
                 }

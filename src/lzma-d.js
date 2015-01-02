@@ -22,7 +22,7 @@ var LZMA = (function () {
         action_decompress = 2,
         /** de */
         action_progress   = 3,
-        wait = typeof setImmediate === "function" ? setImmediate : setTimeout,
+        wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
         c = function () {return {typeName: this.typeId$+""};},
         __4294967296 = 4294967296;
     
@@ -1214,7 +1214,6 @@ var LZMA = (function () {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             data,
-            start,
             callback_num,
             on_progress,
             has_progress;
@@ -1237,13 +1236,12 @@ var LZMA = (function () {
         }
         
         function do_action() {
-            var res;
-            
-            start = (new Date()).getTime();
-            
+            var res, i = 0, start = (new Date()).getTime();
             while ($execute(this$static.d)) {
                 if (!sync) {
-                    if ((new Date()).getTime() - start > 200) {
+                    //if (++i%1000 == 0 && console.log("here") == undefined && (new Date()).getTime() - start > 200) {
+                    if (++i%1000 == 0 && (new Date()).getTime() - start > 200) {
+                    //console.log("and here",i)
                         if (has_progress) {
                             percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
                             /// If about 200 miliseconds have passed, update the progress.					
@@ -1303,17 +1301,17 @@ var LZMA = (function () {
     
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
-    if (typeof onmessage !== "undefined" && (typeof window === "undefined" || typeof window.document === "undefined")) {
+    if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
     (function create_onmessage() {
             /* jshint -W020 */
             /// Create the global onmessage function.
             onmessage = function (e) {
                 if (e && e.data) {
                     
-                    /// co:if (e.data.action === action_compress) {
+                    /// co:if (e.data.action == action_compress) {
                     /// co:    LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
                     /// co:}
-                    if (e.data.action === action_decompress) {
+                    if (e.data.action == action_decompress) {
                         LZMA.decompress(e.data.data, e.data.callback_num);
                     }
                 }
