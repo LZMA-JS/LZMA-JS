@@ -3078,7 +3078,7 @@ var LZMA = (function () {
         return a[1] + a[0];
     }
     /** cs */
-    function compress(str, mode, on_finish, on_progress) {
+    function compress(str, mode, on_finish, on_progress, sync) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             start,
@@ -3105,16 +3105,18 @@ var LZMA = (function () {
             var res;
             start = (new Date()).getTime();
             while ($execute(this$static.c)) {
-                percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-                /// If about 200 miliseconds have passed, update the progress.
-                if ((new Date()).getTime() - start > 200) {
-                    if (on_progress) {
-                        on_progress(percent);
-                    } else if (typeof callback_num !== "undefined") {
-                        update_progress(percent, callback_num);
+                if (!sync) {
+                    percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
+                    /// If about 200 miliseconds have passed, update the progress.
+                    if ((new Date()).getTime() - start > 200) {
+                        if (on_progress) {
+                            on_progress(percent);
+                        } else if (typeof callback_num !== "undefined") {
+                            update_progress(percent, callback_num);
+                        }
+                        wait(do_action, 0);
+                        return false;
                     }
-                    wait(do_action, 0);
-                    return false;
                 }
             }
             
@@ -3139,11 +3141,11 @@ var LZMA = (function () {
             }
         }
         
-        wait(do_action, 1);
+        do_action();
     }
     /** ce */
     /** ds */
-    function decompress(byte_arr, on_finish, on_progress) {
+    function decompress(byte_arr, on_finish, on_progress, sync) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             data,
@@ -3175,20 +3177,22 @@ var LZMA = (function () {
             start = (new Date()).getTime();
             
             while ($execute(this$static.d)) {
-                if ((new Date()).getTime() - start > 200) {
-                    if (has_progress) {
-                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
-                        /// If about 200 miliseconds have passed, update the progress.					
-                        if (on_progress) {
-                            on_progress(percent);
-                        } else if (typeof callback_num !== "undefined") {
-                            update_progress(percent, callback_num);
+                if (!sync) {
+                    if ((new Date()).getTime() - start > 200) {
+                        if (has_progress) {
+                            percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                            /// If about 200 miliseconds have passed, update the progress.					
+                            if (on_progress) {
+                                on_progress(percent);
+                            } else if (typeof callback_num !== "undefined") {
+                                update_progress(percent, callback_num);
+                            }
                         }
+                        
+                        /// This allows other code to run, like the browser to update.
+                        wait(do_action, 0);
+                        return false;
                     }
-                    
-                    /// This allows other code to run, like the browser to update.
-                    wait(do_action, 0);
-                    return false;
                 }
             }
             
@@ -3214,7 +3218,7 @@ var LZMA = (function () {
             }
         }
         
-        wait(do_action, 0);
+        do_action();
     }
     /** de */
     var LZMAJS = make_thing(0);

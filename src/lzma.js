@@ -39,25 +39,25 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 req(path);
                 
                 fake_lzma = {
-                    compress: function compress(string, mode, on_finish, on_progress) {
+                    compress: function compress(string, mode, on_finish, on_progress, sync) {
                         if (global_var.LZMA_WORKER) {
-                            global_var.LZMA_WORKER.compress(string, mode, on_finish, on_progress);
+                            global_var.LZMA_WORKER.compress(string, mode, on_finish, on_progress, sync);
                         } else {
                             /// Wait
                             setTimeout(function ()
                             {
-                                fake_lzma.compress(string, mode, on_finish, on_progress);
+                                fake_lzma.compress(string, mode, on_finish, on_progress, sync);
                             }, 50);
                         }
                     },
-                    decompress: function decompress(byte_arr, on_finish, on_progress) {
+                    decompress: function decompress(byte_arr, on_finish, on_progress, sync) {
                         if (global_var.LZMA_WORKER) {
-                            global_var.LZMA_WORKER.decompress(byte_arr, on_finish, on_progress);
+                            global_var.LZMA_WORKER.decompress(byte_arr, on_finish, on_progress, sync);
                         } else {
                             /// Wait
                             setTimeout(function ()
                             {
-                                fake_lzma.decompress(byte_arr, on_finish, on_progress);
+                                fake_lzma.decompress(byte_arr, on_finish, on_progress, sync);
                             }, 50);
                         }
                     }
@@ -129,11 +129,11 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             }
             
             return {
-                compress: function compress(string, mode, on_finish, on_progress) {
-                    send_to_worker(action_compress, String(string), mode, on_finish, on_progress);
+                compress: function compress(string, mode, on_finish, on_progress, sync) {
+                    send_to_worker(action_compress, String(string), mode, on_finish, on_progress, sync);
                 },
-                decompress: function decompress(byte_arr, on_finish, on_progress) {
-                    send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
+                decompress: function decompress(byte_arr, on_finish, on_progress, sync) {
+                    send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress, sync);
                 }
             };
         }());
