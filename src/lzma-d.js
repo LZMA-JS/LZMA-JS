@@ -18,7 +18,6 @@
 
 var LZMA = (function () {
     var 
-        
         /** ds */
         action_decompress = 2,
         /** de */
@@ -1211,25 +1210,18 @@ var LZMA = (function () {
     }
     
     /** ds */
-    function decompress() {
+    function decompress(byte_arr, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             data,
             start,
-            /// Arguments
-            byte_arr = arguments[0],
             callback_num,
-            on_finish,
             on_progress,
             has_progress;
         
-        if (typeof arguments[1] === "function") {
-            on_finish = arguments[1];
-            if (typeof arguments[2] === "function") {
-                on_progress = arguments[2];
-            }
-        } else {
-            callback_num = arguments[1];
+        if (typeof on_finish !== "function") {
+            callback_num = on_finish;
+            on_finish = on_progress = 0;
         }
         
         data = initValues(_3B_classLit, 0, -1, byte_arr);

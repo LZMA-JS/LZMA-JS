@@ -17,8 +17,7 @@
 /// do    (decompression only)
 
 var LZMA = (function () {
-    var 
-        /** cs */
+    var /** cs */
         action_compress   = 1,
         /** ce */
         
@@ -2398,24 +2397,17 @@ var LZMA = (function () {
         return a[1] + a[0];
     }
     /** cs */
-    function compress() {
+    function compress(str, mode, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             start,
-            /// Arguments
-            str = arguments[0],
-            mode = arguments[1],
             callback_num,
             on_finish,
             on_progress;
         
-        if (typeof arguments[2] === "function") {
-            on_finish = arguments[2];
-            if (typeof arguments[3] === "function") {
-                on_progress = arguments[3];
-            }
-        } else {
-            callback_num = arguments[2];
+        if (typeof on_finish !== "function") {
+            callback_num = on_finish
+            on_finish = on_progress = 0;
         }
         
         this$static.mode = get_mode_obj(mode);
@@ -2451,9 +2443,7 @@ var LZMA = (function () {
                 update_progress(1, callback_num);
             }
             
-            /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
-            /// .slice(0) simply returns the entire array by value.
-            res = $toByteArray(this$static.c.output).slice(0);
+            res = $toByteArray(this$static.c.output);
             
             if (on_finish) {
                 on_finish(res);
@@ -2461,7 +2451,9 @@ var LZMA = (function () {
                 postMessage({
                     action: action_compress,
                     callback_num: callback_num,
-                    result: res
+                    /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
+                    /// .slice(0) simply returns the entire array by value.
+                    result: res.slice(0)
                 });
             }
         }
