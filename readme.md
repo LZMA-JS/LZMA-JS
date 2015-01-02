@@ -5,7 +5,7 @@ LZMA in a Browser
 
 What's New in 2.0
 ---
-<b>Speed</b> & <b>Size</b>
+Two things: <b>speed</b> & <b>size</b>.
 
 LZMA-JS 2.0 now minifies to almost half of 1.x and in some cases is 1,000x faster (particularly with high compression).
 
@@ -76,8 +76,7 @@ If the decompression progress is unable to be calculated, the on_progress() func
 LZMA-JS will try to use Web Workers if they are available.  If the environment does not support Web Workers,
 it will just do something else, and it won't pollute the global scope.
 
-LZMA-JS is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
-Java into JavaScript.  The original Java code is licensed under the Apache License 2.0 license.
+LZMA-JS was originally based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from Java into JavaScript.
 
 
 But I don't want to use Web Workers
@@ -97,7 +96,7 @@ Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code
 
 In Node.js, the Web Worker code is already skipped, so there's no need to do this.
 
-If you only need to compress or decompress and you're looking to save some bytes, instead of loading lzma_worker.js,
+And if you only need to compress or decompress and you're looking to save some bytes, instead of loading lzma_worker.js,
 you can simply load lzma-c.js (for compression) or lzma-d.js (for decompression).
 
 Of course, you'll want to load the minified versions if you're sending data over the wire.
