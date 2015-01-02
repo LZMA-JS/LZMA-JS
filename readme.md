@@ -2,7 +2,6 @@ LZMA in a Browser
 ===
 
 [LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
-The JavaScript, CSS, and HTML is licensed under the MIT license.
 
 What's New in 2.0
 ---
@@ -97,3 +96,13 @@ That will create a global <code>LZMA</code> <code>object</code> that you can use
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
 In Node.js, the Web Worker code is already skipped, so there's no need to do this.
+
+If you only need to compress or decompress and you're looking to save some bytes, instead of loading lzma_worker.js,
+you can simply load lzma-c.js (for compression) or lzma-d.js (for decompression).
+
+Of course, you'll want to load the minified versions if you're sending data over the wire.
+
+
+License
+---
+<a href="https://raw.githubusercontent.com/nmrugg/LZMA-JS/master/LICENSE">MIT</a>
