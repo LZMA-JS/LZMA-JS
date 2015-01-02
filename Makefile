@@ -1,5 +1,8 @@
 all:
-	@echo "Try make check"
+	@echo "Try make check || minify"
 
 check:
-	cd test && node test-node.js
+	node test/test-node.js
+
+minify:
+	node minify.js
