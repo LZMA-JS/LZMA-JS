@@ -33,7 +33,9 @@ Create the LZMA object.
 (De)Compress stuff.
 
     /// To compress:
-    ///NOTE: mode can be 1-9 (1 is fast but not as good; 9 will probably make your browser crash).
+    ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is very slow and probably a bit better).
+    ///      I suggest keeping mode low, like 1-3.
+    ///      And by the way, 9 is not always the smallest.
     my_lzma.compress(string, mode, on_finish(result) {}, on_progress(percent) {});
     
     /// To decompress:
