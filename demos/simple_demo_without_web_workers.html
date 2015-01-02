@@ -1,5 +1,5 @@
 <head>
-    <title>Simple Demo</title>
+    <title>Simple Demo (Without Web Workers)</title>
     <meta http-equive="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -9,11 +9,11 @@ a browser-based implementation of the LZMA compression algorithm.</p>
 
 <textarea spellcheck=false id=compression_el>Hello, world.</textarea><br>
 <button id=go>Go</button>
-<script src="../src/lzma.js"></script>
+<script src="../src/lzma_worker.js"></script>
 <script>
 
 var compression_mode = 1,
-    my_lzma = new LZMA("../src/lzma_worker.js");
+    my_lzma = LZMA; /// lzma_worker.js creates a global LZMA object. We store it as a new variable just to match simple_demo.html.
 
 document.getElementById("go").onclick = function () {
     /// First, let's compress it.
