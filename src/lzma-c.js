@@ -2397,7 +2397,7 @@ var LZMA = (function () {
         return a[1] + a[0];
     }
     /** cs */
-    function compress(str, mode, on_finish, on_progress) {
+    function compress(str, mode, on_finish, on_progress, sync) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
             start,
@@ -2424,16 +2424,18 @@ var LZMA = (function () {
             var res;
             start = (new Date()).getTime();
             while ($execute(this$static.c)) {
-                percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-                /// If about 200 miliseconds have passed, update the progress.
-                if ((new Date()).getTime() - start > 200) {
-                    if (on_progress) {
-                        on_progress(percent);
-                    } else if (typeof callback_num !== "undefined") {
-                        update_progress(percent, callback_num);
+                if (!sync) {
+                    percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
+                    /// If about 200 miliseconds have passed, update the progress.
+                    if ((new Date()).getTime() - start > 200) {
+                        if (on_progress) {
+                            on_progress(percent);
+                        } else if (typeof callback_num !== "undefined") {
+                            update_progress(percent, callback_num);
+                        }
+                        wait(do_action, 0);
+                        return false;
                     }
-                    wait(do_action, 0);
-                    return false;
                 }
             }
             
@@ -2458,7 +2460,7 @@ var LZMA = (function () {
             }
         }
         
-        wait(do_action, 1);
+        do_action();
     }
     /** ce */
     
