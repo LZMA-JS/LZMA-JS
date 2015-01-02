@@ -2,10 +2,23 @@ LZMA in a Browser
 ===
 
 [LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
-The JavaScript, CSS, and HTML is licensed under the MIT license.  See LICENSE for more details.
+The JavaScript, CSS, and HTML is licensed under the MIT license.
 
-It is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
-Java into JavaScript.  The original Java code is licensed under the Apache License 2.0 license.
+What's New in 2.0
+---
+<b>Speed</b> & <b>Size</b>
+
+LZMA-JS 2.0 now minifies to almost half of 1.x and in some cases is 1,000x faster (particularly with high compression).
+
+It is also more modular. The compression and decompression algorithms can be optionally separated to shrink the file size even more.
+
+Here are some file size stats:
+
+|    Filename    |   Method(s)   | Minified | Gzipped |
+|:---------------|:--------------|---------:|--------:|
+| lzma_worker.js | both          | 29.3 KB  | 11.2 KB |
+| lzma-c.js      | compression   | 22.7 KB  |  9.0 KB |
+| lzma-d.js      | decompression | 10.5 KB  |  4.4 KB |
 
 Demos
 ---
@@ -63,6 +76,10 @@ If the decompression progress is unable to be calculated, the on_progress() func
 
 LZMA-JS will try to use Web Workers if they are available.  If the environment does not support Web Workers,
 it will just do something else, and it won't pollute the global scope.
+
+LZMA-JS is based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from
+Java into JavaScript.  The original Java code is licensed under the Apache License 2.0 license.
+
 
 But I don't want to use Web Workers
 ---
