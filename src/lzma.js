@@ -6,7 +6,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
     /// Is this Node.js?
     if (typeof global !== "undefined" && typeof require !== "undefined") {
         this.LZMA = function (lzma_path) {
-            return require(lzma_path || "./lzma_worker.js").LZMA;
+            return require(lzma_path || "./lzma_worker-min.js").LZMA;
         }
     /// Is this a browser?
     } else if (typeof window !== "undefined" && window.document) {
@@ -84,7 +84,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             callback_obj = {},
             
             ///NOTE: Node.js needs something like "./" or "../" at the beginning.
-            lzma_worker = new Worker(lzma_path || "./lzma_worker.js");
+            lzma_worker = new Worker(lzma_path || "./lzma_worker-min.js");
         
         lzma_worker.onmessage = function (e) {
             if (e.data.action === action_progress) {
