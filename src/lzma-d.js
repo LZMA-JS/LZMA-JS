@@ -90,8 +90,7 @@ var LZMA = (function () {
     }
     
     function initDim(arrayClass, typeId, queryId, length_0, seedType) {
-        var result;
-        result = createFromSeed(seedType, length_0);
+        var result = createFromSeed(seedType, length_0);
         $clinit_4();
         wrapArray(result, expandoNames_0, expandoValues_0);
         result.arrayClass$ = arrayClass;
@@ -439,9 +438,6 @@ var LZMA = (function () {
     }
     
     
-    _ = String.prototype;
-    _.getClass$ = c;
-    _.typeId$ = 2;
     
     /** ds */
     function $StringBuilder(this$static) {
@@ -1155,8 +1151,7 @@ var LZMA = (function () {
     
     /** ds */
     function decode(utf) {
-        var buf, i, x, y, z;
-        buf = $StringBuilder(new StringBuilder());
+        var buf = $StringBuilder(new StringBuilder()), i, x, y, z;
         for (i = 0; i < utf.length; ++i) {
             x = utf[i] & 255;
             if ((x & 128) == 0) {
@@ -1215,7 +1210,6 @@ var LZMA = (function () {
             percent,
             data,
             callback_num,
-            on_progress,
             has_progress;
         
         if (typeof on_finish !== "function") {

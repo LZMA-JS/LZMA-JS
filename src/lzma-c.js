@@ -90,8 +90,7 @@ var LZMA = (function () {
     }
     
     function initDim(arrayClass, typeId, queryId, length_0, seedType) {
-        var result;
-        result = createFromSeed(seedType, length_0);
+        var result = createFromSeed(seedType, length_0);
         $clinit_4();
         wrapArray(result, expandoNames_0, expandoValues_0);
         result.arrayClass$ = arrayClass;
@@ -520,9 +519,6 @@ var LZMA = (function () {
         }
     }
     /** ce */
-    _ = String.prototype;
-    _.getClass$ = c;
-    _.typeId$ = 2;
     
     
     
@@ -2400,12 +2396,10 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            callback_num,
-            on_finish,
-            on_progress;
+            callback_num;
         
         if (typeof on_finish !== "function") {
-            callback_num = on_finish
+            callback_num = on_finish;
             on_finish = on_progress = 0;
         }
         
