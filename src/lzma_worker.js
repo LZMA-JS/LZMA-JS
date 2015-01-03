@@ -3081,12 +3081,10 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            callback_num,
-            on_finish,
-            on_progress;
+            callback_num;
         
         if (typeof on_finish !== "function") {
-            callback_num = on_finish
+            callback_num = on_finish;
             on_finish = on_progress = 0;
         }
         
@@ -3147,7 +3145,6 @@ var LZMA = (function () {
             percent,
             data,
             callback_num,
-            on_progress,
             has_progress;
         
         if (typeof on_finish !== "function") {
