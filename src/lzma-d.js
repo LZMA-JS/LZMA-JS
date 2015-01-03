@@ -70,7 +70,7 @@ var LZMA = (function () {
     
     function $toString(a) {
         var s_0, s;
-        s_0 = (s = a.join('') , a.length = a.explicitLength = 0 , s);
+        s_0 = (s = a.join("") , a.length = a.explicitLength = 0 , s);
         a[a.explicitLength++] = s_0;
         return s_0;
     }
@@ -460,10 +460,10 @@ var LZMA = (function () {
         destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c()).typeName;
         
         if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
-            throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
+            throw $ArrayStoreException(new ArrayStoreException(), "Must be array types");
         }
         if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
-            throw $ArrayStoreException(new ArrayStoreException(), 'Array types must match');
+            throw $ArrayStoreException(new ArrayStoreException(), "Array types must match");
         }
         
         srclen  = src.length;
@@ -517,24 +517,24 @@ var LZMA = (function () {
         for (i = 0; i < properties.length; ++i) {
             r = $read(input);
             if (r == -1)
-                throw $IOException(new IOException(), 'truncated input');
+                throw $IOException(new IOException(), "truncated input");
             properties[i] = r << 24 >> 24;
         }
         
         decoder = $Decoder(new Decoder());
         if (!$SetDecoderProperties(decoder, properties)) {
-            throw $IOException(new IOException(), 'corrupted input');
+            throw $IOException(new IOException(), "corrupted input");
         }
         for (i = 0; i < 64; i += 8) {
             r = $read(input);
             if (r == -1)
-                throw $IOException(new IOException(), 'truncated input');
+                throw $IOException(new IOException(), "truncated input");
             r = r.toString(16);
             if (r.length == 1) r = "0" + r;
             hex_length = r + "" + hex_length;
         }
         
-        /// Was the length set in the header (if it was compressed from a stream, the length is all f's).
+        /// Was the length set in the header (if it was compressed from a stream, the length is all f"s).
         if (/^0+$|^f+$/i.test(hex_length)) {
             /// The length is unknown, so set to -1.
             this$static.length_0 = N1_longLit;
@@ -703,7 +703,7 @@ var LZMA = (function () {
         var result;
         result = $CodeOneChunk(this$static.decoder);
         if (result == -1) {
-            throw $IOException(new IOException(), 'corrupted input');
+            throw $IOException(new IOException(), "corrupted input");
         }
         this$static.inBytesProcessed = N1_longLit;
         this$static.outBytesProcessed = this$static.decoder.nowPos64;
@@ -1156,39 +1156,39 @@ var LZMA = (function () {
             x = utf[i] & 255;
             if ((x & 128) == 0) {
                 if (x == 0) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 $append(buf.data, String.fromCharCode(x & 65535));
             } else if ((x & 224) == 192) {
                 if (i + 1 >= utf.length) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 y = utf[++i] & 255;
                 if ((y & 192) != 128) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 $append(buf.data, String.fromCharCode((x & 31) << 6 & 65535 | y & 63));
             } else if ((x & 240) == 224) {
                 if (i + 2 >= utf.length) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 y = utf[++i] & 255;
                 if ((y & 192) != 128) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 z = utf[++i] & 255;
                 if ((z & 192) != 128) {
-                    /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                    /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
                 $append(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
             } else {
-                /// It appears that this is binary data, so it can't be converted to a string, so just send it back.
+                /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                 return convert_binary_arr(utf);
             }
         }
@@ -1278,14 +1278,14 @@ var LZMA = (function () {
     
     function nullMethod() {}
     
-    var _3B_classLit = createForArray('', '[B'),
-        _3S_classLit = createForArray('', '[S'),
+    var _3B_classLit = createForArray("", "[B"),
+        _3S_classLit = createForArray("", "[S"),
         
         /** ds */
-        bitTreeDecoder_2_classLit = createForArray('[Ll', 'bd'),
-        decoder2_2_classLit = createForArray('[Ll.', 'd'),
+        bitTreeDecoder_2_classLit = createForArray("[Ll", "bd"),
+        decoder2_2_classLit = createForArray("[Ll.", "d"),
         /** de */
-        _3_3D_classLit = createForArray('', '[[D');
+        _3_3D_classLit = createForArray("", "[[D");
     
     
     

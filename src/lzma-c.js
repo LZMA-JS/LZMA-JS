@@ -533,10 +533,10 @@ var LZMA = (function () {
         destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c()).typeName;
         
         if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
-            throw $ArrayStoreException(new ArrayStoreException(), 'Must be array types');
+            throw $ArrayStoreException(new ArrayStoreException(), "Must be array types");
         }
         if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
-            throw $ArrayStoreException(new ArrayStoreException(), 'Array types must match');
+            throw $ArrayStoreException(new ArrayStoreException(), "Array types must match");
         }
         
         srclen  = src.length;
@@ -567,7 +567,7 @@ var LZMA = (function () {
     /** cs */
     function $configure(this$static, encoder) {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw $RuntimeException(new RuntimeException(), 'unexpected failure');
+            throw $RuntimeException(new RuntimeException(), "unexpected failure");
     }
     /** ce */
     
@@ -584,9 +584,9 @@ var LZMA = (function () {
     function $init(this$static, input, output, length_0, mode) {
         var encoder, i;
         if (!mode)
-            throw $IllegalArgumentException(new IllegalArgumentException(), 'null mode');
+            throw $IllegalArgumentException(new IllegalArgumentException(), "null mode");
         if (compare(length_0, N1_longLit) < 0)
-            throw $IllegalArgumentException(new IllegalArgumentException(), 'invalid length ' + length_0);
+            throw $IllegalArgumentException(new IllegalArgumentException(), "invalid length " + length_0);
         this$static.length_0 = length_0;
         encoder = $Encoder(new Encoder());
         $configure(mode, encoder);
@@ -2459,19 +2459,19 @@ var LZMA = (function () {
     
     function nullMethod() {}
     
-    var _3B_classLit = createForArray('', '[B'),
-        _3S_classLit = createForArray('', '[S'),
+    var _3B_classLit = createForArray("", "[B"),
+        _3S_classLit = createForArray("", "[S"),
         /** cs */
-        _3C_classLit = createForArray('', '[C'),
-        _3I_classLit = createForArray('', '[I'),
-        optimal_2_classLit = createForArray('[Ll.', 'o'),
-        bitTreeEncoder_2_classLit = createForArray('[Ll', 'be'),
-        _3J_classLit = createForArray('', '[J'),
-        _3Z_classLit = createForArray('', '[Z'),
-        encoder2_2_classLit = createForArray('[Ll.', 'e'),
+        _3C_classLit = createForArray("", "[C"),
+        _3I_classLit = createForArray("", "[I"),
+        optimal_2_classLit = createForArray("[Ll.", "o"),
+        bitTreeEncoder_2_classLit = createForArray("[Ll", "be"),
+        _3J_classLit = createForArray("", "[J"),
+        _3Z_classLit = createForArray("", "[Z"),
+        encoder2_2_classLit = createForArray("[Ll.", "e"),
         /** ce */
         
-        _3_3D_classLit = createForArray('', '[[D');
+        _3_3D_classLit = createForArray("", "[[D");
     
     /** cs */
     var get_mode_obj = (function () {
