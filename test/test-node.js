@@ -13,18 +13,6 @@ function display_result(str, pass) {
     console.log("\u001B[3" + (pass ? "2" : "1") + "m" + str + "\u001B[0m");
 }
 
-function buffer2arr(buffer) {
-    var arr = [],
-        i,
-        len = buffer.length;
-    
-    for (i = 0; i < len; i += 1) {
-        arr[i] = buffer[i];
-    }
-    
-    return arr;
-}
-
 function progress(percent)
 {
     if (process.stdout.isTTY) {
