@@ -17,7 +17,7 @@ Here are some file size stats:
 |:---------------|:--------------|---------:|--------:|
 | lzma_worker.js | both          | 29.3 KB  | 11.2 KB |
 | lzma-c.js      | compression   | 22.7 KB  |  9.0 KB |
-| lzma-d.js      | decompression | 10.5 KB  |  4.4 KB |
+| lzma-d.js      | decompression | 10.5 KB  |  4.3 KB |
 
 Demos
 ---
