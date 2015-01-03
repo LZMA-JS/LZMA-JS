@@ -570,9 +570,6 @@ var LZMA = (function () {
         }
     }
     /** ce */
-    _ = String.prototype;
-    _.getClass$ = c;
-    _.typeId$ = 2;
     
     /** ds */
     function $StringBuilder(this$static) {
