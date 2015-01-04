@@ -3,7 +3,12 @@
 var all_tests_pass = true,
     fs = require("fs"),
     p = require("path"),
-    my_lzma = require("../src/lzma_worker-min.js").LZMA,
+    my_lzma,
+    lzma_norm = require("../src/lzma_worker" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA,
+    lzma_sep = {
+        decompress: require("../src/lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA.decompress,
+        compress:   require("../src/lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA.compress,
+    },
     path_to_files = "files";
 
 function display_result(str, pass) {
@@ -127,43 +132,68 @@ function compression_test(file, next) {
     });
 }
 
+function run_tests(cb)
+{
+    fs.readdir(path_to_files, function (err, files) {
+        var file_count = files.length;
+        
+        if (err) {
+            throw err;
+        }
+        
+        (function run_test(i) {
+            var file;
+            
+            if (i >= file_count) {
+                if (all_tests_pass) {
+                    display_result("All tests completed sucessfully", true);
+                } else {
+                    display_result("An error was detected!", false);
+                }
+                
+                return cb ? cb(all_tests_pass) : 0;
+            }
+            file = files[i];
+            
+            console.log(file);
+            
+            if (file.slice(-5) === ".lzma") {
+                /// Preform a decompress test on *.lzma files.
+                decompression_test(p.join(path_to_files, file), p.join(path_to_files, file.slice(0, -5)), function next()
+                {
+                    run_test(i + 1);
+                });
+            } else {
+                /// Preform a compression/decompression test.
+                compression_test(p.join(path_to_files, file), function next()
+                {
+                    run_test(i + 1);
+                });
+            }
+        }(0));
+    });
+}
+
 
 path_to_files = p.join(__dirname, path_to_files);
 
-fs.readdir(path_to_files, function (err, files) {
-    var file_count = files.length;
-    
-    if (err) {
-        throw err;
+my_lzma = lzma_norm;
+
+console.log("Testing lzma_worker" + (process.argv[2] === "unmin" ? "" : "-min") + ".js")
+run_tests(function (tests_passed_norm) {
+    if (!tests_passed_norm) {
+        /// Fail.
+        process.exit(1);
     }
     
-    (function run_test(i) {
-        var file;
-        
-        if (i >= file_count) {
-            if (all_tests_pass) {
-                display_result("All tests completed sucessfully", true);
-            } else {
-                display_result("An error was detected!", false);
-            }
-            return;
+    console.log("\nTesting lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js and lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js.")
+    my_lzma = lzma_sep;
+    
+    run_tests(function (tests_passed_sep)
+    {
+        if (!tests_passed_sep) {
+            /// Fail.
+            process.exit(1);
         }
-        file = files[i];
-        
-        console.log(file);
-        
-        if (file.slice(-5) === ".lzma") {
-            /// Preform a decompress test on *.lzma files.
-            decompression_test(p.join(path_to_files, file), p.join(path_to_files, file.slice(0, -5)), function next()
-            {
-                run_test(i + 1);
-            });
-        } else {
-            /// Preform a compression/decompression test.
-            compression_test(p.join(path_to_files, file), function next()
-            {
-                run_test(i + 1);
-            });
-        }
-    }(0));
+    });
 });
