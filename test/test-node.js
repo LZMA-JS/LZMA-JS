@@ -1,3 +1,5 @@
+// jshint bitwise:true, curly:true, eqeqeq:true, forin:true, immed:true, latedef:true, newcap:true, noarg:true, noempty:true, nonew:true, onevar:true, plusplus:true, quotmark:double, strict:true, undef:true, unused:strict, node:true
+
 "use strict";
 
 var all_tests_pass = true,
@@ -10,6 +12,20 @@ var all_tests_pass = true,
         compress:   require("../src/lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA.compress,
     },
     path_to_files = "files";
+
+function announce(str)
+{
+    var stars = "****",
+        i;
+    
+    for (i = str.length - 1; i >= 0; i -= 1) {
+        stars += "*";
+    }
+    
+    console.log(stars);
+    console.log("* "+ str + " *");
+    console.log(stars);
+}
 
 function display_result(str, pass) {
     ///NOTE: \u001B[32m makes green text.
@@ -96,10 +112,10 @@ function compression_test(file, next) {
             throw err;
         }
         
-        match = p.basename(file, p.extname(file)).match(/^level[ _](\d)/i)
+        match = p.basename(file, p.extname(file)).match(/^level[ _](\d)/i);
         
         if (match) {
-            compression_mode = Number(match[1]) || 1
+            compression_mode = Number(match[1]) || 1;
         }
         
         console.log("     Initial size:", content.length);
@@ -179,14 +195,15 @@ path_to_files = p.join(__dirname, path_to_files);
 
 my_lzma = lzma_norm;
 
-console.log("Testing lzma_worker" + (process.argv[2] === "unmin" ? "" : "-min") + ".js")
+announce("Testing lzma_worker" + (process.argv[2] === "unmin" ? "" : "-min") + ".js");
 run_tests(function (tests_passed_norm) {
     if (!tests_passed_norm) {
         /// Fail.
         process.exit(1);
     }
     
-    console.log("\nTesting lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js and lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js.")
+    console.log("");
+    announce("Testing lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js and lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js");
     my_lzma = lzma_sep;
     
     run_tests(function (tests_passed_sep)
