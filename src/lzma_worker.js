@@ -3162,7 +3162,7 @@ var LZMA = (function () {
         function do_action() {
             var res, i = 0, start = (new Date()).getTime();
             while ($execute(this$static.d)) {
-                if (++i%1000 == 0 && (new Date()).getTime() - start > 200) {
+                if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
                     if (has_progress) {
                         percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
                         /// If about 200 miliseconds have passed, update the progress.					
