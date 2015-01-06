@@ -124,7 +124,7 @@ function write_file(path, mixed, orig)
         try {
             fs.unlink(orig);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 }
@@ -138,14 +138,21 @@ function compress_files(files)
         }
         
         if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(files[i] + suffix)) {
-            console.log("File already exists. Use -f to force overwrite.");
+            console.error("File already exists. Use -f to force overwrite.");
             return loop(i + 1);
         }
         
-        if ((params.c || params.stdout) && !stdout_is_ok()) {
-            console.log("Compressed data not written to a terminal. Use -f to force compression.");
-            console.log("For help, type: lzma.js -h");
-            return loop(i + 1);
+        if (params.c || params.stdout) {
+            if (!stdout_is_ok()) {
+                console.error("Compressed data not written to a terminal. Use -f to force compression.");
+                console.error("For help, type: lzma.js -h");
+                return loop(i + 1);
+            }
+        } else {
+            if (p.extname(files[i]) === suffix) {
+                console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged.")
+                return loop(i + 1);
+            }
         }
         
         lzma.compress(fs.readFileSync(files[i], "utf8"), mode, function ondone(data)
@@ -163,16 +170,62 @@ function compress_files(files)
                 }
             } else {
                 write_file(files[i] + suffix, array2buffer(data), files[i]);
+                if (params.v || params.verbose) {
+                    console.error(files[i] + " -- encoded succesfully");
+                }
             }
             loop(i + 1);
         }, params.v || params.verbose ? progress : null);
     }(0));
 }
+
+function decompress_files(files)
+{
+    (function loop(i)
+    {
+        var ext;
+        
+        if (i >= files.length) {
+            return;
+        }
+        
+        ext = p.extname(files[i]);
+        
+        if (ext !== suffix) {
+            console.error(p.basename(files[i]) + " unknown suffix -- unchanged. Use -S to change suffix.");
+            return loop(i + 1);
+        }
+        
+        if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(p.basename(files[i], ext))) {
+            console.error("File already exists. Use -f to force overwrite.");
+            return loop(i + 1);
+        }
+        
+        lzma.decompress(fs.readFileSync(files[i]), function ondone(data)
+        {
+            var j,
+                len,
+                buf;
+            
+            if (params.c || params.stdout) {
+                if (typeof data === "string") {
+                    process.stdout.write(data);
+                } else {
+                    len = data.length;
+                    buf = new Buffer(1);
+                    for (j = 0; j < len; j += 1) {
+                        buf[0] = data[j] < 0 ? data[j] + 256 : data[j];
+                        process.stdout.write(buf);
+                    }
                 }
             } else {
-                write_file(array2buffer(data), files[i] + suffix);
+                write_file(p.basename(files[i], ext), data, files[i]);
+                if (params.v || params.verbose) {
+                    console.error(files[i] + " -- decoded succesfully");
+                }
             }
-        }, progress);
+            loop(i + 1);
+        }, params.v || params.verbose ? progress : null);
     }(0));
 }
 
@@ -225,6 +278,8 @@ if (params._.length) {
     if (params.z || params.compress || !(params.d || params.decompress || params.t || params.test)) {
         mode = get_mode();
         compress_files(params._);
+    } else {
+        decompress_files(params._);
     }
 } else {
     console.log("TODO: STDIN");
