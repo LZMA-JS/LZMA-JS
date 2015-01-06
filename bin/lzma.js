@@ -54,7 +54,7 @@ function get_mode()
 
 function parse_parameters(options)
 {
-    var args = {_:[]},
+    var args = {_: []},
         i,
         len = process.argv.length,
         arg;
@@ -116,8 +116,6 @@ function array2buffer(data)
 
 function write_file(path, mixed, orig)
 {
-    //console.log(mixed)
-    //console.log(path)
     fs.writeFileSync(path, mixed);
     
     if (orig && !params.k && !params.keep) {
@@ -307,4 +305,3 @@ if (params._.length) {
 } else {
     console.log("TODO: STDIN");
 }
-
