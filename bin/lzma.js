@@ -114,20 +114,15 @@ function array2buffer(data)
     return buf;
 }
 
-function write_file(mixed, path)
+function write_file(path, mixed, orig)
 {
     //console.log(mixed)
     //console.log(path)
-    if (!params.f && !params.force && fs.existsSync(path)) {
-        console.log("File already exists. Use -f to force overwrite.");
-        return;
-    }
-    
     fs.writeFileSync(path, mixed);
     
-    if (!params.k && !params.keep) {
+    if (orig && !params.k && !params.keep) {
         try {
-            fs.unlink(path);
+            fs.unlink(orig);
         } catch (e) {
             console.log(e);
         }
