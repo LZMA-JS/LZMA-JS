@@ -181,7 +181,7 @@ function compress_files(files)
                 }
             }
             loop(i + 1);
-        }, params.v || params.verbose ? progress : null);
+        }, params.q || params.quiet ? null : progress);
     }(0));
 }
 
@@ -248,7 +248,7 @@ function decompress_files(files)
                 }
             }
             loop(i + 1);
-        }, params.v || params.verbose ? progress : null);
+        }, params.q || params.quiet ? null : progress);
     }(0));
 }
 
