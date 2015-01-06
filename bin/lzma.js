@@ -283,6 +283,7 @@ if (params.h || params.help) {
 }
 
 if (params.L || params.license) {
+    console.log("");
     console.log(fs.readFileSync(p.join(__dirname, "..", "LICENSE"), "utf8"));
     process.exit();
 }
