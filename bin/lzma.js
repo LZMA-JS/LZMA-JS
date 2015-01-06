@@ -240,7 +240,7 @@ function decompress_files(files)
                     }
                 }
             } else {
-                write_file(p.basename(files[i], ext), data, files[i]);
+                write_file(p.basename(files[i], ext), typeof data === "string" ? data : array2buffer(data), files[i]);
                 if (params.v || params.verbose) {
                     console.error(files[i] + " -- decoded succesfully");
                 }
