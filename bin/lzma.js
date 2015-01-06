@@ -138,19 +138,25 @@ function compress_files(files)
         }
         
         if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(files[i] + suffix)) {
-            console.error("File already exists. Use -f to force overwrite.");
+            if (!params.q && !params.quiet) {
+                console.error("File already exists. Use -f to force overwrite.");
+            }
             return loop(i + 1);
         }
         
         if (params.c || params.stdout) {
             if (!stdout_is_ok()) {
-                console.error("Compressed data not written to a terminal. Use -f to force compression.");
-                console.error("For help, type: lzma.js -h");
+                if (!params.q && !params.quiet) {
+                    console.error("Compressed data not written to a terminal. Use -f to force compression.");
+                    console.error("For help, type: lzma.js -h");
+                }
                 return loop(i + 1);
             }
         } else {
             if (p.extname(files[i]) === suffix) {
-                console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged.")
+                if (!params.q && !params.quiet) {
+                    console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged.")
+                }
                 return loop(i + 1);
             }
         }
@@ -192,12 +198,16 @@ function decompress_files(files)
         ext = p.extname(files[i]);
         
         if (ext !== suffix) {
-            console.error(p.basename(files[i]) + " unknown suffix -- unchanged. Use -S to change suffix.");
+            if (!params.q && !params.quiet) {
+                console.error(p.basename(files[i]) + " unknown suffix -- unchanged. Use -S to change suffix.");
+            }
             return loop(i + 1);
         }
         
-        if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(p.basename(files[i], ext))) {
-            console.error("File already exists. Use -f to force overwrite.");
+        if (!params.c && !params.stdout && !params.f && !params.force && !params.t && fs.existsSync(p.basename(files[i], ext))) {
+            if (!params.q && !params.quiet) {
+                console.error("File already exists. Use -f to force overwrite.");
+            }
             return loop(i + 1);
         }
         
@@ -206,6 +216,19 @@ function decompress_files(files)
             var j,
                 len,
                 buf;
+            
+            if (params.t || params.test) {
+                if (data) {
+                    if (params.v || params.verbose) {
+                        console.error(files[i] + " -- decoded succesfully");
+                    }
+                } else {
+                    if (!params.q && !params.quiet) {
+                        console.error("Decoder error");
+                    }
+                }
+                return loop(i + 1);
+            }
             
             if (params.c || params.stdout) {
                 if (typeof data === "string") {
