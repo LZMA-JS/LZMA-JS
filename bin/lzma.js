@@ -133,6 +133,21 @@ function compress_files(files)
 {
     (function loop(i)
     {
+        if (i >= files.length) {
+            return;
+        }
+        
+        if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(files[i] + suffix)) {
+            console.log("File already exists. Use -f to force overwrite.");
+            return loop(i + 1);
+        }
+        
+        if ((params.c || params.stdout) && !stdout_is_ok()) {
+            console.log("Compressed data not written to a terminal. Use -f to force compression.");
+            console.log("For help, type: lzma.js -h");
+            return loop(i + 1);
+        }
+        
         lzma.compress(fs.readFileSync(files[i], "utf8"), mode, function ondone(data)
         {
             var j,
@@ -140,16 +155,19 @@ function compress_files(files)
                 buf;
             
             if (params.c || params.stdout) {
-                if (stdout_is_ok()) {
-                    len = data.length;
-                    buf = new Buffer(1);
-                    for (j = 0; j < len; j += 1) {
-                        buf[0] = data[j] < 0 ? data[j] + 256 : data[j];
-                        process.stdout.write(buf);
-                    }
-                } else {
-                    console.log("Compressed data not written to a terminal. Use -f to force compression.");
-                    console.log("For help, type: lzma.js -h");
+                len = data.length;
+                buf = new Buffer(1);
+                for (j = 0; j < len; j += 1) {
+                    buf[0] = data[j] < 0 ? data[j] + 256 : data[j];
+                    process.stdout.write(buf);
+                }
+            } else {
+                write_file(files[i] + suffix, array2buffer(data), files[i]);
+            }
+            loop(i + 1);
+        }, params.v || params.verbose ? progress : null);
+    }(0));
+}
                 }
             } else {
                 write_file(array2buffer(data), files[i] + suffix);
@@ -200,12 +218,12 @@ if (params.V || params.version) {
     process.exit();
 }
 
-mode = get_mode();
 suffix = params.S || params.suffix || ".lzma";
 
 if (params._.length) {
     ///NOTE: -t and --test must be decompress.
     if (params.z || params.compress || !(params.d || params.decompress || params.t || params.test)) {
+        mode = get_mode();
         compress_files(params._);
     }
 } else {
