@@ -1,19 +1,19 @@
 {
-    "author": "Nathan Rugg <nmrugg@gmail.com>",
-    "name": "lzma",
-    "description": "A JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm",
-    "version": "2.0.1",
-    "homepage": "http://nmrugg.github.com/LZMA-JS/",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/nmrugg/LZMA-JS.git"
-    },
-    "main": "lzma.js",
-    "readme": "readme.md",
-    "bin": {
-        "lzma.js": "bin/lzma.js"
-    },
-    "devDependencies": {
-        "uglify-js": "~2.4.16"
-    }
+  "author": "Nathan Rugg <nmrugg@gmail.com>",
+  "name": "lzma",
+  "description": "A JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm",
+  "version": "2.0.2",
+  "homepage": "http://nmrugg.github.com/LZMA-JS/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nmrugg/LZMA-JS.git"
+  },
+  "main": "lzma.js",
+  "readme": "readme.md",
+  "bin": {
+    "lzma.js": "bin/lzma.js"
+  },
+  "devDependencies": {
+    "uglify-js": "~2.4.16"
+  }
 }
