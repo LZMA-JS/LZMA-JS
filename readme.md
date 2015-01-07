@@ -32,14 +32,11 @@ First, load the bootstrapping code.
     /// In a browser:
     <script src="../src/lzma.js"></script>
 
-    /// In Node.js:
-    var LZMA = require("../src/lzma.js").LZMA;
 
 Create the LZMA object.
     
     /// LZMA([optional path])
     /// If lzma_worker.js is in the same directory, you don't need to set the path.
-    /// You should be able to do the first two steps simultaneously in Node.js: var my_lzma = require("../src/lzma.js").LZMA();
     var my_lzma = new LZMA("../src/lzma_worker.js");
 
 (De)Compress stuff.
@@ -53,7 +50,7 @@ Create the LZMA object.
     /// To decompress:
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
 
-Node.js Installation
+Node.js
 ---
 
 LZMA-JS is available in the npm repository.
@@ -62,7 +59,7 @@ LZMA-JS is available in the npm repository.
 
 It can be loaded with the following code:
     
-    var my_lzma = require("lzma").LZMA();
+    var my_lzma = require("lzma");
     
 
 Notes
@@ -100,6 +97,8 @@ And if you only need to compress or decompress and you're looking to save some b
 you can simply load lzma-c.js (for compression) or lzma-d.js (for decompression).
 
 Of course, you'll want to load the minified versions if you're sending data over the wire.
+
+
 
 
 License

@@ -16,7 +16,7 @@ function load_req()
 {
     p = require("path");
     fs = require("fs");
-    lzma = require(p.join("..", "src", "lzma_worker.js")).LZMA;
+    lzma = require(p.join("..", "index.js"));
 }
 
 function progress(percent)

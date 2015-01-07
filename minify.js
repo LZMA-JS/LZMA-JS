@@ -50,7 +50,7 @@ function base54_64(arr)
         str = "";
         base = 54;
         do {
-            ///NOTE: This is not perfect. It skips the first char (_) on the last place when more than one letter.
+            ///NOTE: This is not perfect. It skips the first char (a) on the last place when more than one letter.
             str += chars[pos % base];
             pos = Math.floor(pos / base);
             /// After the first character, we can use numbers.
