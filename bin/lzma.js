@@ -135,14 +135,14 @@ function compress_files(files)
             return;
         }
         
-        if (!params.c && !params.stdout && !params.f && !params.force && fs.existsSync(files[i] + suffix)) {
+        if (!params.c && !params.stdout && !params.f && !params.force && !(params.r || params.testComp) && fs.existsSync(files[i] + suffix)) {
             if (!params.q && !params.quiet) {
                 console.error("File already exists. Use -f to force overwrite.");
             }
             return loop(i + 1);
         }
         
-        if (params.c || params.stdout) {
+        if ((params.c || params.stdout) && !(params.r || params.testComp)) {
             if (!stdout_is_ok()) {
                 if (!params.q && !params.quiet) {
                     console.error("Compressed data not written to a terminal. Use -f to force compression.");
@@ -164,6 +164,19 @@ function compress_files(files)
             var j,
                 len,
                 buf;
+            
+            if (params.r || params.testComp) {
+                if (data) {
+                    if (params.v || params.verbose) {
+                        console.error(files[i] + " -- compressed succesfully");
+                    }
+                } else {
+                    if (!params.q && !params.quiet) {
+                        console.error("Compression error");
+                    }
+                }
+                return loop(i + 1);
+            }
             
             if (params.c || params.stdout) {
                 len = data.length;
@@ -272,7 +285,7 @@ function get_stdin(cb)
 
 function is_compress()
 {
-    return params.z || params.compress || !(params.d || params.decompress || params.t || params.test);
+    return params.z || params.compress || params.r || params.testComp || !(params.d || params.decompress || params.t || params.test);
 }
 
 params = parse_parameters({nonboolean: ["S", "suffix"]});
@@ -290,6 +303,7 @@ if (params.h || params.help) {
     console.log("  -k --keep         keep (don't delete) input files");
     console.log("  -f --force        force overwrite of output file and compress links");
     console.log("  -t --test         test compressed file integrity");
+    console.log("  -r --testComp    test compressing but don't save anything");
     console.log("  -S .suf  --suffix .suf   use suffix .suf on compressed files");
     console.log("  -q --quiet        suppress error messages");
     console.log("  -v --verbose      be verbose");
