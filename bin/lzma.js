@@ -159,7 +159,7 @@ function compress_files(files)
             }
         }
         
-        lzma.compress(fs.readFileSync(files[i], "utf8"), mode, function ondone(data)
+        lzma.compress(typeof files[i] === "string" ? fs.readFileSync(files[i], "utf8") : files[i].toString(), mode, function ondone(data)
         {
             var j,
                 len,
@@ -193,13 +193,15 @@ function decompress_files(files)
             return;
         }
         
-        ext = p.extname(files[i]);
-        
-        if (ext !== suffix) {
-            if (!params.q && !params.quiet) {
-                console.error(p.basename(files[i]) + " unknown suffix -- unchanged. Use -S to change suffix.");
+        if (typeof files[i] === "string") {
+            ext = p.extname(files[i]);
+            
+            if (ext !== suffix) {
+                if (!params.q && !params.quiet) {
+                    console.error(p.basename(files[i]) + " unknown suffix -- unchanged. Use -S to change suffix.");
+                }
+                return loop(i + 1);
             }
-            return loop(i + 1);
         }
         
         if (!params.c && !params.stdout && !params.f && !params.force && !params.t && fs.existsSync(p.basename(files[i], ext))) {
@@ -209,7 +211,7 @@ function decompress_files(files)
             return loop(i + 1);
         }
         
-        lzma.decompress(fs.readFileSync(files[i]), function ondone(data)
+        lzma.decompress(typeof files[i] === "string" ? fs.readFileSync(files[i], "utf8") : files[i], function ondone(data)
         {
             var j,
                 len,
@@ -248,6 +250,29 @@ function decompress_files(files)
             loop(i + 1);
         }, params.q || params.quiet ? null : progress);
     }(0));
+}
+
+function get_stdin(cb)
+{
+    var buf = new Buffer(0);
+    
+    process.stdin.on("readable", function()
+    {
+        var chunk = process.stdin.read();
+        if (chunk) {
+            buf = Buffer.concat([buf, chunk]);
+        }
+    });
+    
+    process.stdin.on("end", function()
+    {
+        cb(buf);
+    });
+}
+
+function is_compress()
+{
+    return params.z || params.compress || !(params.d || params.decompress || params.t || params.test);
 }
 
 params = parse_parameters({nonboolean: ["S", "suffix"]});
@@ -297,12 +322,22 @@ suffix = params.S || params.suffix || ".lzma";
 
 if (params._.length) {
     ///NOTE: -t and --test must be decompress.
-    if (params.z || params.compress || !(params.d || params.decompress || params.t || params.test)) {
+    if (is_compress()) {
         mode = get_mode();
         compress_files(params._);
     } else {
         decompress_files(params._);
     }
 } else {
-    console.log("TODO: STDIN");
+    /// STDIN needs STDOUT.
+    params.c = true;
+    
+    get_stdin(function onget(data)
+    {
+        if (is_compress()) {
+            compress_files([data]);
+        } else {
+            decompress_files([data]);
+        }
+    });
 }
