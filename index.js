@@ -7,7 +7,7 @@ function load_lzma()
     var p = require("path");
     
     ///NOTE: We can't use .join() because it will delete the leading dot slash, which node needs.
-    return require("." + p.sep + "src" + p.sep + "lzma_worker.js").LZMA;
+    return require("." + p.sep + "src" + p.sep + "lzma_worker.js").LZMA_WORKER;
 }
 
 lzma = load_lzma();
