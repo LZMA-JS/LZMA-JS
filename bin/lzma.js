@@ -131,9 +131,13 @@ function compress_files(files)
 {
     (function loop(i)
     {
+        var is_file;
+        
         if (i >= files.length) {
             return;
         }
+        
+        is_file = typeof files[i] === "string";
         
         if (!params.c && !params.stdout && !params.f && !params.force && !(params.r || params.testComp) && fs.existsSync(files[i] + suffix)) {
             if (!params.q && !params.quiet) {
@@ -159,7 +163,7 @@ function compress_files(files)
             }
         }
         
-        lzma.compress(typeof files[i] === "string" ? fs.readFileSync(files[i], "utf8") : files[i].toString(), mode, function ondone(data)
+        lzma.compress(is_file ? fs.readFileSync(files[i], "utf8") : files[i].toString(), mode, function ondone(data)
         {
             var j,
                 len,
@@ -168,7 +172,7 @@ function compress_files(files)
             if (params.r || params.testComp) {
                 if (data) {
                     if (params.v || params.verbose) {
-                        console.error(files[i] + " -- compressed succesfully");
+                        console.error((is_file ? files[i] : "STDIN") + " -- compressed succesfully");
                     }
                 } else {
                     if (!params.q && !params.quiet) {
@@ -200,13 +204,16 @@ function decompress_files(files)
 {
     (function loop(i)
     {
-        var ext;
+        var ext,
+            is_file;
         
         if (i >= files.length) {
             return;
         }
         
-        if (typeof files[i] === "string") {
+        is_file = typeof files[i] === "string";
+        
+        if (is_file) {
             ext = p.extname(files[i]);
             
             if (ext !== suffix) {
@@ -233,7 +240,7 @@ function decompress_files(files)
             if (params.t || params.test) {
                 if (data) {
                     if (params.v || params.verbose) {
-                        console.error(files[i] + " -- decoded succesfully");
+                        console.error((is_file ? files[i] : "STDIN") + " -- decoded succesfully");
                     }
                 } else {
                     if (!params.q && !params.quiet) {
