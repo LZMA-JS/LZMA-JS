@@ -2451,7 +2451,8 @@ var LZMA = (function () {
             }
         }
         
-        do_action();
+        ///NOTE: We need to wait to make sure it is always async.
+        wait(do_action, 0);
     }
     /** ce */
     

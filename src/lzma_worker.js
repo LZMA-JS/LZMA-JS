@@ -3131,7 +3131,8 @@ var LZMA = (function () {
             }
         }
         
-        do_action();
+        ///NOTE: We need to wait to make sure it is always async.
+        wait(do_action, 0);
     }
     /** ce */
     /** ds */
@@ -3201,7 +3202,8 @@ var LZMA = (function () {
             }
         }
         
-        do_action();
+        ///NOTE: We need to wait to make sure it is always async.
+        wait(do_action, 0);
     }
     /** de */
     var LZMAJS = make_thing(0);
