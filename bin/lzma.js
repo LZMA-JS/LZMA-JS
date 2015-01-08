@@ -310,7 +310,7 @@ if (params.h || params.help) {
     console.log("  -k --keep         keep (don't delete) input files");
     console.log("  -f --force        force overwrite of output file and compress links");
     console.log("  -t --test         test compressed file integrity");
-    console.log("  -r --testComp    test compressing but don't save anything");
+    console.log("  -r --testComp     test compressing (don't save anything)");
     console.log("  -S .suf  --suffix .suf   use suffix .suf on compressed files");
     console.log("  -q --quiet        suppress error messages");
     console.log("  -v --verbose      be verbose");
