@@ -157,7 +157,7 @@ function compress_files(files)
         } else {
             if (p.extname(files[i]) === suffix) {
                 if (!params.q && !params.quiet) {
-                    console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged.")
+                    console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged. Use -S to change suffix.")
                 }
                 return loop(i + 1);
             }
@@ -175,9 +175,7 @@ function compress_files(files)
                         console.error((is_file ? files[i] : "STDIN") + " -- compressed succesfully");
                     }
                 } else {
-                    if (!params.q && !params.quiet) {
-                        console.error("Compression error");
-                    }
+                    console.error("Compression error");
                 }
                 return loop(i + 1);
             }
@@ -243,9 +241,7 @@ function decompress_files(files)
                         console.error((is_file ? files[i] : "STDIN") + " -- decoded succesfully");
                     }
                 } else {
-                    if (!params.q && !params.quiet) {
-                        console.error("Decoder error");
-                    }
+                    console.error("Decoder error");
                 }
                 return loop(i + 1);
             }
