@@ -1293,7 +1293,7 @@ var LZMA = (function () {
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
     if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
-    (function create_onmessage() {
+        (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
             onmessage = function (e) {
