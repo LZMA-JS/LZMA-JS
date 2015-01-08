@@ -2489,7 +2489,7 @@ var LZMA = (function () {
                     ];
         
         return function (mode) {
-            return modes[mode < 1 ? 0 : mode > 9 ? 8 : mode - 1 || 0];
+            return modes[mode - 1] || modes[0];
         };
     }());
     /** ce */
