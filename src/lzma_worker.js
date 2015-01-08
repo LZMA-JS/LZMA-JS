@@ -3230,10 +3230,10 @@ var LZMA = (function () {
     /** cs */
     var get_mode_obj = (function () {
         var modes = [
-                        {dicSize: 16, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 20, fb: 64,  matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 19, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 20, fb: 64,  matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                        {dicSize: 16, fb:  64, matchFinder: 0, lc: 3, lp: 0, pb: 2},
+                        {dicSize: 20, fb:  64, matchFinder: 0, lc: 3, lp: 0, pb: 2},
+                        {dicSize: 19, fb:  64, matchFinder: 1, lc: 3, lp: 0, pb: 2},
+                        {dicSize: 20, fb:  64, matchFinder: 1, lc: 3, lp: 0, pb: 2},
                         {dicSize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
                         {dicSize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
                         {dicSize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
@@ -3241,22 +3241,8 @@ var LZMA = (function () {
                         {dicSize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
                     ];
         
-        function isNumber(n) {
-            return !isNaN(parseFloat(n)) && isFinite(n);
-        }
-
         return function (mode) {
-            if (!isNumber(mode)) {
-                mode = 1;
-            } else {
-                if (mode < 1) {
-                    mode = 1;
-                } else if (mode > 9) {
-                    mode = 9;
-                }
-            }
-            
-            return modes[mode - 1];
+            return modes[mode < 1 ? 0 : mode > 9 ? 8 : mode - 1 || 0];
         };
     }());
     /** ce */
@@ -3264,7 +3250,7 @@ var LZMA = (function () {
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
     if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
-    (function create_onmessage() {
+        (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
             onmessage = function (e) {
