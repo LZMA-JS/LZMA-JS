@@ -101,6 +101,10 @@ you can simply load lzma-c.js (for compression) or lzma-d.js (for decompression)
 Of course, you'll want to load the minified versions if you're sending data over the wire.
 
 
+Compatibility
+---
+
+LZMA-JS is compatible with anything that is compatible with the reference implementation of LZMA, for example, the <code>lzma</code> command.
 
 
 License
