@@ -1,0 +1,47 @@
+<head>
+    <title>Simple Demo</title>
+    <meta http-equive="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<p>This is a very simple demonstration of <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a>,
+a browser-based implementation of the LZMA compression algorithm.</p>
+<p>You can find a more advanced demo <a href="advanced_demo.html">here</a>.</p>
+
+<textarea spellcheck=false id=compression_el>Hello, world.</textarea><br>
+<button id=go>Go</button>
+<!--
+    This demo shows how to use the individual compression and decompression scripts.
+    Of course, there is no reason to use both (this is just an example).
+    If you want to use both compression and decompression, use lzma.js (see simple_demo.html).
+    If you want to skip web workers, include lzma_worker.js (see simple_demo_without_web_workers.html).
+-->
+<script src="../src/lzma-c.js"></script>
+<script>
+var my_lzma = LZMA;
+</script>
+<script src="../src/lzma-d.js"></script>
+<script>
+
+var compression_mode = 1;
+my_lzma.decompress = LZMA.decompress;
+
+document.getElementById("go").onclick = function () {
+    /// First, let's compress it.
+    my_lzma.compress(document.getElementById("compression_el").value, compression_mode, function on_compress_complete(result) {
+        alert("Compressed: " + result);
+        
+        /// Now, let's try to decompress it to make sure it works both ways.
+        my_lzma.decompress(result, function on_decompress_complete(result) {
+            alert("Decompressed: " + result);
+        }, function on_decompress_progress_update(percent) {
+            /// Decompressing progress code goes here.
+            document.title = "Decompressing: " + (percent * 100) + "%";
+        });
+    }, function on_compress_progress_update(percent) {
+        /// Compressing progress code goes here.
+        document.title = "Compressing: " + (percent * 100) + "%";
+    });
+}
+
+</script>
+</body>
