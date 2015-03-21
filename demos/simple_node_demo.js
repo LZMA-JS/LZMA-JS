@@ -8,8 +8,8 @@ var my_lzma = require("../index.js"),
 
 /// First, let's compress it.
 my_lzma.compress(compress_me, compression_mode, function (result) {
-    console.log("Compressed: " + result);
-    
+    ///NOTE: LZMA-JS returns a regular JavaScript array. You can turn it into a buffer like so.
+    console.log("Compressed: ", new Buffer(result));
     /// Now, let's try to decompress it to make sure it works both ways.
     my_lzma.decompress(result, function (result) {
         console.log("Decompressed: " + result);
