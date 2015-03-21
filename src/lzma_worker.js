@@ -5,6 +5,7 @@
 
 /* global setImmediate, setTimeout, window, onmessage */
 
+/** xs */
 ///NOTE: This is the master file that is used to generate lzma-c.js and lzma-d.js.
 ///      Comments are used to determine which parts are to be removed.
 ///
@@ -13,6 +14,7 @@
 /// xs-xe (only in this file start-end)
 /// co    (compression only)
 /// do    (decompression only)
+/** xe */
 
 var LZMA = (function () {
     var /** cs */
