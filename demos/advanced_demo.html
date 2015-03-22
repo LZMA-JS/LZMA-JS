@@ -22,23 +22,23 @@
 
                     <p>
                     <strong>Compressing:</strong>
-                    Enter any content into the left window and press "Compress" to compress it.
-                    When finished, the right window will display the hexadecimal representation
-                    of the compressed content of the left window (after encoding it in UTF-8).
-                    Use the pulldown to choose from fastest (Level 1) to best (Level 9) compression&mdash;lower levels
-                    are more appropriate for JavaScript running in a browser.
+                    Enter any content into the left text box, and click "Compress" to compress it.
+                    When finished, the right text box will display the hexadecimal representation
+                    of the compressed content of the left text box (after encoding it in UTF-8).
+                    Use the drop down box to choose from fastest (Level 1) to best (Level 9) compression.
                     </p>
 
                     <p>
                     <strong>Decompressing:</strong>
-                    Enter whitespace-separated hexadecimal bytes in the right window corresponding
+                    Enter whitespace-separated hexadecimal bytes in the right text box corresponding
                     to compressed output of the LZMA algorithm.
-                    Press the "Decompress" button to decompress the data and the original will be shown back in
-                    the left window (decoded from UTF-8).
+                    Click the "Decompress" button to decompress the data, and the original text will be shown back in
+                    the left text box (decoded from UTF-8). However, it the original content is binary data, it will
+                    instead display the data as a comma separated list of bytes.
                     </p>
 
                     <p>
-                    On UNIX machines, you can generate input for the right window yourself using commands like this:
+                    On UNIX machines, you can generate input for the right text box yourself using commands like this:
                     <blockquote>
                     <span style="white-space: pre; font-family: Courier">$ echo "Hello, world." | lzma | hexdump -C | cut -c9-60</span>
                     </blockquote>
@@ -169,6 +169,7 @@
                 my_lzma = new LZMA("../src/lzma_worker.js");
             
             if (!String.prototype.trim) {
+                /// This is not the fastest or best practice, but this is just a demo.
                 String.prototype.trim = function () {
                     return this.replace(/^\s+|\s+$/, "");
                 }
@@ -190,7 +191,9 @@
                     hex_len,
                     i;
                 
-                if (hex_str.trim() == "") return [];
+                if (hex_str.trim() === "") {
+                    return [];
+                }
                 
                 /// Check for invalid hex characters.
                 if (/[^0-9a-fA-F\s]/.test(hex_str)) {
@@ -201,7 +204,7 @@
                 hex_len = hex_arr.length;
                 
                 for (i = 0; i < hex_len; ++i) {
-                    if (hex_arr[i].trim() == "") {
+                    if (hex_arr[i].trim() === "") {
                         continue;
                     }
                     hex_data[count++] = parseInt(hex_arr[i], 16);
@@ -229,7 +232,9 @@
                     tmp_hex = byte_arr[i].toString(16);
                     
                     /// Add leading zero.
-                    if (tmp_hex.length == 1) tmp_hex = "0" + tmp_hex;
+                    if (tmp_hex.length === 1) {
+                        tmp_hex = "0" + tmp_hex;
+                    }
                     
                     if ((i + 1) % 16 === 0) {
                         tmp_hex += "\n";
@@ -320,7 +325,7 @@
                 update_sizes();
                 left_output_el.innerHTML = "Decompressing...0%";
                 
-                if (byte_arr == false) {
+                if (byte_arr === false) {
                     ///TODO: Show which character is wrong.  I.e., invalid compressed input: invalid hex character `s
                     alert("invalid compressed input");
                     update_sizes();
