@@ -1,0 +1,44 @@
+<head>
+    <title>Simple Demo</title>
+    <meta http-equive="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<p>This simple demonstration shows how to use <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a> with Ajax.</p>
+<p>Press "<code>Load</code>" to download a compressed file via Ajax and display it below.</p>
+<p id=warning style="background: #FEB91E; color rgba(0,0,0,.5);border: 2 solid #965D2D;font-size: 25px; padding:3px; display:none"></p>
+<button id=go>Load</button>
+<div id=area></div>
+<script src="../src/lzma.js"></script>
+<script>
+var my_lzma = new LZMA("../src/lzma_worker.js");
+
+function decompress(data) {
+    my_lzma.decompress(data, function on_decompress_complete(result) {
+        document.getElementById("area").innerHTML = result;
+    }, function on_decompress_progress_update(percent) {
+        document.title = "Decompressing: " + (percent * 100) + "%";
+    });
+}
+
+document.getElementById("go").onclick = function () {
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "./assets/compressed.lzma", true);
+    ajax.responseType = "arraybuffer";
+    
+    ajax.onload = function (e) {
+        /// LZMA-JS can read Uint8Array directly.
+        decompress(new Uint8Array(ajax.response));
+    };
+    
+    /// Clear the area for good measure.
+    document.getElementById("area").innerHTML = "";
+    
+    ajax.send();
+}
+
+if (location.protocol === "file:") {
+    document.getElementById("warning").style.display = "block";
+    document.getElementById("warning").innerHTML = "Sorry, but Ajax does not work from the <code><b>file:</b></code> protocol.<br>Try <a href=\"https://nmrugg.github.io/LZMA-JS/demos/ajax_demo.html\">https://nmrugg.github.io/LZMA-JS/demos/ajax_demo.html</a> instead.";
+}
+</script>
+</body>
