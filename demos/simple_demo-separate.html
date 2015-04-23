@@ -5,25 +5,26 @@
 <body>
 <p>This is a very simple demonstration of <a href="http://github.com/nmrugg/LZMA-JS/">LZMA-JS</a>,
 a browser-based implementation of the LZMA compression algorithm.</p>
-<p>You can find a more advanced demo <a href="advanced_demo.html">here</a>.</p>
+<p>
+This demo shows how to use the individual compression and decompression scripts.<br>
+Of course, there is no reason to use both (this is just an example).<br>
+If you just want compression, only include lzma-c.js and if you just want decompression, include lzma-d.js.<br>
+If you want to use both compression and decompression, just use lzma.js (see <a href="simple_demo.html">simple_demo.html</a>).<br>
+Or if you want to skip web workers, include lzma_worker.js (see <a href="simple_demo_without_web_workers.html">simple_demo_without_web_workers.html</a>).<br>
+</p>
 
 <textarea spellcheck=false id=compression_el>Hello, world.</textarea><br>
 <button id=go>Go</button>
-<!--
-    This demo shows how to use the individual compression and decompression scripts.
-    Of course, there is no reason to use both (this is just an example).
-    If you just want compression, only include lzma-c.js and if you just want decompression, include lzma-d.js.
-    If you want to use both compression and decompression, just use lzma.js (see simple_demo.html).
-    Or if you want to skip web workers, include lzma_worker.js (see simple_demo_without_web_workers.html).
--->
 <script src="../src/lzma-c.js"></script>
 <script>
+/// Create this variable now to get LZMA.compress. lzma-d.js will overwrite the "LZMA" variable.
 var my_lzma = LZMA;
 </script>
 <script src="../src/lzma-d.js"></script>
 <script>
 
 var compression_mode = 1;
+/// Add the decompression function to the compression function loaded above.
 my_lzma.decompress = LZMA.decompress;
 
 document.getElementById("go").onclick = function () {
