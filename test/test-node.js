@@ -53,7 +53,7 @@ function progress(percent)
 
 function decompression_test(compressed_file, correct_filename, next)
 {
-    fs.readFile(correct_filename, function (err, correct_buffer)
+    fs.readFile(correct_filename, function (err, correct_result)
     {
         
         if (err) {
@@ -73,20 +73,15 @@ function decompression_test(compressed_file, correct_filename, next)
             try {
                 my_lzma.decompress(buffer, function (result)
                 {
-                    var deco_speed = (new Date()).getTime() - deco_start,
-                        correct_result,
-                        is_correct;
+                    var deco_speed = (new Date()).getTime() - deco_start;
                     
                     console.log("Decompressed size:", result.length);
                     
                     if (typeof result === "string") {
-                        correct_result = correct_buffer.toString();
-                        is_correct = correct_result === result
-                    } else {
-                        is_correct = correct_buffer.equals(new Buffer(result))
+                        correct_result = correct_result.toString();
                     }
                     
-                    if (is_correct) {
+                    if (compare(correct_result, result)) {
                         display_result("Test passed", true);
                     } else {
                         display_result("ERROR: files do not match!", false);
@@ -151,9 +146,12 @@ function compression_test(file, next)
             {
                 var deco_speed = (new Date()).getTime() - deco_start;
                 console.log("Decompressed size:", decompressed_result.length);
-                var dbuf = new Buffer(decompressed_result);
                 
-                if (typeof content === "string" ? content === decompressed_result : content.equals(dbuf)) {
+                if (typeof decompressed_result === "string") {
+                    content = content.toString();
+                }
+                
+                if (compare(content, decompressed_result)) {
                 //if (content === result) {
                     display_result("Test passed", true);
                 } else {
@@ -222,37 +220,38 @@ function run_tests(cb)
     });
 }
 
-(function ()
+function compare(a, b)
 {
-    if (!(new Buffer(0)).equals) {
-        Buffer.prototype.equals = function equals(b)
-        {
-            var i;
-            //console.log("comparing")
-            //console.log(this)
-            //console.log(b)
-            //console.log(this.toJSON())
-            //console.log(b.toJSON())
-            if (!Buffer.isBuffer(b)) {
-                return;
-            }
-            if (this.length !== b.length) {
-                console.log("BAD LENGTH:", this.length, "!==", b.length)
-                return false;
-            }
-            
-            for (i = this.length - 1; i >= 0; --i) {
-                if (this[i] !== b[i]) {
-                    console.log("BAD VAL:", this[i], "!==", b[i])
-                    return false;
-                }
-            }
-            
-            return true;
-        };
+    var i;
+    //console.log("comparing")
+    //console.log(this)
+    //console.log(b)
+    //console.log(this.toJSON())
+    //console.log(b.toJSON())
+    
+    if (typeof a !== typeof b) {
+        console.log("BAD TYPES:", typeof a, "!==", typeof b)
+        return false;
     }
-}());
-
+    
+    if (a.length !== b.length) {
+        console.log("BAD LENGTH:", a.length, "!==", b.length)
+        return false;
+    }
+    
+    if (typeof a === "string") {
+        return a === b;
+    }
+    
+    for (i = a.length - 1; i >= 0; --i) {
+        if (a[i] !== b[i]) {
+            console.log("BAD VAL (" + i + "):",  a[i], "!==", b[i])
+            return false;
+        }
+    }
+    
+    return true;
+}
 
 path_to_files = p.join(__dirname, path_to_files);
 
