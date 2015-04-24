@@ -382,7 +382,7 @@ var LZMA = (function () {
         srclen  = src.length;
         destlen = dest.length;
         if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            throw new Error("IndexOutOfBoundsException");
+            throw new Error("out of bounds");
         }
 
         for (i = 0; i < len; ++i) {
@@ -393,7 +393,7 @@ var LZMA = (function () {
     /** cs */
     function $configure(this$static, encoder) {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw new Error("unexpected failure");
+            throw new Error("unknown error");
     }
     /** ce */
     
@@ -1008,7 +1008,7 @@ var LZMA = (function () {
     function $processChunk(this$static) {
         var exception;
         if (!this$static.alive) {
-            throw new Error("IllegalStateException");
+            throw new Error("bad state");
         }
         exception = true;
         try {
