@@ -2069,13 +2069,13 @@ var LZMA = (function () {
         var i;
         $BaseInit(this$static);
         $Init_9(this$static._rangeEncoder);
-        InitBitModels_0(this$static._isMatch);
-        InitBitModels_0(this$static._isRep0Long);
-        InitBitModels_0(this$static._isRep);
-        InitBitModels_0(this$static._isRepG0);
-        InitBitModels_0(this$static._isRepG1);
-        InitBitModels_0(this$static._isRepG2);
-        InitBitModels_0(this$static._posEncoders);
+        InitBitModels(this$static._isMatch);
+        InitBitModels(this$static._isRep0Long);
+        InitBitModels(this$static._isRep);
+        InitBitModels(this$static._isRepG0);
+        InitBitModels(this$static._isRepG1);
+        InitBitModels(this$static._isRepG2);
+        InitBitModels(this$static._posEncoders);
         $Init_3(this$static._literalEncoder);
         for (i = 0; i < 4; ++i) {
             InitBitModels(this$static._posSlotEncoder[i].Models);
@@ -2265,7 +2265,7 @@ var LZMA = (function () {
     
     function $Init_2(this$static, numPosStates) {
         var posState;
-        InitBitModels_0(this$static._choice);
+        InitBitModels(this$static._choice);
         for (posState = 0; posState < numPosStates; ++posState) {
             InitBitModels(this$static._lowCoder[posState].Models);
             InitBitModels(this$static._midCoder[posState].Models);
@@ -2350,7 +2350,7 @@ var LZMA = (function () {
         var i, numStates;
         numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
         for (i = 0; i < numStates; ++i) {
-            InitBitModels_0(this$static.m_Coders[i].m_Encoders);
+            InitBitModels(this$static.m_Coders[i].m_Encoders);
         }
     }
     
@@ -2712,12 +2712,6 @@ var LZMA = (function () {
         return ProbPrices[((Prob - symbol ^ -symbol) & 2047) >>> 2];
     }
     
-    function InitBitModels_0(probs) {
-        var i;
-        for (i = 0; i < probs.length; ++i) {
-            probs[i] = 1024;
-        }
-    }
     /** ce */
     /** ds */
     function convert_binary_arr(arr)
