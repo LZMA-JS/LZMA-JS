@@ -48,14 +48,12 @@ var LZMA = (function () {
     var _,
         N1_longLit = [4294967295, -__4294967296],
         /** cs */
-        N8000000000000000_longLit = [0, -9223372036854775808],
+        MIN_VALUE = [0, -9223372036854775808],
         P4_longLit = [4, 0],
         P1000_longLit = [4096, 0],
         Pffffff_longLit = [16777215, 0],
         Pff000000_longLit = [4278190080, 0],
         Pffffffff_longLit = [4294967295, 0],
-        P1000000_longLit = [16777216, 0],
-        P7fffffffffffffff_longLit = [4294967295, 9223372032559808512],
         /** ce */
         P0_longLit = [0, 0],
         P1_longLit = [1, 0];
@@ -78,7 +76,7 @@ var LZMA = (function () {
     function createFromSeed(seedType, length_0) {
         var array = new Array(length_0);
         if (seedType > 0) {
-            var value = [null, 0, false, [0, 0]][seedType];
+            var value = [null, 0, false, P0_longLit][seedType];
             if (typeof value !== "number") {
                 for (var i = 0; i < length_0; ++i) {
                     array[i] = value;
@@ -231,7 +229,7 @@ var LZMA = (function () {
             if (n == 0) {
                 return a;
             } else {
-                return ZERO;
+                return P0_longLit;
             }
         }
         if (a[1] < 0) {
@@ -263,19 +261,11 @@ var LZMA = (function () {
         n &= 63;
         sr = shr(a, n);
         if (a[1] < 0) {
-            sr = add(sr, shl(TWO, 63 - n));
+            sr = add(sr, shl([2, 0], 63 - n));
         }
         return sr;
     }
     
-    var LN_2 = Math.log(2),
-        MAX_VALUE = P7fffffffffffffff_longLit,
-        MIN_VALUE = N8000000000000000_longLit,
-        NEG_ONE = [ 4294967295, -4294967296 ],
-        ONE = [1, 0],
-        TWO = [2, 0],
-        TWO_PWR_24 = P1000000_longLit,
-        ZERO = [0, 0];
     /** ce */
     
     function sub(a, b) {
