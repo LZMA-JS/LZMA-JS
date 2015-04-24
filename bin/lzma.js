@@ -163,7 +163,7 @@ function compress_files(files)
             }
         }
         
-        lzma.compress(is_file ? fs.readFileSync(files[i], "utf8") : files[i].toString(), mode, function ondone(data)
+        lzma.compress(is_file ? fs.readFileSync(files[i]) : files[i].toString(), mode, function ondone(data)
         {
             var j,
                 len,
