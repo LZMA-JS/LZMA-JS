@@ -55,19 +55,6 @@ var LZMA = (function () {
     
     var Object_0 = make_thing({});
     
-    /** ds */
-    function $append(a, x) {
-        a[a.explicitLength++] = x;
-    }
-    
-    function $toString(a) {
-        var s_0, s;
-        s_0 = (s = a.join("") , a.length = a.explicitLength = 0 , s);
-        a[a.explicitLength++] = s_0;
-        return s_0;
-    }
-    /** de */
-    
     function createFromSeed(seedType, length_0) {
         var array = new Array(length_0);
         if (seedType > 0) {
@@ -359,16 +346,6 @@ var LZMA = (function () {
         }
     }
     /** ce */
-    
-    /** ds */
-    function $StringBuilder(this$static) {
-        var array;
-        this$static.data = (array = [] , array.explicitLength = 0 , array);
-        return this$static;
-    }
-    
-    var StringBuilder = make_thing();
-    /** de */
     
     function arraycopy(src, srcOfs, dest, destOfs, len) {
         var destlen, i, srclen;
@@ -2726,7 +2703,7 @@ var LZMA = (function () {
     /** ce */
     /** ds */
     function decode(utf) {
-        var buf = $StringBuilder(new StringBuilder()), i, x, y, z;
+        var buf = [], i, x, y, z;
         for (i = 0; i < utf.length; ++i) {
             x = utf[i] & 255;
             if ((x & 128) == 0) {
@@ -2734,7 +2711,7 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                $append(buf.data, String.fromCharCode(x & 65535));
+                buf[buf.length] = String.fromCharCode(x & 65535);
             } else if ((x & 224) == 192) {
                 if (i + 1 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
@@ -2745,7 +2722,7 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                $append(buf.data, String.fromCharCode((x & 31) << 6 & 65535 | y & 63));
+                buf[buf.length] = String.fromCharCode((x & 31) << 6 & 65535 | y & 63);
             } else if ((x & 240) == 224) {
                 if (i + 2 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
@@ -2761,13 +2738,14 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                $append(buf.data, String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535));
+                buf[buf.length] = String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
             } else {
                 /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                 return convert_binary_arr(utf);
             }
         }
-        return $toString(buf.data);
+        
+        return buf.join("");
     }
     /** de */
     /** cs */
