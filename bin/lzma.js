@@ -229,7 +229,7 @@ function decompress_files(files)
             return loop(i + 1);
         }
         
-        lzma.decompress(typeof files[i] === "string" ? fs.readFileSync(files[i], "utf8") : files[i], function ondone(data)
+        lzma.decompress(typeof files[i] === "string" ? fs.readFileSync(files[i]) : files[i], function ondone(data)
         {
             var j,
                 len,
