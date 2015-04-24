@@ -951,13 +951,6 @@ var LZMA = (function () {
         this$static._stream = null;
     }
     
-    function $SetStream_0(this$static, stream) {
-        $Flush_0(this$static);
-        this$static._stream = null;
-        this$static._stream = stream;
-    }
-    
-    
     var OutWindow = make_thing();
     _._pos = 0;
     _._streamPos = 0;
@@ -1064,7 +1057,8 @@ var LZMA = (function () {
     
     function $CodeInChunks(this$static, inStream, outStream, outSize) {
         this$static.m_RangeDecoder.Stream = inStream;
-        $SetStream_0(this$static.m_OutWindow, outStream);
+        $ReleaseStream(this$static.m_OutWindow)
+        this$static.m_OutWindow._stream = outStream;
         $Init_1(this$static);
         this$static.state = 0;
         this$static.rep0 = 0;
