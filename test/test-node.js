@@ -93,11 +93,11 @@ function decompression_test(compressed_file, correct_filename, next) {
                     next();
                 }, progress);
             } catch (e) {
-                if (p.basename(correct_filename) === "error-" + e.detailMessage) {
+                if (p.basename(correct_filename) === "error-" + e.message) {
                     display_result("Test passed", true);
-                    console.log("threw correct error: " + e.detailMessage);
+                    console.log("threw correct error: " + e.message);
                 } else {
-                    display_result("ERROR: " + e.detailMessage, false);
+                    display_result("ERROR: " + e.message, false);
                     all_tests_pass = false;
                 }
                 console.log();
