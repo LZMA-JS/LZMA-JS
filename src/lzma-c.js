@@ -46,12 +46,11 @@ var LZMA = (function () {
     
     var Object_0 = make_thing({});
     
-    
-    
-    function createFromSeed(seedType, length_0) {
+    function initDim(length_0, seedType) {
         var array = new Array(length_0);
         if (seedType > 0) {
             var value = [null, 0, false, P0_longLit][seedType];
+            /// Speed up creating arrays.
             if (typeof value !== "number") {
                 for (var i = 0; i < length_0; ++i) {
                     array[i] = value;
@@ -59,11 +58,6 @@ var LZMA = (function () {
             }
         }
         return array;
-    }
-    
-    function initDim(length_0, seedType) {
-        var result = createFromSeed(seedType, length_0);
-        return result;
     }
     
     function add(a, b) {
@@ -255,16 +249,9 @@ var LZMA = (function () {
     var InputStream = make_thing();
     
     function $ByteArrayInputStream(this$static, buf) {
-        $ByteArrayInputStream_0(this$static, buf, 0, buf.length);
-        return this$static;
-    }
-    
-    function $ByteArrayInputStream_0(this$static, buf, off, len) {
         this$static.buf = buf;
-        this$static.pos = off;
-        this$static.count = off + len;
-        if (this$static.count > buf.length)
-            this$static.count = buf.length;
+        this$static.pos = 0;
+        this$static.count = buf.length;
         return this$static;
     }
     
@@ -273,7 +260,7 @@ var LZMA = (function () {
     function $read_0(this$static, buf, off, len) {
         if (this$static.pos >= this$static.count)
             return -1;
-        len = min(len, this$static.count - this$static.pos);
+        len = Math.min(len, this$static.count - this$static.pos);
         arraycopy(this$static.buf, this$static.pos, buf, off, len);
         this$static.pos += len;
         return len;
@@ -295,16 +282,15 @@ var LZMA = (function () {
         var newbuf;
         if (len <= this$static.buf.length)
             return;
-        len = max(len, this$static.buf.length * 2);
+        len = Math.max(len, this$static.buf.length * 2);
         newbuf = initDim(len, 1);
         arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
         this$static.buf = newbuf;
     }
     
     function $toByteArray(this$static) {
-        var data;
-        data = initDim(this$static.count, 1);
-        arraycopy(this$static.buf, 0, data, 0, this$static.count);
+        var data = this$static.buf;
+        data.length = this$static.count;
         return data;
     }
     
@@ -324,14 +310,7 @@ var LZMA = (function () {
     var ByteArrayOutputStream = make_thing(new OutputStream());
     _.count = 0;
     
-    function max(x, y) {
-        return x > y?x:y;
-    }
     /** cs */
-    function min(x, y) {
-        return x < y?x:y;
-    }
-    
     function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
         var srcIdx;
         for (srcIdx = srcBegin; srcIdx < srcEnd; ++srcIdx) {
@@ -340,15 +319,13 @@ var LZMA = (function () {
     }
     /** ce */
     
-    
-    
     function arraycopy(src, srcOfs, dest, destOfs, len) {
         var destlen, i, srclen;
         
         srclen  = src.length;
         destlen = dest.length;
         if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            throw new Error("IndexOutOfBoundsException");
+            throw new Error("out of bounds");
         }
 
         for (i = 0; i < len; ++i) {
@@ -359,17 +336,12 @@ var LZMA = (function () {
     /** cs */
     function $configure(this$static, encoder) {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw new Error("unexpected failure");
+            throw new Error("unknown error");
     }
     /** ce */
     
     function $execute(this$static) {
-        try {
-            return $processChunk(this$static.chunker);
-        } catch (err) {
-            this$static.exception = err;
-            return false;
-        }
+        return $processChunk(this$static.chunker);
     }
     
     /** cs */
@@ -392,11 +364,7 @@ var LZMA = (function () {
     
     function $LZMAByteArrayCompressor(this$static, data, mode) {
         this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
-        try {
-            $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
-        } catch (err) {
-            throw err;
-        }
+        $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
         return this$static;
     }
     
@@ -828,28 +796,20 @@ var LZMA = (function () {
     
     
     function $processChunk(this$static) {
-        var exception;
         if (!this$static.alive) {
-            throw new Error("IllegalStateException");
+            throw new Error("bad state");
         }
-        exception = true;
-        try {
-            if (this$static.encoder) {
-                /// do:throw new Error("No encoding");
-                /** cs */
-                $processEncoderChunk(this$static);
-                /** ce */
-            } else {
-                throw new Error("No decoding");
-                
-            }
-            exception = false;
-            return this$static.alive;
-        } finally {
-            if (exception) {
-                this$static.alive = false;
-            }
+        
+        if (this$static.encoder) {
+            /// do:throw new Error("No encoding");
+            /** cs */
+            $processEncoderChunk(this$static);
+            /** ce */
+        } else {
+            throw new Error("No decoding");
+            
         }
+        return this$static.alive;
     }
     
     
@@ -1394,7 +1354,7 @@ var LZMA = (function () {
                 numAvailableBytes = this$static._numFastBytes;
             }
             if (!nextIsChar && matchByte != currentByte) {
-                t = min(numAvailableBytesFull - 1, this$static._numFastBytes);
+                t = Math.min(numAvailableBytesFull - 1, this$static._numFastBytes);
                 lenTest2 = $GetMatchLen(this$static._matchFinder, 0, this$static.reps[0], t);
                 if (lenTest2 >= 2) {
                     state2 = StateUpdateChar(state);
@@ -1440,7 +1400,7 @@ var LZMA = (function () {
                     startLen = lenTest + 1;
                 }
                 if (lenTest < numAvailableBytesFull) {
-                    t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
+                    t = Math.min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
                     lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, this$static.reps[repIndex], t);
                     if (lenTest2 >= 2) {
                         state2 = state < 7?8:11;
@@ -1496,7 +1456,7 @@ var LZMA = (function () {
                 }
                 if (lenTest == this$static._matchDistances[offs]) {
                     if (lenTest < numAvailableBytesFull) {
-                        t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
+                        t = Math.min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
                         lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, curBack, t);
                         if (lenTest2 >= 2) {
                             state2 = state < 7?7:10;
@@ -1568,13 +1528,13 @@ var LZMA = (function () {
         var i;
         $BaseInit(this$static);
         $Init_9(this$static._rangeEncoder);
-        InitBitModels_0(this$static._isMatch);
-        InitBitModels_0(this$static._isRep0Long);
-        InitBitModels_0(this$static._isRep);
-        InitBitModels_0(this$static._isRepG0);
-        InitBitModels_0(this$static._isRepG1);
-        InitBitModels_0(this$static._isRepG2);
-        InitBitModels_0(this$static._posEncoders);
+        InitBitModels(this$static._isMatch);
+        InitBitModels(this$static._isRep0Long);
+        InitBitModels(this$static._isRep);
+        InitBitModels(this$static._isRepG0);
+        InitBitModels(this$static._isRepG1);
+        InitBitModels(this$static._isRepG2);
+        InitBitModels(this$static._posEncoders);
         $Init_3(this$static._literalEncoder);
         for (i = 0; i < 4; ++i) {
             InitBitModels(this$static._posSlotEncoder[i].Models);
@@ -1764,7 +1724,7 @@ var LZMA = (function () {
     
     function $Init_2(this$static, numPosStates) {
         var posState;
-        InitBitModels_0(this$static._choice);
+        InitBitModels(this$static._choice);
         for (posState = 0; posState < numPosStates; ++posState) {
             InitBitModels(this$static._lowCoder[posState].Models);
             InitBitModels(this$static._midCoder[posState].Models);
@@ -1849,7 +1809,7 @@ var LZMA = (function () {
         var i, numStates;
         numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
         for (i = 0; i < numStates; ++i) {
-            InitBitModels_0(this$static.m_Coders[i].m_Encoders);
+            InitBitModels(this$static.m_Coders[i].m_Encoders);
         }
     }
     
@@ -2114,12 +2074,6 @@ var LZMA = (function () {
         return ProbPrices[((Prob - symbol ^ -symbol) & 2047) >>> 2];
     }
     
-    function InitBitModels_0(probs) {
-        var i;
-        for (i = 0; i < probs.length; ++i) {
-            probs[i] = 1024;
-        }
-    }
     /** ce */
     
     /** cs */
