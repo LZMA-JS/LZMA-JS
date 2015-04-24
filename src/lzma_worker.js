@@ -280,7 +280,7 @@ var LZMA = (function () {
     function $read_0(this$static, buf, off, len) {
         if (this$static.pos >= this$static.count)
             return -1;
-        len = min(len, this$static.count - this$static.pos);
+        len = Math.min(len, this$static.count - this$static.pos);
         arraycopy(this$static.buf, this$static.pos, buf, off, len);
         this$static.pos += len;
         return len;
@@ -302,7 +302,7 @@ var LZMA = (function () {
         var newbuf;
         if (len <= this$static.buf.length)
             return;
-        len = max(len, this$static.buf.length * 2);
+        len = Math.max(len, this$static.buf.length * 2);
         newbuf = initDim(len, 1);
         arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
         this$static.buf = newbuf;
@@ -331,14 +331,7 @@ var LZMA = (function () {
     var ByteArrayOutputStream = make_thing(new OutputStream());
     _.count = 0;
     
-    function max(x, y) {
-        return x > y?x:y;
-    }
     /** cs */
-    function min(x, y) {
-        return x < y?x:y;
-    }
-    
     function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
         var srcIdx;
         for (srcIdx = srcBegin; srcIdx < srcEnd; ++srcIdx) {
@@ -1192,8 +1185,8 @@ var LZMA = (function () {
         }
         if (this$static.m_DictionarySize != dictionarySize) {
             this$static.m_DictionarySize = dictionarySize;
-            this$static.m_DictionarySizeCheck = max(this$static.m_DictionarySize, 1);
-            $Create_5(this$static.m_OutWindow, max(this$static.m_DictionarySizeCheck, 4096));
+            this$static.m_DictionarySizeCheck = Math.max(this$static.m_DictionarySize, 1);
+            $Create_5(this$static.m_OutWindow, Math.max(this$static.m_DictionarySizeCheck, 4096));
         }
         return true;
     }
@@ -1860,7 +1853,7 @@ var LZMA = (function () {
                 numAvailableBytes = this$static._numFastBytes;
             }
             if (!nextIsChar && matchByte != currentByte) {
-                t = min(numAvailableBytesFull - 1, this$static._numFastBytes);
+                t = Math.min(numAvailableBytesFull - 1, this$static._numFastBytes);
                 lenTest2 = $GetMatchLen(this$static._matchFinder, 0, this$static.reps[0], t);
                 if (lenTest2 >= 2) {
                     state2 = StateUpdateChar(state);
@@ -1906,7 +1899,7 @@ var LZMA = (function () {
                     startLen = lenTest + 1;
                 }
                 if (lenTest < numAvailableBytesFull) {
-                    t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
+                    t = Math.min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
                     lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, this$static.reps[repIndex], t);
                     if (lenTest2 >= 2) {
                         state2 = state < 7?8:11;
@@ -1962,7 +1955,7 @@ var LZMA = (function () {
                 }
                 if (lenTest == this$static._matchDistances[offs]) {
                     if (lenTest < numAvailableBytesFull) {
-                        t = min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
+                        t = Math.min(numAvailableBytesFull - 1 - lenTest, this$static._numFastBytes);
                         lenTest2 = $GetMatchLen(this$static._matchFinder, lenTest, curBack, t);
                         if (lenTest2 >= 2) {
                             state2 = state < 7?7:10;
