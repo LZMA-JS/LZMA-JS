@@ -25,15 +25,12 @@ var LZMA = (function () {
         /** de */
         action_progress   = 3,
         wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
-        c = function () {return {typeName: this.typeId$+""};},
         __4294967296 = 4294967296;
     
     function make_thing(typeId, proto)
     {
         function func() {}
         _ = func.prototype = proto || new Object_0();
-        _.getClass$ = c;
-        _.typeId$ = typeId;
         return func;
     }
     
@@ -106,9 +103,6 @@ var LZMA = (function () {
         var result = createFromSeed(seedType, length_0);
         $clinit_4();
         wrapArray(result, expandoNames_0, expandoValues_0);
-        result.arrayClass$ = arrayClass;
-        result.typeId$ = typeId;
-        result.queryId$ = queryId;
         return result;
     }
     
@@ -116,31 +110,11 @@ var LZMA = (function () {
     function initValues(arrayClass, typeId, queryId, array) {
         $clinit_4();
         wrapArray(array, expandoNames_0, expandoValues_0);
-        array.arrayClass$ = arrayClass;
-        array.typeId$ = typeId;
-        array.queryId$ = queryId;
         return array;
     }
     /** de */
     
-    function setCheck(array, index, value) {
-        if (value != null) {
-            if (array.queryId$ > 0 && !canCastUnsafe(value.typeId$, array.queryId$)) {
-            throw new ArrayStoreException();
-            }
-            if (array.queryId$ < 0 && (value.typeMarker$ == nullMethod || value.typeId$ == 2)) {
-            throw new ArrayStoreException();
-            }
-        }
-        return array[index] = value;
-    }
-    
     var Array_0 = make_thing(0);
-    _.getClass$ = function () {
-        return this.arrayClass$;
-    };
-    _.length = 0;
-    _.queryId$ = 0;
     
     function $clinit_4() {
         $clinit_4 = nullMethod;
@@ -168,18 +142,7 @@ var LZMA = (function () {
     }
     
     var expandoNames_0, expandoValues_0;
-    
-    function canCastUnsafe(srcId, dstId) {
-        return srcId && typeIdArray[srcId][dstId];
-    }
-    
-    function dynamicCast(src, dstId) {
-        if (src != null && !canCastUnsafe(src.typeId$, dstId)) {
-            throw new ClassCastException();
-        }
-        return src;
-    }
-            
+     
     var typeIdArray = [
             {},
             {},
@@ -505,22 +468,6 @@ var LZMA = (function () {
     var ByteArrayOutputStream = make_thing(0, new OutputStream());
     _.count = 0;
     
-    /** ds */
-    function $IOException(this$static, message) {
-        this$static.detailMessage = message;
-        return this$static;
-    }
-    
-    var IOException = make_thing(7);
-    /** de */
-    
-    function $ArrayStoreException(this$static, message) {
-        this$static.detailMessage = message;
-        return this$static;
-    }
-    
-    var ArrayStoreException = make_thing(9, new RuntimeException());
-    
     function createForArray(packageName, className) {
         var clazz;
         clazz = new Class();
@@ -532,19 +479,6 @@ var LZMA = (function () {
     
     var ClassCastException = make_thing(12, new RuntimeException());
     
-    /** cs */
-    function $IllegalArgumentException(this$static, message) {
-        this$static.detailMessage = message;
-        return this$static;
-    }
-    
-    var IllegalArgumentException = make_thing(13, new RuntimeException());
-    /** ce */
-    
-    var IllegalStateException = make_thing(14, new RuntimeException());
-    
-    var IndexOutOfBoundsException = make_thing(15, new RuntimeException());
-    
     function max(x, y) {
         return x > y?x:y;
     }
@@ -552,18 +486,7 @@ var LZMA = (function () {
     function min(x, y) {
         return x < y?x:y;
     }
-    /** ce */
     
-    var NullPointerException = make_thing(16, new RuntimeException());
-    
-    function $equals(this$static, other) {
-        if (other == null) {
-            return false;
-        }
-        return String(this$static) == other;
-    }
-    
-    /** cs */
     function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
         var srcIdx;
         for (srcIdx = srcBegin; srcIdx < srcEnd; ++srcIdx) {
@@ -586,48 +509,24 @@ var LZMA = (function () {
         var destArray, destEnd, destTypeName, destlen, i, srcArray, srcTypeName, srclen;
         
         if (src == null || dest == null) {
-            throw new NullPointerException();
-        }
-        
-        srcTypeName  = (src.typeMarker$  == nullMethod || src.typeId$  == 2 ? src.getClass$()  : c()).typeName;
-        destTypeName = (dest.typeMarker$ == nullMethod || dest.typeId$ == 2 ? dest.getClass$() : c()).typeName;
-        
-        if (srcTypeName.charCodeAt(0) != 91 || destTypeName.charCodeAt(0) != 91) {
-            throw $ArrayStoreException(new ArrayStoreException(), "Must be array types");
-        }
-        if (srcTypeName.charCodeAt(1) != destTypeName.charCodeAt(1)) {
-            throw $ArrayStoreException(new ArrayStoreException(), "Array types must match");
+            throw new Error("NullPointerException");
         }
         
         srclen  = src.length;
         destlen = dest.length;
         if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            throw new IndexOutOfBoundsException();
+            throw new Error("IndexOutOfBoundsException");
         }
-        if ((srcTypeName.charCodeAt(1) == 76 || srcTypeName.charCodeAt(1) == 91) && !$equals(srcTypeName, destTypeName)) {
-            srcArray  = dynamicCast(src, 3);
-            destArray = dynamicCast(dest, 3);
-            if ((src == null ? null : src) === (dest == null ? null : dest) && srcOfs < destOfs) {
-                srcOfs += len;
-                for (destEnd = destOfs + len; destEnd-- > destOfs;) {
-                    setCheck(destArray, destEnd, srcArray[--srcOfs]);
-                }
-            } else {
-                for (destEnd = destOfs + len; destOfs < destEnd;) {
-                    setCheck(destArray, destOfs++, srcArray[srcOfs++]);
-                }
-            }
-        } else {
-            for (i = 0; i < len; ++i) {
-                dest[destOfs + i] = src[srcOfs + i];
-            }
+
+        for (i = 0; i < len; ++i) {
+            dest[destOfs + i] = src[srcOfs + i];
         }
     }
     
     /** cs */
     function $configure(this$static, encoder) {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw $RuntimeException(new RuntimeException(), "unexpected failure");
+            throw new Error("unexpected failure");
     }
     /** ce */
     
@@ -644,9 +543,9 @@ var LZMA = (function () {
     function $init(this$static, input, output, length_0, mode) {
         var encoder, i;
         if (!mode)
-            throw $IllegalArgumentException(new IllegalArgumentException(), "null mode");
+            throw new Error("null mode");
         if (compare(length_0, N1_longLit) < 0)
-            throw $IllegalArgumentException(new IllegalArgumentException(), "invalid length " + length_0);
+            throw new Error("invalid length " + length_0);
         this$static.length_0 = length_0;
         encoder = $Encoder(new Encoder());
         $configure(mode, encoder);
@@ -686,18 +585,18 @@ var LZMA = (function () {
         for (i = 0; i < properties.length; ++i) {
             r = $read(input);
             if (r == -1)
-                throw $IOException(new IOException(), "truncated input");
+                throw new Error("truncated input");
             properties[i] = r << 24 >> 24;
         }
         
         decoder = $Decoder(new Decoder());
         if (!$SetDecoderProperties(decoder, properties)) {
-            throw $IOException(new IOException(), "corrupted input");
+            throw new Error("corrupted input");
         }
         for (i = 0; i < 64; i += 8) {
             r = $read(input);
             if (r == -1)
-                throw $IOException(new IOException(), "truncated input");
+                throw new Error("truncated input");
             r = r.toString(16);
             if (r.length == 1) r = "0" + r;
             hex_length = r + "" + hex_length;
@@ -1247,7 +1146,7 @@ var LZMA = (function () {
     function $processChunk(this$static) {
         var exception;
         if (!this$static.alive) {
-            throw new IllegalStateException();
+            throw new Error("IllegalStateException");
         }
         exception = true;
         try {
@@ -1276,7 +1175,7 @@ var LZMA = (function () {
         var result;
         result = $CodeOneChunk(this$static.decoder);
         if (result == -1) {
-            throw $IOException(new IOException(), "corrupted input");
+            throw new Error("corrupted input");
         }
         this$static.inBytesProcessed = N1_longLit;
         this$static.outBytesProcessed = this$static.decoder.nowPos64;
