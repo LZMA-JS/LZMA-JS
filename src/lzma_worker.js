@@ -17,6 +17,9 @@
 /** xe */
 
 var LZMA = (function () {
+    
+    "use strict";
+    
     var /** cs */
         action_compress   = 1,
         /** ce */
