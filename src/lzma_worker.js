@@ -49,11 +49,6 @@ var LZMA = (function () {
         N1_longLit = [4294967295, -__4294967296],
         /** cs */
         MIN_VALUE = [0, -9223372036854775808],
-        P4_longLit = [4, 0],
-        P1000_longLit = [4096, 0],
-        Pffffff_longLit = [16777215, 0],
-        Pff000000_longLit = [4278190080, 0],
-        Pffffffff_longLit = [4294967295, 0],
         /** ce */
         P0_longLit = [0, 0],
         P1_longLit = [1, 0];
@@ -1553,7 +1548,7 @@ var LZMA = (function () {
                     $Flush(this$static, lowBits_0(this$static.nowPos64));
                     return;
                 }
-                if (compare(sub(this$static.nowPos64, progressPosValuePrev), P1000_longLit) >= 0) {
+                if (compare(sub(this$static.nowPos64, progressPosValuePrev), [4096, 0]) >= 0) {
                     this$static._finished = false;
                     finished[0] = false;
                     return;
@@ -2654,7 +2649,7 @@ var LZMA = (function () {
             this$static.Range = newBound;
             probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
         } else {
-            this$static.Low = add(this$static.Low, and(fromInt(newBound), Pffffffff_longLit));
+            this$static.Low = add(this$static.Low, and(fromInt(newBound), [4294967295, 0]));
             this$static.Range -= newBound;
             probs[index] = prob - (prob >>> 5) << 16 >> 16;
         }
@@ -2686,7 +2681,7 @@ var LZMA = (function () {
     }
     
     function $GetProcessedSizeAdd(this$static) {
-        return add(add(fromInt(this$static._cacheSize), this$static._position), P4_longLit);
+        return add(add(fromInt(this$static._cacheSize), this$static._position), [4, 0]);
     }
     
     function $Init_9(this$static) {
@@ -2700,7 +2695,7 @@ var LZMA = (function () {
     function $ShiftLow(this$static) {
         var LowHi, temp;
         LowHi = lowBits_0(shru(this$static.Low, 32));
-        if (LowHi != 0 || compare(this$static.Low, Pff000000_longLit) < 0) {
+        if (LowHi != 0 || compare(this$static.Low, [4278190080, 0]) < 0) {
             this$static._position = add(this$static._position, fromInt(this$static._cacheSize));
             temp = this$static._cache;
             do {
@@ -2710,7 +2705,7 @@ var LZMA = (function () {
             this$static._cache = lowBits_0(this$static.Low) >>> 24;
         }
         ++this$static._cacheSize;
-        this$static.Low = shl(and(this$static.Low, Pffffff_longLit), 8);
+        this$static.Low = shl(and(this$static.Low, [16777215, 0]), 8);
     }
     
     function GetPrice(Prob, symbol) {
