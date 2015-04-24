@@ -46,19 +46,19 @@ var LZMA = (function () {
     }
     
     var _,
-        N8000000000000000_longLit = [0, -9223372036854775808],
         N1_longLit = [4294967295, -__4294967296],
-        P0_longLit = [0, 0],
-        P1_longLit = [1, 0],
         /** cs */
+        N8000000000000000_longLit = [0, -9223372036854775808],
         P4_longLit = [4, 0],
         P1000_longLit = [4096, 0],
         Pffffff_longLit = [16777215, 0],
         Pff000000_longLit = [4278190080, 0],
         Pffffffff_longLit = [4294967295, 0],
-        /** ce */
         P1000000_longLit = [16777216, 0],
-        P7fffffffffffffff_longLit = [4294967295, 9223372032559808512];
+        P7fffffffffffffff_longLit = [4294967295, 9223372032559808512],
+        /** ce */
+        P0_longLit = [0, 0],
+        P1_longLit = [1, 0];
     
     var Object_0 = make_thing({});
     
@@ -101,6 +101,8 @@ var LZMA = (function () {
     }
     
     /** cs */
+    function nullMethod() {}
+    
     function and(a, b) {
         return makeFromBits(~~Math.max(Math.min(a[1] / __4294967296, 2147483647), -2147483648) & ~~Math.max(Math.min(b[1] / __4294967296, 2147483647), -2147483648), lowBits_0(a) & lowBits_0(b));
     }
@@ -158,30 +160,12 @@ var LZMA = (function () {
         return a[0] == b[0] && a[1] == b[1];
     }
     /** ce */
-    /** ds */
-    function fromDouble(value) {
-        if (isNaN(value)) {
-            return $clinit_10() , ZERO;
-        }
-        if (value < -9223372036854775808) {
-            return $clinit_10() , MIN_VALUE;
-        }
-        if (value >= 9223372036854775807) {
-            return $clinit_10() , MAX_VALUE;
-        }
-        if (value > 0) {
-            return create(Math.floor(value), 0);
-        } else {
-            return create(Math.ceil(value), 0);
-        }
-    }
-    /** de */
     
     function fromInt(value) {
         var rebase, result;
         if (value > -129 && value < 128) {
             rebase = value + 128;
-            result = ($clinit_9() , boxedValues)[rebase];
+            result = boxedValues[rebase];
             if (result == null) {
                 result = boxedValues[rebase] = internalFromInt(value);
             }
@@ -285,21 +269,7 @@ var LZMA = (function () {
         }
         return sr;
     }
-    /** ce */
     
-    function sub(a, b) {
-        var newHigh, newLow;
-        newHigh = a[1] - b[1];
-        newLow = a[0] - b[0];
-        return create(newLow, newHigh);
-    }
-        
-    function $clinit_9() {
-        $clinit_9 = nullMethod;
-        boxedValues = initDim(256, 0);
-    }
-    
-    var boxedValues;
     function $clinit_10() {
         $clinit_10 = nullMethod;
         LN_2 = Math.log(2);
@@ -311,8 +281,17 @@ var LZMA = (function () {
         TWO_PWR_24 = P1000000_longLit;
         ZERO = fromInt(0);
     }
-    
     var LN_2, MAX_VALUE, MIN_VALUE, NEG_ONE, ONE, TWO, TWO_PWR_24, ZERO;
+    /** ce */
+    
+    function sub(a, b) {
+        var newHigh, newLow;
+        newHigh = a[1] - b[1];
+        newLow = a[0] - b[0];
+        return create(newLow, newHigh);
+    }
+    
+    var boxedValues = initDim(256, 0);
     
     var InputStream = make_thing();
     
@@ -520,7 +499,7 @@ var LZMA = (function () {
             if (tmp_length > 4294967295) {
                 this$static.length_0 = N1_longLit;
             } else {
-                this$static.length_0 = fromDouble(tmp_length);
+                this$static.length_0 = fromInt(tmp_length);
             }
         }
         
@@ -3033,8 +3012,6 @@ var LZMA = (function () {
     }
     /** de */
     var LZMAJS = make_thing();
-    
-    function nullMethod() {}
     
     /** cs */
     var get_mode_obj = (function () {
