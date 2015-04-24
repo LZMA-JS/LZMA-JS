@@ -1,7 +1,7 @@
 /// © 2015 Nathan Rugg <nmrugg@gmail.com> | MIT
 /// See LICENSE for more details.
 
-/* jshint noarg:true, boss:true, noempty:true, unused:strict, strict:true, undef:true, noarg: true, forin:true, evil:true, -W041, -W021, worker:true, browser:true, node:true */
+/* jshint noarg:true, boss:true, unused:strict, strict:true, undef:true, noarg: true, forin:true, evil:true, newcap:false, -W041, -W021, worker:true, browser:true, node:true */
 
 /* global setImmediate, setTimeout, window, onmessage */
 
@@ -87,47 +87,8 @@ var LZMA = (function () {
     
     function initDim(length_0, seedType) {
         var result = createFromSeed(seedType, length_0);
-        $clinit_4();
-        wrapArray(result, expandoNames_0, expandoValues_0);
         return result;
     }
-    
-    /** ds */
-    function initValues(arrayClass, typeId, queryId, array) {
-        $clinit_4();
-        wrapArray(array, expandoNames_0, expandoValues_0);
-        return array;
-    }
-    /** de */
-    
-    var Array_0 = make_thing();
-    
-    function $clinit_4() {
-        $clinit_4 = nullMethod;
-        expandoNames_0 = [];
-        expandoValues_0 = [];
-        initExpandos(new Array_0(), expandoNames_0, expandoValues_0);
-    }
-    
-    function initExpandos(protoType, expandoNames, expandoValues) {
-        var i = 0, value;
-        for (var name_0 in protoType) {
-            if (value = protoType[name_0]) {
-            expandoNames[i] = name_0;
-            expandoValues[i] = value;
-            ++i;
-            }
-        }
-    }
-    
-    function wrapArray(array, expandoNames, expandoValues) {
-        $clinit_4();
-        for (var i = 0, c = expandoNames.length; i < c; ++i) {
-            array[expandoNames[i]] = expandoValues[i];
-        }
-    }
-    
-    var expandoNames_0, expandoValues_0;
     
     function add(a, b) {
         var newHigh, newLow;
@@ -428,14 +389,6 @@ var LZMA = (function () {
     var ByteArrayOutputStream = make_thing(new OutputStream());
     _.count = 0;
     
-    function createForArray() {
-        var clazz;
-        clazz = new Class();
-        return clazz;
-    }
-    
-    var Class = make_thing();
-    
     function max(x, y) {
         return x > y?x:y;
     }
@@ -464,10 +417,6 @@ var LZMA = (function () {
     
     function arraycopy(src, srcOfs, dest, destOfs, len) {
         var destlen, i, srclen;
-        
-        if (src == null || dest == null) {
-            throw new Error("NullPointerException");
-        }
         
         srclen  = src.length;
         destlen = dest.length;
@@ -499,8 +448,6 @@ var LZMA = (function () {
     /** cs */
     function $init(this$static, input, output, length_0, mode) {
         var encoder, i;
-        if (!mode)
-            throw new Error("null mode");
         if (compare(length_0, N1_longLit) < 0)
             throw new Error("invalid length " + length_0);
         this$static.length_0 = length_0;
@@ -3018,7 +2965,6 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            data,
             callback_num,
             has_progress;
         
@@ -3027,9 +2973,7 @@ var LZMA = (function () {
             on_finish = on_progress = 0;
         }
         
-        data = initValues(_3B_classLit, 0, -1, byte_arr);
-        
-        this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), data);
+        this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), byte_arr);
         
         has_progress = toDouble(this$static.d.length_0) > -1;
         
@@ -3088,23 +3032,6 @@ var LZMA = (function () {
     var LZMAJS = make_thing();
     
     function nullMethod() {}
-    
-    var _3B_classLit = createForArray(),
-        _3S_classLit = createForArray(),
-        /** cs */
-        _3C_classLit = createForArray(),
-        _3I_classLit = createForArray(),
-        optimal_2_classLit = createForArray(),
-        bitTreeEncoder_2_classLit = createForArray(),
-        _3J_classLit = createForArray(),
-        _3Z_classLit = createForArray(),
-        encoder2_2_classLit = createForArray(),
-        /** ce */
-        /** ds */
-        bitTreeDecoder_2_classLit = createForArray(),
-        decoder2_2_classLit = createForArray(),
-        /** de */
-        _3_3D_classLit = createForArray();
     
     /** cs */
     var get_mode_obj = (function () {
