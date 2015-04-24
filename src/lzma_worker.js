@@ -3051,7 +3051,7 @@ var LZMA = (function () {
                     ];
         
         return function (mode) {
-            return modes[mode - 1] || modes[0];
+            return modes[mode - 1] || modes[6];
         };
     }());
     /** ce */
