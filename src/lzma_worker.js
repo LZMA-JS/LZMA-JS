@@ -2711,17 +2711,40 @@ var LZMA = (function () {
         console.log("----------")
         console.log(s)
         console.log(typeof s)
+        */
+        //s = "\u0080"
+        //console.log(s)
         /// Array or Buffer actually.
         if (typeof s === "object") {
-            var a = [];
-            for (i = 0; i < s.length; i += 1) {
-                a.push(s[i]);
+            
+            if (s instanceof Array) {
+                chars = s;
+            } else if (s.toJSON) {
+                chars = s.toJSON();
+                //console.log(chars)
+            } else {
+                chars = [];
+                for (i = 0; i < s.length; i += 1) {
+                    chars[i] = s[i];
+                }
             }
+            
+                /*
+                chars = [];
+                for (i = 0; i < s.length; i += 1) {
+                    if (s[i] < 128) {
+                        chars[i] = s[i];
+                    } else {
+                        chars[i] = s[i] - 256;
+                    }
+                }
+                */
+            //console.log("----------")
+        } else {
+            chars = (n = s.length , charArr = initDim(n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
         }
-        console.log(a)
-        console.log("----------")
-        */
-        chars = (n = s.length , charArr = initDim(n, 1) , $getChars(s, 0, n, charArr, 0) , charArr);
+        //console.log(chars)
+        //console.log(chars)
         //console.log(JSON.stringify(chars))
         //console.log("~~~~~~~~~~")
         elen = 0;
@@ -2754,6 +2777,7 @@ var LZMA = (function () {
         console.log("~~~~~~~~~~")
         console.log(data)
         console.log("!!!!!!!!!!!")
+        process.exit();
         */
         return data;
     }
