@@ -2,6 +2,11 @@
 
 "use strict";
 
+/// Usage: node test-node.js [unmin]
+///
+/// Add "unmin" to test the unminified code.
+///
+
 var all_tests_pass = true,
     fs = require("fs"),
     p = require("path"),
@@ -130,12 +135,13 @@ function compression_test(file, next) {
                 var deco_speed = (new Date()).getTime() - deco_start;
                 console.log("Decompressed size:", result.length);
                 
-                if (content !== result) {
+                //if (content.compare(new Buffer(result))) {
+                if (content === result) {
+                    display_result("Test passed", true);
+                } else {
                     display_result("ERROR: files do not match!", false);
                     console.log();
                     all_tests_pass = false;
-                } else {
-                    display_result("Test passed", true);
                 }
                 
                 console.log("  Compression time:", comp_speed);
