@@ -98,9 +98,7 @@ var LZMA = (function () {
         if (sub(a, b)[1] < 0) {
             return -1;
         }
-        else {
-            return 1;
-        }
+        return 1;
     }
     
     function create(valueLow, valueHigh) {
@@ -353,13 +351,7 @@ var LZMA = (function () {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
             throw new Error("unknown error");
     }
-    /** ce */
     
-    function $execute(this$static) {
-        return $processChunk(this$static.chunker);
-    }
-    
-    /** cs */
     function $init(this$static, input, output, length_0, mode) {
         var encoder, i;
         if (compare(length_0, N1_longLit) < 0)
@@ -2797,7 +2789,7 @@ var LZMA = (function () {
         function do_action() {
             var res, start = (new Date()).getTime();
             
-            while ($execute(this$static.c)) {
+            while ($processChunk(this$static.c.chunker)) {
                 percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
                 /// If about 200 miliseconds have passed, update the progress.
                 if ((new Date()).getTime() - start > 200) {
@@ -2860,7 +2852,7 @@ var LZMA = (function () {
         
         function do_action() {
             var res, i = 0, start = (new Date()).getTime();
-            while ($execute(this$static.d)) {
+            while ($processChunk(this$static.d.chunker)) {
                 if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
                     if (has_progress) {
                         percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
