@@ -37,10 +37,10 @@ var LZMA = (function () {
         return func;
     }
     
-    function update_progress(percent, callback_num) {
+    function update_progress(percent, cbn) {
         postMessage({
             action: action_progress,
-            callback_num: callback_num,
+            cbn: cbn,
             result: percent
         });
     }
@@ -2769,10 +2769,10 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            callback_num;
+            cbn;
         
         if (typeof on_finish !== "function") {
-            callback_num = on_finish;
+            cbn = on_finish;
             on_finish = on_progress = 0;
         }
         
@@ -2782,8 +2782,8 @@ var LZMA = (function () {
         
         if (on_progress) {
             on_progress(0);
-        } else if (typeof callback_num !== "undefined") {
-            update_progress(0, callback_num);
+        } else if (typeof cbn !== "undefined") {
+            update_progress(0, cbn);
         }
         
         function do_action() {
@@ -2795,8 +2795,8 @@ var LZMA = (function () {
                 if ((new Date()).getTime() - start > 200) {
                     if (on_progress) {
                         on_progress(percent);
-                    } else if (typeof callback_num !== "undefined") {
-                        update_progress(percent, callback_num);
+                    } else if (typeof cbn !== "undefined") {
+                        update_progress(percent, cbn);
                     }
                     wait(do_action, 0);
                     return false;
@@ -2805,18 +2805,18 @@ var LZMA = (function () {
             
             if (on_progress) {
                 on_progress(1);
-            } else if (typeof callback_num !== "undefined") {
-                update_progress(1, callback_num);
+            } else if (typeof cbn !== "undefined") {
+                update_progress(1, cbn);
             }
             
             res = $toByteArray(this$static.c.output);
             
             if (on_finish) {
                 on_finish(res);
-            } else if (typeof callback_num !== "undefined") {
+            } else if (typeof cbn !== "undefined") {
                 postMessage({
                     action: action_compress,
-                    callback_num: callback_num,
+                    cbn: cbn,
                     /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
                     /// .slice(0) simply returns the entire array by value.
                     result: res.slice(0)
@@ -2832,11 +2832,11 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            callback_num,
+            cbn,
             has_progress;
         
         if (typeof on_finish !== "function") {
-            callback_num = on_finish;
+            cbn = on_finish;
             on_finish = on_progress = 0;
         }
         
@@ -2846,8 +2846,8 @@ var LZMA = (function () {
         
         if (on_progress) {
             on_progress(has_progress ? 0 : -1);
-        } else if (typeof callback_num !== "undefined") {
-            update_progress(has_progress ? 0 : -1, callback_num);
+        } else if (typeof cbn !== "undefined") {
+            update_progress(has_progress ? 0 : -1, cbn);
         }
         
         function do_action() {
@@ -2859,8 +2859,8 @@ var LZMA = (function () {
                         /// If about 200 miliseconds have passed, update the progress.					
                         if (on_progress) {
                             on_progress(percent);
-                        } else if (typeof callback_num !== "undefined") {
-                            update_progress(percent, callback_num);
+                        } else if (typeof cbn !== "undefined") {
+                            update_progress(percent, cbn);
                         }
                     }
                     
@@ -2873,8 +2873,8 @@ var LZMA = (function () {
             if (has_progress) {
                 if (on_progress) {
                     on_progress(1);
-                } else if (typeof callback_num !== "undefined") {
-                    update_progress(1, callback_num);
+                } else if (typeof cbn !== "undefined") {
+                    update_progress(1, cbn);
                 }
             }
             
@@ -2882,10 +2882,10 @@ var LZMA = (function () {
             
             if (on_finish) {
                 on_finish(res);
-            } else if (typeof callback_num !== "undefined") {
+            } else if (typeof cbn !== "undefined") {
                 postMessage({
                     action: action_decompress,
-                    callback_num: callback_num,
+                    cbn: cbn,
                     /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
                     result: (typeof res !== "string" ? res.slice(0) : res)
                 });
@@ -2928,16 +2928,16 @@ var LZMA = (function () {
                 if (e && e.data) {
                     /** xs */
                     if (e.data.action == action_decompress) {
-                        LZMA.decompress(e.data.data, e.data.callback_num);
+                        LZMA.decompress(e.data.data, e.data.cbn);
                     } else if (e.data.action == action_compress) {
-                        LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                        LZMA.compress(e.data.data, e.data.mode, e.data.cbn);
                     }
                     /** xe */
                     /// co:if (e.data.action == action_compress) {
-                    /// co:    LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                    /// co:    LZMA.compress(e.data.data, e.data.mode, e.data.cbn);
                     /// co:}
                     /// do:if (e.data.action == action_decompress) {
-                    /// do:    LZMA.decompress(e.data.data, e.data.callback_num);
+                    /// do:    LZMA.decompress(e.data.data, e.data.cbn);
                     /// do:}
                 }
             };
