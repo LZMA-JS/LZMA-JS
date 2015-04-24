@@ -304,9 +304,8 @@ var LZMA = (function () {
     }
     
     function $toByteArray(this$static) {
-        var data;
-        data = initDim(this$static.count, 1);
-        arraycopy(this$static.buf, 0, data, 0, this$static.count);
+        var data = this$static.buf;
+        data.length = this$static.count;
         return data;
     }
     
