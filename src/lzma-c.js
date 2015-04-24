@@ -28,10 +28,10 @@ var LZMA = (function () {
         return func;
     }
     
-    function update_progress(percent, callback_num) {
+    function update_progress(percent, cbn) {
         postMessage({
             action: action_progress,
-            callback_num: callback_num,
+            cbn: cbn,
             result: percent
         });
     }
@@ -89,9 +89,7 @@ var LZMA = (function () {
         if (sub(a, b)[1] < 0) {
             return -1;
         }
-        else {
-            return 1;
-        }
+        return 1;
     }
     
     function create(valueLow, valueHigh) {
@@ -338,13 +336,7 @@ var LZMA = (function () {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
             throw new Error("unknown error");
     }
-    /** ce */
     
-    function $execute(this$static) {
-        return $processChunk(this$static.chunker);
-    }
-    
-    /** cs */
     function $init(this$static, input, output, length_0, mode) {
         var encoder, i;
         if (compare(length_0, N1_longLit) < 0)
@@ -639,7 +631,6 @@ var LZMA = (function () {
         this$static._bufferOffset = 0;
         this$static._pos = 0;
         this$static._streamPos = 0;
-        this$static._streamEndWasReached = false;
         $ReadBlock(this$static);
         this$static._cyclicBufferPos = 0;
         $ReduceOffsets(this$static, -1);
@@ -2151,10 +2142,10 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = $LZMAJS(new LZMAJS()),
             percent,
-            callback_num;
+            cbn;
         
         if (typeof on_finish !== "function") {
-            callback_num = on_finish;
+            cbn = on_finish;
             on_finish = on_progress = 0;
         }
         
@@ -2164,21 +2155,21 @@ var LZMA = (function () {
         
         if (on_progress) {
             on_progress(0);
-        } else if (typeof callback_num !== "undefined") {
-            update_progress(0, callback_num);
+        } else if (typeof cbn !== "undefined") {
+            update_progress(0, cbn);
         }
         
         function do_action() {
             var res, start = (new Date()).getTime();
             
-            while ($execute(this$static.c)) {
+            while ($processChunk(this$static.c.chunker)) {
                 percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
                 /// If about 200 miliseconds have passed, update the progress.
                 if ((new Date()).getTime() - start > 200) {
                     if (on_progress) {
                         on_progress(percent);
-                    } else if (typeof callback_num !== "undefined") {
-                        update_progress(percent, callback_num);
+                    } else if (typeof cbn !== "undefined") {
+                        update_progress(percent, cbn);
                     }
                     wait(do_action, 0);
                     return false;
@@ -2187,18 +2178,18 @@ var LZMA = (function () {
             
             if (on_progress) {
                 on_progress(1);
-            } else if (typeof callback_num !== "undefined") {
-                update_progress(1, callback_num);
+            } else if (typeof cbn !== "undefined") {
+                update_progress(1, cbn);
             }
             
             res = $toByteArray(this$static.c.output);
             
             if (on_finish) {
                 on_finish(res);
-            } else if (typeof callback_num !== "undefined") {
+            } else if (typeof cbn !== "undefined") {
                 postMessage({
                     action: action_compress,
-                    callback_num: callback_num,
+                    cbn: cbn,
                     /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
                     /// .slice(0) simply returns the entire array by value.
                     result: res.slice(0)
@@ -2243,10 +2234,10 @@ var LZMA = (function () {
                 if (e && e.data) {
                     
                     if (e.data.action == action_compress) {
-                        LZMA.compress(e.data.data, e.data.mode, e.data.callback_num);
+                        LZMA.compress(e.data.data, e.data.mode, e.data.cbn);
                     }
                     /// do:if (e.data.action == action_decompress) {
-                    /// do:    LZMA.decompress(e.data.data, e.data.callback_num);
+                    /// do:    LZMA.decompress(e.data.data, e.data.cbn);
                     /// do:}
                 }
             };
