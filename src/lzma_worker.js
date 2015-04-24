@@ -356,12 +356,7 @@ var LZMA = (function () {
     /** ce */
     
     function $execute(this$static) {
-        try {
-            return $processChunk(this$static.chunker);
-        } catch (err) {
-            this$static.exception = err;
-            return false;
-        }
+        return $processChunk(this$static.chunker);
     }
     
     /** cs */
@@ -384,11 +379,7 @@ var LZMA = (function () {
     
     function $LZMAByteArrayCompressor(this$static, data, mode) {
         this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
-        try {
-            $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
-        } catch (err) {
-            throw err;
-        }
+        $init(this$static, $ByteArrayInputStream(new ByteArrayInputStream(), data), this$static.output, fromInt(data.length), mode);
         return this$static;
     }
     
@@ -957,30 +948,22 @@ var LZMA = (function () {
     /** de */
     
     function $processChunk(this$static) {
-        var exception;
         if (!this$static.alive) {
             throw new Error("bad state");
         }
-        exception = true;
-        try {
-            if (this$static.encoder) {
-                /// do:throw new Error("No encoding");
-                /** cs */
-                $processEncoderChunk(this$static);
-                /** ce */
-            } else {
-                /// co:throw new Error("No decoding");
-                /** ds */
-                $processDecoderChunk(this$static);
-                /** de */
-            }
-            exception = false;
-            return this$static.alive;
-        } finally {
-            if (exception) {
-                this$static.alive = false;
-            }
+        
+        if (this$static.encoder) {
+            /// do:throw new Error("No encoding");
+            /** cs */
+            $processEncoderChunk(this$static);
+            /** ce */
+        } else {
+            /// co:throw new Error("No decoding");
+            /** ds */
+            $processDecoderChunk(this$static);
+            /** de */
         }
+        return this$static.alive;
     }
     
     /** ds */
