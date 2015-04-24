@@ -55,7 +55,7 @@ var LZMA = (function () {
     
     var Object_0 = make_thing({});
     
-    function createFromSeed(seedType, length_0) {
+    function initDim(length_0, seedType) {
         var array = new Array(length_0);
         if (seedType > 0) {
             var value = [null, 0, false, P0_longLit][seedType];
@@ -67,11 +67,6 @@ var LZMA = (function () {
             }
         }
         return array;
-    }
-    
-    function initDim(length_0, seedType) {
-        var result = createFromSeed(seedType, length_0);
-        return result;
     }
     
     function add(a, b) {
