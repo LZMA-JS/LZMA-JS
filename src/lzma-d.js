@@ -232,12 +232,12 @@ var LZMA = (function () {
         var decoder,
             hex_length = "",
             i,
-            properties,
+            properties = initDim(5, 1),
             r,
-            tmp_length;
+            tmp_length,
+            l = properties.length;
         
-        properties = initDim(5, 1);
-        for (i = 0; i < properties.length; ++i) {
+        for (i = 0; i < l; ++i) {
             r = $read(input);
             if (r == -1)
                 throw new Error("truncated input");
@@ -833,7 +833,7 @@ var LZMA = (function () {
     
     function InitBitModels(probs) {
         var i;
-        for (i = 0; i < probs.length; ++i) {
+        for (i = probs.length - 1; i >= 0; --i) {
             probs[i] = 1024;
         }
     }
@@ -855,15 +855,15 @@ var LZMA = (function () {
     
     /** ds */
     function decode(utf) {
-        var buf = [], i, x, y, z;
-        for (i = 0; i < utf.length; ++i) {
+        var buf = "", i, x, y, z, l = utf.length;
+        for (i = 0; i < l; ++i) {
             x = utf[i] & 255;
             if ((x & 128) == 0) {
                 if (x == 0) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                buf[buf.length] = String.fromCharCode(x & 65535);
+                buf += String.fromCharCode(x & 65535);
             } else if ((x & 224) == 192) {
                 if (i + 1 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
@@ -874,7 +874,7 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                buf[buf.length] = String.fromCharCode((x & 31) << 6 & 65535 | y & 63);
+                buf += String.fromCharCode((x & 31) << 6 & 65535 | y & 63);
             } else if ((x & 240) == 224) {
                 if (i + 2 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
@@ -890,14 +890,14 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return convert_binary_arr(utf);
                 }
-                buf[buf.length] = String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
+                buf += String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
             } else {
                 /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                 return convert_binary_arr(utf);
             }
         }
         
-        return buf.join("");
+        return buf;
     }
     /** de */
     

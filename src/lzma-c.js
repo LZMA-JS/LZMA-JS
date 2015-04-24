@@ -1977,7 +1977,7 @@ var LZMA = (function () {
     
     function InitBitModels(probs) {
         var i;
-        for (i = 0; i < probs.length; ++i) {
+        for (i = probs.length - 1; i >= 0; --i) {
             probs[i] = 1024;
         }
     }
@@ -2079,7 +2079,7 @@ var LZMA = (function () {
     
     /** cs */
     function encode(s) {
-        var ch, chars, data, elen, i, charArr, n;
+        var ch, chars, data, elen, i, charArr, n, l = s.length;
         /*
         console.log("----------")
         console.log(s)
@@ -2098,7 +2098,7 @@ var LZMA = (function () {
         //console.log(JSON.stringify(chars))
         //console.log("~~~~~~~~~~")
         elen = 0;
-        for (i = 0; i < s.length; ++i) {
+        for (i = 0; i < l; ++i) {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 ++elen;
@@ -2110,7 +2110,7 @@ var LZMA = (function () {
         }
         data = initDim(elen, 1);
         elen = 0;
-        for (i = 0; i < s.length; ++i) {
+        for (i = 0; i < l; ++i) {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 data[elen++] = ch << 24 >> 24;
