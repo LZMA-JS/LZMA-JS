@@ -208,6 +208,10 @@ run_tests(function (tests_passed_norm) {
         process.exit(1);
     }
     
+    if (process.argv[2] === "nosep" || process.argv[3] === "nosep") {
+        process.exit();
+    }
+    
     console.log("");
     announce("Testing lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js and lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js");
     my_lzma = lzma_sep;
