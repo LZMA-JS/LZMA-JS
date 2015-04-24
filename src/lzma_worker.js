@@ -72,6 +72,7 @@ var LZMA = (function () {
         var array = new Array(length_0);
         if (seedType > 0) {
             var value = [null, 0, false, P0_longLit][seedType];
+            /// Speed up creating arrays.
             if (typeof value !== "number") {
                 for (var i = 0; i < length_0; ++i) {
                     array[i] = value;
@@ -275,16 +276,9 @@ var LZMA = (function () {
     var InputStream = make_thing();
     
     function $ByteArrayInputStream(this$static, buf) {
-        $ByteArrayInputStream_0(this$static, buf, 0, buf.length);
-        return this$static;
-    }
-    
-    function $ByteArrayInputStream_0(this$static, buf, off, len) {
         this$static.buf = buf;
-        this$static.pos = off;
-        this$static.count = off + len;
-        if (this$static.count > buf.length)
-            this$static.count = buf.length;
+        this$static.pos = 0;
+        this$static.count = buf.length;
         return this$static;
     }
     
