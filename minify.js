@@ -130,6 +130,11 @@ function split_lzma_worker()
     fs.writeFileSync(p.join(__dirname, "src", "lzma-d.js"), notice + d);
 }
 
+function get_kb(bytes)
+{
+    return (bytes / 1024).toFixed(bytes < 1024 ? 2 : 1);
+}
+
 split_lzma_worker();
 
 (function loop(i)
@@ -192,8 +197,8 @@ split_lzma_worker();
         
         min_size = filesize(min_path);
         
-        console.log("Original size: " + orig_size + " bytes");
-        console.log("Minified size: " + min_size + " bytes");
+        console.log("Original size: " + orig_size + " bytes (" + get_kb(orig_size) + " KB)");
+        console.log("Minified size: " + min_size + " bytes (" + get_kb(min_size) + " KB)");
         console.log("Compression:   " + (orig_size / min_size).toFixed(4) + " x smaller");
         
         zlib.gzip(result.code, function(err, buffer) {
@@ -204,7 +209,7 @@ split_lzma_worker();
             gzmin_size = buffer.length;
             
             ///NOTE: We could write the file if we wanted to like this: fs.writeFileSync(p.join(__dirname, "src", p.basename(file, ext) + "-min" + ext + ".gz"), buffer);
-            console.log("Gzipped size:  " + gzmin_size + " bytes");
+            console.log("Gzipped size:  " + gzmin_size + " bytes (" + get_kb(gzmin_size) + " KB)");
             console.log("Gzipped ratio: " + (orig_size / gzmin_size).toFixed(4) + " x smaller");
             console.log("");
             loop(i + 1);
