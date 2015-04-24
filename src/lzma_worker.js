@@ -993,7 +993,9 @@ var LZMA = (function () {
         this$static.inBytesProcessed = N1_longLit;
         this$static.outBytesProcessed = this$static.decoder.nowPos64;
         if (result == 1 || compare(this$static.decoder.outSize, P0_longLit) >= 0 && compare(this$static.decoder.nowPos64, this$static.decoder.outSize) >= 0) {
-            $CodeFinish(this$static.decoder);
+            $Flush_0(this$static.decoder.m_OutWindow);
+            $ReleaseStream(this$static.decoder.m_OutWindow);
+            this$static.decoder.m_RangeDecoder.Stream = null;
             this$static.alive = false;
         }
     }
@@ -1012,16 +1014,9 @@ var LZMA = (function () {
     var Chunker = make_thing();
     
     /** ds */
-    function $CodeFinish(this$static) {
-        $Flush_0(this$static.m_OutWindow);
-        $ReleaseStream(this$static.m_OutWindow);
-        this$static.m_RangeDecoder.Stream = null;
-    }
-    
-    
     function $CodeInChunks(this$static, inStream, outStream, outSize) {
         this$static.m_RangeDecoder.Stream = inStream;
-        $ReleaseStream(this$static.m_OutWindow)
+        $ReleaseStream(this$static.m_OutWindow);
         this$static.m_OutWindow._stream = outStream;
         $Init_1(this$static);
         this$static.state = 0;
