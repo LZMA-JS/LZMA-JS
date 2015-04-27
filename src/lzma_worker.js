@@ -2783,15 +2783,13 @@ var LZMA = (function () {
     }
     /** ce */
     
-    function $LZMAJS(this$static) {
-        return this$static;
-    }
     function toDouble(a) {
         return a[1] + a[0];
     }
+    
     /** cs */
     function compress(str, mode, on_finish, on_progress) {
-        var this$static = $LZMAJS(new LZMAJS()),
+        var this$static = {},
             percent,
             cbn;
         
@@ -2854,7 +2852,7 @@ var LZMA = (function () {
     /** ce */
     /** ds */
     function decompress(byte_arr, on_finish, on_progress) {
-        var this$static = $LZMAJS(new LZMAJS()),
+        var this$static = {},
             percent,
             cbn,
             has_progress;
@@ -2920,8 +2918,6 @@ var LZMA = (function () {
         wait(do_action, 0);
     }
     /** de */
-    var LZMAJS = make_thing();
-    
     /** cs */
     var get_mode_obj = (function () {
         var modes = [
