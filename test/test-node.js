@@ -272,12 +272,6 @@ function compare(a, b)
     }
     
     if (typeof a === "string") {
-        if (a !== b) {
-            var dump_file = Math.random();
-            console.log("Dumping " + dump_file);
-            fs.writeFileSync(dump_file + "-a", a);
-            fs.writeFileSync(dump_file + "-b", b);
-        }
         return a === b;
     }
     
