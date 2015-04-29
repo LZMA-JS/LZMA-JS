@@ -318,8 +318,10 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw new Error("config error");
+        $SetDictionarySize_0(encoder, 1 << this$static.dicSize);
+        encoder._numFastBytes = this$static.fb;
+        $SetMatchFinder(encoder, this$static.matchFinder);
+        $SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb);
     }
     
     function $init(this$static, input, output, length_0, mode) {
@@ -2011,48 +2013,25 @@ var LZMA = (function () {
     }
     
     function $SetDictionarySize_0(this$static, dictionarySize) {
-        var dicLogSize;
-        if (dictionarySize < 1 || dictionarySize > 536870912) {
-            return false;
-        }
         this$static._dictionarySize = dictionarySize;
-        for (dicLogSize = 0; dictionarySize > 1 << dicLogSize; ++dicLogSize) {
-        }
+        for (var dicLogSize = 0; dictionarySize > 1 << dicLogSize; ++dicLogSize) {}
         this$static._distTableSize = dicLogSize * 2;
-        return true;
     }
     
     function $SetLcLpPb_0(this$static, lc, lp, pb) {
-        if (lp < 0 || lp > 4 || lc < 0 || lc > 8 || pb < 0 || pb > 4) {
-            return false;
-        }
         this$static._numLiteralPosStateBits = lp;
         this$static._numLiteralContextBits = lc;
         this$static._posStateBits = pb;
         this$static._posStateMask = (1 << this$static._posStateBits) - 1;
-        return true;
     }
     
     function $SetMatchFinder(this$static, matchFinderIndex) {
-        var matchFinderIndexPrev;
-        if (matchFinderIndex < 0 || matchFinderIndex > 2) {
-            return false;
-        }
-        matchFinderIndexPrev = this$static._matchFinderType;
+        var matchFinderIndexPrev = this$static._matchFinderType;
         this$static._matchFinderType = matchFinderIndex;
         if (!!this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
             this$static._dictionarySizePrev = -1;
             this$static._matchFinder = null;
         }
-        return true;
-    }
-    
-    function $SetNumFastBytes(this$static, numFastBytes) {
-        if (numFastBytes < 5 || numFastBytes > 273) {
-            return false;
-        }
-        this$static._numFastBytes = numFastBytes;
-        return true;
     }
     
     function $WriteCoderProperties(this$static, outStream) {
@@ -2667,7 +2646,7 @@ var LZMA = (function () {
         //s = "\u0080"
         //console.log(s)
         /// Array or Buffer actually.
-        if (typeof s === "object") {
+        if (typeof s == "object") {
             
             if (s instanceof Array) {
                 chars = s;
