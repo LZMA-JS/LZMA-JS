@@ -870,7 +870,7 @@ var LZMA = (function () {
             cbn,
             has_progress;
         
-        if (typeof on_finish !== "function") {
+        if (typeof on_finish != "function") {
             cbn = on_finish;
             on_finish = on_progress = 0;
         }
@@ -881,7 +881,7 @@ var LZMA = (function () {
         
         if (on_progress) {
             on_progress(has_progress ? 0 : -1);
-        } else if (typeof cbn !== "undefined") {
+        } else if (typeof cbn != "undefined") {
             update_progress(has_progress ? 0 : -1, cbn);
         }
         
@@ -894,7 +894,7 @@ var LZMA = (function () {
                         /// If about 200 miliseconds have passed, update the progress.					
                         if (on_progress) {
                             on_progress(percent);
-                        } else if (typeof cbn !== "undefined") {
+                        } else if (typeof cbn != "undefined") {
                             update_progress(percent, cbn);
                         }
                     }
@@ -908,7 +908,7 @@ var LZMA = (function () {
             if (has_progress) {
                 if (on_progress) {
                     on_progress(1);
-                } else if (typeof cbn !== "undefined") {
+                } else if (typeof cbn != "undefined") {
                     update_progress(1, cbn);
                 }
             }
@@ -917,12 +917,12 @@ var LZMA = (function () {
             
             if (on_finish) {
                 on_finish(res);
-            } else if (typeof cbn !== "undefined") {
+            } else if (typeof cbn != "undefined") {
                 postMessage({
                     action: action_decompress,
                     cbn: cbn,
                     /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
-                    result: (typeof res !== "string" ? res.slice(0) : res)
+                    result: (typeof res != "string" ? res.slice(0) : res)
                 });
             }
         }
@@ -935,7 +935,7 @@ var LZMA = (function () {
     
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
-    if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
+    if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
         (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.

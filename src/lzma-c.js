@@ -2110,7 +2110,7 @@ var LZMA = (function () {
             percent,
             cbn;
         
-        if (typeof on_finish !== "function") {
+        if (typeof on_finish != "function") {
             cbn = on_finish;
             on_finish = on_progress = 0;
         }
@@ -2121,7 +2121,7 @@ var LZMA = (function () {
         
         if (on_progress) {
             on_progress(0);
-        } else if (typeof cbn !== "undefined") {
+        } else if (typeof cbn != "undefined") {
             update_progress(0, cbn);
         }
         
@@ -2134,7 +2134,7 @@ var LZMA = (function () {
                 if ((new Date()).getTime() - start > 200) {
                     if (on_progress) {
                         on_progress(percent);
-                    } else if (typeof cbn !== "undefined") {
+                    } else if (typeof cbn != "undefined") {
                         update_progress(percent, cbn);
                     }
                     wait(do_action, 0);
@@ -2144,7 +2144,7 @@ var LZMA = (function () {
             
             if (on_progress) {
                 on_progress(1);
-            } else if (typeof cbn !== "undefined") {
+            } else if (typeof cbn != "undefined") {
                 update_progress(1, cbn);
             }
             
@@ -2152,7 +2152,7 @@ var LZMA = (function () {
             
             if (on_finish) {
                 on_finish(res);
-            } else if (typeof cbn !== "undefined") {
+            } else if (typeof cbn != "undefined") {
                 postMessage({
                     action: action_compress,
                     cbn: cbn,
@@ -2190,7 +2190,7 @@ var LZMA = (function () {
     
     /// Are we in a Web Worker?
     /// This seems to be the most reliable way to detect this.
-    if (typeof onmessage !== "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
+    if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
         (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
