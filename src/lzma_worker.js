@@ -2631,47 +2631,23 @@ var LZMA = (function () {
     /** cs */
     function encode(s) {
         var ch, chars = [], data, elen = 0, i, l = s.length;
-        /*
-        console.log("----------")
-        console.log(s)
-        console.log(typeof s)
-        */
-        //s = "\u0080"
-        //console.log(s)
-        /// Array or Buffer actually.
+        /// Be able to handle binary arrays and buffers.
         if (typeof s == "object") {
-            
             if (s instanceof Array) {
                 chars = s;
             } else if (s.toJSON) {
+                /// Node.js buffers have a toJSON() method that turns it into an Array.
                 chars = s.toJSON();
-                //console.log(chars)
             } else {
-                for (i = 0; i < s.length; i += 1) {
+                for (i = 0; i < l; i += 1) {
                     chars[i] = s[i];
                 }
             }
-            
-                /*
-                chars = [];
-                for (i = 0; i < s.length; i += 1) {
-                    if (s[i] < 128) {
-                        chars[i] = s[i];
-                    } else {
-                        chars[i] = s[i] - 256;
-                    }
-                }
-                */
-            //console.log("----------")
             return chars;
         } else {
             $getChars(s, 0, l, chars, 0);
         }
-        //console.log(chars)
-        //console.log(chars)
-        //console.log(JSON.stringify(chars))
-        //console.log("~~~~~~~~~~")
-        elen = 0;
+        /// Add extra spaces in the array to break up the unicode symbols.
         for (i = 0; i < l; ++i) {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
@@ -2697,12 +2673,6 @@ var LZMA = (function () {
                 data[elen++] = (128 | ch & 63) << 24 >> 24;
             }
         }
-        /*
-        console.log("~~~~~~~~~~")
-        console.log(data)
-        console.log("!!!!!!!!!!!")
-        process.exit();
-        */
         return data;
     }
     /** ce */
