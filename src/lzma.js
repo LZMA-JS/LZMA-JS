@@ -88,15 +88,15 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         
         lzma_worker.onmessage = function (e) {
             if (e.data.action === action_progress) {
-                if (callback_obj[e.data.callback_num] && typeof callback_obj[e.data.callback_num].on_progress === "function") {
-                    callback_obj[e.data.callback_num].on_progress(e.data.result);
+                if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_progress === "function") {
+                    callback_obj[e.data.cbn].on_progress(e.data.result);
                 }
             } else {
-                if (callback_obj[e.data.callback_num] && typeof callback_obj[e.data.callback_num].on_finish === "function") {
-                    callback_obj[e.data.callback_num].on_finish(e.data.result);
+                if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_finish === "function") {
+                    callback_obj[e.data.cbn].on_finish(e.data.result);
                     
                     /// Since the (de)compression is complete, the callbacks are no longer needed.
-                    delete callback_obj[e.data.callback_num];
+                    delete callback_obj[e.data.cbn];
                 }
             }
         };
@@ -109,22 +109,22 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         return (function () {
             
             function send_to_worker(action, data, mode, on_finish, on_progress) {
-                var callback_num;
+                var cbn;
                 
                 do {
-                    callback_num = Math.floor(Math.random() * (10000000));
-                } while(typeof callback_obj[callback_num] !== "undefined");
+                    cbn = Math.floor(Math.random() * (10000000));
+                } while(typeof callback_obj[cbn] !== "undefined");
                 
-                callback_obj[callback_num] = {
+                callback_obj[cbn] = {
                     on_finish:   on_finish,
                     on_progress: on_progress
                 };
                 
                 lzma_worker.postMessage({
-                    action:       action,
-                    callback_num: callback_num,
-                    data:         data,
-                    mode:         mode
+                    action: action, /// action_compress = 1, action_decompress = 2, action_progress = 3
+                    cbn:    cbn,    /// callback number
+                    data:   data,
+                    mode:   mode
                 });
             }
             
