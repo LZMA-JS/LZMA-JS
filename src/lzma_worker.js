@@ -527,37 +527,35 @@ var LZMA = (function () {
     
     function $Create_3(this$static, historySize, keepAddBufferBefore, matchMaxLen, keepAddBufferAfter) {
         var cyclicBufferSize, hs, windowReservSize;
-        if (historySize > 1073741567) {
-            return;
-        }
-
-        this$static._cutValue = 16 + (matchMaxLen >> 1);
-        windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
-        $Create_4(this$static, historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
-        this$static._matchMaxLen = matchMaxLen;
-        cyclicBufferSize = historySize + 1;
-        if (this$static._cyclicBufferSize != cyclicBufferSize) {
-            this$static._son = initDim((this$static._cyclicBufferSize = cyclicBufferSize) * 2);
-        }
-
-        hs = 65536;
-        if (this$static.HASH_ARRAY) {
-            hs = historySize - 1;
-            hs |= hs >> 1;
-            hs |= hs >> 2;
-            hs |= hs >> 4;
-            hs |= hs >> 8;
-            hs >>= 1;
-            hs |= 65535;
-            if (hs > 16777216)
-            hs >>= 1;
-            this$static._hashMask = hs;
-            ++hs;
-            hs += this$static.kFixHashSize;
-        }
-
-        if (hs != this$static._hashSizeSum) {
-            this$static._hash = initDim(this$static._hashSizeSum = hs);
+        if (historySize < 1073741567) {
+            this$static._cutValue = 16 + (matchMaxLen >> 1);
+            windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
+            $Create_4(this$static, historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
+            this$static._matchMaxLen = matchMaxLen;
+            cyclicBufferSize = historySize + 1;
+            if (this$static._cyclicBufferSize != cyclicBufferSize) {
+                this$static._son = initDim((this$static._cyclicBufferSize = cyclicBufferSize) * 2);
+            }
+    
+            hs = 65536;
+            if (this$static.HASH_ARRAY) {
+                hs = historySize - 1;
+                hs |= hs >> 1;
+                hs |= hs >> 2;
+                hs |= hs >> 4;
+                hs |= hs >> 8;
+                hs >>= 1;
+                hs |= 65535;
+                if (hs > 16777216)
+                hs >>= 1;
+                this$static._hashMask = hs;
+                ++hs;
+                hs += this$static.kFixHashSize;
+            }
+    
+            if (hs != this$static._hashSizeSum) {
+                this$static._hash = initDim(this$static._hashSizeSum = hs);
+            }
         }
     }
     
