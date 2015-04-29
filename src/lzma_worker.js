@@ -318,9 +318,9 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        $SetDictionarySize_0(encoder, 1 << this$static.dicSize);
+        $SetDictionarySize_0(encoder, 1 << this$static.ds);
         encoder._numFastBytes = this$static.fb;
-        $SetMatchFinder(encoder, this$static.matchFinder);
+        $SetMatchFinder(encoder, this$static.mf);
         $SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb);
     }
     
@@ -2852,15 +2852,15 @@ var LZMA = (function () {
     /** cs */
     var get_mode_obj = (function () {
         var modes = [
-                        {dicSize: 16, fb:  64, matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 20, fb:  64, matchFinder: 0, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 19, fb:  64, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 20, fb:  64, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 21, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 22, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 23, fb: 128, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 24, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2},
-                        {dicSize: 25, fb: 255, matchFinder: 1, lc: 3, lp: 0, pb: 2}
+                        {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+                        {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+                        {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
+                        {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
                     ];
         
         return function (mode) {
