@@ -291,16 +291,6 @@ var LZMA = (function () {
         return this$static;
     }
     
-    function $ensureCapacity(this$static, len) {
-        var newbuf;
-        if (len <= this$static.buf.length)
-            return;
-        len = Math.max(len, this$static.buf.length * 2);
-        newbuf = initDim(len, 1);
-        arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
-        this$static.buf = newbuf;
-    }
-    
     function $toByteArray(this$static) {
         var data = this$static.buf;
         data.length = this$static.count;
@@ -309,13 +299,11 @@ var LZMA = (function () {
     
     /** cs */
     function $write(this$static, b) {
-        $ensureCapacity(this$static, this$static.count + 1);
         this$static.buf[this$static.count++] = b << 24 >> 24;
     }
     /** ce */
     
     function $write_0(this$static, buf, off, len) {
-        $ensureCapacity(this$static, this$static.count + len);
         arraycopy(buf, off, this$static.buf, this$static.count, len);
         this$static.count += len;
     }
@@ -338,9 +326,8 @@ var LZMA = (function () {
         srclen  = src.length;
         destlen = dest.length;
         if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            throw new Error("out of bounds");
+            //throw new Error("out of bounds");
         }
-
         for (i = 0; i < len; ++i) {
             dest[destOfs + i] = src[srcOfs + i];
         }
