@@ -528,7 +528,7 @@ var LZMA = (function () {
     function $Create_3(this$static, historySize, keepAddBufferBefore, matchMaxLen, keepAddBufferAfter) {
         var cyclicBufferSize, hs, windowReservSize;
         if (historySize > 1073741567) {
-            return false;
+            return;
         }
 
         this$static._cutValue = 16 + (matchMaxLen >> 1);
@@ -559,7 +559,6 @@ var LZMA = (function () {
         if (hs != this$static._hashSizeSum) {
             this$static._hash = initDim(this$static._hashSizeSum = hs);
         }
-        return true;
     }
     
     function $GetMatches(this$static, distances) {
