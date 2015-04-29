@@ -40,9 +40,8 @@ var LZMA = (function () {
         N1_longLit = [4294967295, -__4294967296],
         
         P0_longLit = [0, 0],
-        P1_longLit = [1, 0];
-    
-    var Object_0 = make_thing({});
+        P1_longLit = [1, 0],
+        Object_0 = make_thing({});
     
     function initDim(len) {
         return new Array(len);
