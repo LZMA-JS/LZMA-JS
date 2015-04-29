@@ -311,14 +311,7 @@ var LZMA = (function () {
     /** ce */
     
     function arraycopy(src, srcOfs, dest, destOfs, len) {
-        var destlen, i, srclen;
-        
-        srclen  = src.length;
-        destlen = dest.length;
-        if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            //throw new Error("out of bounds");
-        }
-        for (i = 0; i < len; ++i) {
+        for (var i = 0; i < len; ++i) {
             dest[destOfs + i] = src[srcOfs + i];
         }
     }
