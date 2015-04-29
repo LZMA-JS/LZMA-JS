@@ -16,7 +16,8 @@ var all_tests_pass = true,
         decompress: require("../src/lzma-d" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA.decompress,
         compress:   require("../src/lzma-c" + (process.argv[2] === "unmin" ? "" : "-min") + ".js").LZMA.compress,
     },
-    path_to_files = "files";
+    path_to_files = "files",
+    isTTY = process.stdout.isTTY;
 
 function announce(str)
 {
@@ -27,22 +28,53 @@ function announce(str)
         stars += "*";
     }
     
-    console.log(stars);
-    console.log("* "+ str + " *");
-    console.log(stars);
+    note(stars);
+    note("* "+ str + " *");
+    note(stars);
 }
+
+function color(color_code, str)
+{
+    if (isTTY) {
+        str = "\u001B[" + color_code + "m" + str + "\u001B[0m";
+    }
+    
+    console.log(str);
+}
+
+function note(str)
+{
+    color(36, str);
+}
+
+function good(str)
+{
+    color(32, str);
+}
+
+function warn(str)
+{
+    color(33, str);
+}
+
+function error(str)
+{
+    color(31, str);
+}
+
 
 function display_result(str, pass)
 {
-    ///NOTE: \u001B[32m makes green text.
-    ///      \u001B[31m makes red text.
-    ///      \u001B[0m  resets the text color.
-    console.log("\u001B[3" + (pass ? "2" : "1") + "m" + str + "\u001B[0m");
+    if (pass) {
+        good(str)
+    } else {
+        error(str)
+    }
 }
 
 function progress(percent)
 {
-    if (process.stdout.isTTY) {
+    if (isTTY) {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
         if (percent > 0 && percent < 1) {
