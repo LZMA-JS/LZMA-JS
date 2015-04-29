@@ -306,13 +306,6 @@ var LZMA = (function () {
         return this$static._buffer[pos];
     }
     
-    function $Init_7(this$static, solid) {
-        if (!solid) {
-            this$static._streamPos = 0;
-            this$static._pos = 0;
-        }
-    }
-    
     function $PutByte(this$static, b) {
         this$static._buffer[this$static._pos++] = b;
         if (this$static._pos >= this$static._windowSize) {
@@ -514,7 +507,8 @@ var LZMA = (function () {
     
     function $Init_1(this$static) {
         var i;
-        $Init_7(this$static.m_OutWindow, false);
+        this$static.m_OutWindow._streamPos = 0;
+        this$static.m_OutWindow._pos = 0;
         InitBitModels(this$static.m_IsMatchDecoders);
         InitBitModels(this$static.m_IsRep0LongDecoders);
         InitBitModels(this$static.m_IsRepDecoders);
