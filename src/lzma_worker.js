@@ -319,7 +319,7 @@ var LZMA = (function () {
     /** cs */
     function $configure(this$static, encoder) {
         if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw new Error("unknown error");
+            throw new Error("config error");
     }
     
     function $init(this$static, input, output, length_0, mode) {
