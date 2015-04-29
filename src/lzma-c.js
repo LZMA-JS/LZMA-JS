@@ -303,8 +303,10 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        if (!$SetDictionarySize_0(encoder, 1 << this$static.dicSize) || !$SetNumFastBytes(encoder, this$static.fb) || !$SetMatchFinder(encoder, this$static.matchFinder) || !$SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb))
-            throw new Error("unknown error");
+        $SetDictionarySize_0(encoder, 1 << this$static.dicSize);
+        encoder._numFastBytes = this$static.fb;
+        $SetMatchFinder(encoder, this$static.matchFinder);
+        $SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb);
     }
     
     function $init(this$static, input, output, length_0, mode) {
@@ -454,39 +456,36 @@ var LZMA = (function () {
     
     function $Create_3(this$static, historySize, keepAddBufferBefore, matchMaxLen, keepAddBufferAfter) {
         var cyclicBufferSize, hs, windowReservSize;
-        if (historySize > 1073741567) {
-            return false;
+        if (historySize < 1073741567) {
+            this$static._cutValue = 16 + (matchMaxLen >> 1);
+            windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
+            $Create_4(this$static, historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
+            this$static._matchMaxLen = matchMaxLen;
+            cyclicBufferSize = historySize + 1;
+            if (this$static._cyclicBufferSize != cyclicBufferSize) {
+                this$static._son = initDim((this$static._cyclicBufferSize = cyclicBufferSize) * 2);
+            }
+    
+            hs = 65536;
+            if (this$static.HASH_ARRAY) {
+                hs = historySize - 1;
+                hs |= hs >> 1;
+                hs |= hs >> 2;
+                hs |= hs >> 4;
+                hs |= hs >> 8;
+                hs >>= 1;
+                hs |= 65535;
+                if (hs > 16777216)
+                hs >>= 1;
+                this$static._hashMask = hs;
+                ++hs;
+                hs += this$static.kFixHashSize;
+            }
+    
+            if (hs != this$static._hashSizeSum) {
+                this$static._hash = initDim(this$static._hashSizeSum = hs);
+            }
         }
-
-        this$static._cutValue = 16 + (matchMaxLen >> 1);
-        windowReservSize = ~~((historySize + keepAddBufferBefore + matchMaxLen + keepAddBufferAfter) / 2) + 256;
-        $Create_4(this$static, historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
-        this$static._matchMaxLen = matchMaxLen;
-        cyclicBufferSize = historySize + 1;
-        if (this$static._cyclicBufferSize != cyclicBufferSize) {
-            this$static._son = initDim((this$static._cyclicBufferSize = cyclicBufferSize) * 2);
-        }
-
-        hs = 65536;
-        if (this$static.HASH_ARRAY) {
-            hs = historySize - 1;
-            hs |= hs >> 1;
-            hs |= hs >> 2;
-            hs |= hs >> 4;
-            hs |= hs >> 8;
-            hs >>= 1;
-            hs |= 65535;
-            if (hs > 16777216)
-            hs >>= 1;
-            this$static._hashMask = hs;
-            ++hs;
-            hs += this$static.kFixHashSize;
-        }
-
-        if (hs != this$static._hashSizeSum) {
-            this$static._hash = initDim(this$static._hashSizeSum = hs);
-        }
-        return true;
     }
     
     function $GetMatches(this$static, distances) {
@@ -1543,48 +1542,25 @@ var LZMA = (function () {
     }
     
     function $SetDictionarySize_0(this$static, dictionarySize) {
-        var dicLogSize;
-        if (dictionarySize < 1 || dictionarySize > 536870912) {
-            return false;
-        }
         this$static._dictionarySize = dictionarySize;
-        for (dicLogSize = 0; dictionarySize > 1 << dicLogSize; ++dicLogSize) {
-        }
+        for (var dicLogSize = 0; dictionarySize > 1 << dicLogSize; ++dicLogSize) {}
         this$static._distTableSize = dicLogSize * 2;
-        return true;
     }
     
     function $SetLcLpPb_0(this$static, lc, lp, pb) {
-        if (lp < 0 || lp > 4 || lc < 0 || lc > 8 || pb < 0 || pb > 4) {
-            return false;
-        }
         this$static._numLiteralPosStateBits = lp;
         this$static._numLiteralContextBits = lc;
         this$static._posStateBits = pb;
         this$static._posStateMask = (1 << this$static._posStateBits) - 1;
-        return true;
     }
     
     function $SetMatchFinder(this$static, matchFinderIndex) {
-        var matchFinderIndexPrev;
-        if (matchFinderIndex < 0 || matchFinderIndex > 2) {
-            return false;
-        }
-        matchFinderIndexPrev = this$static._matchFinderType;
+        var matchFinderIndexPrev = this$static._matchFinderType;
         this$static._matchFinderType = matchFinderIndex;
         if (!!this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
             this$static._dictionarySizePrev = -1;
             this$static._matchFinder = null;
         }
-        return true;
-    }
-    
-    function $SetNumFastBytes(this$static, numFastBytes) {
-        if (numFastBytes < 5 || numFastBytes > 273) {
-            return false;
-        }
-        this$static._numFastBytes = numFastBytes;
-        return true;
     }
     
     function $WriteCoderProperties(this$static, outStream) {
@@ -2056,7 +2032,7 @@ var LZMA = (function () {
         //s = "\u0080"
         //console.log(s)
         /// Array or Buffer actually.
-        if (typeof s === "object") {
+        if (typeof s == "object") {
             
             if (s instanceof Array) {
                 chars = s;
