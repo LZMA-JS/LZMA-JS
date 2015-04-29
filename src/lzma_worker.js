@@ -490,7 +490,7 @@ var LZMA = (function () {
                 if (pointerToPostion > this$static._pointerToLastSafePosition) {
                     this$static._posLimit = this$static._pointerToLastSafePosition - this$static._bufferOffset;
                 }
-                this$static._streamEndWasReached = true;
+                this$static._streamEndWasReached = 1;
                 return;
             }
             this$static._streamPos += numReadBytes;
@@ -681,7 +681,7 @@ var LZMA = (function () {
         this$static._bufferOffset = 0;
         this$static._pos = 0;
         this$static._streamPos = 0;
-        this$static._streamEndWasReached = false;
+        this$static._streamEndWasReached = 0;
         $ReadBlock(this$static);
         this$static._cyclicBufferPos = 0;
         $ReduceOffsets(this$static, -1);
