@@ -15,9 +15,9 @@ Here are some file size stats:
 
 |    Filename    |   Method(s)   | Minified | Gzipped |
 |:---------------|:--------------|---------:|--------:|
-| lzma_worker.js | both          | 29.3 KB  | 11.2 KB |
-| lzma-c.js      | compression   | 22.7 KB  |  9.0 KB |
-| lzma-d.js      | decompression | 10.5 KB  |  4.3 KB |
+| lzma_worker.js | both          |  25.0 KB |  9.7 KB |
+| lzma-c.js      | compression   |  19.2 KB |  7.7 KB |
+| lzma-d.js      | decompression |   7.3 KB |  3.1 KB |
 
 Demos
 ---
@@ -45,9 +45,11 @@ Create the LZMA object.
     ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is very slow and probably a bit better).
     ///      I suggest keeping mode low, like 1-3.
     ///      And by the way, 9 is not always the smallest.
-    my_lzma.compress(string, mode, on_finish(result) {}, on_progress(percent) {});
+    ///NOTE: compress() can take a string or an array of bytes. (A Node.js Buffer counts as an array of bytes.)
+    my_lzma.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
     
     /// To decompress:
+    ///NOTE: The result will be returned as a string if it is printable text, otherwise, it will return an array of bytes.
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
 
 Node.js
