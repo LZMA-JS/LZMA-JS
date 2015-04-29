@@ -44,18 +44,8 @@ var LZMA = (function () {
     
     var Object_0 = make_thing({});
     
-    function initDim(length_0, seedType) {
-        var array = new Array(length_0);
-        if (seedType > 0) {
-            var value = [null, 0, false, P0_longLit][seedType];
-            /// Speed up creating arrays.
-            if (typeof value !== "number") {
-                for (var i = 0; i < length_0; ++i) {
-                    array[i] = value;
-                }
-            }
-        }
-        return array;
+    function initDim(len) {
+        return new Array(len);
     }
     
     function add(a, b) {
@@ -151,7 +141,7 @@ var LZMA = (function () {
         return create(newLow, newHigh);
     }
     
-    var boxedValues = initDim(256, 0);
+    var boxedValues = initDim(256);
     
     var InputStream = make_thing();
     
@@ -178,18 +168,8 @@ var LZMA = (function () {
     var OutputStream = make_thing();
     
     function $ByteArrayOutputStream(this$static) {
-        this$static.buf = initDim(32, 1);
+        this$static.buf = initDim(32);
         return this$static;
-    }
-    
-    function $ensureCapacity(this$static, len) {
-        var newbuf;
-        if (len <= this$static.buf.length)
-            return;
-        len = Math.max(len, this$static.buf.length * 2);
-        newbuf = initDim(len, 1);
-        arraycopy(this$static.buf, 0, newbuf, 0, this$static.buf.length);
-        this$static.buf = newbuf;
     }
     
     function $toByteArray(this$static) {
@@ -201,7 +181,6 @@ var LZMA = (function () {
     
     
     function $write_0(this$static, buf, off, len) {
-        $ensureCapacity(this$static, this$static.count + len);
         arraycopy(buf, off, this$static.buf, this$static.count, len);
         this$static.count += len;
     }
@@ -212,15 +191,7 @@ var LZMA = (function () {
     
     
     function arraycopy(src, srcOfs, dest, destOfs, len) {
-        var destlen, i, srclen;
-        
-        srclen  = src.length;
-        destlen = dest.length;
-        if (srcOfs < 0 || destOfs < 0 || len < 0 || srcOfs + len > srclen || destOfs + len > destlen) {
-            throw new Error("out of bounds");
-        }
-
-        for (i = 0; i < len; ++i) {
+        for (var i = 0; i < len; ++i) {
             dest[destOfs + i] = src[srcOfs + i];
         }
     }
@@ -232,7 +203,7 @@ var LZMA = (function () {
         var decoder,
             hex_length = "",
             i,
-            properties = initDim(5, 1),
+            properties = initDim(5),
             r,
             tmp_length,
             l = properties.length;
@@ -307,7 +278,7 @@ var LZMA = (function () {
     
     function $Create_5(this$static, windowSize) {
         if (this$static._buffer == null || this$static._windowSize != windowSize) {
-            this$static._buffer = initDim(windowSize, 1);
+            this$static._buffer = initDim(windowSize);
         }
         this$static._windowSize = windowSize;
         this$static._pos = 0;
@@ -524,14 +495,14 @@ var LZMA = (function () {
         var i;
         this$static.m_OutWindow = new OutWindow();
         this$static.m_RangeDecoder = new Decoder_0();
-        this$static.m_IsMatchDecoders = initDim(192, 1);
-        this$static.m_IsRepDecoders = initDim(12, 1);
-        this$static.m_IsRepG0Decoders = initDim(12, 1);
-        this$static.m_IsRepG1Decoders = initDim(12, 1);
-        this$static.m_IsRepG2Decoders = initDim(12, 1);
-        this$static.m_IsRep0LongDecoders = initDim(192, 1);
-        this$static.m_PosSlotDecoder = initDim(4, 0);
-        this$static.m_PosDecoders = initDim(114, 1);
+        this$static.m_IsMatchDecoders = initDim(192);
+        this$static.m_IsRepDecoders = initDim(12);
+        this$static.m_IsRepG0Decoders = initDim(12);
+        this$static.m_IsRepG1Decoders = initDim(12);
+        this$static.m_IsRepG2Decoders = initDim(12);
+        this$static.m_IsRep0LongDecoders = initDim(192);
+        this$static.m_PosSlotDecoder = [0,0,0,0];
+        this$static.m_PosDecoders = initDim(114);
         this$static.m_PosAlignDecoder = $BitTreeDecoder(new BitTreeDecoder(), 4);
         this$static.m_LenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
         this$static.m_RepLenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
@@ -642,9 +613,9 @@ var LZMA = (function () {
     }
     
     function $Decoder$LenDecoder(this$static) {
-        this$static.m_Choice = initDim(2, 1);
-        this$static.m_LowCoder = initDim(16, 0);
-        this$static.m_MidCoder = initDim(16, 0);
+        this$static.m_Choice = [0,0];
+        this$static.m_LowCoder = initDim(16);
+        this$static.m_MidCoder = initDim(16);
         this$static.m_HighCoder = $BitTreeDecoder(new BitTreeDecoder(), 8);
         return this$static;
     }
@@ -671,7 +642,7 @@ var LZMA = (function () {
         this$static.m_PosMask = (1 << numPosBits) - 1;
         this$static.m_NumPrevBits = numPrevBits;
         numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
-        this$static.m_Coders = initDim(numStates, 0);
+        this$static.m_Coders = initDim(numStates);
         for (i = 0; i < numStates; ++i)
             this$static.m_Coders[i] = $Decoder$LiteralDecoder$Decoder2(new Decoder$LiteralDecoder$Decoder2());
     }
@@ -722,7 +693,7 @@ var LZMA = (function () {
     }
     
     function $Decoder$LiteralDecoder$Decoder2(this$static) {
-        this$static.m_Decoders = initDim(768, 1);
+        this$static.m_Decoders = initDim(768);
         return this$static;
     }
     
@@ -733,7 +704,7 @@ var LZMA = (function () {
     /** ds */
     function $BitTreeDecoder(this$static, numBitLevels) {
         this$static.NumBitLevels = numBitLevels;
-        this$static.Models = initDim(1 << numBitLevels, 1);
+        this$static.Models = initDim(1 << numBitLevels);
         return this$static;
     }
     
@@ -839,21 +810,6 @@ var LZMA = (function () {
     }
     
     /** ds */
-    function convert_binary_arr(arr)
-    {
-        var i;
-        
-        for (i = arr.length - 1; i >= 0; i -= 1) {
-            if (arr[i] < 0) {
-                arr[i] = 256 + arr[i];
-            }
-        }
-        
-        return arr;
-    }
-    /** de */
-    
-    /** ds */
     function decode(utf) {
         var buf = "", i, x, y, z, l = utf.length;
         for (i = 0; i < l; ++i) {
@@ -861,39 +817,39 @@ var LZMA = (function () {
             if ((x & 128) == 0) {
                 if (x == 0) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 buf += String.fromCharCode(x & 65535);
             } else if ((x & 224) == 192) {
                 if (i + 1 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 y = utf[++i] & 255;
                 if ((y & 192) != 128) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 buf += String.fromCharCode((x & 31) << 6 & 65535 | y & 63);
             } else if ((x & 240) == 224) {
                 if (i + 2 >= utf.length) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 y = utf[++i] & 255;
                 if ((y & 192) != 128) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 z = utf[++i] & 255;
                 if ((z & 192) != 128) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                    return convert_binary_arr(utf);
+                    return utf;
                 }
                 buf += String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
             } else {
                 /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                return convert_binary_arr(utf);
+                return utf;
             }
         }
         
@@ -902,16 +858,14 @@ var LZMA = (function () {
     /** de */
     
     
-    function $LZMAJS(this$static) {
-        return this$static;
-    }
     function toDouble(a) {
         return a[1] + a[0];
     }
     
+    
     /** ds */
     function decompress(byte_arr, on_finish, on_progress) {
-        var this$static = $LZMAJS(new LZMAJS()),
+        var this$static = {},
             percent,
             cbn,
             has_progress;
@@ -977,8 +931,6 @@ var LZMA = (function () {
         wait(do_action, 0);
     }
     /** de */
-    var LZMAJS = make_thing();
-    
     
     
     /// Are we in a Web Worker?
