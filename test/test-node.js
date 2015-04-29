@@ -275,6 +275,12 @@ function compare(a, b)
         return a === b;
     }
     
+    if (Buffer.isBuffer(a) && !Buffer.isBuffer(b) && Array.isArray(b)) {
+        b = new Buffer(b);
+    } else if (Buffer.isBuffer(b) && !Buffer.isBuffer(a) && Array.isArray(a)) {
+        a = new Buffer(a);
+    }
+    
     for (i = a.length - 1; i >= 0; --i) {
         if (a[i] !== b[i]) {
             console.log("BAD VAL (" + i + "):",  a[i], "!==", b[i])
