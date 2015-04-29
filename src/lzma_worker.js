@@ -691,6 +691,7 @@ var LZMA = (function () {
         this$static._bufferOffset = 0;
         this$static._pos = 0;
         this$static._streamPos = 0;
+        this$static._streamEndWasReached = false;
         $ReadBlock(this$static);
         this$static._cyclicBufferPos = 0;
         $ReduceOffsets(this$static, -1);
