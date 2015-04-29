@@ -143,7 +143,7 @@ function decompression_test(compressed_file, correct_filename, next)
 
 function compression_test(file, next)
 {
-    fs.readFile(file, function (err, content)
+    fs.readFile(file, "utf8", function (err, content)
     {
         var comp_start = (new Date()).getTime(),
             compression_mode = 1,
@@ -272,6 +272,12 @@ function compare(a, b)
     }
     
     if (typeof a === "string") {
+        if (a !== b) {
+            var dump_file = Math.random();
+            console.log("Dumping " + dump_file);
+            fs.writeFileSync(dump_file + "-a", a);
+            fs.writeFileSync(dump_file + "-b", b);
+        }
         return a === b;
     }
     
