@@ -2722,9 +2722,7 @@ var LZMA = (function () {
             on_finish = on_progress = 0;
         }
         
-        this$static.mode = get_mode_obj(mode);
-        
-        this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), this$static.mode);
+        this$static.c = $LZMAByteArrayCompressor(new LZMAByteArrayCompressor(), encode(str), get_mode_obj(mode));
         
         if (on_progress) {
             on_progress(0);
