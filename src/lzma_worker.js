@@ -606,10 +606,10 @@ var LZMA = (function () {
             hashValue = this$static._bufferBase[cur] & 255 ^ (this$static._bufferBase[cur + 1] & 255) << 8;
         }
 
-        curMatch = this$static._hash[this$static.kFixHashSize + hashValue];
+        curMatch = this$static._hash[this$static.kFixHashSize + hashValue] || 0;
         if (this$static.HASH_ARRAY) {
-            curMatch2 = this$static._hash[hash2Value];
-            curMatch3 = this$static._hash[1024 + hash3Value];
+            curMatch2 = this$static._hash[hash2Value] || 0;
+            curMatch3 = this$static._hash[1024 + hash3Value] || 0;
             this$static._hash[hash2Value] = this$static._pos;
             this$static._hash[1024 + hash3Value] = this$static._pos;
             if (curMatch2 > matchMinPos) {
@@ -713,7 +713,7 @@ var LZMA = (function () {
     function $NormalizeLinks(items, numItems, subValue) {
         var i, value;
         for (i = 0; i < numItems; ++i) {
-            value = items[i];
+            value = items[i] || 0;
             if (value <= subValue) {
                 value = 0;
             } else {
