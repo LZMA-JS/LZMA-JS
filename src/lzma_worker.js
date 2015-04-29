@@ -2630,7 +2630,7 @@ var LZMA = (function () {
     /** de */
     /** cs */
     function encode(s) {
-        var ch, chars, data, elen, i, charArr, n, l = s.length;
+        var ch, chars = [], data, elen, i, l = s.length;
         /*
         console.log("----------")
         console.log(s)
@@ -2665,7 +2665,7 @@ var LZMA = (function () {
                 */
             //console.log("----------")
         } else {
-            chars = (n = s.length , charArr = initDim(n) , $getChars(s, 0, n, charArr, 0) , charArr);
+            $getChars(s, 0, l, chars, 0);
         }
         //console.log(chars)
         //console.log(chars)
