@@ -2,9 +2,11 @@
 
 "use strict";
 
-/// Usage: node test-node.js [unmin]
+/// Usage: node test-node.js [FLAGS]
 ///
-/// Add "unmin" to test the unminified code.
+/// --unmin    Test the unminified code.
+/// --nosep    Don't test the seperate (de)compression modules.
+/// --nolarge  Skip large files (they can take a long time).
 ///
 
 var all_tests_pass = true;
@@ -13,23 +15,31 @@ var p = require("path");
 var params = get_params();
 var my_lzma;
 var lzma_norm = require("../src/lzma_worker" + (params.unmin ? "" : "-min") + ".js").LZMA;
-var lzma_sep = {
-        decompress: require("../src/lzma-d" + (params.unmin ? "" : "-min") + ".js").LZMA.decompress,
-        compress:   require("../src/lzma-c" + (params.unmin ? "" : "-min") + ".js").LZMA.compress,
-    };
 var path_to_files = "files";
 var isTTY = process.stdout.isTTY;
 var total_time;
+
+function get_hrtime(start)
+{
+    var diff;
+    if (start) {
+        diff = process.hrtime(start);
+        return  (diff[0] * 1e9 + diff[1]) / 1000000;
+    }
+    return process.hrtime();
+}
 
 function get_params(argv)
 {
     var i,
         params = {};
+    
     argv = argv || process.argv;
     
     for (i = process.argv.length - 1; i >= 2; i -= 1) {
         params[process.argv[i].replace(/^-+/, "")] = 1;
     }
+    
     return params;
 }
 
@@ -100,6 +110,7 @@ function progress(percent)
 function decompression_test(compressed_file, correct_filename, next)
 {
     if (params.nolarge && p.basename(compressed_file).indexOf("large-") === 0) {
+        warn("Skipping large file.");
         return next();
     }
     fs.readFile(correct_filename, function (err, correct_result)
@@ -112,17 +123,18 @@ function decompression_test(compressed_file, correct_filename, next)
         
         fs.readFile(compressed_file, function (err, buffer)
         {
-            var deco_start;
+            var deco_start,
+                deco_speed;
             
             if (err) {
                 throw err;
             }
             
-            deco_start = Date.now();
+            deco_start = get_hrtime();
             try {
                 my_lzma.decompress(buffer, function (result)
                 {
-                    var deco_speed = Date.now() - deco_start;
+                    deco_speed = get_hrtime(deco_start);
                     
                     console.log("Decompressed size:", result.length + " bytes");
                     
@@ -143,6 +155,7 @@ function decompression_test(compressed_file, correct_filename, next)
                     next();
                 }, progress);
             } catch (e) {
+                deco_speed = get_hrtime(deco_start);
                 if (p.basename(correct_filename) === "error-" + e.message) {
                     display_result("Test passed", true);
                     console.log("threw correct error: " + e.message);
@@ -150,6 +163,7 @@ function decompression_test(compressed_file, correct_filename, next)
                     display_result("ERROR: " + e.message, false);
                     all_tests_pass = false;
                 }
+                console.log("Decompression time:", deco_speed + " ms");
                 console.log("");
                 next();
             }
@@ -161,11 +175,12 @@ function compression_test(file, next)
 {
     var ext = p.extname(file).toLowerCase();
     if (params.nolarge && p.basename(file).indexOf("large-") === 0) {
+        warn("Skipping large file.");
         return next();
     }
     fs.readFile(file, (ext === ".txt" ? "utf8" : null), function (err, content)
     {
-        var comp_start = Date.now(),
+        var comp_start = get_hrtime(),
             compression_mode = 1,
             match,
             buf;
@@ -187,15 +202,15 @@ function compression_test(file, next)
         console.log("     Initial size:", content.length + " bytes");
         my_lzma.compress(buf || content, compression_mode, function ondone(compressed_result)
         {
-            var comp_speed = Date.now() - comp_start,
+            var comp_speed = get_hrtime(comp_start),
                 deco_start;
             
             console.log("  Compressed size:", compressed_result.length + " bytes");
             fs.writeFileSync("file.lzma", new Buffer(compressed_result))
-            deco_start = Date.now();
+            deco_start = get_hrtime();
             my_lzma.decompress(compressed_result, function (decompressed_result)
             {
-                var deco_speed = Date.now() - deco_start;
+                var deco_speed = get_hrtime(deco_start);
                 console.log("Decompressed size:", decompressed_result.length + " bytes");
                 
                 if (typeof decompressed_result === "string") {
@@ -299,14 +314,30 @@ function compare(a, b)
 
 function display_time()
 {
-    console.log("Total Time: " + (Date.now() - total_time) + " ms");
+    console.log("Total Time: " + get_hrtime(total_time) + " ms");
+}
+
+function help()
+{
+    console.log("");
+    console.log("Usage: node test-node.js [FLAGS]");
+    console.log("");
+    console.log("  --unmin    Test the unminified code.");
+    console.log("  --nosep    Don't test the seperate (de)compression modules.");
+    console.log("  --nolarge  Skip large files (they can take a long time).");
+    console.log("");
+    process.exit();
+}
+
+if (params.help) {
+    help();
 }
 
 path_to_files = p.join(__dirname, path_to_files);
 
 my_lzma = lzma_norm;
 
-total_time = Date.now();
+total_time = get_hrtime();
 
 announce("Testing lzma_worker" + (params.unmin ? "" : "-min") + ".js");
 
@@ -314,7 +345,7 @@ run_tests(function (tests_passed_norm)
 {
     if (!tests_passed_norm) {
         display_time();
-        /// Fail.
+        /// Fail
         process.exit(1);
     }
     
@@ -325,13 +356,17 @@ run_tests(function (tests_passed_norm)
     
     console.log("");
     announce("Testing lzma-c" + (params.unmin ? "" : "-min") + ".js and lzma-d" + (params.unmin ? "" : "-min") + ".js");
-    my_lzma = lzma_sep;
+    
+    my_lzma = {
+        decompress: require("../src/lzma-d" + (params.unmin ? "" : "-min") + ".js").LZMA.decompress,
+        compress:   require("../src/lzma-c" + (params.unmin ? "" : "-min") + ".js").LZMA.compress,
+    };
     
     run_tests(function (tests_passed_sep)
     {
         display_time();
         if (!tests_passed_sep) {
-            /// Fail.
+            /// Fail
             process.exit(1);
         }
     });
