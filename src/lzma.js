@@ -39,14 +39,14 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 req(path);
                 
                 fake_lzma = {
-                    compress: function compress(string, mode, on_finish, on_progress) {
+                    compress: function compress(mixed, mode, on_finish, on_progress) {
                         if (global_var.LZMA_WORKER) {
-                            global_var.LZMA_WORKER.compress(string, mode, on_finish, on_progress);
+                            global_var.LZMA_WORKER.compress(mixed, mode, on_finish, on_progress);
                         } else {
                             /// Wait
                             setTimeout(function ()
                             {
-                                fake_lzma.compress(string, mode, on_finish, on_progress);
+                                fake_lzma.compress(mixed, mode, on_finish, on_progress);
                             }, 50);
                         }
                     },
@@ -129,8 +129,8 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             }
             
             return {
-                compress: function compress(string, mode, on_finish, on_progress) {
-                    send_to_worker(action_compress, String(string), mode, on_finish, on_progress);
+                compress: function compress(mixed, mode, on_finish, on_progress) {
+                    send_to_worker(action_compress, mixed, mode, on_finish, on_progress);
                 },
                 decompress: function decompress(byte_arr, on_finish, on_progress) {
                     send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
