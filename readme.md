@@ -78,7 +78,7 @@ If the decompression progress is unable to be calculated, the on_progress() func
 LZMA-JS will try to use Web Workers if they are available.  If the environment does not support Web Workers,
 it will just do something else, and it won't pollute the global scope.
 
-LZMA-JS was originally based on [gwt-lzma](http://code.google.com/p/gwt-lzma/), which is a port of the LZMA SDK from Java into JavaScript.
+LZMA-JS was originally based on gwt-lzma, which is a port of the LZMA SDK from Java into JavaScript.
 
 
 But I don't want to use Web Workers
