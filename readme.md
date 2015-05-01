@@ -20,6 +20,7 @@ Here are some file size stats:
 | lzma-c.js      | compression   |  19.2 KB |  7.7 KB |
 | lzma-d.js      | decompression |   7.3 KB |  3.1 KB |
 
+Also, older versions returned compressed data as unsigned bytes. Now, it returns signed bytes.
 
 Demos
 ---
@@ -79,7 +80,6 @@ LZMA-JS will try to use Web Workers if they are available.  If the environment d
 it will just do something else, and it won't pollute the global scope.
 
 LZMA-JS was originally based on gwt-lzma, which is a port of the LZMA SDK from Java into JavaScript.
-
 
 But I don't want to use Web Workers
 ---
