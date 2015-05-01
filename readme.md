@@ -3,11 +3,12 @@ LZMA in a Browser
 
 [LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
 
+
 What's New in 2.0
 ---
 Two things: <b>speed</b> & <b>size</b>.
 
-LZMA-JS 2.0 now minifies to almost half of 1.x and in some cases is 1,000x faster (particularly with high compression).
+LZMA-JS 2.x now minifies to smaller than one fourth of 1.x and in some cases is 1,000x faster (particularly with high compression).
 
 It is also more modular. The compression and decompression algorithms can be optionally separated to shrink the file size even more.
 
@@ -19,10 +20,12 @@ Here are some file size stats:
 | lzma-c.js      | compression   |  19.2 KB |  7.7 KB |
 | lzma-d.js      | decompression |   7.3 KB |  3.1 KB |
 
+
 Demos
 ---
 
 Live demos can be found [here](http://nmrugg.github.io/LZMA-JS/ "Demos").
+
 
 How to Use
 ---
@@ -31,7 +34,6 @@ First, load the bootstrapping code.
     
     /// In a browser:
     <script src="../src/lzma.js"></script>
-
 
 Create the LZMA object.
     
@@ -42,15 +44,14 @@ Create the LZMA object.
 (De)Compress stuff.
 
     /// To compress:
-    ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is very slow and probably a bit better).
-    ///      I suggest keeping mode low, like 1-3.
-    ///      And by the way, 9 is not always the smallest.
+    ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is slower and probably much better).
     ///NOTE: compress() can take a string or an array of bytes. (A Node.js Buffer counts as an array of bytes.)
     my_lzma.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
     
     /// To decompress:
     ///NOTE: The result will be returned as a string if it is printable text, otherwise, it will return an array of bytes.
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
+
 
 Node.js
 ---
@@ -62,7 +63,7 @@ LZMA-JS is available in the npm repository.
 It can be loaded with the following code:
     
     var my_lzma = require("lzma");
-    
+
 
 Notes
 ---
@@ -89,7 +90,7 @@ If you'd prefer not to bother with Web Workers, you can just include <code>lzma_
 
 That will create a global <code>LZMA</code> <code>object</code> that you can use directly. Like this:
 
-    LZMA.compress(string, mode, on_finish(result) {}, on_progress(percent) {});
+    LZMA.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
     
     LZMA.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
 
