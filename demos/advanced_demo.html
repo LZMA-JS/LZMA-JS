@@ -165,7 +165,7 @@
                 right_output_el       = document.getElementById("right_output"),
                 right_time_el         = document.getElementById("right_time"),
                 select_mode_el        = document.getElementById("select_mode"),
-                
+                left_byte_size,
                 my_lzma = new LZMA("../src/lzma_worker.js");
             
             if (!String.prototype.trim) {
@@ -250,7 +250,8 @@
             
             function update_sizes(compare) {
                 var compare_result = "",
-                    left_size  = left_text_el.value.length,
+                    /// If the left text element contains a JSON byte array, we need to get the lenght of the array.
+                    left_size  = typeof left_byte_size === "number" ? left_byte_size : left_text_el.value.length,
                     right_size = convert_formated_hex_to_bytes(right_text_el.value);
                 
                 if (right_size === false) {
@@ -269,6 +270,7 @@
             
             function clear_left() {
                 left_text_el.value = "";
+                left_byte_size = undefined;
                 update_sizes();
             }
             
@@ -284,12 +286,28 @@
                 return time + " ms";
             }
             
+            function prepare_data(str)
+            {
+                var arr;
+                /// If the string is a JSON array, use that. This allows us to compress a byte array.
+                if (str[0] === "[" && str.slice(-1) === "]") {
+                    try {
+                        arr = JSON.parse(str);
+                    } catch (e) {}
+                }
+                if (arr) {
+                    return arr;
+                }
+                return str;
+            }
+            
             
             clear_left_button_el.onclick  = clear_left;
             clear_right_button_el.onclick = clear_right;
             
             compress_button_el.onclick = function () {
-                var start_time;
+                var start_time,
+                    data_to_compress = prepare_data(left_text_el.value);
                 
                 right_text_el.value = "";
                 update_sizes();
@@ -300,7 +318,13 @@
                 start_time = (new Date).getTime();
                 right_time_el.innerHTML = "";
                 
-                my_lzma.compress(left_text_el.value, select_mode_el.value, function (result) {
+                if (typeof data_to_compress === "string") {
+                    left_byte_size = undefined;
+                } else {
+                    left_byte_size = data_to_compress.length;
+                }
+                
+                my_lzma.compress(data_to_compress, select_mode_el.value, function (result) {
                     right_time_el.innerHTML = format_time((new Date).getTime() - start_time);
                     
                     if (result === false) {
@@ -322,6 +346,7 @@
                     start_time;
                 
                 left_text_el.value = "";
+                left_byte_size = undefined;
                 update_sizes();
                 left_output_el.innerHTML = "Decompressing...0%";
                 
@@ -344,7 +369,12 @@
                         return;
                     }
                     
-                    left_text_el.value = result;
+                    if (is_array(result)) {
+                        left_text_el.value = JSON.stringify(result);
+                        left_byte_size = result.length;
+                    } else {
+                        left_text_el.value = result;
+                    }
                     update_sizes(true);
                 }, function progress(percent) {
                     ///NOTE: If "percent" is -1, that means that it is not possible to calculate the percent, so you'll just have to wait.
