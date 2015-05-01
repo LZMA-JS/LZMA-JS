@@ -1,10 +1,10 @@
 LZMA in a Browser
 ===
 
-[LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
+<a href="https://github.com/nmrugg/LZMA-JS">LZMA-JS</a> is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
 
 
-What's New in 2.0
+What's New in 2.x
 ---
 Two things: <b>speed</b> & <b>size</b>.
 
@@ -24,7 +24,7 @@ Here are some file size stats:
 Demos
 ---
 
-Live demos can be found [here](http://nmrugg.github.io/LZMA-JS/ "Demos").
+Live demos can be found <a href="http://nmrugg.github.io/LZMA-JS/">here</a>.
 
 
 How to Use
