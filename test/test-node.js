@@ -206,7 +206,7 @@ function compression_test(file, next)
                 deco_start;
             
             console.log("  Compressed size:", compressed_result.length + " bytes");
-            fs.writeFileSync("file.lzma", new Buffer(compressed_result))
+            
             deco_start = get_hrtime();
             my_lzma.decompress(compressed_result, function (decompressed_result)
             {
