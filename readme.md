@@ -49,7 +49,7 @@ Create the LZMA object.
     my_lzma.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
     
     /// To decompress:
-    ///NOTE: The result will be returned as a string if it is printable text, otherwise, it will return an array of bytes.
+    ///NOTE: The result will be returned as a string if it is printable text; otherwise, it will return an array of bytes.
     my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
 
 
