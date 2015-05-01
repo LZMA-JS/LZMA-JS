@@ -1,13 +1,15 @@
 //! © 2015 Nathan Rugg <nmrugg@gmail.com> | MIT
 /// See LICENSE for more details.
 
+// jshint bitwise:true, curly:true, eqeqeq:true, forin:true, immed:true, latedef:true, newcap:true, noarg:true, noempty:true, nonew:true, onevar:true, plusplus:true, quotmark:double, undef:true, unused:strict, browser: true, node: true
+
 /// Does the environment support web workers?  If not, let's load the worker manually (without polluting the global scope).
 if (typeof Worker === "undefined" || (typeof location !== "undefined" && location.protocol === "file:")) {
     /// Is this Node.js?
     if (typeof global !== "undefined" && typeof require !== "undefined") {
         this.LZMA = function (lzma_path) {
             return require(lzma_path || "./lzma_worker-min.js").LZMA;
-        }
+        };
     /// Is this a browser?
     } else if (typeof window !== "undefined" && window.document) {
         (function ()
@@ -64,7 +66,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 };
                 
                 return fake_lzma;
-            };
+            }
             
             that.LZMA = non_worker_lzma;
         }());
