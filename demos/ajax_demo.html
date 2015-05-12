@@ -38,7 +38,7 @@ document.getElementById("go").onclick = function () {
 
 if (location.protocol === "file:") {
     document.getElementById("warning").style.display = "block";
-    document.getElementById("warning").innerHTML = "Sorry, but Ajax does not work from the <code><b>file:</b></code> protocol.<br>Try <a href=\"https://nmrugg.github.io/LZMA-JS/demos/ajax_demo.html\">https://nmrugg.github.io/LZMA-JS/demos/ajax_demo.html</a> instead.";
+    document.getElementById("warning").innerHTML = "Sorry, but Ajax does not work from the <code><b>file:</b></code> protocol. This is a limitation of your browser, not LZMA-JS. You'll need to setup your own localhost server to try it out, or just view the demo <a href=\"https://nmrugg.github.io/LZMA-JS/demos/ajax_demo.html\">here</a> instead.";
 }
 </script>
 </body>
