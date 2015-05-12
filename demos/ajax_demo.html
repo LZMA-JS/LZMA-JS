@@ -1,5 +1,5 @@
 <head>
-    <title>Simple Demo</title>
+    <title>Ajax Demo</title>
     <meta http-equive="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -25,7 +25,7 @@ document.getElementById("go").onclick = function () {
     ajax.open("GET", "./assets/compressed.lzma", true);
     ajax.responseType = "arraybuffer";
     
-    ajax.onload = function (e) {
+    ajax.onload = function () {
         /// LZMA-JS can read Uint8Array directly.
         decompress(new Uint8Array(ajax.response));
     };
