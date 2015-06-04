@@ -69,6 +69,11 @@ function parse_parameters(options)
         return true;
     }
     
+    function get_letters(letter)
+    {
+        args[letter] = get_val(letter);
+    }
+    
     options = options || {};
     
     if (!Array.isArray(options.nonboolean)) {
@@ -83,10 +88,7 @@ function parse_parameters(options)
                 args[arg.substr(2)] = get_val(arg.substr(2));
             } else {
                 /// Single
-                arg.substr(1).split("").forEach(function oneach(letter)
-                {
-                    args[letter] = get_val(letter);
-                })
+                arg.substr(1).split("").forEach(get_letters);
             }
         } else {
             args._.push(arg);
@@ -157,7 +159,7 @@ function compress_files(files)
         } else {
             if (p.extname(files[i]) === suffix) {
                 if (!params.q && !params.quiet) {
-                    console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged. Use -S to change suffix.")
+                    console.error(p.basename(files[i]) + " already has " + suffix + " suffix -- unchanged. Use -S to change suffix.");
                 }
                 return loop(i + 1);
             }
