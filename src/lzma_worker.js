@@ -2638,7 +2638,8 @@ var LZMA = (function () {
             } else if (s.toJSON) {
                 /// Node.js buffers have a toJSON() method that turns it into an Array.
                 chars = s.toJSON();
-                if(!(chars instanceof Array)) {
+                /// Node.js 0.12 returns {type: "Buffer", data: []}.
+                if (!(chars instanceof Array)) {
                     chars = chars.data;
                 }
             } else {
