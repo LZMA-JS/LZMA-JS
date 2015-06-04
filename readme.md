@@ -1,4 +1,4 @@
-LZMA in a Browser
+LZMA Everywhere
 ===
 
 <a href="https://github.com/nmrugg/LZMA-JS">LZMA-JS</a> is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
