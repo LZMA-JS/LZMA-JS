@@ -5,4 +5,4 @@ check:
 	node test/test-node.js unmin && node test/test-node.js
 
 minify:
-	node minify.js
+	node minify.js --save
