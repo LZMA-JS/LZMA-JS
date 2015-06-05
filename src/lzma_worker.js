@@ -2635,21 +2635,7 @@ var LZMA = (function () {
         var ch, chars = [], data, elen = 0, i, l = s.length;
         /// Be able to handle binary arrays and buffers.
         if (typeof s == "object") {
-            if (s instanceof Array) {
-                chars = s;
-            } else if (s.toJSON) {
-                /// Node.js buffers have a toJSON() method that turns it into an Array.
-                chars = s.toJSON();
-                /// Node.js 0.12 returns {type: "Buffer", data: []}.
-                if (!(chars instanceof Array)) {
-                    chars = chars.data;
-                }
-            } else {
-                for (i = 0; i < l; i += 1) {
-                    chars[i] = s[i];
-                }
-            }
-            return chars;
+            return s;
         } else {
             $getChars(s, 0, l, chars, 0);
         }
