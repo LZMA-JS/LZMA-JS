@@ -2737,7 +2737,8 @@ var LZMA = (function () {
         var this$static = {},
             percent,
             cbn,
-            has_progress;
+            has_progress,
+            len;
         
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -2746,8 +2747,10 @@ var LZMA = (function () {
         
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), byte_arr);
         
+        len = toDouble(this$static.d.length_0);
+        
         ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
-        has_progress = toDouble(this$static.d.length_0) > -1;
+        has_progress = len > -1;
         
         if (on_progress) {
             on_progress(has_progress ? 0 : -1);
@@ -2760,7 +2763,7 @@ var LZMA = (function () {
             while ($processChunk(this$static.d.chunker)) {
                 if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
                     if (has_progress) {
-                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / len;
                         /// If about 200 miliseconds have passed, update the progress.					
                         if (on_progress) {
                             on_progress(percent);
