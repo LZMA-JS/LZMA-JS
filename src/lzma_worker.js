@@ -55,7 +55,7 @@ var LZMA = (function () {
         Object_0 = make_thing({});
     
     function initDim(len) {
-        //NOTE: This is MUCH faster than "new Array(len)" in newer versions of v8 (starting with Node.js 0.11.15, which uses v8 3.28.73).
+        ///NOTE: This is MUCH faster than "new Array(len)" in newer versions of v8 (starting with Node.js 0.11.15, which uses v8 3.28.73).
         var a = [];
         a[len - 1] = undefined;
         return a;
