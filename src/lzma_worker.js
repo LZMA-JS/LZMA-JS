@@ -124,21 +124,7 @@ var LZMA = (function () {
         return a[0] == b[0] && a[1] == b[1];
     }
     /** ce */
-    
     function fromInt(value) {
-        var rebase, result;
-        if (value > -129 && value < 128) {
-            rebase = value + 128;
-            result = boxedValues[rebase];
-            if (result == null) {
-                result = boxedValues[rebase] = internalFromInt(value);
-            }
-            return result;
-        }
-        return internalFromInt(value);
-    }
-    
-    function internalFromInt(value) {
         if (value >= 0) {
             return [value, 0];
         } else {
@@ -242,8 +228,6 @@ var LZMA = (function () {
         newLow = a[0] - b[0];
         return create(newLow, newHigh);
     }
-    
-    var boxedValues = initDim(256);
     
     var InputStream = make_thing();
     
@@ -515,7 +499,7 @@ var LZMA = (function () {
     _._streamPos = 0;
     
     var CrcTable = (function () {
-        var i, j, r, CrcTable = initDim(256);
+        var i, j, r, CrcTable = [];
         for (i = 0; i < 256; ++i) {
             r = i;
             for (j = 0; j < 8; ++j)
@@ -1257,7 +1241,7 @@ var LZMA = (function () {
     /** de */
     /** cs */
     var g_FastPos = (function () {
-        var c, j, k, slotFast, g_FastPos = initDim(2048);
+        var c, j, k, slotFast, g_FastPos = [];
         c = 2;
         g_FastPos[0] = 0;
         g_FastPos[1] = 1;
