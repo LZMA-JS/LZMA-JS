@@ -2782,7 +2782,7 @@ var LZMA = (function () {
                         }
                     }
                     
-                    /// This allows other code to run, like the browser to update.
+                    ///NOTE: This allows other code to run, like the browser to update.
                     wait(do_action, 0);
                     return false;
                 }
@@ -2817,16 +2817,16 @@ var LZMA = (function () {
     /** cs */
     var get_mode_obj = (function () {
         var modes = [
-                        {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-                        {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-                        {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
-                    ];
+            {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+            {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+            {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
+        ];
         
         return function (mode) {
             return modes[mode - 1] || modes[6];
@@ -2835,7 +2835,7 @@ var LZMA = (function () {
     /** ce */
     
     /// Are we in a Web Worker?
-    /// This seems to be the most reliable way to detect this.
+    ///NOTE: This seems to be the most reliable way to detect this.
     if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
         (function () {
             /* jshint -W020 */
