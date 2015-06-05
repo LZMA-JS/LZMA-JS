@@ -28,6 +28,8 @@ var LZMA = (function () {
         /** de */
         action_progress   = 3,
         wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
+        ///NOTE: This seems to be the most reliable way to detect this.
+        is_web_worker = typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined"),
         __4294967296 = 4294967296;
     
     function make_thing(proto)
@@ -2760,6 +2762,7 @@ var LZMA = (function () {
         
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), byte_arr);
         
+        ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
         has_progress = toDouble(this$static.d.length_0) > -1;
         
         if (on_progress) {
@@ -2805,7 +2808,7 @@ var LZMA = (function () {
                     action: action_decompress,
                     cbn: cbn,
                     /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
-                    result: (typeof res != "string" ? res.slice(0) : res)
+                    result: (is_web_worker && typeof res != "string" ? res.slice(0) : res)
                 });
             }
         }
@@ -2834,9 +2837,8 @@ var LZMA = (function () {
     }());
     /** ce */
     
-    /// Are we in a Web Worker?
-    ///NOTE: This seems to be the most reliable way to detect this.
-    if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
+    /// If we're in a Web Worker, create the onmessage() communication channel.
+    if (is_web_worker) {
         (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
