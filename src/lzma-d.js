@@ -19,6 +19,8 @@ var LZMA = (function () {
         /** de */
         action_progress   = 3,
         wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
+        ///NOTE: This seems to be the most reliable way to detect this.
+        is_web_worker = typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined"),
         __4294967296 = 4294967296;
     
     function make_thing(proto)
@@ -861,7 +863,8 @@ var LZMA = (function () {
         var this$static = {},
             percent,
             cbn,
-            has_progress;
+            has_progress,
+            len;
         
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -870,7 +873,10 @@ var LZMA = (function () {
         
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), byte_arr);
         
-        has_progress = toDouble(this$static.d.length_0) > -1;
+        len = toDouble(this$static.d.length_0);
+        
+        ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
+        has_progress = len > -1;
         
         if (on_progress) {
             on_progress(has_progress ? 0 : -1);
@@ -883,7 +889,7 @@ var LZMA = (function () {
             while ($processChunk(this$static.d.chunker)) {
                 if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
                     if (has_progress) {
-                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / len;
                         /// If about 200 miliseconds have passed, update the progress.					
                         if (on_progress) {
                             on_progress(percent);
@@ -892,7 +898,7 @@ var LZMA = (function () {
                         }
                     }
                     
-                    /// This allows other code to run, like the browser to update.
+                    ///NOTE: This allows other code to run, like the browser to update.
                     wait(do_action, 0);
                     return false;
                 }
@@ -914,8 +920,7 @@ var LZMA = (function () {
                 postMessage({
                     action: action_decompress,
                     cbn: cbn,
-                    /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
-                    result: (typeof res != "string" ? res.slice(0) : res)
+                    result: res
                 });
             }
         }
@@ -926,9 +931,8 @@ var LZMA = (function () {
     /** de */
     
     
-    /// Are we in a Web Worker?
-    /// This seems to be the most reliable way to detect this.
-    if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
+    /// If we're in a Web Worker, create the onmessage() communication channel.
+    if (is_web_worker) {
         (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
