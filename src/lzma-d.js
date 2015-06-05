@@ -19,8 +19,6 @@ var LZMA = (function () {
         /** de */
         action_progress   = 3,
         wait = typeof setImmediate == "function" ? setImmediate : setTimeout,
-        ///NOTE: This seems to be the most reliable way to detect this.
-        is_web_worker = typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined"),
         __4294967296 = 4294967296;
     
     function make_thing(proto)
@@ -932,7 +930,8 @@ var LZMA = (function () {
     
     
     /// If we're in a Web Worker, create the onmessage() communication channel.
-    if (is_web_worker) {
+    ///NOTE: This seems to be the most reliable way to detect this.
+    if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
         (function () {
             /* jshint -W020 */
             /// Create the global onmessage function.
