@@ -2723,9 +2723,7 @@ var LZMA = (function () {
                 postMessage({
                     action: action_compress,
                     cbn: cbn,
-                    /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
-                    /// .slice(0) simply returns the entire array by value.
-                    result: res.slice(0)
+                    result: res
                 });
             }
         }
@@ -2793,8 +2791,7 @@ var LZMA = (function () {
                 postMessage({
                     action: action_decompress,
                     cbn: cbn,
-                    /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
-                    result: (is_web_worker && typeof res != "string" ? res.slice(0) : res)
+                    result: res
                 });
             }
         }
