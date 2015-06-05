@@ -105,21 +105,7 @@ var LZMA = (function () {
     }
     
     
-    
     function fromInt(value) {
-        var rebase, result;
-        if (value > -129 && value < 128) {
-            rebase = value + 128;
-            result = boxedValues[rebase];
-            if (result == null) {
-                result = boxedValues[rebase] = internalFromInt(value);
-            }
-            return result;
-        }
-        return internalFromInt(value);
-    }
-    
-    function internalFromInt(value) {
         if (value >= 0) {
             return [value, 0];
         } else {
@@ -142,8 +128,6 @@ var LZMA = (function () {
         newLow = a[0] - b[0];
         return create(newLow, newHigh);
     }
-    
-    var boxedValues = initDim(256);
     
     var InputStream = make_thing();
     
