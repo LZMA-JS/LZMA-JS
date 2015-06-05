@@ -55,7 +55,10 @@ var LZMA = (function () {
         Object_0 = make_thing({});
     
     function initDim(len) {
-        return new Array(len);
+        ///NOTE: This is MUCH faster than "new Array(len)" in newer versions of v8 (starting with Node.js 0.11.15, which uses v8 3.28.73).
+        var a = [];
+        a[len - 1] = undefined;
+        return a;
     }
     
     function add(a, b) {
@@ -2633,21 +2636,7 @@ var LZMA = (function () {
         var ch, chars = [], data, elen = 0, i, l = s.length;
         /// Be able to handle binary arrays and buffers.
         if (typeof s == "object") {
-            if (s instanceof Array) {
-                chars = s;
-            } else if (s.toJSON) {
-                /// Node.js buffers have a toJSON() method that turns it into an Array.
-                chars = s.toJSON();
-                /// Node.js 0.12 returns {type: "Buffer", data: []}.
-                if (!(chars instanceof Array)) {
-                    chars = chars.data;
-                }
-            } else {
-                for (i = 0; i < l; i += 1) {
-                    chars[i] = s[i];
-                }
-            }
-            return chars;
+            return s;
         } else {
             $getChars(s, 0, l, chars, 0);
         }
@@ -2735,9 +2724,7 @@ var LZMA = (function () {
                 postMessage({
                     action: action_compress,
                     cbn: cbn,
-                    /// .slice(0) is required for Firefox 4.0 (because I think arrays are now passed by reference, which is not allowed when sending messages to or from web workers).
-                    /// .slice(0) simply returns the entire array by value.
-                    result: res.slice(0)
+                    result: res
                 });
             }
         }
@@ -2751,7 +2738,8 @@ var LZMA = (function () {
         var this$static = {},
             percent,
             cbn,
-            has_progress;
+            has_progress,
+            len;
         
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -2760,7 +2748,10 @@ var LZMA = (function () {
         
         this$static.d = $LZMAByteArrayDecompressor(new LZMAByteArrayDecompressor(), byte_arr);
         
-        has_progress = toDouble(this$static.d.length_0) > -1;
+        len = toDouble(this$static.d.length_0);
+        
+        ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
+        has_progress = len > -1;
         
         if (on_progress) {
             on_progress(has_progress ? 0 : -1);
@@ -2773,7 +2764,7 @@ var LZMA = (function () {
             while ($processChunk(this$static.d.chunker)) {
                 if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
                     if (has_progress) {
-                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / toDouble(this$static.d.length_0);
+                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / len;
                         /// If about 200 miliseconds have passed, update the progress.					
                         if (on_progress) {
                             on_progress(percent);
@@ -2782,7 +2773,7 @@ var LZMA = (function () {
                         }
                     }
                     
-                    /// This allows other code to run, like the browser to update.
+                    ///NOTE: This allows other code to run, like the browser to update.
                     wait(do_action, 0);
                     return false;
                 }
@@ -2804,8 +2795,7 @@ var LZMA = (function () {
                 postMessage({
                     action: action_decompress,
                     cbn: cbn,
-                    /// If the result is an array of integers (because it is binary), we need to use slice to make a copy of the data before it is returned from the Web Worker.
-                    result: (typeof res != "string" ? res.slice(0) : res)
+                    result: res
                 });
             }
         }
@@ -2817,16 +2807,16 @@ var LZMA = (function () {
     /** cs */
     var get_mode_obj = (function () {
         var modes = [
-                        {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-                        {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-                        {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
-                        {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
-                    ];
+            {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+            {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
+            {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
+            {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
+        ];
         
         return function (mode) {
             return modes[mode - 1] || modes[6];
@@ -2834,8 +2824,8 @@ var LZMA = (function () {
     }());
     /** ce */
     
-    /// Are we in a Web Worker?
-    /// This seems to be the most reliable way to detect this.
+    /// If we're in a Web Worker, create the onmessage() communication channel.
+    ///NOTE: This seems to be the most reliable way to detect this.
     if (typeof onmessage != "undefined" && (typeof window == "undefined" || typeof window.document == "undefined")) {
         (function () {
             /* jshint -W020 */
