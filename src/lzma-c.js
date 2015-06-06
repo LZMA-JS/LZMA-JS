@@ -115,21 +115,7 @@ var LZMA = (function () {
         return a[0] == b[0] && a[1] == b[1];
     }
     /** ce */
-    
     function fromInt(value) {
-        var rebase, result;
-        if (value > -129 && value < 128) {
-            rebase = value + 128;
-            result = boxedValues[rebase];
-            if (result == null) {
-                result = boxedValues[rebase] = internalFromInt(value);
-            }
-            return result;
-        }
-        return internalFromInt(value);
-    }
-    
-    function internalFromInt(value) {
         if (value >= 0) {
             return [value, 0];
         } else {
@@ -233,8 +219,6 @@ var LZMA = (function () {
         newLow = a[0] - b[0];
         return create(newLow, newHigh);
     }
-    
-    var boxedValues = initDim(256);
     
     var InputStream = make_thing();
     
@@ -442,7 +426,7 @@ var LZMA = (function () {
     _._streamPos = 0;
     
     var CrcTable = (function () {
-        var i, j, r, CrcTable = initDim(256);
+        var i, j, r, CrcTable = [];
         for (i = 0; i < 256; ++i) {
             r = i;
             for (j = 0; j < 8; ++j)
@@ -792,8 +776,7 @@ var LZMA = (function () {
     
     /** cs */
     var g_FastPos = (function () {
-        var c, j, k, slotFast, g_FastPos = initDim(2048);
-        c = 2;
+        var j, k, slotFast, c = 2, g_FastPos = [];
         g_FastPos[0] = 0;
         g_FastPos[1] = 1;
         for (slotFast = 2; slotFast < 22; ++slotFast) {
@@ -833,10 +816,9 @@ var LZMA = (function () {
     }
     
     function $BaseInit(this$static) {
-        var i;
         this$static._state = 0;
         this$static._previousByte = 0;
-        for (i = 0; i < 4; ++i) {
+        for (var i = 0; i < 4; ++i) {
             this$static._repDistances[i] = 0;
         }
     }
@@ -1001,7 +983,7 @@ var LZMA = (function () {
     
     function $Encoder(this$static) {
         var i;
-        this$static._repDistances = [0,0,0,0];
+        this$static._repDistances = initDim(4);
         this$static._optimum = initDim(4096);
         this$static._rangeEncoder = new Encoder_0();
         this$static._isMatch = initDim(192);
@@ -1010,7 +992,7 @@ var LZMA = (function () {
         this$static._isRepG1 = initDim(12);
         this$static._isRepG2 = initDim(12);
         this$static._isRep0Long = initDim(192);
-        this$static._posSlotEncoder = [0,0,0,0];
+        this$static._posSlotEncoder = initDim(4);
         this$static._posEncoders = initDim(114);
         this$static._posAlignEncoder = $BitTreeEncoder(new BitTreeEncoder(), 4);
         this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
@@ -1020,8 +1002,8 @@ var LZMA = (function () {
         this$static._posSlotPrices = initDim(256);
         this$static._distancesPrices = initDim(512);
         this$static._alignPrices = initDim(16);
-        this$static.reps = [0,0,0,0];
-        this$static.repLens = [0,0,0,0];
+        this$static.reps = initDim(4);
+        this$static.repLens = initDim(4);
         this$static.processedInSize = [P0_longLit];
         this$static.processedOutSize = [P0_longLit];
         this$static.finished = [false];
@@ -1037,8 +1019,7 @@ var LZMA = (function () {
     }
     
     function $FillAlignPrices(this$static) {
-        var i;
-        for (i = 0; i < 16; ++i) {
+        for (var i = 0; i < 16; ++i) {
             this$static._alignPrices[i] = $ReverseGetPrice(this$static._posAlignEncoder, i);
         }
         this$static._alignPriceCount = 0;
@@ -1456,8 +1437,7 @@ var LZMA = (function () {
     }
     
     function $GetPosLenPrice(this$static, pos, len, posState) {
-        var lenToPosState, price;
-        lenToPosState = GetLenToPosState(len);
+        var price, lenToPosState = GetLenToPosState(len);
         if (pos < 128) {
             price = this$static._distancesPrices[lenToPosState * 128 + pos];
         } else {
@@ -1488,7 +1468,6 @@ var LZMA = (function () {
     }
     
     function $Init_4(this$static) {
-        var i;
         $BaseInit(this$static);
         $Init_9(this$static._rangeEncoder);
         InitBitModels(this$static._isMatch);
@@ -1499,7 +1478,7 @@ var LZMA = (function () {
         InitBitModels(this$static._isRepG2);
         InitBitModels(this$static._posEncoders);
         $Init_3(this$static._literalEncoder);
-        for (i = 0; i < 4; ++i) {
+        for (var i = 0; i < 4; ++i) {
             InitBitModels(this$static._posSlotEncoder[i].Models);
         }
         $Init_2(this$static._lenEncoder, 1 << this$static._posStateBits);
@@ -1519,8 +1498,7 @@ var LZMA = (function () {
     }
     
     function $ReadMatchDistances(this$static) {
-        var lenRes;
-        lenRes = 0;
+        var lenRes = 0;
         this$static._numDistancePairs = $GetMatches(this$static._matchFinder, this$static._matchDistances);
         if (this$static._numDistancePairs > 0) {
             lenRes = this$static._matchDistances[this$static._numDistancePairs - 2];
@@ -1566,16 +1544,14 @@ var LZMA = (function () {
     }
     
     function $WriteCoderProperties(this$static, outStream) {
-        var i;
         this$static.properties[0] = (this$static._posStateBits * 5 + this$static._numLiteralPosStateBits) * 9 + this$static._numLiteralContextBits << 24 >> 24;
-        for (i = 0; i < 4; ++i) {
+        for (var i = 0; i < 4; ++i) {
             this$static.properties[1 + i] = this$static._dictionarySize >> 8 * i << 24 >> 24;
         }
         $write_0(outStream, this$static.properties, 0, 5);
     }
     
     function $WriteEndMarker(this$static, posState) {
-        var lenToPosState;
         if (!this$static._writeEndMark) {
             return;
         }
@@ -1583,7 +1559,7 @@ var LZMA = (function () {
         $Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 0);
         this$static._state = this$static._state < 7?7:10;
         $Encode_0(this$static._lenEncoder, this$static._rangeEncoder, 0, posState);
-        lenToPosState = GetLenToPosState(2);
+        var lenToPosState = GetLenToPosState(2);
         $Encode_2(this$static._posSlotEncoder[lenToPosState], this$static._rangeEncoder, 63);
         $EncodeDirectBits(this$static._rangeEncoder, 67108863, 26);
         $ReverseEncode(this$static._posAlignEncoder, this$static._rangeEncoder, 15);
@@ -1650,12 +1626,11 @@ var LZMA = (function () {
     }
     
     function $Encoder$LenEncoder(this$static) {
-        var posState;
-        this$static._choice = [0,0];
+        this$static._choice = initDim(2);
         this$static._lowCoder = initDim(16);
         this$static._midCoder = initDim(16);
         this$static._highCoder = $BitTreeEncoder(new BitTreeEncoder(), 8);
-        for (posState = 0; posState < 16; ++posState) {
+        for (var posState = 0; posState < 16; ++posState) {
             this$static._lowCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
             this$static._midCoder[posState] = $BitTreeEncoder(new BitTreeEncoder(), 3);
         }
@@ -1663,9 +1638,8 @@ var LZMA = (function () {
     }
     
     function $Init_2(this$static, numPosStates) {
-        var posState;
         InitBitModels(this$static._choice);
-        for (posState = 0; posState < numPosStates; ++posState) {
+        for (var posState = 0; posState < numPosStates; ++posState) {
             InitBitModels(this$static._lowCoder[posState].Models);
             InitBitModels(this$static._midCoder[posState].Models);
         }
@@ -1716,8 +1690,7 @@ var LZMA = (function () {
     }
     
     function $UpdateTables(this$static, numPosStates) {
-        var posState;
-        for (posState = 0; posState < numPosStates; ++posState) {
+        for (var posState = 0; posState < numPosStates; ++posState) {
             $SetPrices(this$static, posState, this$static._tableSize, this$static._prices, posState * 272);
             this$static._counters[posState] = this$static._tableSize;
         }
@@ -1746,8 +1719,7 @@ var LZMA = (function () {
     }
     
     function $Init_3(this$static) {
-        var i, numStates;
-        numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
+        var i, numStates = 1 << this$static.m_NumPrevBits + this$static.m_NumPosBits;
         for (i = 0; i < numStates; ++i) {
             InitBitModels(this$static.m_Coders[i].m_Encoders);
         }
@@ -1759,8 +1731,7 @@ var LZMA = (function () {
     _.m_PosMask = 0;
     
     function $Encode_1(this$static, rangeEncoder, symbol) {
-        var bit, context, i;
-        context = 1;
+        var bit, i, context = 1;
         for (i = 7; i >= 0; --i) {
             bit = symbol >> i & 1;
             $Encode_3(rangeEncoder, this$static.m_Encoders, context, bit);
@@ -1769,9 +1740,7 @@ var LZMA = (function () {
     }
     
     function $EncodeMatched(this$static, rangeEncoder, matchByte, symbol) {
-        var bit, context, i, matchBit, same, state;
-        context = 1;
-        same = true;
+        var bit, i, matchBit, state, same = true, context = 1;
         for (i = 7; i >= 0; --i) {
             bit = symbol >> i & 1;
             state = context;
@@ -1791,10 +1760,7 @@ var LZMA = (function () {
     }
     
     function $GetPrice_0(this$static, matchMode, matchByte, symbol) {
-        var bit, context, i, matchBit, price;
-        price = 0;
-        context = 1;
-        i = 7;
+        var bit, context = 1, i = 7, matchBit, price = 0;
         if (matchMode) {
             for (; i >= 0; --i) {
                 matchBit = matchByte >> i & 1;
@@ -1848,8 +1814,7 @@ var LZMA = (function () {
     }
     
     function $Encode_2(this$static, rangeEncoder, symbol) {
-        var bit, bitIndex, m;
-        m = 1;
+        var bit, bitIndex, m = 1;
         for (bitIndex = this$static.NumBitLevels; bitIndex != 0;) {
             --bitIndex;
             bit = symbol >>> bitIndex & 1;
@@ -1859,9 +1824,7 @@ var LZMA = (function () {
     }
     
     function $GetPrice_1(this$static, symbol) {
-        var bit, bitIndex, m, price;
-        price = 0;
-        m = 1;
+        var bit, bitIndex, m = 1, price = 0;
         for (bitIndex = this$static.NumBitLevels; bitIndex != 0;) {
             --bitIndex;
             bit = symbol >>> bitIndex & 1;
@@ -1872,8 +1835,7 @@ var LZMA = (function () {
     }
     
     function $ReverseEncode(this$static, rangeEncoder, symbol) {
-        var bit, i, m;
-        m = 1;
+        var bit, i, m = 1;
         for (i = 0; i < this$static.NumBitLevels; ++i) {
             bit = symbol & 1;
             $Encode_3(rangeEncoder, this$static.Models, m, bit);
@@ -1883,9 +1845,7 @@ var LZMA = (function () {
     }
     
     function $ReverseGetPrice(this$static, symbol) {
-        var bit, i, m, price;
-        price = 0;
-        m = 1;
+        var bit, i, m = 1, price = 0;
         for (i = this$static.NumBitLevels; i != 0; --i) {
             bit = symbol & 1;
             symbol >>>= 1;
@@ -1896,8 +1856,7 @@ var LZMA = (function () {
     }
     
     function ReverseEncode(Models, startIndex, rangeEncoder, NumBitLevels, symbol) {
-        var bit, i, m;
-        m = 1;
+        var bit, i, m = 1;
         for (i = 0; i < NumBitLevels; ++i) {
             bit = symbol & 1;
             $Encode_3(rangeEncoder, Models, startIndex + m, bit);
@@ -1907,9 +1866,7 @@ var LZMA = (function () {
     }
     
     function ReverseGetPrice(Models, startIndex, NumBitLevels, symbol) {
-        var bit, i, m, price;
-        price = 0;
-        m = 1;
+        var bit, i, m = 1, price = 0;
         for (i = NumBitLevels; i != 0; --i) {
             bit = symbol & 1;
             symbol >>>= 1;
@@ -1925,8 +1882,7 @@ var LZMA = (function () {
     
     
     function InitBitModels(probs) {
-        var i;
-        for (i = probs.length - 1; i >= 0; --i) {
+        for (var i = probs.length - 1; i >= 0; --i) {
             probs[i] = 1024;
         }
     }
@@ -1944,8 +1900,7 @@ var LZMA = (function () {
     }());
     
     function $Encode_3(this$static, probs, index, symbol) {
-        var newBound, prob;
-        prob = probs[index];
+        var newBound, prob = prob = probs[index];
         newBound = (this$static.Range >>> 11) * prob;
         if (symbol == 0) {
             this$static.Range = newBound;
@@ -1962,8 +1917,7 @@ var LZMA = (function () {
     }
     
     function $EncodeDirectBits(this$static, v, numTotalBits) {
-        var i;
-        for (i = numTotalBits - 1; i >= 0; --i) {
+        for (var i = numTotalBits - 1; i >= 0; --i) {
             this$static.Range >>>= 1;
             if ((v >>> i & 1) == 1) {
                 this$static.Low = add(this$static.Low, fromInt(this$static.Range));
@@ -1976,8 +1930,7 @@ var LZMA = (function () {
     }
     
     function $FlushData(this$static) {
-        var i;
-        for (i = 0; i < 5; ++i) {
+        for (var i = 0; i < 5; ++i) {
             $ShiftLow(this$static);
         }
     }
@@ -1995,8 +1948,7 @@ var LZMA = (function () {
     }
     
     function $ShiftLow(this$static) {
-        var LowHi, temp;
-        LowHi = lowBits_0(shru(this$static.Low, 32));
+        var temp, LowHi = lowBits_0(shru(this$static.Low, 32));
         if (LowHi != 0 || compare(this$static.Low, [4278190080, 0]) < 0) {
             this$static._position = add(this$static._position, fromInt(this$static._cacheSize));
             temp = this$static._cache;
