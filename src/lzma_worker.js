@@ -611,6 +611,7 @@ var LZMA = (function () {
         }
     }
     
+    ///NOTE: This is only called after reading one whole gigabyte.
     function $NormalizeLinks(items, numItems, subValue) {
         var i, value;
         for (i = 0; i < numItems; ++i) {
