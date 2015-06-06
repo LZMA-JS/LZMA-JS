@@ -207,6 +207,13 @@ function commit(cb)
 {
     var execFile = require("child_process").execFile;
     
+    function ret()
+    {
+        if (cb) {
+            cb();
+        }
+    }
+    
     execFile("git", ["add", "readme.md"], function onexec(err)
     {
         if (err) {
@@ -218,15 +225,20 @@ function commit(cb)
                 throw err;
             }
             
-            execFile("git", ["commit", "-m", "Minified:\n\n" + text_output.trim()], function onexec(err)
+            staged_files_found(function oncheck(found)
             {
-                if (err) {
-                    throw err;
+                if (!found) {
+                    console.log("No files need updating.");
+                    return ret();
                 }
-                
-                if (cb) {
-                    cb();
-                }
+                execFile("git", ["commit", "-m", "Minified:\n\n" + text_output.trim()], function onexec(err)
+                {
+                    if (err) {
+                        throw err;
+                    }
+                    
+                    ret();
+                });
             });
         });
     });
