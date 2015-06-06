@@ -257,13 +257,12 @@ var LZMA = (function () {
     /** ce */
     
     var ByteArrayInputStream = make_thing(new InputStream());
-    _.count = 0;
-    _.pos = 0;
     
     var OutputStream = make_thing();
     
     function $ByteArrayOutputStream(this$static) {
         this$static.buf = initDim(32);
+        this$static.count = 0;
         return this$static;
     }
     
@@ -285,7 +284,6 @@ var LZMA = (function () {
     }
     
     var ByteArrayOutputStream = make_thing(new OutputStream());
-    _.count = 0;
     
     /** cs */
     function $getChars(this$static, srcBegin, srcEnd, dst, dstBegin) {
@@ -933,10 +931,9 @@ var LZMA = (function () {
         if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsMatchDecoders, (this$static.state << 4) + posState) == 0) {
             decoder2 = $GetDecoder(this$static.m_LiteralDecoder, lowBits_0(this$static.nowPos64), this$static.prevByte);
             if (this$static.state < 7) {
-            this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
-            }
-            else {
-            this$static.prevByte = $DecodeWithMatchByte(decoder2, this$static.m_RangeDecoder, $GetByte(this$static.m_OutWindow, this$static.rep0));
+                this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
+            } else {
+                this$static.prevByte = $DecodeWithMatchByte(decoder2, this$static.m_RangeDecoder, $GetByte(this$static.m_OutWindow, this$static.rep0));
             }
             $PutByte(this$static.m_OutWindow, this$static.prevByte);
             this$static.state = StateUpdateChar(this$static.state);
@@ -1115,6 +1112,7 @@ var LZMA = (function () {
         this$static.m_LowCoder = initDim(16);
         this$static.m_MidCoder = initDim(16);
         this$static.m_HighCoder = $BitTreeDecoder(new BitTreeDecoder(), 8);
+        this$static.m_NumPosStates = 0;
         return this$static;
     }
     
@@ -1129,7 +1127,6 @@ var LZMA = (function () {
     
     
     var Decoder$LenDecoder = make_thing();
-    _.m_NumPosStates = 0;
     
     function $Create_0(this$static, numPosBits, numPrevBits) {
         var i, numStates;
@@ -1158,9 +1155,6 @@ var LZMA = (function () {
     
     
     var Decoder$LiteralDecoder = make_thing();
-    _.m_NumPosBits = 0;
-    _.m_NumPrevBits = 0;
-    _.m_PosMask = 0;
     
     function $DecodeNormal(this$static, rangeDecoder) {
         var symbol = 1;
@@ -1428,6 +1422,11 @@ var LZMA = (function () {
         this$static.finished = [0];
         this$static.properties = initDim(5);
         this$static.tempPrices = initDim(128);
+        this$static._longestMatchLength = 0;
+        this$static._matchFinderType = 1;
+        this$static._numDistancePairs = 0;
+        this$static._numFastBytesPrev = -1;
+        this$static.backRes = 0;
         for (i = 0; i < 4096; ++i) {
             this$static._optimum[i] = new Encoder$Optimal();
         }
@@ -2004,11 +2003,6 @@ var LZMA = (function () {
     }
     
     var Encoder = make_thing();
-    _._longestMatchLength = 0;
-    _._matchFinderType = 1;
-    _._numDistancePairs = 0;
-    _._numFastBytesPrev = -1;
-    _.backRes = 0;
     
     function $Encode(this$static, rangeEncoder, symbol, posState) {
         if (symbol < 8) {
@@ -2127,9 +2121,6 @@ var LZMA = (function () {
     }
     
     var Encoder$LiteralEncoder = make_thing();
-    _.m_NumPosBits = 0;
-    _.m_NumPrevBits = 0;
-    _.m_PosMask = 0;
     
     function $Encode_1(this$static, rangeEncoder, symbol) {
         var bit, i, context = 1;
@@ -2234,7 +2225,6 @@ var LZMA = (function () {
     }
     
     var BitTreeDecoder = make_thing();
-    _.NumBitLevels = 0;
     /** de */
     /** cs */
     function $BitTreeEncoder(this$static, numBitLevels) {
@@ -2307,7 +2297,6 @@ var LZMA = (function () {
     }
     
     var BitTreeEncoder = make_thing();
-    _.NumBitLevels = 0;
     /** ce */
     /** ds */
     function $DecodeBit(this$static, probs, index) {
