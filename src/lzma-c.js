@@ -776,13 +776,11 @@ var LZMA = (function () {
     
     /** cs */
     var g_FastPos = (function () {
-        var j, k, slotFast, c = 2, g_FastPos = [];
-        g_FastPos[0] = 0;
-        g_FastPos[1] = 1;
+        var j, k, slotFast, c = 2, g_FastPos = [0, 1];
         for (slotFast = 2; slotFast < 22; ++slotFast) {
             k = 1 << (slotFast >> 1) - 1;
             for (j = 0; j < k; ++j , ++c)
-            g_FastPos[c] = slotFast << 24 >> 24;
+                g_FastPos[c] = slotFast << 24 >> 24;
         }
         return g_FastPos;
     }());
@@ -1603,8 +1601,6 @@ var LZMA = (function () {
     _._optimumEndIndex = 0;
     _._posStateBits = 2;
     _._posStateMask = 3;
-    _._previousByte = 0;
-    _._state = 0;
     _.backRes = 0;
     _.nowPos64 = P0_longLit;
     

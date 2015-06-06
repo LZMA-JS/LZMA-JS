@@ -555,14 +555,6 @@ var LZMA = (function () {
     _.m_DictionarySize = -1;
     _.m_DictionarySizeCheck = -1;
     _.m_PosStateMask = 0;
-    _.nowPos64 = P0_longLit;
-    _.outSize = P0_longLit;
-    _.prevByte = 0;
-    _.rep0 = 0;
-    _.rep1 = 0;
-    _.rep2 = 0;
-    _.rep3 = 0;
-    _.state = 0;
     
     function $Create(this$static, numPosStates) {
         for (; this$static.m_NumPosStates < numPosStates; ++this$static.m_NumPosStates) {
@@ -594,9 +586,9 @@ var LZMA = (function () {
     
     function $Init(this$static) {
         InitBitModels(this$static.m_Choice);
-        for (var i = 0; posState < this$static.m_NumPosStates; ++i) {
-            InitBitModels(this$static.m_LowCoder[i].Models);
-            InitBitModels(this$static.m_MidCoder[i].Models);
+        for (var posState = 0; posState < this$static.m_NumPosStates; ++posState) {
+            InitBitModels(this$static.m_LowCoder[posState].Models);
+            InitBitModels(this$static.m_MidCoder[posState].Models);
         }
         InitBitModels(this$static.m_HighCoder.Models);
     }
