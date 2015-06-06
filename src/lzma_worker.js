@@ -1793,8 +1793,7 @@ var LZMA = (function () {
             }
             if (newLen > numAvailableBytes) {
                 newLen = numAvailableBytes;
-                for (numDistancePairs = 0; newLen > this$static._matchDistances[numDistancePairs]; numDistancePairs += 2) {
-                }
+                for (numDistancePairs = 0; newLen > this$static._matchDistances[numDistancePairs]; numDistancePairs += 2) {}
                 this$static._matchDistances[numDistancePairs] = newLen;
                 numDistancePairs += 2;
             }
@@ -2379,7 +2378,7 @@ var LZMA = (function () {
     }());
     
     function $Encode_3(this$static, probs, index, symbol) {
-        var newBound, prob = prob = probs[index];
+        var newBound, prob = probs[index];
         newBound = (this$static.Range >>> 11) * prob;
         if (symbol == 0) {
             this$static.Range = newBound;
