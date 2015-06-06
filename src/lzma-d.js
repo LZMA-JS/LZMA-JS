@@ -51,10 +51,7 @@ var LZMA = (function () {
     }
     
     function add(a, b) {
-        var newHigh, newLow;
-        newHigh = a[1] + b[1];
-        newLow = a[0] + b[0];
-        return create(newLow, newHigh);
+        return create(a[0] + b[0], a[1] + b[1]);
     }
     
     
@@ -123,10 +120,7 @@ var LZMA = (function () {
     
     
     function sub(a, b) {
-        var newHigh, newLow;
-        newHigh = a[1] - b[1];
-        newLow = a[0] - b[0];
-        return create(newLow, newHigh);
+        return create(a[0] - b[0], a[1] - b[1]);
     }
     
     var InputStream = make_thing();
