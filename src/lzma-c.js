@@ -965,7 +965,7 @@ var LZMA = (function () {
     function $Encoder(this$static) {
         var i;
         this$static._repDistances = initDim(4);
-        this$static._optimum = initDim(4096);
+        this$static._optimum = [];
         this$static._rangeEncoder = new Encoder_0();
         this$static._isMatch = initDim(192);
         this$static._isRep = initDim(12);
@@ -973,15 +973,15 @@ var LZMA = (function () {
         this$static._isRepG1 = initDim(12);
         this$static._isRepG2 = initDim(12);
         this$static._isRep0Long = initDim(192);
-        this$static._posSlotEncoder = initDim(4);
+        this$static._posSlotEncoder = [];
         this$static._posEncoders = initDim(114);
         this$static._posAlignEncoder = $BitTreeEncoder(new BitTreeEncoder(), 4);
         this$static._lenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
         this$static._repMatchLenEncoder = $Encoder$LenPriceTableEncoder(new Encoder$LenPriceTableEncoder());
         this$static._literalEncoder = new Encoder$LiteralEncoder();
-        this$static._matchDistances = initDim(548);
-        this$static._posSlotPrices = initDim(256);
-        this$static._distancesPrices = initDim(512);
+        this$static._matchDistances = [];
+        this$static._posSlotPrices = [];
+        this$static._distancesPrices = [];
         this$static._alignPrices = initDim(16);
         this$static.reps = initDim(4);
         this$static.repLens = initDim(4);
@@ -1645,8 +1645,8 @@ var LZMA = (function () {
     
     function $Encoder$LenPriceTableEncoder(this$static) {
         $Encoder$LenEncoder(this$static);
-        this$static._prices = initDim(4352);
-        this$static._counters = initDim(16);
+        this$static._prices = [];
+        this$static._counters = [];
         return this$static;
     }
     
@@ -1842,7 +1842,7 @@ var LZMA = (function () {
     }
     /** cs */
     var ProbPrices = (function () {
-        var end, i, j, start, ProbPrices = initDim(512);
+        var end, i, j, start, ProbPrices = [];
         for (i = 8; i >= 0; --i) {
             start = 1 << 9 - i - 1;
             end = 1 << 9 - i;
@@ -1944,7 +1944,7 @@ var LZMA = (function () {
                 elen += 3;
             }
         }
-        data = initDim(elen);
+        data = [];
         elen = 0;
         for (i = 0; i < l; ++i) {
             ch = chars[i];

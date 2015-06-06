@@ -189,12 +189,11 @@ var LZMA = (function () {
         var decoder,
             hex_length = "",
             i,
-            properties = initDim(5),
+            properties = [],
             r,
-            tmp_length,
-            l = properties.length;
+            tmp_length;
         
-        for (i = 0; i < l; ++i) {
+        for (i = 0; i < 5; ++i) {
             r = $read(input);
             if (r == -1)
                 throw new Error("truncated input");
