@@ -233,7 +233,6 @@ var LZMA = (function () {
     }
     
     var LZMADecompressor = make_thing();
-    _.length_0 = P0_longLit;
     
     function $LZMAByteArrayDecompressor(this$static, data) {
         this$static.output = $ByteArrayOutputStream(new ByteArrayOutputStream());
@@ -303,9 +302,6 @@ var LZMA = (function () {
     }
     
     var OutWindow = make_thing();
-    _._pos = 0;
-    _._streamPos = 0;
-    _._windowSize = 0;
     /** de */
     
     function GetLenToPosState(len) {
@@ -331,7 +327,7 @@ var LZMA = (function () {
     function $Chunker(this$static, decoder) {
         this$static.decoder = decoder;
         this$static.encoder = null;
-        this$static.alive = true;
+        this$static.alive = 1;
         return this$static;
     }
     /** de */
@@ -365,7 +361,7 @@ var LZMA = (function () {
             $Flush_0(this$static.decoder.m_OutWindow);
             $ReleaseStream(this$static.decoder.m_OutWindow);
             this$static.decoder.m_RangeDecoder.Stream = null;
-            this$static.alive = false;
+            this$static.alive = 0;
         }
     }
     /** de */
@@ -510,7 +506,7 @@ var LZMA = (function () {
     function $SetDecoderProperties(this$static, properties) {
         var dictionarySize, i, lc, lp, pb, remainder, val;
         if (properties.length < 5)
-            return false;
+            return 0;
         val = properties[0] & 255;
         lc = val % 9;
         remainder = ~~(val / 9);
@@ -522,39 +518,36 @@ var LZMA = (function () {
         }
         ///NOTE: If the input is bad, it might call for an insanely large dictionary size, which would crash the script.
         if (dictionarySize > 99999999 || !$SetLcLpPb(this$static, lc, lp, pb)) {
-            return false;
+            return 0;
         }
         return $SetDictionarySize(this$static, dictionarySize);
     }
     
     function $SetDictionarySize(this$static, dictionarySize) {
         if (dictionarySize < 0) {
-            return false;
+            return 0;
         }
         if (this$static.m_DictionarySize != dictionarySize) {
             this$static.m_DictionarySize = dictionarySize;
             this$static.m_DictionarySizeCheck = Math.max(this$static.m_DictionarySize, 1);
             $Create_5(this$static.m_OutWindow, Math.max(this$static.m_DictionarySizeCheck, 4096));
         }
-        return true;
+        return 1;
     }
     
     function $SetLcLpPb(this$static, lc, lp, pb) {
         if (lc > 8 || lp > 4 || pb > 4) {
-            return false;
+            return 0;
         }
         $Create_0(this$static.m_LiteralDecoder, lp, lc);
         var numPosStates = 1 << pb;
         $Create(this$static.m_LenDecoder, numPosStates);
         $Create(this$static.m_RepLenDecoder, numPosStates);
         this$static.m_PosStateMask = numPosStates - 1;
-        return true;
+        return 1;
     }
     
     var Decoder = make_thing();
-    _.m_DictionarySize = -1;
-    _.m_DictionarySizeCheck = -1;
-    _.m_PosStateMask = 0;
     
     function $Create(this$static, numPosStates) {
         for (; this$static.m_NumPosStates < numPosStates; ++this$static.m_NumPosStates) {
@@ -751,8 +744,6 @@ var LZMA = (function () {
     }
     
     var Decoder_0 = make_thing();
-    _.Code = 0;
-    _.Range = 0;
     /** de */
     
     function InitBitModels(probs) {
@@ -857,7 +848,7 @@ var LZMA = (function () {
                     
                     ///NOTE: This allows other code to run, like the browser to update.
                     wait(do_action, 0);
-                    return false;
+                    return 0;
                 }
             }
             
