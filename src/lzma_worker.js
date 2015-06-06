@@ -62,10 +62,7 @@ var LZMA = (function () {
     }
     
     function add(a, b) {
-        var newHigh, newLow;
-        newHigh = a[1] + b[1];
-        newLow = a[0] + b[0];
-        return create(newLow, newHigh);
+        return create(a[0] + b[0], a[1] + b[1]);
     }
     
     /** cs */
@@ -202,12 +199,10 @@ var LZMA = (function () {
     }
     
     function shr(a, n) {
-        var newHigh, newLow, shiftFact;
+        var shiftFact;
         n &= 63;
         shiftFact = pwrAsDouble(n);
-        newHigh = a[1] / shiftFact;
-        newLow = Math.floor(a[0] / shiftFact);
-        return create(newLow, newHigh);
+        return create(Math.floor(a[0] / shiftFact), a[1] / shiftFact);
     }
     
     function shru(a, n) {
@@ -223,10 +218,7 @@ var LZMA = (function () {
     /** ce */
     
     function sub(a, b) {
-        var newHigh, newLow;
-        newHigh = a[1] - b[1];
-        newLow = a[0] - b[0];
-        return create(newLow, newHigh);
+        return create(a[0] - b[0], a[1] - b[1]);
     }
     
     var InputStream = make_thing();
