@@ -165,7 +165,7 @@ function pad(str, len)
 
 function replace_data(str, filename)
 {
-    return str.replace(new RegExp("(" + filename + "\\s*\\|\\s*both\\s*\\|)([^|]+)\\|([^|]+)"), function replace(all, base, min, gzip)
+    return str.replace(new RegExp("(" + filename + "\\s*\\|\\s*\\S+\\s*\\|)([^|]+)\\|([^|]+)"), function replace(all, base, min, gzip)
     {
         var new_min  = pad(get_kb(stats[filename].min)  + " ", min.length),
             new_gzip = pad(get_kb(stats[filename].gzip) + " ", gzip.length);
