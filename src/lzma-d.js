@@ -246,8 +246,7 @@ var LZMA = (function () {
     
     /** ds */
     function $CopyBlock(this$static, distance, len) {
-        var pos;
-        pos = this$static._pos - distance - 1;
+        var pos = this$static._pos - distance - 1;
         if (pos < 0) {
             pos += this$static._windowSize;
         }
@@ -272,8 +271,7 @@ var LZMA = (function () {
     }
     
     function $Flush_0(this$static) {
-        var size;
-        size = this$static._pos - this$static._streamPos;
+        var size = this$static._pos - this$static._streamPos;
         if (size == 0) {
             return;
         }
@@ -285,8 +283,7 @@ var LZMA = (function () {
     }
     
     function $GetByte(this$static, distance) {
-        var pos;
-        pos = this$static._pos - distance - 1;
+        var pos = this$static._pos - distance - 1;
         if (pos < 0) {
             pos += this$static._windowSize;
         }
@@ -358,8 +355,7 @@ var LZMA = (function () {
     
     /** ds */
     function $processDecoderChunk(this$static) {
-        var result;
-        result = $CodeOneChunk(this$static.decoder);
+        var result = $CodeOneChunk(this$static.decoder);
         if (result == -1) {
             throw new Error("corrupted input");
         }
@@ -471,7 +467,6 @@ var LZMA = (function () {
     }
     
     function $Decoder(this$static) {
-        var i;
         this$static.m_OutWindow = new OutWindow();
         this$static.m_RangeDecoder = new Decoder_0();
         this$static.m_IsMatchDecoders = initDim(192);
@@ -480,20 +475,19 @@ var LZMA = (function () {
         this$static.m_IsRepG1Decoders = initDim(12);
         this$static.m_IsRepG2Decoders = initDim(12);
         this$static.m_IsRep0LongDecoders = initDim(192);
-        this$static.m_PosSlotDecoder = [0,0,0,0];
+        this$static.m_PosSlotDecoder = initDim(4);
         this$static.m_PosDecoders = initDim(114);
         this$static.m_PosAlignDecoder = $BitTreeDecoder(new BitTreeDecoder(), 4);
         this$static.m_LenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
         this$static.m_RepLenDecoder = $Decoder$LenDecoder(new Decoder$LenDecoder());
         this$static.m_LiteralDecoder = new Decoder$LiteralDecoder();
-        for (i = 0; i < 4; ++i) {
+        for (var i = 0; i < 4; ++i) {
             this$static.m_PosSlotDecoder[i] = $BitTreeDecoder(new BitTreeDecoder(), 6);
         }
         return this$static;
     }
     
     function $Init_1(this$static) {
-        var i;
         this$static.m_OutWindow._streamPos = 0;
         this$static.m_OutWindow._pos = 0;
         InitBitModels(this$static.m_IsMatchDecoders);
@@ -504,7 +498,7 @@ var LZMA = (function () {
         InitBitModels(this$static.m_IsRepG2Decoders);
         InitBitModels(this$static.m_PosDecoders);
         $Init_0(this$static.m_LiteralDecoder);
-        for (i = 0; i < 4; ++i) {
+        for (var i = 0; i < 4; ++i) {
             InitBitModels(this$static.m_PosSlotDecoder[i].Models);
         }
         $Init(this$static.m_LenDecoder);
@@ -546,12 +540,11 @@ var LZMA = (function () {
     }
     
     function $SetLcLpPb(this$static, lc, lp, pb) {
-        var numPosStates;
         if (lc > 8 || lp > 4 || pb > 4) {
             return false;
         }
         $Create_0(this$static.m_LiteralDecoder, lp, lc);
-        numPosStates = 1 << pb;
+        var numPosStates = 1 << pb;
         $Create(this$static.m_LenDecoder, numPosStates);
         $Create(this$static.m_RepLenDecoder, numPosStates);
         this$static.m_PosStateMask = numPosStates - 1;
@@ -579,11 +572,10 @@ var LZMA = (function () {
     }
     
     function $Decode(this$static, rangeDecoder, posState) {
-        var symbol;
         if ($DecodeBit(rangeDecoder, this$static.m_Choice, 0) == 0) {
             return $Decode_0(this$static.m_LowCoder[posState], rangeDecoder);
         }
-        symbol = 8;
+        var symbol = 8;
         if ($DecodeBit(rangeDecoder, this$static.m_Choice, 1) == 0) {
             symbol += $Decode_0(this$static.m_MidCoder[posState], rangeDecoder);
         } else {
@@ -593,7 +585,7 @@ var LZMA = (function () {
     }
     
     function $Decoder$LenDecoder(this$static) {
-        this$static.m_Choice = [0,0];
+        this$static.m_Choice = initDim(2);
         this$static.m_LowCoder = initDim(16);
         this$static.m_MidCoder = initDim(16);
         this$static.m_HighCoder = $BitTreeDecoder(new BitTreeDecoder(), 8);
@@ -601,11 +593,10 @@ var LZMA = (function () {
     }
     
     function $Init(this$static) {
-        var posState;
         InitBitModels(this$static.m_Choice);
-        for (posState = 0; posState < this$static.m_NumPosStates; ++posState) {
-            InitBitModels(this$static.m_LowCoder[posState].Models);
-            InitBitModels(this$static.m_MidCoder[posState].Models);
+        for (var i = 0; posState < this$static.m_NumPosStates; ++i) {
+            InitBitModels(this$static.m_LowCoder[i].Models);
+            InitBitModels(this$static.m_MidCoder[i].Models);
         }
         InitBitModels(this$static.m_HighCoder.Models);
     }
@@ -646,8 +637,7 @@ var LZMA = (function () {
     _.m_PosMask = 0;
     
     function $DecodeNormal(this$static, rangeDecoder) {
-        var symbol;
-        symbol = 1;
+        var symbol = 1;
         do {
             symbol = symbol << 1 | $DecodeBit(rangeDecoder, this$static.m_Decoders, symbol);
         } while (symbol < 256);
@@ -655,8 +645,7 @@ var LZMA = (function () {
     }
     
     function $DecodeWithMatchByte(this$static, rangeDecoder, matchByte) {
-        var bit, matchBit, symbol;
-        symbol = 1;
+        var bit, matchBit, symbol = 1;
         do {
             matchBit = matchByte >> 7 & 1;
             matchByte <<= 1;
@@ -689,8 +678,7 @@ var LZMA = (function () {
     }
     
     function $Decode_0(this$static, rangeDecoder) {
-        var bitIndex, m;
-        m = 1;
+        var bitIndex, m = 1;
         for (bitIndex = this$static.NumBitLevels; bitIndex != 0; --bitIndex) {
             m = (m << 1) + $DecodeBit(rangeDecoder, this$static.Models, m);
         }
@@ -698,9 +686,7 @@ var LZMA = (function () {
     }
     
     function $ReverseDecode(this$static, rangeDecoder) {
-        var bit, bitIndex, m, symbol;
-        m = 1;
-        symbol = 0;
+        var bit, bitIndex, m = 1, symbol = 0;
         for (bitIndex = 0; bitIndex < this$static.NumBitLevels; ++bitIndex) {
             bit = $DecodeBit(rangeDecoder, this$static.Models, m);
             m <<= 1;
@@ -711,9 +697,7 @@ var LZMA = (function () {
     }
     
     function ReverseDecode(Models, startIndex, rangeDecoder, NumBitLevels) {
-        var bit, bitIndex, m, symbol;
-        m = 1;
-        symbol = 0;
+        var bit, bitIndex, m = 1, symbol = 0;
         for (bitIndex = 0; bitIndex < NumBitLevels; ++bitIndex) {
             bit = $DecodeBit(rangeDecoder, Models, startIndex + m);
             m <<= 1;
@@ -729,8 +713,7 @@ var LZMA = (function () {
     
     /** ds */
     function $DecodeBit(this$static, probs, index) {
-        var newBound, prob;
-        prob = probs[index];
+        var newBound, prob = probs[index];
         newBound = (this$static.Range >>> 11) * prob;
         if ((this$static.Code ^ -2147483648) < (newBound ^ -2147483648)) {
             this$static.Range = newBound;
@@ -753,8 +736,7 @@ var LZMA = (function () {
     }
     
     function $DecodeDirectBits(this$static, numTotalBits) {
-        var i, result, t;
-        result = 0;
+        var i, t, result = 0;
         for (i = numTotalBits; i != 0; --i) {
             this$static.Range >>>= 1;
             t = this$static.Code - this$static.Range >>> 31;
@@ -769,10 +751,9 @@ var LZMA = (function () {
     }
     
     function $Init_8(this$static) {
-        var i;
         this$static.Code = 0;
         this$static.Range = -1;
-        for (i = 0; i < 5; ++i) {
+        for (var i = 0; i < 5; ++i) {
             this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
         }
     }
@@ -783,8 +764,7 @@ var LZMA = (function () {
     /** de */
     
     function InitBitModels(probs) {
-        var i;
-        for (i = probs.length - 1; i >= 0; --i) {
+        for (var i = probs.length - 1; i >= 0; --i) {
             probs[i] = 1024;
         }
     }

@@ -16,7 +16,7 @@ Here are some file size stats:
 
 |    Filename    |   Method(s)   | Minified | Gzipped |
 |:---------------|:--------------|---------:|--------:|
-| lzma_worker.js | both          |  24.7 KB |  9.6 KB |
+| lzma_worker.js | both          |  24.6 KB |  9.6 KB |
 | lzma-c.js      | compression   |  19.2 KB |  7.7 KB |
 | lzma-d.js      | decompression |   7.3 KB |  3.1 KB |
 
