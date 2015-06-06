@@ -136,24 +136,6 @@ var LZMA = (function () {
         }
         return [low, high];
     }
-        
-    function neg(a) {
-        var newHigh, newLow;
-        if (eq(a, MIN_VALUE)) {
-            return MIN_VALUE;
-        }
-        newHigh = -a[1];
-        newLow = -a[0];
-        if (newLow > 4294967295) {
-            newLow -= __4294967296;
-            newHigh += __4294967296;
-        }
-        if (newLow < 0) {
-            newLow += __4294967296;
-            newHigh -= __4294967296;
-        }
-        return [newLow, newHigh];
-    }
     
     function pwrAsDouble(n) {
         if (n <= 30) {
@@ -173,7 +155,7 @@ var LZMA = (function () {
             return P0_longLit;
         }
         if (a[1] < 0) {
-            return neg(shl(neg(a), n));
+            throw new Error("Neg");
         }
         twoToN = pwrAsDouble(n);
         newHigh = a[1] * twoToN % 1.8446744073709552E19;
