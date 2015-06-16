@@ -140,7 +140,7 @@ var LZMA = (function () {
         var diff, newHigh, newLow, twoToN;
         n &= 63;
         if (eq(a, MIN_VALUE)) {
-            if (n == 0) {
+            if (!n) {
                 return a;
             }
             return P0_longLit;
@@ -337,7 +337,7 @@ var LZMA = (function () {
             return;
         while (1) {
             size = -this$static._bufferOffset + this$static._blockSize - this$static._streamPos;
-            if (size == 0)
+            if (!size)
                 return;
             numReadBytes = $read_0(this$static._stream, this$static._bufferBase, this$static._bufferOffset + this$static._streamPos, size);
             if (numReadBytes == -1) {
@@ -765,7 +765,7 @@ var LZMA = (function () {
         this$static._finished = 1;
         progressPosValuePrev = this$static.nowPos64;
         if (eq(this$static.nowPos64, P0_longLit)) {
-            if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+            if (!$GetNumAvailableBytes(this$static._matchFinder)) {
                 $Flush(this$static, lowBits_0(this$static.nowPos64));
                 return;
             }
@@ -779,7 +779,7 @@ var LZMA = (function () {
             --this$static._additionalOffset;
             this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
         }
-        if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+        if (!$GetNumAvailableBytes(this$static._matchFinder)) {
             $Flush(this$static, lowBits_0(this$static.nowPos64));
             return;
         }
@@ -804,7 +804,7 @@ var LZMA = (function () {
                 $Encode_3(this$static._rangeEncoder, this$static._isMatch, complexState, 1);
                 if (pos < 4) {
                     $Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 1);
-                    if (pos == 0) {
+                    if (!pos) {
                         $Encode_3(this$static._rangeEncoder, this$static._isRepG0, this$static._state, 0);
                         if (len == 1) {
                             $Encode_3(this$static._rangeEncoder, this$static._isRep0Long, complexState, 0);
@@ -864,7 +864,7 @@ var LZMA = (function () {
             }
             this$static._additionalOffset -= len;
             this$static.nowPos64 = add(this$static.nowPos64, fromInt(len));
-            if (this$static._additionalOffset == 0) {
+            if (!this$static._additionalOffset) {
                 if (this$static._matchPriceCount >= 128) {
                     $FillDistancesPrices(this$static);
                 }
@@ -873,7 +873,7 @@ var LZMA = (function () {
                 }
                 inSize[0] = this$static.nowPos64;
                 outSize[0] = $GetProcessedSizeAdd(this$static._rangeEncoder);
-                if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+                if (!$GetNumAvailableBytes(this$static._matchFinder)) {
                     $Flush(this$static, lowBits_0(this$static.nowPos64));
                     return;
                 }
@@ -891,7 +891,7 @@ var LZMA = (function () {
         if (!this$static._matchFinder) {
             bt = {};
             numHashBytes = 4;
-            if (this$static._matchFinderType == 0) {
+            if (!this$static._matchFinderType) {
                 numHashBytes = 2;
             }
             $SetType(bt, numHashBytes);
@@ -1139,7 +1139,7 @@ var LZMA = (function () {
                 state = this$static._optimum[posPrev].State;
             }
             if (posPrev == cur - 1) {
-                if (this$static._optimum[cur].BackPrev == 0) {
+                if (!this$static._optimum[cur].BackPrev) {
                     state = state < 7?9:11;
                 } else {
                     state = StateUpdateChar(state);
@@ -1159,7 +1159,7 @@ var LZMA = (function () {
                 }
                 opt = this$static._optimum[posPrev];
                 if (pos < 4) {
-                    if (pos == 0) {
+                    if (!pos) {
                         this$static.reps[0] = opt.Backs0;
                         this$static.reps[1] = opt.Backs1;
                         this$static.reps[2] = opt.Backs2;
@@ -1208,7 +1208,7 @@ var LZMA = (function () {
             }
             matchPrice = curPrice + ProbPrices[2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
             repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[state] >>> 2];
-            if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
+            if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && !nextOptimum.BackPrev)) {
                 shortRepPrice = repMatchPrice + (ProbPrices[this$static._isRepG0[state] >>> 2] + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2]);
                 if (shortRepPrice <= nextOptimum.Price) {
                     nextOptimum.Price = shortRepPrice;
@@ -1270,7 +1270,7 @@ var LZMA = (function () {
                     }
                 } while (--lenTest >= 2);
                 lenTest = lenTestTemp;
-                if (repIndex == 0) {
+                if (!repIndex) {
                     startLen = lenTest + 1;
                 }
                 if (lenTest < numAvailableBytesFull) {
@@ -1377,7 +1377,7 @@ var LZMA = (function () {
     
     function $GetPureRepPrice(this$static, repIndex, state, posState) {
         var price;
-        if (repIndex == 0) {
+        if (!repIndex) {
             price = ProbPrices[this$static._isRepG0[state] >>> 2];
             price += ProbPrices[2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
         } else {
@@ -1781,7 +1781,7 @@ var LZMA = (function () {
     function $Encode_3(this$static, probs, index, symbol) {
         var newBound, prob = probs[index];
         newBound = (this$static.Range >>> 11) * prob;
-        if (symbol == 0) {
+        if (!symbol) {
             this$static.Range = newBound;
             probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
         } else {
@@ -1789,7 +1789,7 @@ var LZMA = (function () {
             this$static.Range -= newBound;
             probs[index] = prob - (prob >>> 5) << 16 >> 16;
         }
-        if ((this$static.Range & -16777216) == 0) {
+        if (!(this$static.Range & -16777216)) {
             this$static.Range <<= 8;
             $ShiftLow(this$static);
         }
@@ -1801,7 +1801,7 @@ var LZMA = (function () {
             if ((v >>> i & 1) == 1) {
                 this$static.Low = add(this$static.Low, fromInt(this$static.Range));
             }
-            if ((this$static.Range & -16777216) == 0) {
+            if (!(this$static.Range & -16777216)) {
                 this$static.Range <<= 8;
                 $ShiftLow(this$static);
             }
@@ -1861,7 +1861,7 @@ var LZMA = (function () {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 ++elen;
-            } else if (ch == 0 || ch >= 128 && ch <= 2047) {
+            } else if (!ch || ch >= 128 && ch <= 2047) {
                 elen += 2;
             } else {
                 elen += 3;
@@ -1873,7 +1873,7 @@ var LZMA = (function () {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 data[elen++] = ch << 24 >> 24;
-            } else if (ch == 0 || ch >= 128 && ch <= 2047) {
+            } else if (!ch || ch >= 128 && ch <= 2047) {
                 data[elen++] = (192 | ch >> 6 & 31) << 24 >> 24;
                 data[elen++] = (128 | ch & 63) << 24 >> 24;
             } else {
