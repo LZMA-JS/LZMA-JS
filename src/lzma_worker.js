@@ -257,10 +257,18 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        $SetDictionarySize_0(encoder, 1 << this$static.ds);
-        encoder._numFastBytes = this$static.fb;
-        $SetMatchFinder(encoder, this$static.mf);
-        $SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb);
+        $SetDictionarySize_0(encoder, 1 << this$static.s);
+        encoder._numFastBytes = this$static.f;
+        $SetMatchFinder(encoder, this$static.m);
+        
+        /// lc is always 3
+        /// lp is always 0
+        /// pb is always 2
+        encoder._numLiteralPosStateBits = 0;
+        encoder._numLiteralContextBits = 3;
+        encoder._posStateBits = 2;
+        ///this$static._posStateMask = (1 << pb) - 1;
+        encoder._posStateMask = 3;
     }
     
     function $init(this$static, input, output, length_0, mode) {
@@ -1859,7 +1867,7 @@ var LZMA = (function () {
     }
     
     function $ReleaseMFStream(this$static) {
-        if (!!this$static._matchFinder && this$static._needReleaseMFStream) {
+        if (this$static._matchFinder && this$static._needReleaseMFStream) {
             this$static._matchFinder._stream = null;
             this$static._needReleaseMFStream = 0;
         }
@@ -1876,17 +1884,10 @@ var LZMA = (function () {
         this$static._distTableSize = dicLogSize * 2;
     }
     
-    function $SetLcLpPb_0(this$static, lc, lp, pb) {
-        this$static._numLiteralPosStateBits = lp;
-        this$static._numLiteralContextBits = lc;
-        this$static._posStateBits = pb;
-        this$static._posStateMask = (1 << pb) - 1;
-    }
-    
     function $SetMatchFinder(this$static, matchFinderIndex) {
         var matchFinderIndexPrev = this$static._matchFinderType;
         this$static._matchFinderType = matchFinderIndex;
-        if (!!this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
+        if (this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
             this$static._dictionarySizePrev = -1;
             this$static._matchFinder = null;
         }
@@ -2570,16 +2571,23 @@ var LZMA = (function () {
     /** de */
     /** cs */
     var get_mode_obj = (function () {
+        /// s is dictionarySize
+        /// f is fb
+        /// m is matchFinder
+        ///NOTE: Because some values are always the same, they have been removed.
+        /// lc is always 3
+        /// lp is always 0
+        /// pb is always 2
         var modes = [
-            {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-            {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-            {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
+            {s: 16, f:  64, m: 0},
+            {s: 20, f:  64, m: 0},
+            {s: 19, f:  64, m: 1},
+            {s: 20, f:  64, m: 1},
+            {s: 21, f: 128, m: 1},
+            {s: 22, f: 128, m: 1},
+            {s: 23, f: 128, m: 1},
+            {s: 24, f: 255, m: 1},
+            {s: 25, f: 255, m: 1}
         ];
         
         return function (mode) {
