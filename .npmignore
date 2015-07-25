@@ -2,3 +2,7 @@ demos
 test
 logo*
 Makefile
+minify.js
+update_gh-pages.sh
+todo
+coverage/
