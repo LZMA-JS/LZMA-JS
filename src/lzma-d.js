@@ -704,7 +704,7 @@ var LZMA = (function () {
     function decode(utf) {
         var i = 0, j = 0, x, y, z, l = utf.length;
         var buf = [];
-        var charCodes = global.Uint16Array ? new Uint16Array(65536) : new Array(65536);
+        var charCodes = new Array(65536);
         for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
             if (!(x & 128)) {
@@ -750,12 +750,7 @@ var LZMA = (function () {
             }
         }
         if (j > 0) {
-            if (global.Uint16Array) {
-                charCodes = charCodes.subarray(0, j);
-            }
-            else {
-                charCodes.length = j;
-            }
+            charCodes.length = j;
             buf.push(String.fromCharCode.apply(String, charCodes));
         }
         return buf.join('');
