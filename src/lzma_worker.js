@@ -2353,7 +2353,7 @@ var LZMA = (function () {
     function decode(utf) {
         var i = 0, j = 0, x, y, z, l = utf.length;
         var buf = [];
-        var charCodes = new Array(65536);
+        var charCodes = [];
         for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
             if (!(x & 128)) {
