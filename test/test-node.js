@@ -7,6 +7,8 @@
 /// --unmin    Test the unminified code.
 /// --nosep    Don't test the seperate (de)compression modules.
 /// --nolarge  Skip large files (they can take a long time).
+/// --decOnly  Skip compression tests.
+/// --comOnly  Skip decompression tests.
 ///
 
 var all_tests_pass = true;
@@ -113,6 +115,10 @@ function decompression_test(compressed_file, correct_filename, next)
         warn("Skipping large file.");
         return next();
     }
+    if (params.comOnly) {
+        warn("Skipping decompression test.");
+        return next();
+    }
     fs.readFile(correct_filename, function (err, correct_result)
     {
         
@@ -176,6 +182,10 @@ function compression_test(file, next)
     var ext = p.extname(file).toLowerCase();
     if (params.nolarge && p.basename(file).indexOf("large-") === 0) {
         warn("Skipping large file.");
+        return next();
+    }
+    if (params.decOnly) {
+        warn("Skipping compression test.");
         return next();
     }
     fs.readFile(file, (ext === ".txt" ? "utf8" : null), function (err, content)
@@ -325,6 +335,8 @@ function help()
     console.log("  --unmin    Test the unminified code.");
     console.log("  --nosep    Don't test the seperate (de)compression modules.");
     console.log("  --nolarge  Skip large files (they can take a long time).");
+    console.log("  --decOnly  Skip compression tests.");
+    console.log("  --comOnly  Skip decompression tests.");
     console.log("");
     process.exit();
 }
