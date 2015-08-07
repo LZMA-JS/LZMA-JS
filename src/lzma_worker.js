@@ -2351,9 +2351,7 @@ var LZMA = (function () {
     /** ce */
     /** ds */
     function decode(utf) {
-        var i = 0, j = 0, x, y, z, l = utf.length;
-        var buf = [];
-        var charCodes = [];
+        var i = 0, j = 0, x, y, z, l = utf.length, buf = [], charCodes = [];
         for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
             if (!(x & 128)) {
@@ -2363,7 +2361,7 @@ var LZMA = (function () {
                 }
                 charCodes[j] = x;
             } else if ((x & 224) == 192) {
-                if (i + 1 >= utf.length) {
+                if (i + 1 >= l) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
@@ -2374,7 +2372,7 @@ var LZMA = (function () {
                 }
                 charCodes[j] = ((x & 31) << 6) | (y & 63);
             } else if ((x & 240) == 224) {
-                if (i + 2 >= utf.length) {
+                if (i + 2 >= l) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
@@ -2402,7 +2400,7 @@ var LZMA = (function () {
             charCodes.length = j;
             buf.push(String.fromCharCode.apply(String, charCodes));
         }
-        return buf.join('');
+        return buf.join("");
     }
     /** de */
     /** cs */
