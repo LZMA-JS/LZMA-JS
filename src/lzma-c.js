@@ -994,7 +994,9 @@ var LZMA = (function () {
     function $Flush(this$static, nowPos) {
         $ReleaseMFStream(this$static);
         $WriteEndMarker(this$static, nowPos & this$static._posStateMask);
-        $FlushData(this$static._rangeEncoder);
+        for (var i = 0; i < 5; ++i) {
+            $ShiftLow(this$static._rangeEncoder);
+        }
     }
     
     function $GetOptimum(this$static, position) {
@@ -1806,12 +1808,6 @@ var LZMA = (function () {
                 this$static.Range <<= 8;
                 $ShiftLow(this$static);
             }
-        }
-    }
-    
-    function $FlushData(this$static) {
-        for (var i = 0; i < 5; ++i) {
-            $ShiftLow(this$static);
         }
     }
     
