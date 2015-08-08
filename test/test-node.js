@@ -293,12 +293,12 @@ function compare(a, b)
     var i;
     
     if (typeof a !== typeof b) {
-        console.log("BAD TYPES:", typeof a, "!==", typeof b)
+        error("BAD TYPES:", typeof a, "!==", typeof b)
         return false;
     }
     
     if (a.length !== b.length) {
-        console.log("BAD LENGTH:", a.length, "!==", b.length)
+        error("BAD LENGTH:", a.length, "!==", b.length)
         return false;
     }
     
@@ -314,7 +314,7 @@ function compare(a, b)
     
     for (i = a.length - 1; i >= 0; --i) {
         if (a[i] !== b[i]) {
-            console.log("BAD VAL (" + i + "):",  a[i], "!==", b[i])
+            error("BAD VAL (" + i + "):",  a[i], "!==", b[i])
             return false;
         }
     }
