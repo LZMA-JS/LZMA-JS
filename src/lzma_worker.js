@@ -149,7 +149,7 @@ var LZMA = (function () {
         var diff, newHigh, newLow, twoToN;
         n &= 63;
         if (eq(a, MIN_VALUE)) {
-            if (n == 0) {
+            if (!n) {
                 return a;
             }
             return P0_longLit;
@@ -257,10 +257,18 @@ var LZMA = (function () {
     
     /** cs */
     function $configure(this$static, encoder) {
-        $SetDictionarySize_0(encoder, 1 << this$static.ds);
-        encoder._numFastBytes = this$static.fb;
-        $SetMatchFinder(encoder, this$static.mf);
-        $SetLcLpPb_0(encoder, this$static.lc, this$static.lp, this$static.pb);
+        $SetDictionarySize_0(encoder, 1 << this$static.s);
+        encoder._numFastBytes = this$static.f;
+        $SetMatchFinder(encoder, this$static.m);
+        
+        /// lc is always 3
+        /// lp is always 0
+        /// pb is always 2
+        encoder._numLiteralPosStateBits = 0;
+        encoder._numLiteralContextBits = 3;
+        encoder._posStateBits = 2;
+        ///this$static._posStateMask = (1 << pb) - 1;
+        encoder._posStateMask = 3;
     }
     
     function $init(this$static, input, output, length_0, mode) {
@@ -404,7 +412,7 @@ var LZMA = (function () {
             return;
         while (1) {
             size = -this$static._bufferOffset + this$static._blockSize - this$static._streamPos;
-            if (size == 0)
+            if (!size)
                 return;
             numReadBytes = $read_0(this$static._stream, this$static._bufferBase, this$static._bufferOffset + this$static._streamPos, size);
             if (numReadBytes == -1) {
@@ -736,7 +744,7 @@ var LZMA = (function () {
     
     function $Flush_0(this$static) {
         var size = this$static._pos - this$static._streamPos;
-        if (size == 0) {
+        if (!size) {
             return;
         }
         $write_0(this$static._stream, this$static._buffer, this$static._streamPos, size);
@@ -829,7 +837,7 @@ var LZMA = (function () {
         }
         this$static.inBytesProcessed = N1_longLit;
         this$static.outBytesProcessed = this$static.decoder.nowPos64;
-        if (result == 1 || compare(this$static.decoder.outSize, P0_longLit) >= 0 && compare(this$static.decoder.nowPos64, this$static.decoder.outSize) >= 0) {
+        if (result || compare(this$static.decoder.outSize, P0_longLit) >= 0 && compare(this$static.decoder.nowPos64, this$static.decoder.outSize) >= 0) {
             $Flush_0(this$static.decoder.m_OutWindow);
             $ReleaseStream(this$static.decoder.m_OutWindow);
             this$static.decoder.m_RangeDecoder.Stream = null;
@@ -868,7 +876,7 @@ var LZMA = (function () {
     function $CodeOneChunk(this$static) {
         var decoder2, distance, len, numDirectBits, posSlot, posState;
         posState = lowBits_0(this$static.nowPos64) & this$static.m_PosStateMask;
-        if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsMatchDecoders, (this$static.state << 4) + posState) == 0) {
+        if (!$DecodeBit(this$static.m_RangeDecoder, this$static.m_IsMatchDecoders, (this$static.state << 4) + posState)) {
             decoder2 = $GetDecoder(this$static.m_LiteralDecoder, lowBits_0(this$static.nowPos64), this$static.prevByte);
             if (this$static.state < 7) {
                 this$static.prevByte = $DecodeNormal(decoder2, this$static.m_RangeDecoder);
@@ -879,18 +887,18 @@ var LZMA = (function () {
             this$static.state = StateUpdateChar(this$static.state);
             this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
         } else {
-            if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepDecoders, this$static.state) == 1) {
+            if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepDecoders, this$static.state)) {
                 len = 0;
-                if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG0Decoders, this$static.state) == 0) {
-                    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRep0LongDecoders, (this$static.state << 4) + posState) == 0) {
+                if (!$DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG0Decoders, this$static.state)) {
+                    if (!$DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRep0LongDecoders, (this$static.state << 4) + posState)) {
                         this$static.state = this$static.state < 7?9:11;
                         len = 1;
                     }
                 } else {
-                    if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG1Decoders, this$static.state) == 0) {
+                    if (!$DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG1Decoders, this$static.state)) {
                         distance = this$static.rep1;
                     } else {
-                        if ($DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG2Decoders, this$static.state) == 0) {
+                        if (!$DecodeBit(this$static.m_RangeDecoder, this$static.m_IsRepG2Decoders, this$static.state)) {
                             distance = this$static.rep2;
                         } else {
                             distance = this$static.rep3;
@@ -901,7 +909,7 @@ var LZMA = (function () {
                     this$static.rep1 = this$static.rep0;
                     this$static.rep0 = distance;
                 }
-                if (len == 0) {
+                if (!len) {
                     len = $Decode(this$static.m_RepLenDecoder, this$static.m_RangeDecoder, posState) + 2;
                     this$static.state = this$static.state < 7?8:11;
                 }
@@ -1033,11 +1041,11 @@ var LZMA = (function () {
     }
     
     function $Decode(this$static, rangeDecoder, posState) {
-        if ($DecodeBit(rangeDecoder, this$static.m_Choice, 0) == 0) {
+        if (!$DecodeBit(rangeDecoder, this$static.m_Choice, 0)) {
             return $Decode_0(this$static.m_LowCoder[posState], rangeDecoder);
         }
         var symbol = 8;
-        if ($DecodeBit(rangeDecoder, this$static.m_Choice, 1) == 0) {
+        if (!$DecodeBit(rangeDecoder, this$static.m_Choice, 1)) {
             symbol += $Decode_0(this$static.m_MidCoder[posState], rangeDecoder);
         } else {
             symbol += 8 + $Decode_0(this$static.m_HighCoder, rangeDecoder);
@@ -1185,7 +1193,7 @@ var LZMA = (function () {
         this$static._finished = 1;
         progressPosValuePrev = this$static.nowPos64;
         if (eq(this$static.nowPos64, P0_longLit)) {
-            if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+            if (!$GetNumAvailableBytes(this$static._matchFinder)) {
                 $Flush(this$static, lowBits_0(this$static.nowPos64));
                 return;
             }
@@ -1199,7 +1207,7 @@ var LZMA = (function () {
             --this$static._additionalOffset;
             this$static.nowPos64 = add(this$static.nowPos64, P1_longLit);
         }
-        if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+        if (!$GetNumAvailableBytes(this$static._matchFinder)) {
             $Flush(this$static, lowBits_0(this$static.nowPos64));
             return;
         }
@@ -1224,7 +1232,7 @@ var LZMA = (function () {
                 $Encode_3(this$static._rangeEncoder, this$static._isMatch, complexState, 1);
                 if (pos < 4) {
                     $Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 1);
-                    if (pos == 0) {
+                    if (!pos) {
                         $Encode_3(this$static._rangeEncoder, this$static._isRepG0, this$static._state, 0);
                         if (len == 1) {
                             $Encode_3(this$static._rangeEncoder, this$static._isRep0Long, complexState, 0);
@@ -1284,7 +1292,7 @@ var LZMA = (function () {
             }
             this$static._additionalOffset -= len;
             this$static.nowPos64 = add(this$static.nowPos64, fromInt(len));
-            if (this$static._additionalOffset == 0) {
+            if (!this$static._additionalOffset) {
                 if (this$static._matchPriceCount >= 128) {
                     $FillDistancesPrices(this$static);
                 }
@@ -1293,7 +1301,7 @@ var LZMA = (function () {
                 }
                 inSize[0] = this$static.nowPos64;
                 outSize[0] = $GetProcessedSizeAdd(this$static._rangeEncoder);
-                if ($GetNumAvailableBytes(this$static._matchFinder) == 0) {
+                if (!$GetNumAvailableBytes(this$static._matchFinder)) {
                     $Flush(this$static, lowBits_0(this$static.nowPos64));
                     return;
                 }
@@ -1311,7 +1319,7 @@ var LZMA = (function () {
         if (!this$static._matchFinder) {
             bt = {};
             numHashBytes = 4;
-            if (this$static._matchFinderType == 0) {
+            if (!this$static._matchFinderType) {
                 numHashBytes = 2;
             }
             $SetType(bt, numHashBytes);
@@ -1406,7 +1414,9 @@ var LZMA = (function () {
     function $Flush(this$static, nowPos) {
         $ReleaseMFStream(this$static);
         $WriteEndMarker(this$static, nowPos & this$static._posStateMask);
-        $FlushData(this$static._rangeEncoder);
+        for (var i = 0; i < 5; ++i) {
+            $ShiftLow(this$static._rangeEncoder);
+        }
     }
     
     function $GetOptimum(this$static, position) {
@@ -1559,7 +1569,7 @@ var LZMA = (function () {
                 state = this$static._optimum[posPrev].State;
             }
             if (posPrev == cur - 1) {
-                if (this$static._optimum[cur].BackPrev == 0) {
+                if (!this$static._optimum[cur].BackPrev) {
                     state = state < 7?9:11;
                 } else {
                     state = StateUpdateChar(state);
@@ -1579,7 +1589,7 @@ var LZMA = (function () {
                 }
                 opt = this$static._optimum[posPrev];
                 if (pos < 4) {
-                    if (pos == 0) {
+                    if (!pos) {
                         this$static.reps[0] = opt.Backs0;
                         this$static.reps[1] = opt.Backs1;
                         this$static.reps[2] = opt.Backs2;
@@ -1628,7 +1638,7 @@ var LZMA = (function () {
             }
             matchPrice = curPrice + ProbPrices[2048 - this$static._isMatch[(state << 4) + posState] >>> 2];
             repMatchPrice = matchPrice + ProbPrices[2048 - this$static._isRep[state] >>> 2];
-            if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && nextOptimum.BackPrev == 0)) {
+            if (matchByte == currentByte && !(nextOptimum.PosPrev < cur && !nextOptimum.BackPrev)) {
                 shortRepPrice = repMatchPrice + (ProbPrices[this$static._isRepG0[state] >>> 2] + ProbPrices[this$static._isRep0Long[(state << 4) + posState] >>> 2]);
                 if (shortRepPrice <= nextOptimum.Price) {
                     nextOptimum.Price = shortRepPrice;
@@ -1690,7 +1700,7 @@ var LZMA = (function () {
                     }
                 } while (--lenTest >= 2);
                 lenTest = lenTestTemp;
-                if (repIndex == 0) {
+                if (!repIndex) {
                     startLen = lenTest + 1;
                 }
                 if (lenTest < numAvailableBytesFull) {
@@ -1797,7 +1807,7 @@ var LZMA = (function () {
     
     function $GetPureRepPrice(this$static, repIndex, state, posState) {
         var price;
-        if (repIndex == 0) {
+        if (!repIndex) {
             price = ProbPrices[this$static._isRepG0[state] >>> 2];
             price += ProbPrices[2048 - this$static._isRep0Long[(state << 4) + posState] >>> 2];
         } else {
@@ -1859,7 +1869,7 @@ var LZMA = (function () {
     }
     
     function $ReleaseMFStream(this$static) {
-        if (!!this$static._matchFinder && this$static._needReleaseMFStream) {
+        if (this$static._matchFinder && this$static._needReleaseMFStream) {
             this$static._matchFinder._stream = null;
             this$static._needReleaseMFStream = 0;
         }
@@ -1876,17 +1886,10 @@ var LZMA = (function () {
         this$static._distTableSize = dicLogSize * 2;
     }
     
-    function $SetLcLpPb_0(this$static, lc, lp, pb) {
-        this$static._numLiteralPosStateBits = lp;
-        this$static._numLiteralContextBits = lc;
-        this$static._posStateBits = pb;
-        this$static._posStateMask = (1 << pb) - 1;
-    }
-    
     function $SetMatchFinder(this$static, matchFinderIndex) {
         var matchFinderIndexPrev = this$static._matchFinderType;
         this$static._matchFinderType = matchFinderIndex;
-        if (!!this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
+        if (this$static._matchFinder && matchFinderIndexPrev != this$static._matchFinderType) {
             this$static._dictionarySizePrev = -1;
             this$static._matchFinder = null;
         }
@@ -2221,7 +2224,7 @@ var LZMA = (function () {
         if ((this$static.Code ^ -2147483648) < (newBound ^ -2147483648)) {
             this$static.Range = newBound;
             probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
-            if ((this$static.Range & -16777216) == 0) {
+            if (!(this$static.Range & -16777216)) {
                 this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
                 this$static.Range <<= 8;
             }
@@ -2230,7 +2233,7 @@ var LZMA = (function () {
             this$static.Range -= newBound;
             this$static.Code -= newBound;
             probs[index] = prob - (prob >>> 5) << 16 >> 16;
-            if ((this$static.Range & -16777216) == 0) {
+            if (!(this$static.Range & -16777216)) {
                 this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
                 this$static.Range <<= 8;
             }
@@ -2245,7 +2248,7 @@ var LZMA = (function () {
             t = this$static.Code - this$static.Range >>> 31;
             this$static.Code -= this$static.Range & t - 1;
             result = result << 1 | 1 - t;
-            if ((this$static.Range & -16777216) == 0) {
+            if (!(this$static.Range & -16777216)) {
                 this$static.Code = this$static.Code << 8 | $read(this$static.Stream);
                 this$static.Range <<= 8;
             }
@@ -2283,7 +2286,7 @@ var LZMA = (function () {
     function $Encode_3(this$static, probs, index, symbol) {
         var newBound, prob = probs[index];
         newBound = (this$static.Range >>> 11) * prob;
-        if (symbol == 0) {
+        if (!symbol) {
             this$static.Range = newBound;
             probs[index] = prob + (2048 - prob >>> 5) << 16 >> 16;
         } else {
@@ -2291,7 +2294,7 @@ var LZMA = (function () {
             this$static.Range -= newBound;
             probs[index] = prob - (prob >>> 5) << 16 >> 16;
         }
-        if ((this$static.Range & -16777216) == 0) {
+        if (!(this$static.Range & -16777216)) {
             this$static.Range <<= 8;
             $ShiftLow(this$static);
         }
@@ -2303,16 +2306,10 @@ var LZMA = (function () {
             if ((v >>> i & 1) == 1) {
                 this$static.Low = add(this$static.Low, fromInt(this$static.Range));
             }
-            if ((this$static.Range & -16777216) == 0) {
+            if (!(this$static.Range & -16777216)) {
                 this$static.Range <<= 8;
                 $ShiftLow(this$static);
             }
-        }
-    }
-    
-    function $FlushData(this$static) {
-        for (var i = 0; i < 5; ++i) {
-            $ShiftLow(this$static);
         }
     }
     
@@ -2350,17 +2347,17 @@ var LZMA = (function () {
     /** ce */
     /** ds */
     function decode(utf) {
-        var buf = "", i, x, y, z, l = utf.length;
-        for (i = 0; i < l; ++i) {
+        var i = 0, j = 0, x, y, z, l = utf.length, buf = [], charCodes = [];
+        for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
-            if ((x & 128) == 0) {
-                if (x == 0) {
+            if (!(x & 128)) {
+                if (!x) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
-                buf += String.fromCharCode(x & 65535);
+                charCodes[j] = x;
             } else if ((x & 224) == 192) {
-                if (i + 1 >= utf.length) {
+                if (i + 1 >= l) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
@@ -2369,9 +2366,9 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
-                buf += String.fromCharCode((x & 31) << 6 & 65535 | y & 63);
+                charCodes[j] = ((x & 31) << 6) | (y & 63);
             } else if ((x & 240) == 224) {
-                if (i + 2 >= utf.length) {
+                if (i + 2 >= l) {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
@@ -2385,14 +2382,21 @@ var LZMA = (function () {
                     /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                     return utf;
                 }
-                buf += String.fromCharCode(((x & 15) << 12 | (y & 63) << 6 | z & 63) & 65535);
+                charCodes[j] = ((x & 15) << 12) | ((y & 63) << 6) | (z & 63);
             } else {
                 /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                 return utf;
             }
+            if (j == 65535) {
+                buf.push(String.fromCharCode.apply(String, charCodes));
+                j = -1;
+            }
         }
-        
-        return buf;
+        if (j > 0) {
+            charCodes.length = j;
+            buf.push(String.fromCharCode.apply(String, charCodes));
+        }
+        return buf.join("");
     }
     /** de */
     /** cs */
@@ -2409,7 +2413,7 @@ var LZMA = (function () {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 ++elen;
-            } else if (ch == 0 || ch >= 128 && ch <= 2047) {
+            } else if (!ch || ch >= 128 && ch <= 2047) {
                 elen += 2;
             } else {
                 elen += 3;
@@ -2421,7 +2425,7 @@ var LZMA = (function () {
             ch = chars[i];
             if (ch >= 1 && ch <= 127) {
                 data[elen++] = ch << 24 >> 24;
-            } else if (ch == 0 || ch >= 128 && ch <= 2047) {
+            } else if (!ch || ch >= 128 && ch <= 2047) {
                 data[elen++] = (192 | ch >> 6 & 31) << 24 >> 24;
                 data[elen++] = (128 | ch & 63) << 24 >> 24;
             } else {
@@ -2570,16 +2574,23 @@ var LZMA = (function () {
     /** de */
     /** cs */
     var get_mode_obj = (function () {
+        /// s is dictionarySize
+        /// f is fb
+        /// m is matchFinder
+        ///NOTE: Because some values are always the same, they have been removed.
+        /// lc is always 3
+        /// lp is always 0
+        /// pb is always 2
         var modes = [
-            {ds: 16, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-            {ds: 20, fb:  64, mf: 0, lc: 3, lp: 0, pb: 2},
-            {ds: 19, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 20, fb:  64, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 21, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 22, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 23, fb: 128, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 24, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2},
-            {ds: 25, fb: 255, mf: 1, lc: 3, lp: 0, pb: 2}
+            {s: 16, f:  64, m: 0},
+            {s: 20, f:  64, m: 0},
+            {s: 19, f:  64, m: 1},
+            {s: 20, f:  64, m: 1},
+            {s: 21, f: 128, m: 1},
+            {s: 22, f: 128, m: 1},
+            {s: 23, f: 128, m: 1},
+            {s: 24, f: 255, m: 1},
+            {s: 25, f: 255, m: 1}
         ];
         
         return function (mode) {
