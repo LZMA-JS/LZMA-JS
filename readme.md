@@ -28,6 +28,18 @@ Demos
 Live demos can be found <a href="http://nmrugg.github.io/LZMA-JS/">here</a>.
 
 
+How to Get
+---
+
+If you are using bower, you can download the source like this:
+
+    bower install lzma
+
+LZMA-JS is available in the npm repository.
+    
+    npm install lzma
+
+
 How to Use
 ---
 
@@ -57,11 +69,7 @@ Create the LZMA object.
 Node.js
 ---
 
-LZMA-JS is available in the npm repository.
-    
-    $ npm install lzma
-
-It can be loaded with the following code:
+After installing with npm, it can be loaded with the following code:
     
     var my_lzma = require("lzma");
 
