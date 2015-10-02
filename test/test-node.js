@@ -2,13 +2,20 @@
 
 "use strict";
 
-/// Usage: node test-node.js [FLAGS]
+/// Usage: node test-node.js [FLAGS] [TESTS]
+///
+/// FLAGS:
 ///
 /// --unmin    Test the unminified code.
 /// --nosep    Don't test the seperate (de)compression modules.
 /// --nolarge  Skip large files (they can take a long time).
 /// --decOnly  Skip compression tests.
 /// --comOnly  Skip decompression tests.
+///
+/// TESTS:
+///
+/// The basename of any file in the "tests/file" directory.
+/// Any number of tests can be listed.
 ///
 
 var all_tests_pass = true;
@@ -39,7 +46,14 @@ function get_params(argv)
     argv = argv || process.argv;
     
     for (i = process.argv.length - 1; i >= 2; i -= 1) {
-        params[process.argv[i].replace(/^-+/, "")] = 1;
+        if (process.argv[i][0] === "-") {
+            params[process.argv[i].replace(/^-+/, "")] = 1;
+        } else {
+            if (!params.tests) {
+                params.tests = [];
+            }
+            params.tests.push(process.argv[i]);
+        }
     }
     
     return params;
@@ -111,7 +125,15 @@ function progress(percent)
 
 function decompression_test(compressed_file, correct_filename, next)
 {
-    if (params.nolarge && p.basename(compressed_file).indexOf("large-") === 0) {
+    var basename = p.basename(compressed_file);
+    
+    if (params.tests && params.tests.indexOf(basename) === -1) {
+        return next();
+    }
+    
+    note(basename);
+    
+    if (params.nolarge && basename.indexOf("large-") === 0) {
         warn("Skipping large file.");
         return next();
     }
@@ -179,8 +201,16 @@ function decompression_test(compressed_file, correct_filename, next)
 
 function compression_test(file, next)
 {
+    var basename = p.basename(file);
+    
+    if (params.tests && params.tests.indexOf(basename) === -1) {
+        return next();
+    }
+    
+    note(basename);
+    
     var ext = p.extname(file).toLowerCase();
-    if (params.nolarge && p.basename(file).indexOf("large-") === 0) {
+    if (params.nolarge && basename.indexOf("large-") === 0) {
         warn("Skipping large file.");
         return next();
     }
@@ -269,8 +299,6 @@ function run_tests(cb)
             }
             file = files[i];
             
-            note(file);
-            
             if (file.slice(-5) === ".lzma") {
                 /// Preform a decompress test on *.lzma files.
                 decompression_test(p.join(path_to_files, file), p.join(path_to_files, file.slice(0, -5)), function next()
@@ -330,7 +358,9 @@ function display_time()
 function help()
 {
     console.log("");
-    console.log("Usage: node test-node.js [FLAGS]");
+    console.log("Usage: node test-node.js [FLAGS] [TESTS]");
+    console.log("");
+    console.log("FLAGS:");
     console.log("");
     console.log("  --unmin    Test the unminified code.");
     console.log("  --nosep    Don't test the seperate (de)compression modules.");
@@ -338,6 +368,12 @@ function help()
     console.log("  --decOnly  Skip compression tests.");
     console.log("  --comOnly  Skip decompression tests.");
     console.log("");
+    console.log("TESTS:");
+    console.log("");
+    console.log("The basename of any file in the \"tests/file\" directory.");
+    console.log("Any number of tests can be listed.");
+    console.log("");
+    
     process.exit();
 }
 
