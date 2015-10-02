@@ -742,7 +742,7 @@ var LZMA = (function () {
                 /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
                 return utf;
             }
-            if (j == 65535) {
+            if (j == 16383) {
                 buf.push(String.fromCharCode.apply(String, charCodes));
                 j = -1;
             }
