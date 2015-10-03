@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // jshint bitwise:true, curly:true, eqeqeq:true, forin:true, immed:true, latedef:true, newcap:true, noarg:true, noempty:true, nonew:true, onevar:true, plusplus:true, quotmark:double, strict:true, undef:true, unused:strict, node:true
 
 "use strict";
@@ -321,12 +322,12 @@ function compare(a, b)
     var i;
     
     if (typeof a !== typeof b) {
-        error("BAD TYPES:", typeof a, "!==", typeof b)
+        error("BAD TYPES:" + typeof a + " !== " + typeof b)
         return false;
     }
     
     if (a.length !== b.length) {
-        error("BAD LENGTH:", a.length, "!==", b.length)
+        error("BAD LENGTH: " + a.length + " !== " + b.length)
         return false;
     }
     
@@ -342,7 +343,7 @@ function compare(a, b)
     
     for (i = a.length - 1; i >= 0; --i) {
         if (a[i] !== b[i]) {
-            error("BAD VAL (" + i + "):",  a[i], "!==", b[i])
+            error("BAD VAL (" + i + "): " +  a[i] + " !== " + b[i])
             return false;
         }
     }
