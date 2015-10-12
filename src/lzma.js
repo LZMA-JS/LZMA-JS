@@ -73,7 +73,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         }());
     } else {
         /// It doesn't seem to be either Node.js or a browser.
-        console.log("Can't load the worker. Sorry.");
+        console.error("Can't load the worker. Sorry.");
     }
 } else {
     /// Let's use Web Workers.
@@ -96,7 +96,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 }
             } else {
                 if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_finish === "function") {
-                    callback_obj[e.data.cbn].on_finish(e.data.result);
+                    callback_obj[e.data.cbn].on_finish(e.data.result, e.data.error);
                     
                     /// Since the (de)compression is complete, the callbacks are no longer needed.
                     delete callback_obj[e.data.cbn];
@@ -106,7 +106,13 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         
         /// Very simple error handling.
         lzma_worker.onerror = function(event) {
-            throw new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+            var err = new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+            
+            for (var cbn in callback_obj) {
+                callback_obj[cbn].on_finish(null, err);
+            }
+            
+            console.error('Uncaught error in lzma_worker', err);
         };
         
         return (function () {

@@ -159,42 +159,42 @@ function decompression_test(compressed_file, correct_filename, next)
             }
             
             deco_start = get_hrtime();
-            try {
-                my_lzma.decompress(buffer, function (result)
-                {
+            my_lzma.decompress(buffer, function (result, e)
+            {
+                if (e) {
                     deco_speed = get_hrtime(deco_start);
-                    
-                    console.log("Decompressed size:", result.length + " bytes");
-                    
-                    if (typeof result === "string") {
-                        correct_result = correct_result.toString();
-                    }
-                    
-                    if (compare(correct_result, result)) {
+                    if (p.basename(correct_filename) === "error-" + e.message) {
                         display_result("Test passed", true);
+                        console.log("threw correct error: " + e.message);
                     } else {
-                        display_result("ERROR: files do not match!", false);
+                        display_result("ERROR: " + e.message, false);
                         all_tests_pass = false;
                     }
-                    
                     console.log("Decompression time:", deco_speed + " ms");
-                    
                     console.log("");
-                    next();
-                }, progress);
-            } catch (e) {
+                    return next();
+                }
+                
                 deco_speed = get_hrtime(deco_start);
-                if (p.basename(correct_filename) === "error-" + e.message) {
+                
+                console.log("Decompressed size:", result.length + " bytes");
+                
+                if (typeof result === "string") {
+                    correct_result = correct_result.toString();
+                }
+                
+                if (compare(correct_result, result)) {
                     display_result("Test passed", true);
-                    console.log("threw correct error: " + e.message);
                 } else {
-                    display_result("ERROR: " + e.message, false);
+                    display_result("ERROR: files do not match!", false);
                     all_tests_pass = false;
                 }
+                
                 console.log("Decompression time:", deco_speed + " ms");
+                
                 console.log("");
                 next();
-            }
+            }, progress);
         });
     });
 }
