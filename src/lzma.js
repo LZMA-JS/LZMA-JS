@@ -8,7 +8,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
     /// Is this Node.js?
     if (typeof global !== "undefined" && typeof require !== "undefined") {
         this.LZMA = function (lzma_path) {
-            return require(lzma_path || "./lzma_worker-min.js").LZMA;
+            return require(lzma_path || "./lzma_worker.js").LZMA;
         };
     /// Is this a browser?
     } else if (typeof window !== "undefined" && window.document) {
