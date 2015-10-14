@@ -2628,7 +2628,8 @@ var LZMA = (function () {
     return {
         /** xs */
         compress:   compress,
-        decompress: decompress
+        decompress: decompress,
+        terminateWorker: function() {}
         /** xe */
         /// co:compress:   compress
         /// do:decompress: decompress
