@@ -12,8 +12,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         };
     /// Is this a browser?
     } else if (typeof window !== "undefined" && window.document) {
-        (function ()
-        {
+        (function () {
             var that = this,
                 global_var,
                 req = function req(path) {
@@ -34,8 +33,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 global_var = global;
             }
             
-            function non_worker_lzma(path)
-            {
+            function non_worker_lzma(path) {
                 var fake_lzma;
                 
                 req(path);
@@ -63,7 +61,9 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                             }, 50);
                         }
                     },
-                    worker: function() { return null; }
+                    worker: function worker () {
+                        return null;
+                    }
                 };
                 
                 return fake_lzma;
@@ -89,7 +89,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             ///NOTE: Node.js needs something like "./" or "../" at the beginning.
             lzma_worker = new Worker(lzma_path || "./lzma_worker-min.js");
         
-        lzma_worker.onmessage = function (e) {
+        lzma_worker.onmessage = function onmessage(e) {
             if (e.data.action === action_progress) {
                 if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_progress === "function") {
                     callback_obj[e.data.cbn].on_progress(e.data.result);
