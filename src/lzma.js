@@ -63,7 +63,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                             }, 50);
                         }
                     },
-                    terminateWorker: function() {}
+                    worker: function() { return null; }
                 };
                 
                 return fake_lzma;
@@ -138,9 +138,8 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 decompress: function decompress(byte_arr, on_finish, on_progress) {
                     send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
                 },
-                terminateWorker: function terminateWorker() {
-                    lzma_worker.terminate();
-                    lzma_worker = null;
+                worker: function worker() {
+                    return lzma_worker;
                 }
             };
         }());
