@@ -9,7 +9,6 @@
     "url": "git://github.com/nmrugg/LZMA-JS.git"
   },
   "main": "lzma.js",
-  "readme": "readme.md",
   "bin": {
     "lzma.js": "bin/lzma.js"
   },
@@ -18,5 +17,6 @@
   },
   "scripts": {
     "test": "node test/test-node.js unmin && node test/test-node.js"
-  }
+  },
+  "license": "MIT"
 }
