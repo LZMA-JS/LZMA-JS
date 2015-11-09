@@ -3,6 +3,8 @@ LZMA Everywhere
 
 <a href="https://github.com/nmrugg/LZMA-JS">LZMA-JS</a> is a JavaScript implementation of the Lempel-Ziv-Markov chain (LZMA) compression algorithm.
 
+[![NPM](https://nodei.co/npm/lzma.png?downloads=true)](https://nodei.co/npm/lzma/)
+[![NPM](https://nodei.co/npm-dl/lzma.png?months=6)](https://nodei.co/npm/lzma/)
 
 What's New in 2.x
 ---
