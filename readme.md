@@ -59,11 +59,11 @@ Create the LZMA object.
     /// To compress:
     ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is slower and probably much better).
     ///NOTE: compress() can take a string or an array of bytes. (A Node.js Buffer counts as an array of bytes.)
-    my_lzma.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
+    my_lzma.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
     
     /// To decompress:
     ///NOTE: The result will be returned as a string if it is printable text; otherwise, it will return an array of signed bytes.
-    my_lzma.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
+    my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
 
 
 Node.js
@@ -99,9 +99,9 @@ If you'd prefer not to bother with Web Workers, you can just include <code>lzma_
 
 That will create a global <code>LZMA</code> <code>object</code> that you can use directly. Like this:
 
-    LZMA.compress(string || byte_array, mode, on_finish(result) {}, on_progress(percent) {});
+    LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
     
-    LZMA.decompress(byte_array, on_finish(result) {}, on_progress(percent) {});
+    LZMA.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
 
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
