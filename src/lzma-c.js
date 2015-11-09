@@ -1898,47 +1898,56 @@ var LZMA = (function () {
             on_finish = on_progress = 0;
         }
         
-        this$static.c = $LZMAByteArrayCompressor({}, encode(str), get_mode_obj(mode));
+        on_progress = on_progress || function(percent) {
+            if (typeof cbn == "undefined")
+                return;
+            
+            return update_progress(percent, cbn);
+        };
         
-        if (on_progress) {
+        on_finish = on_finish || function(res, err) {
+            if (typeof cbn == "undefined")
+                return;
+            
+            return postMessage({
+                action: action_compress,
+                cbn: cbn,
+                result: res,
+                error: err
+            });
+        };
+        
+        try {
+            this$static.c = $LZMAByteArrayCompressor({}, encode(str), get_mode_obj(mode));
+            
             on_progress(0);
-        } else if (typeof cbn != "undefined") {
-            update_progress(0, cbn);
+        } catch (err) {
+            return on_finish(null, err);
         }
         
         function do_action() {
-            var res, start = (new Date()).getTime();
-            
-            while ($processChunk(this$static.c.chunker)) {
-                percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
-                /// If about 200 miliseconds have passed, update the progress.
-                if ((new Date()).getTime() - start > 200) {
-                    if (on_progress) {
+            try {
+                var res, start = (new Date()).getTime();
+                
+                while ($processChunk(this$static.c.chunker)) {
+                    percent = toDouble(this$static.c.chunker.inBytesProcessed) / toDouble(this$static.c.length_0);
+                    /// If about 200 miliseconds have passed, update the progress.
+                    if ((new Date()).getTime() - start > 200) {
                         on_progress(percent);
-                    } else if (typeof cbn != "undefined") {
-                        update_progress(percent, cbn);
+                        
+                        wait(do_action, 0);
+                        return 0;
                     }
-                    wait(do_action, 0);
-                    return 0;
                 }
-            }
-            
-            if (on_progress) {
+                
                 on_progress(1);
-            } else if (typeof cbn != "undefined") {
-                update_progress(1, cbn);
-            }
-            
-            res = $toByteArray(this$static.c.output);
-            
-            if (on_finish) {
-                on_finish(res);
-            } else if (typeof cbn != "undefined") {
-                postMessage({
-                    action: action_compress,
-                    cbn: cbn,
-                    result: res
-                });
+                
+                res = $toByteArray(this$static.c.output);
+                
+                /// delay so we don’t catch errors from the on_finish handler
+                wait(on_finish.bind(null, res), 0);
+            } catch (err) {
+                on_finish(null, err);
             }
         }
         
