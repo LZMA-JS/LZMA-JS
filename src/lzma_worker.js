@@ -2347,6 +2347,15 @@ var LZMA = (function () {
     /** ce */
     /** ds */
     function decode(utf) {
+        if (typeof TextDecoder !== 'undefined') {
+            try {
+                return new TextDecoder('utf-8', {fatal: true}).decode(utf);
+            } catch (e) {
+                /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
+                return utf;
+            }
+        }
+        
         var i = 0, j = 0, x, y, z, l = utf.length, buf = [], charCodes = [];
         for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
@@ -2406,6 +2415,14 @@ var LZMA = (function () {
         if (typeof s == "object") {
             return s;
         } else {
+            if (typeof TextEncoder !== 'undefined') {
+                return new TextEncoder().encode(s);
+            }
+            
+            if (typeof Buffer !== 'undefined') {
+                return new Buffer(s);
+            }
+            
             $getChars(s, 0, l, chars, 0);
         }
         /// Add extra spaces in the array to break up the unicode symbols.
