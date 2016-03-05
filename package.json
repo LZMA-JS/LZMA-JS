@@ -16,7 +16,7 @@
     "uglify-js": "=2.4.16"
   },
   "scripts": {
-    "test": "node test/test-node.js unmin && node test/test-node.js"
+    "test": "node test/test-node.js && node test/test-node.js --sync"
   },
   "license": "MIT",
   "tonicExampleFilename": "demos/tonic_example.js"
