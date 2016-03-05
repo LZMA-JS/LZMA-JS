@@ -278,7 +278,7 @@ var LZMA = (function () {
         this$static.length_0 = length_0;
         encoder = $Encoder({});
         $configure(mode, encoder);
-        encoder._writeEndMark = typeof(LZMA.disableEndMark) == "undefined";
+        encoder._writeEndMark = typeof LZMA.disableEndMark == "undefined";
         $WriteCoderProperties(encoder, output);
         for (i = 0; i < 64; i += 8)
             $write(output, lowBits_0(shr(length_0, i)) & 255);
@@ -2446,7 +2446,7 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn,
+            cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
         
         if (typeof on_finish != "function") {
@@ -2473,8 +2473,7 @@ var LZMA = (function () {
             });
         };
 
-        if ( sync )
-        {
+        if (sync) {
             this$static.c = $LZMAByteArrayCompressor({}, encode(str), get_mode_obj(mode));
             while ($processChunk(this$static.c.chunker));
             return $toByteArray(this$static.c.output);
@@ -2522,7 +2521,7 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn,
+            cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
             len,
             sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
@@ -2551,8 +2550,7 @@ var LZMA = (function () {
             });
         };
 
-        if ( sync )
-        {
+        if (sync) {
             this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
             while ($processChunk(this$static.d.chunker));
             return decode($toByteArray(this$static.d.output));
