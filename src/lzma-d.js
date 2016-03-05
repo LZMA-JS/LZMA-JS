@@ -765,66 +765,79 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn,
+            cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
-            len;
-        
+            len,
+            sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
+
         if (typeof on_finish != "function") {
             cbn = on_finish;
             on_finish = on_progress = 0;
         }
         
-        this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
+        on_progress = on_progress || function(percent) {
+            if (typeof cbn == "undefined")
+                return;
+            
+            return update_progress(has_progress ? percent : -1, cbn);
+        };
         
-        len = toDouble(this$static.d.length_0);
+        on_finish = on_finish || function(res, err) {
+            if (typeof cbn == "undefined")
+                return;
+            
+            return postMessage({
+                action: action_decompress,
+                cbn: cbn,
+                result: res,
+                error: err
+            });
+        };
+
+        if (sync) {
+            this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
+            while ($processChunk(this$static.d.chunker));
+            return decode($toByteArray(this$static.d.output));
+        }
         
-        ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
-        has_progress = len > -1;
-        
-        if (on_progress) {
-            on_progress(has_progress ? 0 : -1);
-        } else if (typeof cbn != "undefined") {
-            update_progress(has_progress ? 0 : -1, cbn);
+        try {
+            this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
+            
+            len = toDouble(this$static.d.length_0);
+            
+            ///NOTE: If the data was created via a stream, it will not have a length value, and therefore we can't calculate the progress.
+            has_progress = len > -1;
+            
+            on_progress(0);
+        } catch (err) {
+            return on_finish(null, err);
         }
         
         function do_action() {
-            var res, i = 0, start = (new Date()).getTime();
-            while ($processChunk(this$static.d.chunker)) {
-                if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
-                    if (has_progress) {
-                        percent = toDouble(this$static.d.chunker.decoder.nowPos64) / len;
-                        /// If about 200 miliseconds have passed, update the progress.					
-                        if (on_progress) {
+            try {
+                var res, i = 0, start = (new Date()).getTime();
+                while ($processChunk(this$static.d.chunker)) {
+                    if (++i % 1000 == 0 && (new Date()).getTime() - start > 200) {
+                        if (has_progress) {
+                            percent = toDouble(this$static.d.chunker.decoder.nowPos64) / len;
+                            /// If about 200 miliseconds have passed, update the progress.
                             on_progress(percent);
-                        } else if (typeof cbn != "undefined") {
-                            update_progress(percent, cbn);
                         }
+                        
+                        ///NOTE: This allows other code to run, like the browser to update.
+                        wait(do_action, 0);
+                        return 0;
                     }
-                    
-                    ///NOTE: This allows other code to run, like the browser to update.
-                    wait(do_action, 0);
-                    return 0;
                 }
-            }
-            
-            if (has_progress) {
-                if (on_progress) {
-                    on_progress(1);
-                } else if (typeof cbn != "undefined") {
-                    update_progress(1, cbn);
-                }
-            }
-            
-            res = decode($toByteArray(this$static.d.output));
-            
-            if (on_finish) {
-                on_finish(res);
-            } else if (typeof cbn != "undefined") {
-                postMessage({
-                    action: action_decompress,
-                    cbn: cbn,
-                    result: res
-                });
+                
+                on_progress(1);
+                
+                res = decode($toByteArray(this$static.d.output));
+                
+                /// delay so we don’t catch errors from the on_finish handler
+                wait(on_finish.bind(null, res), 0);
+            } catch (err) {
+                on_finish(null, err);
             }
         }
         

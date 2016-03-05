@@ -8,12 +8,11 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
     /// Is this Node.js?
     if (typeof global !== "undefined" && typeof require !== "undefined") {
         this.LZMA = function (lzma_path) {
-            return require(lzma_path || "./lzma_worker-min.js").LZMA;
+            return require(lzma_path || "./lzma_worker.js").LZMA;
         };
     /// Is this a browser?
     } else if (typeof window !== "undefined" && window.document) {
-        (function ()
-        {
+        (function () {
             var that = this,
                 global_var,
                 req = function req(path) {
@@ -34,8 +33,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 global_var = global;
             }
             
-            function non_worker_lzma(path)
-            {
+            function non_worker_lzma(path) {
                 var fake_lzma;
                 
                 req(path);
@@ -62,6 +60,9 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                                 fake_lzma.decompress(byte_arr, on_finish, on_progress);
                             }, 50);
                         }
+                    },
+                    worker: function worker () {
+                        return null;
                     }
                 };
                 
@@ -72,7 +73,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         }());
     } else {
         /// It doesn't seem to be either Node.js or a browser.
-        console.log("Can't load the worker. Sorry.");
+        console.error("Can't load the worker. Sorry.");
     }
 } else {
     /// Let's use Web Workers.
@@ -88,14 +89,14 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             ///NOTE: Node.js needs something like "./" or "../" at the beginning.
             lzma_worker = new Worker(lzma_path || "./lzma_worker-min.js");
         
-        lzma_worker.onmessage = function (e) {
+        lzma_worker.onmessage = function onmessage(e) {
             if (e.data.action === action_progress) {
                 if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_progress === "function") {
                     callback_obj[e.data.cbn].on_progress(e.data.result);
                 }
             } else {
                 if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_finish === "function") {
-                    callback_obj[e.data.cbn].on_finish(e.data.result);
+                    callback_obj[e.data.cbn].on_finish(e.data.result, e.data.error);
                     
                     /// Since the (de)compression is complete, the callbacks are no longer needed.
                     delete callback_obj[e.data.cbn];
@@ -105,7 +106,13 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         
         /// Very simple error handling.
         lzma_worker.onerror = function(event) {
-            throw new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+            var err = new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+            
+            for (var cbn in callback_obj) {
+                callback_obj[cbn].on_finish(null, err);
+            }
+            
+            console.error('Uncaught error in lzma_worker', err);
         };
         
         return (function () {
@@ -136,6 +143,9 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 },
                 decompress: function decompress(byte_arr, on_finish, on_progress) {
                     send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
+                },
+                worker: function worker() {
+                    return lzma_worker;
                 }
             };
         }());
