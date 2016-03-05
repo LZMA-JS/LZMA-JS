@@ -765,10 +765,11 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn,
+            cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
-            len;
-        
+            len,
+            sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
+
         if (typeof on_finish != "function") {
             cbn = on_finish;
             on_finish = on_progress = 0;
@@ -792,6 +793,12 @@ var LZMA = (function () {
                 error: err
             });
         };
+
+        if (sync) {
+            this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
+            while ($processChunk(this$static.d.chunker));
+            return decode($toByteArray(this$static.d.output));
+        }
         
         try {
             this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
