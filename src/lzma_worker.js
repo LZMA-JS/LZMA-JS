@@ -278,7 +278,7 @@ var LZMA = (function () {
         this$static.length_0 = length_0;
         encoder = $Encoder({});
         $configure(mode, encoder);
-        encoder._writeEndMark = 1;
+        encoder._writeEndMark = typeof(LZMA.disableEndMark) == "undefined";
         $WriteCoderProperties(encoder, output);
         for (i = 0; i < 64; i += 8)
             $write(output, lowBits_0(shr(length_0, i)) & 255);
@@ -2446,7 +2446,8 @@ var LZMA = (function () {
     function compress(str, mode, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn;
+            cbn,
+            sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
         
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -2471,6 +2472,13 @@ var LZMA = (function () {
                 error: err
             });
         };
+
+        if ( sync )
+        {
+            this$static.c = $LZMAByteArrayCompressor({}, encode(str), get_mode_obj(mode));
+            while ($processChunk(this$static.c.chunker));
+            return $toByteArray(this$static.c.output);
+        }
         
         try {
             this$static.c = $LZMAByteArrayCompressor({}, encode(str), get_mode_obj(mode));
@@ -2516,8 +2524,9 @@ var LZMA = (function () {
             percent,
             cbn,
             has_progress,
-            len;
-        
+            len,
+            sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
+
         if (typeof on_finish != "function") {
             cbn = on_finish;
             on_finish = on_progress = 0;
@@ -2541,6 +2550,13 @@ var LZMA = (function () {
                 error: err
             });
         };
+
+        if ( sync )
+        {
+            this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
+            while ($processChunk(this$static.d.chunker));
+            return decode($toByteArray(this$static.d.output));
+        }
         
         try {
             this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
