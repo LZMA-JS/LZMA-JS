@@ -33,54 +33,74 @@ Live demos can be found <a href="http://nmrugg.github.io/LZMA-JS/">here</a>.
 How to Get
 ---
 
+LZMA-JS is available in the npm repository.
+
+```shell
+npm install lzma
+```
+
 If you are using bower, you can download the source like this:
 
-    bower install lzma
-
-LZMA-JS is available in the npm repository.
-    
-    npm install lzma
-
+```shell
+bower install lzma
+```
 
 How to Use
 ---
 
 First, load the bootstrapping code.
-    
-    /// In a browser:
-    <script src="../src/lzma.js"></script>
+
+```html
+<!-- In a browser -->
+<script src="../src/lzma.js"></script>
+```
 
 Create the LZMA object.
-    
-    /// LZMA([optional path])
-    /// If lzma_worker.js is in the same directory, you don't need to set the path.
-    var my_lzma = new LZMA("../src/lzma_worker.js");
 
-(De)Compress stuff.
+```js
+/// LZMA([optional path])
+/// If lzma_worker.js is in the same directory, you don't need to set the path.
+var my_lzma = new LZMA("../src/lzma_worker.js");
+```
 
-    /// To compress:
-    ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is slower and probably much better).
-    ///NOTE: compress() can take a string or an array of bytes. (A Node.js Buffer counts as an array of bytes.)
-    my_lzma.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
-    
-    /// To decompress:
-    ///NOTE: The result will be returned as a string if it is printable text; otherwise, it will return an array of signed bytes.
-    my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+(De)Compress stuff asynchronously:
+
+```js
+/// To compress:
+///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is slower and probably much better).
+///NOTE: compress() can take a string or an array of bytes.
+///      (A Node.js Buffer counts as an array of bytes.)
+my_lzma.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
+
+/// To decompress:
+///NOTE: The result will be returned as a string if it is printable text;
+///      otherwise, it will return an array of signed bytes.
+my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+```
+
+(De)Compress stuff synchronously (not recommended; may cause the client to freeze):
+
+```js
+/// To compress:
+///NOTE: You'll need to do your own error catching.
+result = my_lzma.compress(string || byte_array, mode);
+
+/// To decompress:
+result = my_lzma.decompress(byte_array);
+```
 
 
 Node.js
 ---
 
 After installing with npm, it can be loaded with the following code:
-    
-    var my_lzma = require("lzma");
 
+```js
+var my_lzma = require("lzma");
+```
 
 Notes
 ---
-
-The calls to compress() and decompress() are asynchronous, so you need to supply a callback function if you
-want to use the (de)compressed data.
 
 The decompress() function needs an array of bytes or a Node.js <code>Buffer</code> object.
 
@@ -97,13 +117,17 @@ But I don't want to use Web Workers
 
 If you'd prefer not to bother with Web Workers, you can just include <code>lzma_worker.js</code> directly. For example:
 
-    <script src="../src/lzma_worker.js"></script>
+```html
+<script src="../src/lzma_worker.js"></script>
+```
 
 That will create a global <code>LZMA</code> <code>object</code> that you can use directly. Like this:
 
-    LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
-    
-    LZMA.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+```js
+LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
+
+LZMA.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+```
 
 Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
 
