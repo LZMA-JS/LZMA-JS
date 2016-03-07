@@ -1,4 +1,4 @@
-LZMA Everywhere
+LZMA Everywhere [![Travis CI](https://travis-ci.org/nmrugg/LZMA-JS.svg)](https://travis-ci.org/nmrugg/LZMA-JS/branches)
 ===
 
 <a href="https://github.com/nmrugg/LZMA-JS">LZMA-JS</a> is a JavaScript implementation of the Lempel-Ziv-Markov (LZMA) chain compression algorithm.
