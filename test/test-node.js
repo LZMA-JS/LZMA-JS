@@ -511,7 +511,7 @@ function run_all_tests()
     
     total_time = get_hrtime();
     
-    announce("Testing lzma_worker" + (params.unmin ? "" : "-min") + ".js");
+    announce("Testing lzma_worker" + (params.unmin ? "" : "-min") + ".js" + (test_type === "sync" ? "synchronously" : ""));
     
     run_tests(function (tests_passed_norm)
     {
