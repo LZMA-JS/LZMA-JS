@@ -2391,13 +2391,19 @@ var LZMA = (function () {
     }
     /** ce */
     /** ds */
-    function decompress(byte_arr, on_finish, on_progress) {
+    function decompress(byte_arr, is_utf8, on_finish, on_progress) {
         var this$static = {},
             percent,
             cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
             len,
             sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
+        
+        if (typeof is_utf8 !== "boolean") {
+            on_progress = on_finish;
+            on_finish = is_utf8;
+            is_utf8 = true;
+        }
 
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -2426,7 +2432,9 @@ var LZMA = (function () {
         if (sync) {
             this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
             while ($processChunk(this$static.d.chunker));
-            return decode($toByteArray(this$static.d.output));
+            var bytes = $toByteArray(this$static.d.output);
+            
+            return is_utf8 ? decode(bytes) : bytes;
         }
         
         try {
@@ -2461,7 +2469,8 @@ var LZMA = (function () {
                 
                 on_progress(1);
                 
-                res = decode($toByteArray(this$static.d.output));
+                var bytes = $toByteArray(this$static.d.output);
+                res = is_utf8 ? decode(bytes) : bytes;
                 
                 /// delay so we don’t catch errors from the on_finish handler
                 wait(on_finish.bind(null, res), 0);
@@ -2511,7 +2520,8 @@ var LZMA = (function () {
                 if (e && e.data) {
                     /** xs */
                     if (e.data.action == action_decompress) {
-                        LZMA.decompress(e.data.data, e.data.cbn);
+                        // use data.mode as the is_utf8 argument
+                        LZMA.decompress(e.data.data, e.data.mode, e.data.cbn);
                     } else if (e.data.action == action_compress) {
                         LZMA.compress(e.data.data, e.data.mode, e.data.cbn);
                     }
