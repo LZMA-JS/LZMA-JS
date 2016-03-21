@@ -75,7 +75,8 @@ my_lzma.compress(string || byte_array, mode, on_finish(result, error) {}, on_pro
 /// To decompress:
 ///NOTE: By default, the result will be returned as a string if it decodes as valid UTF-8 text;
 ///      otherwise, it will return a Uint8Array instance.
-my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+///      If the optional is_utf8 parameter is set to false, decompression always returns a Uint8Array.
+my_lzma.decompress(byte_array[, is_utf8 = true], on_finish(result, error) {}, on_progress(percent) {});
 ```
 
 (De)Compress stuff synchronously (not recommended; may cause the client to freeze):
@@ -86,7 +87,7 @@ my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent)
 result = my_lzma.compress(string || byte_array, mode);
 
 /// To decompress:
-result = my_lzma.decompress(byte_array);
+result = my_lzma.decompress(byte_array[, is_utf8 = true]);
 ```
 
 
@@ -126,7 +127,7 @@ That will create a global `LZMA` object that you can use directly. Like this:
 ```js
 LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
 
-LZMA.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
+LZMA.decompress(byte_array[, is_utf8 = true], on_finish(result, error) {}, on_progress(percent) {});
 ```
 
 Note that this `LZMA` variable is an `Object`, not a `Function`.
