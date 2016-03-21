@@ -1,14 +1,14 @@
 LZMA Everywhere
-===
+===============
 
-<a href="https://github.com/nmrugg/LZMA-JS">LZMA-JS</a> is a JavaScript implementation of the Lempel-Ziv-Markov (LZMA) chain compression algorithm.
+[LZMA-JS](https://github.com/nmrugg/LZMA-JS) is a JavaScript implementation of the Lempel-Ziv-Markov (LZMA) chain compression algorithm.
 
 [![NPM](https://nodei.co/npm/lzma.png?downloads=true)](https://nodei.co/npm/lzma/)<br>
 [![NPM](https://nodei.co/npm-dl/lzma.png?months=6)](https://nodei.co/npm/lzma/)
 
 What's New in 2.x
----
-Two things: <b>speed</b> & <b>size</b>.
+-----------------
+Two things: **speed** & **size**.
 
 LZMA-JS 2.x now minifies to smaller than one fourth of 1.x and in some cases is 1,000x faster (particularly with high compression).
 
@@ -25,13 +25,13 @@ Here are some file size stats:
 Also, older versions returned compressed data as unsigned bytes. Now, it returns signed bytes.
 
 Demos
----
+-----
 
-Live demos can be found <a href="http://nmrugg.github.io/LZMA-JS/">here</a>.
+Live demos can be found [here](http://nmrugg.github.io/LZMA-JS/).
 
 
 How to Get
----
+----------
 
 LZMA-JS is available in the npm repository.
 
@@ -46,7 +46,7 @@ bower install lzma
 ```
 
 How to Use
----
+----------
 
 First, load the bootstrapping code.
 
@@ -69,12 +69,12 @@ var my_lzma = new LZMA("../src/lzma_worker.js");
 /// To compress:
 ///NOTE: mode can be 1-9 (1 is fast and pretty good; 9 is slower and probably much better).
 ///NOTE: compress() can take a string or an array of bytes.
-///      (A Node.js Buffer counts as an array of bytes.)
+///      (A Node.js Buffer or a Uint8Array instance counts as an array of bytes.)
 my_lzma.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
 
 /// To decompress:
-///NOTE: The result will be returned as a string if it is printable text;
-///      otherwise, it will return an array of signed bytes.
+///NOTE: By default, the result will be returned as a string if it decodes as valid UTF-8 text;
+///      otherwise, it will return a Uint8Array instance.
 my_lzma.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
 ```
 
@@ -91,7 +91,7 @@ result = my_lzma.decompress(byte_array);
 
 
 Node.js
----
+-------
 
 After installing with npm, it can be loaded with the following code:
 
@@ -100,28 +100,28 @@ var my_lzma = require("lzma");
 ```
 
 Notes
----
+-----
 
-The decompress() function needs an array of bytes or a Node.js <code>Buffer</code> object.
+The `decompress()` function needs an array of bytes or a Node.js `Buffer` object.
 
-If the decompression progress is unable to be calculated, the on_progress() function will be triggered once with the value <code>-1</code>.
+If the decompression progress is unable to be calculated, the `on_progress()` function will be triggered once with the value `-1`.
 
 LZMA-JS will try to use Web Workers if they are available.  If the environment does not support Web Workers,
 it will just do something else, and it won't pollute the global scope.
-Each call to LZMA() will create a new Web Worker, which can be accessed via my_lzma.worker().
+Each call to `LZMA()` will create a new Web Worker, which can be accessed via `my_lzma.worker()`.
 
 LZMA-JS was originally based on gwt-lzma, which is a port of the LZMA SDK from Java into JavaScript.
 
 But I don't want to use Web Workers
----
+-----
 
-If you'd prefer not to bother with Web Workers, you can just include <code>lzma_worker.js</code> directly. For example:
+If you'd prefer not to bother with Web Workers, you can just include `lzma_worker.js` directly. For example:
 
 ```html
 <script src="../src/lzma_worker.js"></script>
 ```
 
-That will create a global <code>LZMA</code> <code>object</code> that you can use directly. Like this:
+That will create a global `LZMA` object that you can use directly. Like this:
 
 ```js
 LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progress(percent) {});
@@ -129,7 +129,7 @@ LZMA.compress(string || byte_array, mode, on_finish(result, error) {}, on_progre
 LZMA.decompress(byte_array, on_finish(result, error) {}, on_progress(percent) {});
 ```
 
-Note that this <code>LZMA</code> variable is an <code>object</code>, not a <code>function</code>.
+Note that this `LZMA` variable is an `Object`, not a `Function`.
 
 In Node.js, the Web Worker code is already skipped, so there's no need to do this.
 
@@ -142,9 +142,9 @@ Of course, you'll want to load the minified versions if you're sending data over
 Compatibility
 ---
 
-LZMA-JS is compatible with anything that is compatible with the reference implementation of LZMA, for example, the <code>lzma</code> command.
+LZMA-JS is compatible with anything that is compatible with the reference implementation of LZMA, for example, the `lzma` command.
 
 
 License
----
-<a href="https://raw.githubusercontent.com/nmrugg/LZMA-JS/master/LICENSE">MIT</a>
+-------
+[MIT](https://raw.githubusercontent.com/nmrugg/LZMA-JS/master/LICENSE)
