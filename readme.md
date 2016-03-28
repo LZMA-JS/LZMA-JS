@@ -17,9 +17,9 @@ Here are some file size stats:
 
 |    Filename    |   Method(s)   | Minified | Gzipped |
 |:---------------|:--------------|---------:|--------:|
-| lzma_worker.js | both          |  22.7 KB |  8.8 KB |
-| lzma-c.js      | compression   |  17.0 KB |  6.8 KB |
-| lzma-d.js      | decompression |   6.5 KB |  2.8 KB |
+| lzma_worker.js | both          |  23.7 KB |  9.2 KB |
+| lzma-c.js      | compression   |  18.0 KB |  7.3 KB |
+| lzma-d.js      | decompression |   7.0 KB |  3.1 KB |
 
 Also, older versions returned compressed data as unsigned bytes. Now, it returns signed bytes.
 
