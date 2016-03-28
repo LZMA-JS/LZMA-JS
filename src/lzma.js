@@ -118,6 +118,12 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
         return (function () {
             
             function send_to_worker(action, data, mode, on_finish, on_progress) {
+                if (typeof mode === 'function') {
+                    on_progress = on_finish;
+                    on_finish = mode;
+                    mode = true; // default to assuming utf8 output
+                }
+                
                 var cbn;
                 
                 do {
