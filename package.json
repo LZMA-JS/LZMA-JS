@@ -8,7 +8,9 @@
     "type": "git",
     "url": "git://github.com/nmrugg/LZMA-JS.git"
   },
-  "main": "lzma.js",
+  "bugs": {
+    "url": "https://github.com/nmrugg/LZMA-JS/issues"
+  },
   "bin": {
     "lzma.js": "bin/lzma.js"
   },
@@ -19,5 +21,10 @@
     "test": "node test/test-node.js && node test/test-node.js --sync"
   },
   "license": "MIT",
-  "tonicExampleFilename": "demos/tonic_example.js"
+  "tonicExampleFilename": "demos/tonic_example.js",
+  "keywords": [
+    "lzma",
+    "compression",
+    "decompression"
+  ]
 }
