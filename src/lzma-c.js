@@ -1851,14 +1851,6 @@ var LZMA = (function () {
         if (typeof s == "object") {
             return s;
         } else {
-            if (typeof TextEncoder !== 'undefined') {
-                return new TextEncoder().encode(s);
-            }
-            
-            if (typeof Buffer !== 'undefined') {
-                return new Buffer(s);
-            }
-            
             $getChars(s, 0, l, chars, 0);
         }
         /// Add extra spaces in the array to break up the unicode symbols.

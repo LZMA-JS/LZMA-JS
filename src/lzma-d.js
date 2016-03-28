@@ -702,15 +702,6 @@ var LZMA = (function () {
     
     /** ds */
     function decode(utf) {
-        if (typeof TextDecoder !== 'undefined') {
-            try {
-                return new TextDecoder('utf-8', {fatal: true}).decode(utf);
-            } catch (e) {
-                /// It appears that this is binary data, so it cannot be converted to a string, so just send it back.
-                return utf;
-            }
-        }
-        
         var i = 0, j = 0, x, y, z, l = utf.length, buf = [], charCodes = [];
         for (; i < l; ++i, ++j) {
             x = utf[i] & 255;
@@ -771,19 +762,13 @@ var LZMA = (function () {
     
     
     /** ds */
-    function decompress(byte_arr, is_utf8, on_finish, on_progress) {
+    function decompress(byte_arr, on_finish, on_progress) {
         var this$static = {},
             percent,
             cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
             len,
             sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
-        
-        if (typeof is_utf8 !== "boolean") {
-            on_progress = on_finish;
-            on_finish = is_utf8;
-            is_utf8 = true;
-        }
 
         if (typeof on_finish != "function") {
             cbn = on_finish;
@@ -812,9 +797,7 @@ var LZMA = (function () {
         if (sync) {
             this$static.d = $LZMAByteArrayDecompressor({}, byte_arr);
             while ($processChunk(this$static.d.chunker));
-            var bytes = $toByteArray(this$static.d.output);
-            
-            return is_utf8 ? decode(bytes) : bytes;
+            return decode($toByteArray(this$static.d.output));
         }
         
         try {
@@ -849,8 +832,7 @@ var LZMA = (function () {
                 
                 on_progress(1);
                 
-                var bytes = $toByteArray(this$static.d.output);
-                res = is_utf8 ? decode(bytes) : bytes;
+                res = decode($toByteArray(this$static.d.output));
                 
                 /// delay so we don’t catch errors from the on_finish handler
                 wait(on_finish.bind(null, res), 0);
