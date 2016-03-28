@@ -50,14 +50,14 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                             }, 50);
                         }
                     },
-                    decompress: function decompress(byte_arr, on_finish, on_progress) {
+                    decompress: function decompress(byte_arr, is_utf8, on_finish, on_progress) {
                         if (global_var.LZMA_WORKER) {
-                            global_var.LZMA_WORKER.decompress(byte_arr, on_finish, on_progress);
+                            global_var.LZMA_WORKER.decompress(byte_arr, is_utf8, on_finish, on_progress);
                         } else {
                             /// Wait
                             setTimeout(function ()
                             {
-                                fake_lzma.decompress(byte_arr, on_finish, on_progress);
+                                fake_lzma.decompress(byte_arr, is_utf8, on_finish, on_progress);
                             }, 50);
                         }
                     },
@@ -141,8 +141,8 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 compress: function compress(mixed, mode, on_finish, on_progress) {
                     send_to_worker(action_compress, mixed, mode, on_finish, on_progress);
                 },
-                decompress: function decompress(byte_arr, on_finish, on_progress) {
-                    send_to_worker(action_decompress, byte_arr, false, on_finish, on_progress);
+                decompress: function decompress(byte_arr, is_utf8, on_finish, on_progress) {
+                    send_to_worker(action_decompress, byte_arr, is_utf8, on_finish, on_progress);
                 },
                 worker: function worker() {
                     return lzma_worker;
