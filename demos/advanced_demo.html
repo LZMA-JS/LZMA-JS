@@ -181,7 +181,7 @@
             }
             
             function is_array(input) {
-                return typeof input === "object" && input instanceof Array;
+                return input && typeof input === "object" && (input instanceof Array || (input.buffer && input.buffer instanceof ArrayBuffer));
             }
             
             function convert_formated_hex_to_bytes(hex_str) {
