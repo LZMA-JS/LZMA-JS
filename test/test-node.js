@@ -298,16 +298,28 @@ test_funcs.async.com = function compression_test(file, next)
             compression_mode = Number(match[1]) || 1;
         }
         console.log("     Initial size:", content.length + " bytes");
-        my_lzma.compress(buf || content, compression_mode, function ondone(compressed_result)
+        my_lzma.compress(buf || content, compression_mode, function ondone(compressed_result, error)
         {
             var comp_speed = get_hrtime(comp_start),
                 deco_start;
             
+            if (error) {
+                display_result("ERROR: " + error, false);
+                all_tests_pass = false;
+                return next();
+            }
+            
             console.log("  Compressed size:", compressed_result.length + " bytes");
             
             deco_start = get_hrtime();
-            my_lzma.decompress(compressed_result, function (decompressed_result)
+            my_lzma.decompress(compressed_result, function (decompressed_result, error)
             {
+                if (error) {
+                    display_result("ERROR: " + error, false);
+                    all_tests_pass = false;
+                    return next();
+                }
+                
                 var deco_speed = get_hrtime(deco_start);
                 console.log("Decompressed size:", decompressed_result.length + " bytes");
                 
