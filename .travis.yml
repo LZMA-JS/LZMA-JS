@@ -7,3 +7,20 @@ node_js:
   - "0.10"
   - "0.8"
 sudo: false
+
+matrix:
+  include:
+    - node_js: node
+      env: TEST_BROWSER=1
+
+install:
+  - if [[ -n $TEST_BROWSER ]]; then npm install; fi
+
+before_script:
+  - if [[ -n $TEST_BROWSER ]]; then export DISPLAY=:99.0; fi
+  - if [[ -n $TEST_BROWSER ]]; then sh -e /etc/init.d/xvfb start; fi
+
+script:
+  - if [[ -n $TEST_BROWSER ]]; then npm run build; fi
+  - if [[ -n $TEST_BROWSER ]]; then npm run test:karma; fi
+  - if [[ -z $TEST_BROWSER ]]; then npm run test; fi

@@ -15,13 +15,20 @@
     "lzma.js": "bin/lzma.js"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "karma": "^1.6.0",
+    "karma-chai": "^0.1.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "mocha": "^3.2.0",
     "rollup": "^0.41.6",
     "rollup-plugin-uglify": "^1.0.1",
     "uglify-js": "github:mishoo/UglifyJS2#harmony-v2.8.21"
   },
   "scripts": {
     "build": "node rollup.js",
-    "test": "node test/test-node.js && node test/test-node.js --sync"
+    "test": "node test/test-node.js && node test/test-node.js --sync",
+    "test:karma": "npm run build && karma start --single-run --browsers Firefox"
   },
   "license": "MIT",
   "tonicExampleFilename": "demos/tonic_example.js",
