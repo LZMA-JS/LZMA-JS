@@ -84,57 +84,41 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
             action_decompress = 2,
             action_progress   = 3,
             
-            callback_obj = {},
-            
             ///NOTE: Node.js needs something like "./" or "../" at the beginning.
             lzma_worker = new Worker(lzma_path || "./lzma_worker-min.js");
-        
-        lzma_worker.onmessage = function onmessage(e) {
-            if (e.data.action === action_progress) {
-                if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_progress === "function") {
-                    callback_obj[e.data.cbn].on_progress(e.data.result);
-                }
-            } else {
-                if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_finish === "function") {
-                    callback_obj[e.data.cbn].on_finish(e.data.result, e.data.error);
-                    
-                    /// Since the (de)compression is complete, the callbacks are no longer needed.
-                    delete callback_obj[e.data.cbn];
-                }
-            }
-        };
         
         /// Very simple error handling.
         lzma_worker.onerror = function(event) {
             var err = new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
-            
-            for (var cbn in callback_obj) {
-                callback_obj[cbn].on_finish(null, err);
-            }
-            
             console.error('Uncaught error in lzma_worker', err);
         };
         
         return (function () {
             
             function send_to_worker(action, data, mode, on_finish, on_progress) {
-                var cbn;
-                
-                do {
-                    cbn = Math.floor(Math.random() * (10000000));
-                } while(typeof callback_obj[cbn] !== "undefined");
-                
-                callback_obj[cbn] = {
-                    on_finish:   on_finish,
-                    on_progress: on_progress
+                var channel = new MessageChannel();
+
+                lzma_worker.addEventListener("error", function (event) {
+                    var err = new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
+                    typeof on_finish === "function" && on_finish(null, err);
+                });
+
+                channel.port1.onmessage = function (e) {
+                    if (e.data.action === action_progress) {
+                        typeof on_progress === "function" && on_progress(e.data.result);
+                    } else {
+                        typeof on_finish === "function" && on_finish(e.data.result, e.data.error);
+                            
+                        /// Since the (de)compression is complete, the callbacks are no longer needed.
+                        channel.port1.onmessage = null;
+                    }
                 };
                 
                 lzma_worker.postMessage({
                     action: action, /// action_compress = 1, action_decompress = 2, action_progress = 3
-                    cbn:    cbn,    /// callback number
                     data:   data,
                     mode:   mode
-                });
+                }, [channel.port2]);
             }
             
             return {
