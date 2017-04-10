@@ -25,10 +25,9 @@ var LZMA = (function () {
         P0_longLit = [0, 0],
         P1_longLit = [1, 0];
     
-    function update_progress(percent, cbn) {
-        postMessage({
+    function update_progress(percent, port) {
+        port.postMessage({
             action: action_progress,
-            cbn: cbn,
             result: percent
         });
     }
@@ -765,30 +764,29 @@ var LZMA = (function () {
     function decompress(byte_arr, on_finish, on_progress) {
         var this$static = {},
             percent,
-            cbn, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
+            port, /// A callback number should be supplied instead of on_finish() if we are using Web Workers.
             has_progress,
             len,
             sync = typeof on_finish == "undefined" && typeof on_progress == "undefined";
 
         if (typeof on_finish != "function") {
-            cbn = on_finish;
+            port = on_finish;
             on_finish = on_progress = 0;
         }
         
         on_progress = on_progress || function(percent) {
-            if (typeof cbn == "undefined")
+            if (typeof port == "undefined")
                 return;
             
-            return update_progress(has_progress ? percent : -1, cbn);
+            return update_progress(has_progress ? percent : -1, port);
         };
         
         on_finish = on_finish || function(res, err) {
-            if (typeof cbn == "undefined")
+            if (typeof port == "undefined")
                 return;
             
-            return postMessage({
+            return port.postMessage({
                 action: action_decompress,
-                cbn: cbn,
                 result: res,
                 error: err
             });
@@ -857,10 +855,10 @@ var LZMA = (function () {
                 if (e && e.data) {
                     
                     /// co:if (e.data.action == action_compress) {
-                    /// co:    LZMA.compress(e.data.data, e.data.mode, e.data.cbn);
+                    /// co:    LZMA.compress(e.data.data, e.data.mode, e.ports[0]);
                     /// co:}
                     if (e.data.action == action_decompress) {
-                        LZMA.decompress(e.data.data, e.data.cbn);
+                        LZMA.decompress(e.data.data, e.ports[0]);
                     }
                 }
             };
