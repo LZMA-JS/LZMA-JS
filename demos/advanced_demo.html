@@ -166,7 +166,24 @@
                 right_time_el         = document.getElementById("right_time"),
                 select_mode_el        = document.getElementById("select_mode"),
                 left_byte_size,
-                my_lzma = new LZMA("../src/lzma_worker.js");
+                my_lzma = new LZMA("../src/lzma_worker.js"),
+                saveByteArray = (function() {
+                    var a = document.createElement("a");
+                    
+                    document.body.appendChild(a);
+                    a.style = "display: none";
+                    
+                    return function(data, name) {
+                        var blob = new Blob([Uint8Array.from(data)]. {type:'application/octet-binary'}),
+                            url = window.URL.createObjectURL(blob);
+                        
+                        a.href = url;
+                        a.download = name;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    };
+                    
+                }());
             
             if (!String.prototype.trim) {
                 ///NOTE: This is not the fastest or best practice, but this is just a demo.
@@ -301,7 +318,6 @@
                 return str;
             }
             
-            
             clear_left_button_el.onclick  = clear_left;
             clear_right_button_el.onclick = clear_right;
             
@@ -334,6 +350,7 @@
                     }
                     
                     right_text_el.value = convert_to_formated_hex(result);
+                    saveByteArray(result, "compressed.lzma");
                     update_sizes(true);
                 }, function progress(percent) {
                     right_output_el.innerHTML = "Compressing..." + Math.round(percent * 100) + "%";
