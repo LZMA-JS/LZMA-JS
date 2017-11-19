@@ -26,7 +26,7 @@ Also, older versions returned compressed data as unsigned bytes. Now, it returns
 Demos
 -----
 
-Live demos can be found [here](http://nmrugg.github.io/LZMA-JS/).
+Live demos can be found [here](http://lzma-js.github.io/LZMA-JS/).
 
 
 How to Get
