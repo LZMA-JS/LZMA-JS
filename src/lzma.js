@@ -80,6 +80,10 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
     ///NOTE: The "this" keyword is the global context ("window" variable) if loaded via a <script> tag
     ///      or the function context if loaded as a module (e.g., in Node.js).
     this.LZMA = function (lzma_path) {
+        if (lzma_path && lzma_path.indexOf("//") >= 0) {
+            lzma_path = URL.createObjectURL(new Blob(["importScripts(" + JSON.stringify(lzma_path) + ")"]));
+        }
+
         var action_compress   = 1,
             action_decompress = 2,
             action_progress   = 3,
