@@ -96,7 +96,7 @@ if (typeof Worker === "undefined" || (typeof location !== "undefined" && locatio
                 }
             } else {
                 if (callback_obj[e.data.cbn] && typeof callback_obj[e.data.cbn].on_finish === "function") {
-                    callback_obj[e.data.cbn].on_finish(e.data.result, e.data.error);
+                    callback_obj[e.data.cbn].on_finish(e.data.result, e.data.error && new Error(e.data.error));
                     
                     /// Since the (de)compression is complete, the callbacks are no longer needed.
                     delete callback_obj[e.data.cbn];

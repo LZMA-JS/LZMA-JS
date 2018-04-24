@@ -1,0 +1,182 @@
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.1.2/mocha.css" />
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.0/fetch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.1.2/mocha.min.js"></script>
+<script>mocha.setup('bdd')</script>
+<div id="mocha"></div>
+
+<script src="../src/lzma.js"></script>
+
+<script type="text/babel">
+var assert = chai.assert
+
+var files = {
+  fast: [
+    "binary",
+    "chinese.txt",
+    "empty",
+    "error-corrupted input",
+    "error-truncated input",
+    "level 1",
+    "level 2",
+    "level 3",
+    "level 4",
+    "level 5",
+    "level 6",
+    "level 7",
+    "level 8",
+    "level 9",
+    "no_progress.txt",
+    "sample_text.txt",
+    "single_character_repeated.txt",
+  ],
+  slow: [
+    "large-kjv.txt",
+    "large-random_binary",
+    "medium-random_binary",
+    "timeseries.txt",
+  ]
+}
+var skipDecompress = [
+  "empty",
+  "medium-random_binary",
+  "single_character_repeated.txt",
+]
+
+function fetchDataset(name) {
+  var promises = [
+    fetch("files/" + name).then(function(response) {
+      return response.text()
+    }),
+    fetch("files/" + name).then(function(response) {
+      return response.arrayBuffer()
+    }).then(function(buffer) {
+      return Array.from(new Int8Array(buffer))
+    })
+  ]
+  if (!skipDecompress.includes(name)) {
+    promises.push(
+      fetch("files/" + name + ".lzma").then(function(response) {
+        return response.arrayBuffer()
+      }).then(function(buffer) {
+        return Array.from(new Int8Array(buffer))
+      })
+    )
+  }
+  return Promise.all(promises)
+}
+
+function newLZMA() {
+  return Promise.resolve(new LZMA("../src/lzma_worker-min.js"))
+}
+
+function doDecompress(lzma, input, name) {
+  return new Promise((resolve, reject) => {
+    lzma.decompress(input, on_finish, on_progress)
+    function on_progress(p) {
+      console.log(`decompress ${name}: ${p}`)
+    }
+    function on_finish(result, error) {
+      result == null ? reject(error) : resolve(result)
+    }
+  })
+}
+
+function doCompress(lzma, input, name, mode) {
+  return new Promise((resolve, reject) => {
+    lzma.compress(input, mode, on_finish, on_progress)
+    function on_progress(p) {
+      console.log(`compress ${name}: ${p}`)
+    }
+    function on_finish(result, error) {
+      result == null ? reject(error) : resolve(result)
+    }
+  })
+}
+
+function compare(actual, string, array) {
+  if (typeof actual === "string") {
+    assert.equal(actual, string)
+  } else if (actual instanceof Array) {
+    assert.equal(actual.length, array.length)
+    for (var i = 0; i < actual.length; i++) {
+      if (actual[i] !== array[i]) {
+        assert.equal(actual[i], array[i])
+      }
+    }
+  } else {
+    assert.fail()
+  }
+}
+
+["fast", "slow"].forEach(dataset => {
+  describe(`LZMA (${dataset})`, function() {
+    if (dataset === "fast") this.timeout(5000)
+    if (dataset === "slow") this.timeout(60000)
+
+    let lzma
+    beforeEach(function(done) {
+      lzma = new LZMA("../src/lzma_worker.js")
+      lzma.compress("", 1, (_, error) => { done(error) })
+    })
+    afterEach(function() {
+      lzma.worker().terminate()
+    })
+
+    it("uses worker", function() {
+      assert.instanceOf(lzma.worker(), Worker)
+    })
+
+    files[dataset].forEach(name => {
+      let error = (/error-(.*)/.exec(name) || {})[1]
+      let mode = (/level ([1-9])/.exec(name) || [null, 1])[1]
+
+      let file = fetchDataset(name)
+
+      if (error) {
+        it(`decompresses ${name} but throws ${error} error`, function() {
+          return file.then(([string, array, compressed]) =>
+            doDecompress(lzma, compressed)
+          ).catch(e => {
+            assert.equal(e.message, error)
+          })
+        })
+      } else {
+        it(`decompresses ${name}`, function() {
+          return file.then(([string, array, compressed]) => {
+            if (compressed) {
+              return doDecompress(lzma, compressed, name).then(result => {
+                compare(result, string, array)
+              })
+            } else {
+              this.skip()
+            }
+          })
+        })
+      }
+
+      it(`compresses ${name} with mode ${mode}`, function() {
+        return file.then(([string, array, compressed]) =>
+          doCompress(lzma, array, name, mode).then(result => {
+            return doDecompress(lzma, result, name)
+          }).then(result => {
+            compare(result, string, array)
+          })
+        )
+      })
+    })
+  })
+})
+
+mocha.checkLeaks()
+mocha.globals(['LZMA_WORKER'])
+mocha.run()
+</script>
+</body>
+</html>

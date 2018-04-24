@@ -2465,11 +2465,13 @@ var LZMA = (function () {
             if (typeof cbn == "undefined")
                 return;
             
+            if (err) try { console.error(err); } catch(e) {}
+
             return postMessage({
                 action: action_compress,
                 cbn: cbn,
                 result: res,
-                error: err
+                error: err && err.message
             });
         };
 
@@ -2542,11 +2544,13 @@ var LZMA = (function () {
             if (typeof cbn == "undefined")
                 return;
             
+            if (err) try { console.error(err); } catch(e) {}
+
             return postMessage({
                 action: action_decompress,
                 cbn: cbn,
                 result: res,
-                error: err
+                error: err && err.message
             });
         };
 
