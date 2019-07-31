@@ -8,11 +8,6 @@ var uglify = require("uglify-js"),
         "lzma-d.js",
         "lzma.js",
     ],
-    minify_props_files = [
-         "lzma_worker.js",
-         "lzma-c.js",
-         "lzma-d.js",
-    ],
     params = get_params(),
     text_output = "",
     stats = {};
@@ -83,48 +78,6 @@ function base54_64(arr)
     }
     
     return new_names;
-}
-
-function minify_properties(code)
-{
-    var props = {},
-        ignore = ["LZMA_WORKER", "on_progress", "on_finish"],
-        sorted_props,
-        new_names,
-        prop_regex = /\.([_$a-zA-Z]*[_$][_$a-zA-Z0-9]*|kFixHashSize|kNumHashDirectBytes|kMinMatchCheck|outBytesProcessed|decoder|encoder|nowPos64|outSize|alive|processedInSize|finished|inBytesProcessed|processedInSize|[Ss]tate|prevByte|Prev1IsChar|Prev2|BackPrev|PosPrev|Models|backRes|properties|processedOutSize|tempPrices|backRes|repLens|Price|Backs[0123]|NumBitLevels|Range|Stream|explicitLength|count|pos|buf|chunker|rep[0-3s]|Code|Low|data|mode|output)/g;
-    
-    /// We want to replace propeters that have an underscore or a dollar sign.
-    code.replace(prop_regex, function calc(prop)
-    {
-        prop = prop.substr(1); /// Remove the perios.
-        if (ignore.indexOf(prop) === -1) {
-            if (!props[prop]) {
-                props[prop] = 1;
-            } else {
-                props[prop] += 1;
-            }
-        }
-    });
-    
-    calculate_minify_value(props);
-    sorted_props = sort_obj(props);
-    
-    new_names = base54_64(sorted_props);
-    
-    code = code.replace(prop_regex, function calc(prop)
-    {
-        var index,
-            partial_prop = prop.substr(1); /// Remove the perios.
-        
-        index = sorted_props.indexOf(partial_prop);
-        
-        if (index > -1) {
-            return "." + new_names[index];
-        }
-        return prop;
-    });
-    
-    return code;
 }
 
 function split_lzma_worker()
@@ -272,7 +225,7 @@ function minify()
             result = uglify.minify(full_path, {
                 mangle: {
                     sort:     false, /// As FALSE, the plain JS is bigger, but gzipped is smaller!
-                    toplevel: true,
+                    toplevel: false,
                 },
                 compress: {
                     sequences:    true,
@@ -300,10 +253,6 @@ function minify()
                     comments: /^!|@preserve|@license|@cc_on/i,
                 },
             });
-            
-            if (minify_props_files.indexOf(file) > -1) {
-                result.code = minify_properties(result.code);
-            }
             
             fs.writeFileSync(min_path, result.code);
             
