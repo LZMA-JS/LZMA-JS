@@ -7,18 +7,18 @@ const umdModuleName = "LZMA";
 
 ["codec", "comp", "decomp"].forEach(function (name) {
     rollup.rollup({
-        entry: `src/es/lzma-${name}.js`,
+        input: `src/es/lzma-${name}.js`,
     }).then(function (bundle) {
         bundle.write({
             format: "umd",
-            dest: `dist/js/lzma-${name}.js`,
+            file: `dist/js/lzma-${name}.js`,
             footer: umdFooter,
-            moduleName: umdModuleName,
+            name: umdModuleName,
         })
     }).catch(console.error)
 
     rollup.rollup({
-        entry: `src/es/lzma-${name}.js`,
+        input: `src/es/lzma-${name}.js`,
         plugins: [
             uglify({
                 compress: {
@@ -39,15 +39,15 @@ const umdModuleName = "LZMA";
     }).then(function (bundle) {
         bundle.write({
             format: "umd",
-            dest: `dist/js/lzma-${name}.min.js`,
+            file: `dist/js/lzma-${name}.min.js`,
             footer: umdFooter,
-            moduleName: umdModuleName,
+            name: umdModuleName,
             sourceMap: true
         })
 
         bundle.write({
             format: "es",
-            dest: `dist/es/lzma-${name}.min.js`,
+            file: `dist/es/lzma-${name}.min.js`,
             sourceMap: true
         })
     }).catch(console.error)
