@@ -1,5 +1,8 @@
-var LZMA = (function (exports) {
-    'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = global || self, factory(global.LZMA = {}));
+}(this, (function (exports) { 'use strict';
 
     /// © 2015 Nathan Rugg <nmrugg@gmail.com> | MIT
     /// See LICENSE for more details.
@@ -2652,6 +2655,11 @@ var LZMA = (function (exports) {
     LZMA.prototype["compress"] = compress;
     LZMA.prototype["decompress"] = decompress;
 
+    LZMA["compress"] = compress;
+    LZMA["decompress"] = decompress;
+    LZMA.prototype["compress"] = compress;
+    LZMA.prototype["decompress"] = decompress;
+
     if (typeof self != "undefined" && 'importScripts' in self) {
         addEventListener("message", function (e) {
             if (e["data"]["action"] == action_decompress) {
@@ -2666,7 +2674,7 @@ var LZMA = (function (exports) {
     exports.compress = compress;
     exports.decompress = decompress;
 
-    return exports;
+    Object.defineProperty(exports, '__esModule', { value: true });
 
-}({}));
-var LZMA_WORKER = this.LZMA;
+})));
+var LZMA = this.LZMA.LZMA; var LZMA_WORKER = LZMA;
