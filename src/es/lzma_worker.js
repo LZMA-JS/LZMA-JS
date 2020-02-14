@@ -271,7 +271,7 @@ function $init(this$static, input, output, length_0, mode) {
     this$static.length_0 = length_0;
     encoder = $Encoder({});
     $configure(mode, encoder);
-    encoder._writeEndMark = typeof LZMA.disableEndMark == "undefined";
+    //encoder._writeEndMark = typeof LZMA.disableEndMark == "undefined";
     $WriteCoderProperties(encoder, output);
     for (i = 0; i < 64; i += 8)
         $write(output, lowBits_0(shr(length_0, i)) & 255);
@@ -1916,9 +1916,9 @@ function $WriteCoderProperties(this$static, outStream) {
 }
 
 function $WriteEndMarker(this$static, posState) {
-    if (!this$static._writeEndMark) {
-        return;
-    }
+    //if (!this$static._writeEndMark) {
+    //    return;
+    //}
     $Encode_3(this$static._rangeEncoder, this$static._isMatch, (this$static._state << 4) + posState, 1);
     $Encode_3(this$static._rangeEncoder, this$static._isRep, this$static._state, 0);
     this$static._state = this$static._state < 7?7:10;

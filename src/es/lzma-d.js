@@ -1,13 +1,13 @@
 import {
     action_decompress,
-    decompress,
-    LZMA
+    decompress
 } from './lzma_worker.js';
 
 export {
-    decompress,
-    LZMA
+    decompress
 };
+
+export function LZMA() {}
 
 LZMA["decompress"] = decompress;
 LZMA.prototype["decompress"] = decompress;

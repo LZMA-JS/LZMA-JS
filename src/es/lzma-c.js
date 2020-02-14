@@ -1,13 +1,13 @@
 import {
     action_compress,
-    compress,
-    LZMA
+    compress
 } from './lzma_worker.js';
 
 export {
-    compress,
-    LZMA
+    compress
 };
+
+export function LZMA() {}
 
 LZMA["compress"] = compress;
 LZMA.prototype["compress"] = compress;
