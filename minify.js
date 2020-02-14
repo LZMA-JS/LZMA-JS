@@ -176,10 +176,12 @@ if (params.save) {
             console.log("Found staged files. Commit first.");
             process.exit(1);
         }
-        rollup.minify();
-        calculate_size();
+        rollup.minify().then(function () {
+            calculate_size();
+        });
     });
 } else {
-    rollup.minify();
-    calculate_size();
+    rollup.minify().then(function () {
+        calculate_size();
+    });
 }
