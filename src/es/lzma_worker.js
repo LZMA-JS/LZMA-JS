@@ -2643,3 +2643,8 @@ var get_mode_obj = (function () {
 /** ce */
 
 export var LZMA = function () {};
+
+LZMA["compress"] = compress;
+LZMA["decompress"] = decompress;
+LZMA.prototype["compress"] = compress;
+LZMA.prototype["decompress"] = decompress;

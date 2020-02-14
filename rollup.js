@@ -1,6 +1,6 @@
 const rollup = require("rollup");
 const terser = require("rollup-plugin-terser").terser;
-const umdFooter = "var LZMA_WORKER = this.LZMA;";
+const umdFooter = "var LZMA = this.LZMA.LZMA; var LZMA_WORKER = LZMA;";
 const umdModuleName = "LZMA";
 
 module.exports.minify = function minify() {
@@ -8,14 +8,14 @@ module.exports.minify = function minify() {
         return rollup.rollup({
             input: `src/es/${name}.js`,
         }).then(function (bundle) {
-            bundle.write({
-                format: "iife",
+            return bundle.write({
+                format: "umd",
                 file: `src/${name}.js`,
                 footer: umdFooter,
                 name: umdModuleName,
             })
         }).then(function () {
-            rollup.rollup({
+            return rollup.rollup({
                 input: `src/es/${name}.js`,
                 plugins: [
                     terser({
@@ -34,19 +34,20 @@ module.exports.minify = function minify() {
                     })
                 ]
             }).then(function (bundle) {
-                bundle.write({
-                    format: "umd",
-                    file: `src/${name}-min.js`,
-                    footer: umdFooter,
-                    name: umdModuleName,
-                    sourceMap: true
-                })
-
-                bundle.write({
-                    format: "esm",
-                    file: `src/${name}-min.mjs`,
-                    sourceMap: true
-                })
+                Promise.all([
+                    bundle.write({
+                        format: "umd",
+                        file: `src/${name}-min.js`,
+                        footer: umdFooter,
+                        name: umdModuleName,
+                        sourceMap: true
+                    }),
+                    bundle.write({
+                        format: "esm",
+                        file: `src/${name}-min.mjs`,
+                        sourceMap: true
+                    })
+                ]);
             })
         })
     }))
