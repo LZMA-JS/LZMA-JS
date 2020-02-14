@@ -1,7 +1,5 @@
 const rollup = require("rollup");
-const uglify = require("rollup-plugin-uglify");
-const minify = require("uglify-js").minify;
-
+const terser = require("rollup-plugin-terser").terser;
 const umdFooter = "var LZMA_WORKER = this.LZMA;";
 const umdModuleName = "LZMA";
 
@@ -20,7 +18,7 @@ const umdModuleName = "LZMA";
     rollup.rollup({
         input: `src/es/lzma-${name}.js`,
         plugins: [
-            uglify({
+            terser({
                 compress: {
                     unsafe: true,
                     unsafe_comps: true,
@@ -28,13 +26,12 @@ const umdModuleName = "LZMA";
                 },
                 mangle: {
                     toplevel: true,
-                    except: ["LZMA", "LZMA_WORKER", "compress", "decompress"]
-                },
-                mangleProperties: {
-                    ignore_quoted: true,
-                    regex: /^(?!LZMA|(de)?compress|data|mode|cbn)/
+                    reserved: ["LZMA", "LZMA_WORKER", "compress", "decompress"],
+                    properties: {
+                        regex: /^(?!LZMA|(de)?compress|data|mode|cbn)/
+                    }
                 }
-            }, minify)
+            })
         ]
     }).then(function (bundle) {
         bundle.write({
