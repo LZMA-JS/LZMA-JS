@@ -3,20 +3,20 @@ const terser = require("rollup-plugin-terser").terser;
 const umdFooter = "var LZMA_WORKER = this.LZMA;";
 const umdModuleName = "LZMA";
 
-["codec", "comp", "decomp"].forEach(function (name) {
+["lzma", "lzma_worker", "lzma-c", "lzma-d"].forEach(function (name) {
     rollup.rollup({
-        input: `src/es/lzma-${name}.js`,
+        input: `src/es/${name}.js`,
     }).then(function (bundle) {
         bundle.write({
             format: "umd",
-            file: `dist/js/lzma-${name}.js`,
+            file: `src/${name}.js`,
             footer: umdFooter,
             name: umdModuleName,
         })
     }).catch(console.error)
 
     rollup.rollup({
-        input: `src/es/lzma-${name}.js`,
+        input: `src/es/${name}.js`,
         plugins: [
             terser({
                 compress: {
@@ -36,15 +36,15 @@ const umdModuleName = "LZMA";
     }).then(function (bundle) {
         bundle.write({
             format: "umd",
-            file: `dist/js/lzma-${name}.min.js`,
+            file: `src/${name}-min.js`,
             footer: umdFooter,
             name: umdModuleName,
             sourceMap: true
         })
 
         bundle.write({
-            format: "es",
-            file: `dist/es/lzma-${name}.min.js`,
+            format: "esm",
+            file: `src/${name}-min.mjs`,
             sourceMap: true
         })
     }).catch(console.error)

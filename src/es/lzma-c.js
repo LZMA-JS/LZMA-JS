@@ -2,7 +2,7 @@ import {
     action_compress,
     compress,
     LZMA
-} from './lzma-algo.js';
+} from './lzma_worker.js';
 
 export {
     compress,
