@@ -8,6 +8,10 @@ node_js:
   - "0.8"
 sudo: false
 
+dist: xenial
+services:
+  - xvfb
+
 matrix:
   include:
     - node_js: node
@@ -15,10 +19,6 @@ matrix:
 
 install:
   - if [[ -n $TEST_BROWSER ]]; then npm install; fi
-
-before_script:
-  - if [[ -n $TEST_BROWSER ]]; then export DISPLAY=:99.0; fi
-  - if [[ -n $TEST_BROWSER ]]; then sh -e /etc/init.d/xvfb start; fi
 
 script:
   - if [[ -n $TEST_BROWSER ]]; then npm run build; fi
