@@ -4,7 +4,7 @@ import {
     compress,
     decompress,
     LZMA
-} from './lzma_worker.js';
+} from './lzma_worker';
 
 export {
     compress,

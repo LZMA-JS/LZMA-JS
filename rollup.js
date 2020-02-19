@@ -6,7 +6,7 @@ const umdModuleName = "LZMA";
 module.exports.minify = function minify() {
     return Promise.all(["lzma", "lzma_worker", "lzma-c", "lzma-d"].map(function (name) {
         return rollup.rollup({
-            input: `src/es/${name}.js`,
+            input: `src/${name}.mjs`,
         }).then(function (bundle) {
             return bundle.write({
                 format: "umd",
@@ -16,7 +16,7 @@ module.exports.minify = function minify() {
             })
         }).then(function () {
             return rollup.rollup({
-                input: `src/es/${name}.js`,
+                input: `src/${name}.mjs`,
                 plugins: [
                     terser({
                         compress: {
@@ -34,7 +34,7 @@ module.exports.minify = function minify() {
                     })
                 ]
             }).then(function (bundle) {
-                Promise.all([
+                return Promise.all([
                     bundle.write({
                         format: "umd",
                         file: `src/${name}-min.js`,
