@@ -2649,16 +2649,22 @@
     /** ce */
 
     var LZMA = function () {};
-
     LZMA["compress"] = compress;
     LZMA["decompress"] = decompress;
     LZMA.prototype["compress"] = compress;
     LZMA.prototype["decompress"] = decompress;
 
+    if (typeof self != "undefined" && 'importScripts' in self) {
+        addEventListener("message", function (e) {
+            if (e["data"]["action"] == action_compress) {
+                compress(e.data["data"], e["data"]["mode"], e["data"]["cbn"]);
+            } else if (e["data"]["action"] == action_decompress) {
+                decompress(e["data"]["data"], e["data"]["cbn"]);
+            }
+        });
+    }
+
     exports.LZMA = LZMA;
-    exports.action_compress = action_compress;
-    exports.action_decompress = action_decompress;
-    exports.action_progress = action_progress;
     exports.compress = compress;
     exports.decompress = decompress;
 
