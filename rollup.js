@@ -1,10 +1,17 @@
+const fs = require("fs");
 const rollup = require("rollup");
-const terser = require("rollup-plugin-terser").terser;
+const Terser = require("terser")
+const TerserPlugin = require("rollup-plugin-terser").terser;
 const umdFooter = "var LZMA = this.LZMA.LZMA; var LZMA_WORKER = LZMA;";
 const umdModuleName = "LZMA";
 
 module.exports.minify = function minify() {
-    return Promise.all(["lzma", "lzma_worker", "lzma-c", "lzma-d"].map(function (name) {
+    var result = Terser.minify({
+        "src/lzma.js": fs.readFileSync("src/lzma.js", "utf8")
+    });
+    fs.writeFileSync("src/lzma-min.js", result.code);
+
+    return Promise.all(["lzma_worker", "lzma-c", "lzma-d"].map(function (name) {
         return rollup.rollup({
             input: `src/${name}.mjs`,
         }).then(function (bundle) {
@@ -18,7 +25,7 @@ module.exports.minify = function minify() {
             return rollup.rollup({
                 input: `src/${name}.mjs`,
                 plugins: [
-                    terser({
+                    TerserPlugin({
                         compress: {
                             unsafe: true,
                             unsafe_comps: true,
