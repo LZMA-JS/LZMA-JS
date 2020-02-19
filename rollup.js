@@ -41,21 +41,14 @@ module.exports.minify = function minify() {
                     })
                 ]
             }).then(function (bundle) {
-                return Promise.all([
-                    bundle.write({
-                        format: "umd",
-                        file: `src/${name}-min.js`,
-                        footer: umdFooter,
-                        name: umdModuleName,
-                        sourceMap: true
-                    }),
-                    bundle.write({
-                        format: "esm",
-                        file: `src/${name}-min.mjs`,
-                        sourceMap: true
-                    })
-                ]);
-            })
-        })
-    }))
+                return bundle.write({
+                    format: "umd",
+                    file: `src/${name}-min.js`,
+                    footer: umdFooter,
+                    name: umdModuleName,
+                    sourceMap: true
+                });
+            });
+        });
+    }));
 }
