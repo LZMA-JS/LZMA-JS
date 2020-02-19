@@ -7,9 +7,16 @@ const umdModuleName = "LZMA";
 
 module.exports.minify = function minify() {
     var result = Terser.minify({
-        "src/lzma.js": fs.readFileSync("src/lzma.js", "utf8")
+        "lzma.js": fs.readFileSync("src/lzma.js", "utf8")
+    },
+    {
+        sourceMap: {
+            filename: "lzma-min.js",
+            url: "lzma-min.js.map"
+        }
     });
     fs.writeFileSync("src/lzma-min.js", result.code);
+    fs.writeFileSync("src/lzma-min.js.map", result.map);
 
     return Promise.all(["lzma_worker", "lzma-c", "lzma-d"].map(function (name) {
         return rollup.rollup({
@@ -20,6 +27,7 @@ module.exports.minify = function minify() {
                 file: `src/${name}.js`,
                 footer: umdFooter,
                 name: umdModuleName,
+                sourcemap: true
             })
         }).then(function () {
             return rollup.rollup({
@@ -46,7 +54,7 @@ module.exports.minify = function minify() {
                     file: `src/${name}-min.js`,
                     footer: umdFooter,
                     name: umdModuleName,
-                    sourceMap: true
+                    sourcemap: true
                 });
             });
         });
