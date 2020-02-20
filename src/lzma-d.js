@@ -875,6 +875,8 @@
     LZMA["decompress"] = decompress;
     LZMA.prototype["decompress"] = decompress;
 
+    var LZMA_WORKER = LZMA;
+
     if (typeof self != "undefined" && 'importScripts' in self) {
         addEventListener("message", function (e) {
             if (e["data"]["action"] == action_decompress) {
@@ -884,6 +886,7 @@
     }
 
     exports.LZMA = LZMA;
+    exports.LZMA_WORKER = LZMA_WORKER;
     exports.decompress = decompress;
 
     Object.defineProperty(exports, '__esModule', { value: true });

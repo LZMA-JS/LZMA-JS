@@ -2654,6 +2654,8 @@
     LZMA.prototype["compress"] = compress;
     LZMA.prototype["decompress"] = decompress;
 
+    var LZMA_WORKER = LZMA;
+
     if (typeof self != "undefined" && 'importScripts' in self) {
         addEventListener("message", function (e) {
             if (e["data"]["action"] == action_compress) {
@@ -2665,6 +2667,7 @@
     }
 
     exports.LZMA = LZMA;
+    exports.LZMA_WORKER = LZMA_WORKER;
     exports.compress = compress;
     exports.decompress = decompress;
 
