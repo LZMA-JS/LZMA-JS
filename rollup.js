@@ -6,7 +6,7 @@ const umdFooter = "var LZMA = this.LZMA.LZMA; var LZMA_WORKER = LZMA;";
 const umdModuleName = "LZMA";
 
 module.exports.minify = function minify() {
-    var result = Terser.minify({
+    const result = Terser.minify({
         "lzma.js": fs.readFileSync("src/lzma.js", "utf8")
     },
     {
