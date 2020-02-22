@@ -15,6 +15,7 @@
     "lzma.js": "bin/lzma.js"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^2.3.1",
     "chai": "^3.5.0",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
