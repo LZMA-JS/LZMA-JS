@@ -196,22 +196,6 @@
         return this$static;
     }
 
-    var CrcTable = (function () {
-        var i, j, r, CrcTable = [];
-        for (i = 0; i < 256; ++i) {
-            r = i;
-            for (j = 0; j < 8; ++j)
-            if ((r & 1) != 0) {
-                r >>>= 1;
-                r ^= -306674912;
-            } else {
-                r >>>= 1;
-            }
-            CrcTable[i] = r;
-        }
-        return CrcTable;
-    }());
-
     /** ce */
     /** ds */
     function $CopyBlock(this$static, distance, len) {
@@ -603,23 +587,6 @@
         this$static.m_Decoders = initDim(768);
         return this$static;
     }
-
-    /** de */
-    /** cs */
-    var g_FastPos = (function () {
-        var j, k, slotFast, c = 2, g_FastPos = [0, 1];
-        for (slotFast = 2; slotFast < 22; ++slotFast) {
-            //k = 1 << (slotFast >> 1) - 1;
-            var s = slotFast;
-            s >>= 1;
-            s -= 1;
-            k = 1;
-            k <<= s;
-            for (j = 0; j < k; ++j , ++c)
-                g_FastPos[c] = slotFast << 24 >> 24;
-        }
-        return g_FastPos;
-    }());
     /** ce */
     /** ds */
     function $BitTreeDecoder(this$static, numBitLevels) {
@@ -711,20 +678,6 @@
             probs[i] = 1024;
         }
     }
-    /** cs */
-    var ProbPrices = (function () {
-        var end, i, j, start, ProbPrices = [];
-        for (i = 8; i >= 0; --i) {
-            start = 1;
-            start <<= 9 - i - 1;
-            end = 1;
-            end <<= 9 - i;
-            for (j = start; j < end; ++j) {
-                ProbPrices[j] = (i << 6) + (end - j << 6 >>> 9 - i - 1);
-            }
-        }
-        return ProbPrices;
-    }());
 
     /** ce */
     /** ds */
