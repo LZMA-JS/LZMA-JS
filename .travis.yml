@@ -21,6 +21,5 @@ install:
   - if [[ -n $TEST_BROWSER ]]; then npm install; fi
 
 script:
-  - if [[ -n $TEST_BROWSER ]]; then npm run build; fi
   - if [[ -n $TEST_BROWSER ]]; then npm run test:karma; fi
   - if [[ -z $TEST_BROWSER ]]; then npm run test; fi
