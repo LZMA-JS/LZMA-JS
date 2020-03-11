@@ -29,7 +29,7 @@
   "scripts": {
     "build": "node minify.js",
     "test": "node test/test-node.js && node test/test-node.js --sync",
-    "test:karma": "npm run build && karma start --single-run --browsers Firefox"
+    "test:karma": "karma start --single-run --browsers Firefox"
   },
   "license": "MIT",
   "tonicExampleFilename": "demos/tonic_example.js",
