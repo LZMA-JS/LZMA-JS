@@ -7,3 +7,19 @@ node_js:
   - "0.10"
   - "0.8"
 sudo: false
+
+dist: xenial
+services:
+  - xvfb
+
+matrix:
+  include:
+    - node_js: node
+      env: TEST_BROWSER=1
+
+install:
+  - if [[ -n $TEST_BROWSER ]]; then npm install; fi
+
+script:
+  - if [[ -n $TEST_BROWSER ]]; then npm run test:karma; fi
+  - if [[ -z $TEST_BROWSER ]]; then npm run test; fi
