@@ -4,7 +4,7 @@ var lzma;
 
 function load_lzma()
 {
-    return require(require("path").join(__dirname, "src" ,"lzma_worker.js")).LZMA_WORKER;
+    return require('./src/lzma_worker.js').LZMA_WORKER;
 }
 
 lzma = load_lzma();
